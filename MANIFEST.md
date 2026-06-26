@@ -1,0 +1,60 @@
+# Manifest LeaderAI Cervello + Ecosistema
+
+## Obiettivo
+
+Portare una cartella cliente a uno standard minimo operativo:
+
+1. Fase 1 - Cervello: istruzioni, memoria, log, agenti, report.
+2. Fase 2 - Ecosistema: fonti reali, processi, limiti, decisioni.
+
+## Regola
+
+L'agente non deve fare un esame al cliente.
+
+Deve:
+
+1. leggere questa repo;
+2. montare i pezzi standard mancanti;
+3. non sovrascrivere cio' che esiste;
+4. collaudare;
+5. scrivere un report finale.
+
+## Standard minimo
+
+Il target passa solo se esistono:
+
+- `AGENTS.md`
+- `memory/MEMORY.md`
+- `logs/install-log.md`
+- `ecosistema/FONTI.md`
+- `ecosistema/PROCESSI.md`
+- `ecosistema/LIMITI.md`
+- `REPORT_FINALE.md`
+
+Per Claude Code:
+
+- `CLAUDE.md`
+- `.claude/README.md`
+
+Per Codex:
+
+- `.codex/README.md`
+
+## Fonti ufficiali da tenere vive
+
+Queste fonti vanno riverificate quando si aggiorna lo standard:
+
+- OpenAI Codex AGENTS.md: `https://developers.openai.com/codex/guides/agents-md`
+- OpenAI Codex hooks: `https://developers.openai.com/codex/hooks`
+- Claude Code memory: `https://code.claude.com/docs/en/memory`
+- Claude Code hooks: `https://code.claude.com/docs/en/hooks`
+
+## Criterio di finito
+
+Il pacchetto e' pronto quando:
+
+- crea una cartella target da zero;
+- puo' essere rilanciato senza duplicare file;
+- produce log e report;
+- i test automatici passano;
+- una nuova chat dell'agente sa leggere `AGENTS.md` e dove salvare memoria/report.
