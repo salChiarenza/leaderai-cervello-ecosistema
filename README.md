@@ -7,6 +7,17 @@ scrive log, lascia un report finale.
 
 ## Uso rapido
 
+Per installare tramite l'agente del cliente, usare:
+
+```text
+INSTALLA_CON_AI.md
+```
+
+Il testo fa clonare questa repo via Git, trova la cartella OneDrive giusta e
+monta Cervello + Ecosistema senza trasformare il cliente in tecnico.
+
+Uso manuale:
+
 ```bash
 python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent both
 ```
@@ -42,5 +53,6 @@ python3 -m unittest discover -s tests
 
 ## Stato
 
-Versione iniziale locale. Prima di consegnarla a clienti va pubblicata come repo
-separata e privata/pubblica secondo decisione LeaderAI.
+Versione iniziale installabile via Git. Prima di usarla con un cliente, leggere
+`AGENTS.md` e `INSTALLA_CON_AI.md`, poi verificare che la repo GitHub sia
+aggiornata.
