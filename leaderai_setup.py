@@ -77,19 +77,36 @@ def build_report(result: InstallResult, agent: str) -> str:
     if result.decisions:
         verdict = "PASSA CON ATTENZIONE"
 
+    if agent == "claude":
+        active_agent = "Claude Code"
+        active_files = "`CLAUDE.md`, `.claude/README.md`, `AGENTS.md`"
+        excluded_agent = "Codex non configurato, salvo richiesta esplicita LeaderAI."
+    elif agent == "codex":
+        active_agent = "Codex"
+        active_files = "`AGENTS.md`, `.codex/README.md`"
+        excluded_agent = "Claude Code non configurato, salvo richiesta esplicita LeaderAI."
+    else:
+        active_agent = "Claude Code + Codex"
+        active_files = "`CLAUDE.md`, `.claude/README.md`, `AGENTS.md`, `.codex/README.md`"
+        excluded_agent = "Entrambi configurati per richiesta esplicita LeaderAI."
+
     return "\n".join(
         [
             "# Report finale LeaderAI",
             "",
-            "CERVELLO",
+            "FASE 1 - CERVELLO",
+            f"- Agente attivo: {active_agent}",
+            f"- Agganci attesi: {active_files}",
+            f"- Nota: {excluded_agent}",
             section("- Creato:", result.created).rstrip(),
             section("- Gia' presente:", result.existing).rstrip(),
             section("- Aggiornato:", result.updated).rstrip(),
             "",
-            "ECOSISTEMA",
-            "- Fonti trovate: da compilare dopo discovery reale",
-            "- Fonti da collegare: da compilare dopo discovery reale",
-            "- Processi candidati: da compilare dopo discovery reale",
+            "FASE 2 - ECOSISTEMA",
+            "- Stato: predisposto, da collegare alle fonti reali del cliente",
+            "- Fonti trovate: da compilare dopo discovery reale in `ecosistema/FONTI.md`",
+            "- Fonti da collegare: cartelle/report clienti, cataloghi, Drive/OneDrive, CRM/gestionale solo se esistono",
+            "- Dove scrivere i collegamenti: `ecosistema/FONTI.md` per fonti, `ecosistema/PROCESSI.md` per processi, `ecosistema/LIMITI.md` per vincoli",
             "",
             "DECISIONI UMANE",
             *(f"- {item}" for item in (result.decisions or ["Nessuna in questa installazione"])),
@@ -145,14 +162,14 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
 
     ensure_text(
         target / "ecosistema" / "FONTI.md",
-        "# Fonti\n\nMappa delle fonti vere del cliente.\n\n## Da compilare\n\n- Cartelle operative\n- Drive/OneDrive/server\n- Email/calendario\n- CRM/gestionale/fatture\n",
+        "# Fonti\n\nMappa delle fonti vere del cliente.\n\n## Fonti trovate\n\n- Cartella madre: da compilare\n\n## Fonti da collegare\n\n- Cartelle operative: da collegare\n- Report/clienti: da collegare\n- Drive/OneDrive/server: da collegare\n- Email/calendario: da collegare solo se autorizzati\n- CRM/gestionale/fatture: da collegare solo se esiste una fonte reale\n\n## Regola\n\nNon inventare percorsi. Se una fonte non e' presente, lasciare `da collegare`.\n",
         result,
         force,
         dry_run,
     )
     ensure_text(
         target / "ecosistema" / "PROCESSI.md",
-        "# Processi\n\nProcessi osservati o candidati.\n\n## Da compilare\n\n- Processo\n- Fonte\n- Frequenza\n- Output atteso\n",
+        "# Processi\n\nProcessi osservati o candidati.\n\n## Fase 1 - Cervello\n\n- Verifica lettura istruzioni e memoria\n- Verifica report finale\n\n## Fase 2 - Ecosistema\n\n- Processo: da collegare a una fonte reale\n- Fonte: da collegare\n- Frequenza: da definire\n- Output atteso: da definire\n",
         result,
         force,
         dry_run,
@@ -191,7 +208,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Monta Cervello + Ecosistema LeaderAI in una cartella cliente.")
     parser.add_argument("--target", required=True, help="Cartella cliente da creare o controllare.")
     parser.add_argument("--client", default="Cliente", help="Nome cliente.")
-    parser.add_argument("--agent", choices=["codex", "claude", "both"], default="both")
+    parser.add_argument("--agent", choices=["codex", "claude", "both"], required=True)
     parser.add_argument("--force", action="store_true", help="Sovrascrive i file standard esistenti.")
     parser.add_argument("--dry-run", action="store_true", help="Mostra cosa farebbe senza scrivere.")
     parser.add_argument("--quiet", action="store_true", help="Riduce output a una riga.")

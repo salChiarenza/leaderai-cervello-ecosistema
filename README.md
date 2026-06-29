@@ -19,20 +19,20 @@ monta Cervello + Ecosistema senza trasformare il cliente in tecnico.
 Uso manuale:
 
 ```bash
-python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent both
+python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
 ```
 
 Valori per `--agent`:
 
-- `codex`
-- `claude`
-- `both`
+- `claude` se il cliente sta usando Claude Code
+- `codex` se il cliente sta usando Codex
+- `both` solo se LeaderAI chiede esplicitamente di preparare entrambi
 
 ## Cosa crea
 
 Nel target scelto crea solo i pezzi standard mancanti:
 
-- `AGENTS.md`
+- `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` se richiesto Claude Code
 - `.codex/README.md` se richiesto Codex
 - `.claude/README.md` se richiesto Claude Code
@@ -53,6 +53,6 @@ python3 -m unittest discover -s tests
 
 ## Stato
 
-Versione iniziale installabile via Git. Prima di usarla con un cliente, leggere
-`AGENTS.md` e `INSTALLA_CON_AI.md`, poi verificare che la repo GitHub sia
-aggiornata.
+Versione installabile via Git. Prima di usarla con un cliente, leggere
+`AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita' giusta
+Claude/Codex, poi verificare che la repo GitHub sia aggiornata.

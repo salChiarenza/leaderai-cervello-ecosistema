@@ -9,8 +9,8 @@ presente, deve essere un symlink o una copia di questo file.
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
-- `AGENTS.md`
-- `CLAUDE.md` se serve Claude Code
+- `AGENTS.md` come mappa comune del Cervello
+- `CLAUDE.md` se il cliente usa Claude Code
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
 - `memory/MEMORY.md`
@@ -25,6 +25,18 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 Il cliente non deve fare debug tecnico. L'agente del cliente fa autodiagnosi,
 installa o ripara cio' che manca, crea la cartella madre nel posto giusto e
 chiude solo dopo un collaudo reale.
+
+## Scelta agente
+
+La repo e' una sola, ma l'installazione non deve creare tutto a caso.
+
+- Se il cliente sta usando Claude Code, usare `--agent claude`.
+- Se il cliente sta usando Codex, usare `--agent codex`.
+- Usare `--agent both` solo se LeaderAI lo chiede esplicitamente per preparare
+  la stessa cartella a entrambi gli agenti.
+
+L'agente cliente deve configurare solo la modalita' con cui sta lavorando. Non
+crea la configurazione dell'altro agente per prudenza o per abitudine.
 
 Per clienti con piu' computer, la cartella madre deve stare in una posizione
 sincronizzata, per esempio OneDrive. Non usare `Downloads`, `Desktop` locale o
@@ -59,7 +71,7 @@ python3 -m unittest discover -s tests
 Installazione manuale:
 
 ```bash
-python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent both
+python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
 ```
 
 ## Quando finisci una modifica

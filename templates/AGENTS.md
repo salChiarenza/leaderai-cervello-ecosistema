@@ -7,6 +7,8 @@ Questa e' la porta del Cervello AI del cliente.
 Aiutare il cliente a lavorare meglio usando AI, senza inventare fonti e senza
 spargere memoria in posti casuali.
 
+Modalita' installata: `{{agent}}`.
+
 ## Regole base
 
 - Prima leggere questa mappa.
@@ -16,6 +18,10 @@ spargere memoria in posti casuali.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
 - Non salvare segreti, password, token o dati bancari in memoria.
 - Se manca un pezzo standard, crearlo.
+- Se questa cartella e' stata installata per `claude`, non creare `.codex`
+  senza richiesta esplicita LeaderAI.
+- Se questa cartella e' stata installata per `codex`, non creare `.claude` o
+  `CLAUDE.md` senza richiesta esplicita LeaderAI.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
 
 ## Fase 1 - Cervello
@@ -25,7 +31,7 @@ Il Cervello e' pronto quando:
 - questa mappa esiste;
 - la memoria a file esiste;
 - i log esistono;
-- Codex/Claude Code hanno il loro punto di aggancio;
+- l'agente scelto ha il suo punto di aggancio;
 - una nuova chat sa dove leggere e dove scrivere.
 
 ## Fase 2 - Ecosistema
@@ -40,6 +46,9 @@ E' la mappa delle fonti reali:
 - gestionali/CRM/fatture se esistono;
 - processi ricorrenti;
 - limiti e azioni che richiedono conferma.
+
+Se una fonte non esiste ancora, scrivere `da collegare` e indicare dove
+andrebbe collegata. Non inventare percorsi, CRM o cartelle clienti.
 
 ## Report
 

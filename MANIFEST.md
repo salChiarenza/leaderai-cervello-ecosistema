@@ -19,6 +19,17 @@ Deve:
 4. collaudare;
 5. scrivere un report finale.
 
+## Modalita' agente
+
+La repo resta unica. La modalita' cambia in base all'agente reale del cliente:
+
+- Claude Code -> `--agent claude`
+- Codex -> `--agent codex`
+- Entrambi -> `--agent both`, solo su richiesta esplicita LeaderAI
+
+Il Cervello passa quando e' pronto per l'agente usato oggi. Non e' necessario
+creare l'altro lato se il cliente non lo usa.
+
 ## Standard minimo
 
 Il target passa solo se esistono:
@@ -58,3 +69,5 @@ Il pacchetto e' pronto quando:
 - produce log e report;
 - i test automatici passano;
 - una nuova chat dell'agente sa leggere `AGENTS.md` e dove salvare memoria/report.
+- il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema
+  da collegare con fonti reali.

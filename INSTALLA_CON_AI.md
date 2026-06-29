@@ -1,6 +1,8 @@
 # Autoconfigurazione Git - Cervello + Ecosistema
 
 Questo e' il testo da incollare nel Claude Code o Codex del cliente.
+La repo resta una sola. La modalita' cambia in base all'agente reale del
+cliente.
 
 ## Testo da copiare
 
@@ -16,6 +18,16 @@ leggono le stesse istruzioni, la stessa memoria e le stesse fonti.
 
 Cliente:
 Marco De Nicolo - Private Banker / Partner Azimut
+
+Modalita':
+sto lavorando da Claude Code. Quindi configura la modalita' Claude:
+--agent claude
+
+Se invece questa istruzione viene incollata in Codex, cambia la modalita' in:
+--agent codex
+
+Usa --agent both solo se LeaderAI/Sal lo chiede esplicitamente.
+Non creare la configurazione dell'altro agente per prudenza.
 
 Agisci tu, senza chiedermi istruzioni tecniche. Chiedimi solo scelte umane vere
 o permessi che non puoi concedere al posto mio.
@@ -48,15 +60,15 @@ Fase 3 - clona o aggiorna la repo
    - README.md
    - MANIFEST.md
 
-Fase 4 - monta Cervello + Ecosistema nella cartella madre
+Fase 4 - monta il Cervello nella cartella madre
 Esegui dalla repo:
 
-python3 leaderai_setup.py --target "<cartella-madre-OneDrive>" --client "Marco De Nicolo - Azimut" --agent both
+python3 leaderai_setup.py --target "<cartella-madre-OneDrive>" --client "Marco De Nicolo - Azimut" --agent claude
 
 Se il comando `python3` non esiste ma `python` o `py` si', usa quello corretto
 per questo computer.
 
-Fase 5 - personalizza il contenuto per Marco
+Fase 5 - personalizza il Cervello per Marco
 Dopo l'installazione, apri i file creati nella cartella madre e aggiorna solo i
 punti necessari, senza cancellare il resto.
 
@@ -95,9 +107,11 @@ In `ecosistema/LIMITI.md` aggiungi:
 
 Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
-   AGENTS.md, CLAUDE.md, memory/MEMORY.md, ecosistema/FONTI.md,
+   AGENTS.md, CLAUDE.md, .claude/README.md, memory/MEMORY.md, ecosistema/FONTI.md,
    ecosistema/PROCESSI.md, ecosistema/LIMITI.md, logs/install-log.md,
    REPORT_FINALE.md.
+   Nota: `.codex/README.md` deve esistere solo se la modalita' scelta e' Codex
+   o both.
 2. Leggi `AGENTS.md` e dimmi in 5 righe:
    - chi sono;
    - dove sta la cartella madre;
@@ -108,12 +122,24 @@ Fase 6 - collaudo
    "crea una scheda cliente vuota per proposta di riallocazione, con campi da compilare e disclaimer bozza da rivedere".
 4. Se qualcosa non passa, correggi e riprova.
 
+Fase 7 - cosa collegare dopo
+Non chiudere con "installato" e basta.
+Dimmi in modo operativo:
+- Cervello: cosa e' stato creato e testato;
+- Ecosistema: quali fonti reali hai trovato;
+- Da collegare: dove vanno collegati fondi Azimut, report clienti, cartelle clienti
+  e CRM/gestionale;
+- Blocchi: cosa manca perche' non esiste ancora o richiede Marco/Sal.
+
 Report finale obbligatorio:
 - cartella madre scelta;
 - repo clonata/aggiornata si/no;
+- modalita' scelta: claude / codex / both;
 - file creati;
 - OneDrive verificato si/no;
+- Cervello verificato si/no;
 - prova scheda cliente completata si/no;
-- cosa resta da collegare;
+- Ecosistema: fonti trovate;
+- cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 ```
