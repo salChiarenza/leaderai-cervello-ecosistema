@@ -34,10 +34,13 @@ creare l'altro lato se il cliente non lo usa.
 
 Il target passa solo se esistono:
 
+- `.gitignore` che esclude i segreti (`.secrets/`, `*.env`, token, chiavi, credenziali)
+- la cartella madre e' un repository git (nella posizione scelta col cliente, locale o cloud; sul cloud vale l'avviso sul rischio corruzione)
 - `AGENTS.md`
 - `memory/MEMORY.md`
 - `logs/install-log.md`
 - `ecosistema/FONTI.md`
+- `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
@@ -71,3 +74,5 @@ Il pacchetto e' pronto quando:
 - una nuova chat dell'agente sa leggere `AGENTS.md` e dove salvare memoria/report.
 - il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema
   da collegare con fonti reali.
+- ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
+  e solo i processi/limiti necessari aggiornati.

@@ -3,12 +3,38 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
 
 
 ROOT = Path(__file__).resolve().parent
+
+# Contenuto del .gitignore della cartella madre.
+# Tiene FUORI dalla repo i segreti del cliente: la cartella e' un repository git
+# e il backup scelto col cliente (GitHub privato o copia su Drive/OneDrive) non
+# deve mai contenere token, chiavi o password. Vale sempre, qualunque sia la
+# posizione scelta per la cartella madre.
+GITIGNORE_CONTENT = """\
+# Segreti del cliente: mai nella repo, mai nel backup.
+# Su ogni PC i connettori (Gmail, Calendar, Drive, Meta) si ri-autorizzano con login:
+# le chiavi restano per-macchina, non viaggiano nel backup.
+.secrets/
+*.env
+.env
+*.key
+*.pem
+*token*
+*secret*
+*password*
+*credential*
+
+# Rumore di sistema
+.DS_Store
+__pycache__/
+.pytest_cache/
+"""
 
 
 @dataclass
@@ -67,6 +93,50 @@ def append_log(path: Path, lines: Iterable[str], dry_run: bool) -> None:
             handle.write(line.rstrip() + "\n")
 
 
+def ensure_gitignore(path: Path, result: InstallResult, dry_run: bool) -> None:
+    # Garantisce un .gitignore che esclude i segreti del cliente.
+    # Se esiste gia' ma non copre .secrets/, aggiunge le righe mancanti senza
+    # toccare il resto: cosi' non sovrascriviamo eventuali regole gia' messe dal cliente.
+    if path.exists():
+        current = path.read_text(encoding="utf-8")
+        if ".secrets/" in current:
+            result.record("existing", path)
+            return
+        if not dry_run:
+            with path.open("a", encoding="utf-8") as handle:
+                handle.write("\n" + GITIGNORE_CONTENT)
+        result.record("updated", path)
+        return
+    if not dry_run:
+        path.write_text(GITIGNORE_CONTENT, encoding="utf-8")
+    result.record("created", path)
+
+
+def ensure_git_repo(target: Path, result: InstallResult, dry_run: bool) -> None:
+    # Inizializza la cartella madre come repository git, se non lo e' gia'.
+    # E' innocuo e utile in ogni caso: la posizione della cartella (locale o
+    # cloud) e il backup (GitHub privato o copia su Drive/OneDrive) si scelgono
+    # col cliente, caso per caso. Il repo git serve comunque.
+    if (target / ".git").exists():
+        result.decisions.append("Git: repository gia' presente nella cartella madre.")
+        return
+    if dry_run:
+        result.decisions.append("Git: 'git init' da eseguire (dry-run).")
+        return
+    try:
+        subprocess.run(
+            ["git", "init"],
+            cwd=str(target),
+            check=True,
+            capture_output=True,
+        )
+        result.decisions.append("Git: repository inizializzato nella cartella madre.")
+    except FileNotFoundError:
+        result.decisions.append("Git: comando 'git' non trovato, repository da inizializzare a mano.")
+    except subprocess.CalledProcessError:
+        result.decisions.append("Git: 'git init' fallito, da completare a mano nella cartella madre.")
+
+
 def build_report(result: InstallResult, agent: str) -> str:
     def section(title: str, items: list[str]) -> str:
         if not items:
@@ -105,8 +175,9 @@ def build_report(result: InstallResult, agent: str) -> str:
             "FASE 2 - ECOSISTEMA",
             "- Stato: predisposto, da collegare alle fonti reali del cliente",
             "- Fonti trovate: da compilare dopo discovery reale in `ecosistema/FONTI.md`",
+            "- Asset operativi: da registrare in `ecosistema/ASSET.md` quando nasce una risorsa da usare o rispettare",
             "- Fonti da collegare: cartelle/report clienti, cataloghi, Drive/OneDrive, CRM/gestionale solo se esistono",
-            "- Dove scrivere i collegamenti: `ecosistema/FONTI.md` per fonti, `ecosistema/PROCESSI.md` per processi, `ecosistema/LIMITI.md` per vincoli",
+            "- Dove scrivere i collegamenti: `ecosistema/FONTI.md` per fonti, `ecosistema/ASSET.md` per asset, `ecosistema/PROCESSI.md` per processi, `ecosistema/LIMITI.md` per vincoli",
             "",
             "DECISIONI UMANE",
             *(f"- {item}" for item in (result.decisions or ["Nessuna in questa installazione"])),
@@ -129,6 +200,12 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
     ensure_dir(target, result, dry_run)
     for dirname in ["memory", "logs", "ecosistema"]:
         ensure_dir(target / dirname, result, dry_run)
+
+    # Cartella madre = repository git con .gitignore che esclude i segreti.
+    # La posizione (locale o cloud) e il backup (GitHub o Drive/OneDrive) sono
+    # scelti col cliente. Il target arriva da --target, non lo decide lo script.
+    ensure_gitignore(target / ".gitignore", result, dry_run)
+    ensure_git_repo(target, result, dry_run)
 
     ensure_text(target / "AGENTS.md", read_template("AGENTS.md", context), result, force, dry_run)
     ensure_text(target / "memory" / "MEMORY.md", read_template("MEMORY.md", context), result, force, dry_run)
@@ -163,6 +240,13 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
     ensure_text(
         target / "ecosistema" / "FONTI.md",
         "# Fonti\n\nMappa delle fonti vere del cliente.\n\n## Fonti trovate\n\n- Cartella madre: da compilare\n\n## Fonti da collegare\n\n- Cartelle operative: da collegare\n- Report/clienti: da collegare\n- Drive/OneDrive/server: da collegare\n- Email/calendario: da collegare solo se autorizzati\n- CRM/gestionale/fatture: da collegare solo se esiste una fonte reale\n\n## Regola\n\nNon inventare percorsi. Se una fonte non e' presente, lasciare `da collegare`.\n",
+        result,
+        force,
+        dry_run,
+    )
+    ensure_text(
+        target / "ecosistema" / "ASSET.md",
+        read_template("ASSET.md", context),
         result,
         force,
         dry_run,
