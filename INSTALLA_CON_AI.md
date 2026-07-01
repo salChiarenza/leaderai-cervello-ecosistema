@@ -104,6 +104,16 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
 - non inviare email, non cancellare file, non spostare cartelle vive e non usare
   dati sensibili senza mia conferma esplicita.
 
+Mantieni anche la sezione "Comunicazione e fonti di verita'":
+- gli agenti non si parlano direttamente, leggono e scrivono file condivisi;
+- stato e chiusure lavoro: `REPORT_FINALE.md` o `logs/install-log.md`;
+- procedure e "come si fa": file dell'area che le usa, non chat;
+- asset/capacita' nuove: `ecosistema/ASSET.md`;
+- coordinamento temporaneo sullo stesso file: chat solo se serve evitare
+  collisioni e massimo 48 ore;
+- problema di allineamento Claude/Codex: sync dedicato solo se il cliente usa
+  entrambi gli agenti.
+
 In `memory/MEMORY.md` aggiungi i puntatori:
 - `AGENTS.md` - regole operative ed eventuali vincoli del settore.
 - `ecosistema/FONTI.md` - fonti autorizzate e cartelle reali.

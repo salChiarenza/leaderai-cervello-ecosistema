@@ -62,6 +62,11 @@ guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act. Ogni modulo
 deve avere uno stato, cosi' il prossimo passo non dipende dalla memoria di chi
 segue la consegna.
 
+Il Cervello include anche la **mappa comunicazione**: stato e chiusure in
+`REPORT_FINALE.md`/`logs/`, procedure nei file proprietari, asset in
+`ecosistema/ASSET.md`, chat solo per coordinamento temporaneo e sync dedicato
+solo se il cliente usa sia Claude sia Codex.
+
 Non sovrascrive file gia' presenti, salvo `--force`.
 
 ## Collaudo

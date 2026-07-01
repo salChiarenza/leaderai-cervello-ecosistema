@@ -76,6 +76,9 @@ Il pacchetto e' pronto quando:
   da collegare con fonti reali.
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
   e solo i processi/limiti necessari aggiornati.
+- `AGENTS.md` e il report finale includono la mappa comunicazione: procedure nei
+  file proprietari, stato/report nei log, asset in `ecosistema/ASSET.md`, chat
+  solo temporanea e sync dedicato solo se esistono due agenti.
 - il report produce una mappa moduli con stato per PEC/email certificata,
   email/calendario, Drive/OneDrive, CRM/gestionale, plugin, skill, agenti,
   guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.

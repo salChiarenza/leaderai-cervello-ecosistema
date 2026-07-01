@@ -45,6 +45,22 @@ La repo e' una sola, ma l'installazione non deve creare tutto a caso.
 L'agente cliente deve configurare solo la modalita' con cui sta lavorando. Non
 crea la configurazione dell'altro agente per prudenza o per abitudine.
 
+## Comunicazione e fonti di verita'
+
+Gli agenti non si parlano direttamente. Si coordinano leggendo e scrivendo file
+condivisi.
+
+| Caso | Dove si scrive nel Cervello/Ecosistema cliente | Durata |
+|---|---|---|
+| Stato operativo o chiusura lavoro | `REPORT_FINALE.md` oppure `logs/install-log.md` | finche' serve come prova |
+| Procedura / come si fa una cosa | file del reparto o dell'area che la usa, es. `ecosistema/PROCESSI.md` o una procedura dedicata | stabile |
+| Problema di allineamento tra Claude e Codex | un sync dedicato solo se il cliente usa entrambi gli agenti | finche' il sync si chiude |
+| Coordinamento immediato sullo stesso file | una chat temporanea solo se serve evitare collisioni | massimo 48 ore |
+| Asset/capacita' nuova | `ecosistema/ASSET.md` | stabile |
+
+Regola pratica: se una nota spiega "come si fa", non va in chat. Va nella
+procedura o nel file proprietario. La chat e' solo coordinamento temporaneo.
+
 Dove mettere la cartella madre si decide caso per caso, con domande guidate, non
 con una regola fissa. Le opzioni sono disco locale oppure cartella sincronizzata
 (OneDrive / Google Drive). Avviso da dire chiaro: Claude Code, mentre scrive,

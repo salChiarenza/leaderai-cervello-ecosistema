@@ -29,6 +29,22 @@ Modalita' installata: `{{agent}}`.
   `CLAUDE.md` senza richiesta esplicita LeaderAI.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
 
+## Comunicazione e fonti di verita'
+
+Gli agenti non si parlano direttamente. Si coordinano leggendo e scrivendo file
+condivisi.
+
+| Caso | Dove si scrive | Durata |
+|---|---|---|
+| Stato operativo o chiusura lavoro | `REPORT_FINALE.md` oppure `logs/install-log.md` | finche' serve come prova |
+| Procedura / come si fa una cosa | file dell'area che la usa, es. `ecosistema/PROCESSI.md` o procedura dedicata | stabile |
+| Problema di allineamento tra Claude e Codex | sync dedicato solo se si usano entrambi gli agenti | finche' si chiude |
+| Coordinamento immediato sullo stesso file | chat temporanea solo se serve evitare collisioni | massimo 48 ore |
+| Asset/capacita' nuova | `ecosistema/ASSET.md` | stabile |
+
+Regola pratica: se una nota spiega "come si fa", non va in chat. Va nella
+procedura o nel file proprietario. La chat e' solo coordinamento temporaneo.
+
 ## Riflesso asset operativo
 
 Quando il cliente dice "aggiungi", "abbiamo", "ho comprato", "attiva",
