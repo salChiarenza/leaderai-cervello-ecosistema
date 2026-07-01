@@ -29,6 +29,9 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Asset operativi", asset)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("FASE 2 - ECOSISTEMA", report)
+            self.assertIn("MAPPA MODULI", report)
+            self.assertIn("PEC/email certificata", report)
+            self.assertIn("Skill per lavori ripetuti", report)
 
     def test_second_run_does_not_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:

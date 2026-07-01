@@ -70,6 +70,19 @@ E' la mappa delle fonti reali:
 Se una fonte non esiste ancora, scrivere `da collegare` e indicare dove
 andrebbe collegata. Non inventare percorsi, CRM o cartelle clienti.
 
+## Mappa moduli
+
+Alla fine del setup o di un audit, il report deve dire quali moduli servono
+davvero e quali no. Non partire dal modulo preferito del momento.
+
+Stati ammessi: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`,
+`ATTIVO`.
+
+Moduli minimi da valutare: PEC/email certificata, email/calendario,
+Drive/OneDrive/cartelle, CRM/gestionale/export, plugin/connettori, skill,
+agenti/ruoli, guardiani/hook, ronde/monitoraggi, voce/dettatura,
+compliance/privacy/AI Act.
+
 ## Report
 
 Ogni intervento importante chiude con `REPORT_FINALE.md` o con una voce in

@@ -208,6 +208,30 @@ Dimmi in modo operativo:
   report, CRM/gestionale);
 - Blocchi: cosa manca perche' non esiste ancora o richiede me/Sal.
 
+Fase 9 - mappa moduli da installare o lasciare fuori
+Non limitarti alla PEC o al primo asset emerso. Prima di chiudere, crea una
+mappa moduli con una riga per ogni area sotto. Per ogni modulo usa uno stato
+obbligatorio: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`,
+`ATTIVO`.
+
+Moduli da valutare:
+- PEC/email certificata;
+- email e calendario;
+- Drive/OneDrive/cartelle operative;
+- CRM/gestionale/export;
+- plugin/connettori;
+- skill per lavori ripetuti;
+- agenti/ruoli dedicati;
+- guardiani/hook;
+- ronde/monitoraggi;
+- voce/dettatura;
+- compliance/privacy/AI Act.
+
+Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
+`DA SCOPRIRE` o `DA COLLEGARE` nel dettaglio. Se il modulo non serve al lavoro
+del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
+non dalla memoria di chi sta seguendo la consegna.
+
 Report finale obbligatorio:
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
 - repo clonata/aggiornata si/no;
@@ -221,6 +245,7 @@ Report finale obbligatorio:
 - prova piccola completata si/no;
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
+- Mappa moduli con stato per ogni modulo;
 - cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 ```

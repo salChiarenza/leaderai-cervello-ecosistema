@@ -23,6 +23,10 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 
+Il `REPORT_FINALE.md` deve includere la mappa moduli con stato per PEC/email
+certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,
+agenti/ruoli, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
+
 ## Regola madre
 
 Il cliente non deve fare debug tecnico. L'agente del cliente fa autodiagnosi,

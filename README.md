@@ -56,6 +56,12 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 
+Il report finale include anche la **mappa moduli**: PEC/email certificata,
+email/calendario, Drive/OneDrive, CRM/gestionale, plugin, skill, agenti,
+guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act. Ogni modulo
+deve avere uno stato, cosi' il prossimo passo non dipende dalla memoria di chi
+segue la consegna.
+
 Non sovrascrive file gia' presenti, salvo `--force`.
 
 ## Collaudo

@@ -76,3 +76,6 @@ Il pacchetto e' pronto quando:
   da collegare con fonti reali.
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
   e solo i processi/limiti necessari aggiornati.
+- il report produce una mappa moduli con stato per PEC/email certificata,
+  email/calendario, Drive/OneDrive, CRM/gestionale, plugin, skill, agenti,
+  guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
