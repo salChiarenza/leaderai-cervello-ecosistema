@@ -24,3 +24,24 @@ Quando il cliente dice che esiste o va aggiunto un asset, l'agente aggiorna:
 
 Se manca una fonte reale, scrivere `DA COLLEGARE`. Non inventare accessi,
 percorsi, password, account o stati.
+
+## Caso PEC/email certificata
+
+Per ogni cliente chiedere o scoprire se esiste una PEC/email certificata e cosa
+deve farci l'agente:
+
+- solo registrarla come recapito/asset;
+- leggerla e archiviare messaggi/ricevute;
+- preparare o inviare comunicazioni certificate.
+
+Stato consentito:
+
+- `NON SERVE` se il cliente non la usa;
+- `DA SCOPRIRE` se non e' stato chiarito;
+- `DA COLLAUDARE` se esiste ma manca una prova;
+- `INSTALLABILE` se il provider consente collegamento ma manca consenso o
+  configurazione;
+- `ATTIVO` solo dopo prova reale.
+
+Credenziali, app password e token stanno solo in `.secrets/`. Ogni invio a
+terzi richiede conferma umana esplicita.

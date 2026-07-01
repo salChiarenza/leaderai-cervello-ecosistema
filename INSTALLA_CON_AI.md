@@ -127,6 +127,16 @@ In `ecosistema/ASSET.md` registra ogni risorsa operativa che emerge:
   "collega" una nuova risorsa, aggiorna questo registro e poi solo i processi o
   limiti collegati che servono davvero.
 
+Per PEC/email certificata chiedi sempre:
+- il cliente ha una PEC/email certificata?
+- vuole solo registrarla come asset o anche leggerla/inviarla con agenti?
+- qual e' il provider e dove si controlla davvero?
+- esistono ricevute o archivi da conservare?
+- ci sono credenziali dedicate o app password? Se si', devono stare solo in
+  `.secrets/`, mai in Git, memoria o chat.
+Non segnare la PEC `ATTIVO` senza una prova reale di login o lettura/invio.
+Ogni invio a terzi richiede conferma umana esplicita.
+
 In `ecosistema/PROCESSI.md` aggiungi i miei processi ricorrenti reali, con input
 e output attesi (lascia "da definire" dove non e' ancora chiaro).
 
