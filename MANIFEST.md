@@ -44,6 +44,7 @@ Il target passa solo se esistono:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
+- `MODULO_CALENDARIO_OPERATIVO.md`
 
 Per Claude Code:
 
@@ -80,5 +81,6 @@ Il pacchetto e' pronto quando:
   file proprietari, stato/report nei log, asset in `ecosistema/ASSET.md`, chat
   solo temporanea e sync dedicato solo se esistono due agenti.
 - il report produce una mappa moduli con stato per PEC/email certificata,
-  email/calendario, Drive/OneDrive, CRM/gestionale, plugin, skill, agenti,
-  guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
+  email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale,
+  plugin, skill, agenti, guardiani/hook, ronde, voce/dettatura e
+  compliance/privacy/AI Act.

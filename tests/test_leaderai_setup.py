@@ -36,6 +36,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Procedure e 'come si fa'", report)
             self.assertIn("MAPPA MODULI", report)
             self.assertIn("PEC/email certificata", report)
+            self.assertIn("Calendario operativo", report)
             self.assertIn("Skill per lavori ripetuti", report)
 
     def test_first_commit_photographs_install(self):

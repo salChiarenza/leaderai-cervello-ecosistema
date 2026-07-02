@@ -95,9 +95,12 @@ Stati ammessi: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`,
 `ATTIVO`.
 
 Moduli minimi da valutare: PEC/email certificata, email/calendario,
-Drive/OneDrive/cartelle, CRM/gestionale/export, plugin/connettori, skill,
-agenti/ruoli, guardiani/hook, ronde/monitoraggi, voce/dettatura,
-compliance/privacy/AI Act.
+calendario operativo, Drive/OneDrive/cartelle, CRM/gestionale/export,
+plugin/connettori, skill, agenti/ruoli, guardiani/hook, ronde/monitoraggi,
+voce/dettatura, compliance/privacy/AI Act.
+
+Se l'agenda vive di colori, applicare il modulo calendario operativo: colori per
+il team, categorie leggibili per l'agente, prova letta prima di `ATTIVO`.
 
 ## Report
 

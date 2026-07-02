@@ -239,7 +239,8 @@ obbligatorio: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`,
 
 Moduli da valutare:
 - PEC/email certificata;
-- email e calendario;
+- email e calendario (accesso e prova fonte);
+- calendario operativo (calendari separati, colori, regole evento);
 - Drive/OneDrive/cartelle operative;
 - CRM/gestionale/export;
 - plugin/connettori;
@@ -254,6 +255,11 @@ Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
 `DA SCOPRIRE` o `DA COLLEGARE` nel dettaglio. Se il modulo non serve al lavoro
 del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
 non dalla memoria di chi sta seguendo la consegna.
+
+Se il cliente usa l'agenda soprattutto tramite colori, leggi
+`MODULO_CALENDARIO_OPERATIVO.md` prima di proporre o creare calendari. Il primo
+blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
+senza conferma esplicita.
 
 Report finale obbligatorio:
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);

@@ -57,10 +57,15 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `REPORT_FINALE.md`
 
 Il report finale include anche la **mappa moduli**: PEC/email certificata,
-email/calendario, Drive/OneDrive, CRM/gestionale, plugin, skill, agenti,
-guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act. Ogni modulo
-deve avere uno stato, cosi' il prossimo passo non dipende dalla memoria di chi
-segue la consegna.
+email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,
+skill, agenti, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI
+Act. Ogni modulo deve avere uno stato, cosi' il prossimo passo non dipende
+dalla memoria di chi segue la consegna.
+
+Modulo specifico gia' disponibile:
+
+- `MODULO_CALENDARIO_OPERATIVO.md` - quando il cliente usa Calendar a colori e
+  serve trasformare quella lettura visiva in struttura leggibile dall'agente.
 
 Il Cervello include anche la **mappa comunicazione**: stato e chiusure in
 `REPORT_FINALE.md`/`logs/`, procedure nei file proprietari, asset in
