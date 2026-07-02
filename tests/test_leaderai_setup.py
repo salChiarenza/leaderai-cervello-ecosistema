@@ -1,3 +1,4 @@
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -36,6 +37,32 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("MAPPA MODULI", report)
             self.assertIn("PEC/email certificata", report)
             self.assertIn("Skill per lavori ripetuti", report)
+
+    def test_first_commit_photographs_install(self):
+        # La cartella madre deve nascere come repository CON cronologia:
+        # senza primo commit il backup della Fase 7 parte da un repo vuoto.
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+            result = leaderai_setup.run_setup(target, "Cliente Test", "claude")
+
+            log = subprocess.run(
+                ["git", "log", "--oneline"],
+                cwd=str(target),
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(log.returncode, 0)
+            self.assertIn("installazione iniziale", log.stdout)
+            porcelain = subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=str(target),
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(porcelain.stdout.strip(), "")
+            self.assertTrue(
+                any("primo commit creato" in d for d in result.decisions)
+            )
 
     def test_second_run_does_not_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:

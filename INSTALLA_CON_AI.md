@@ -163,8 +163,11 @@ Fase 6 - collaudo
    ecosistema/LIMITI.md, logs/install-log.md, REPORT_FINALE.md.
    Nota: `.codex/README.md` deve esistere solo se la modalita' scelta e' Codex
    o both.
-2. Verifica che la cartella madre sia un repository git (esiste `.git`) e che
-   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali.
+2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
+   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
+   esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
+   lo crea da solo a fine corsa: se manca, fallo tu con `git add -A` +
+   `git commit`, altrimenti il backup della Fase 7 parte da un repository vuoto.
 3. Prova delle fonti (obbligatoria). Per ogni fonte disponibile fai una prova
    innocua di SOLA LETTURA e mostrami il dato vero appena letto:
    - email: oggetto e mittente di una mail recente, senza inviare nulla;

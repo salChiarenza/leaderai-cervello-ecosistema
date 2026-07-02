@@ -137,6 +137,48 @@ def ensure_git_repo(target: Path, result: InstallResult, dry_run: bool) -> None:
         result.decisions.append("Git: 'git init' fallito, da completare a mano nella cartella madre.")
 
 
+def ensure_first_commit(target: Path, result: InstallResult, dry_run: bool) -> None:
+    # Fotografa l'installazione: senza un primo commit la cartella e' un
+    # repository vuoto e il backup (push su GitHub, Fase 7) non ha nulla da
+    # caricare. Va chiamato a fine setup, quando tutti i file esistono.
+    if dry_run:
+        result.decisions.append("Git: primo commit da creare a fine setup (dry-run).")
+        return
+    if not (target / ".git").exists():
+        return
+    try:
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=str(target),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        if not status.stdout.strip():
+            result.decisions.append("Git: nessun cambiamento da fotografare, commit non necessario.")
+            return
+        subprocess.run(["git", "add", "-A"], cwd=str(target), check=True, capture_output=True)
+        # Sul PC di un cliente nuovo git spesso non ha nome/email configurati:
+        # l'identita' di riserva vale solo per questo commit, non tocca la sua config.
+        subprocess.run(
+            [
+                "git",
+                "-c", "user.name=LeaderAI Setup",
+                "-c", "user.email=setup@leaderai.local",
+                "commit",
+                "-m", "Cervello + Ecosistema LeaderAI: installazione iniziale",
+            ],
+            cwd=str(target),
+            check=True,
+            capture_output=True,
+        )
+        result.decisions.append("Git: primo commit creato (fotografia dell'installazione).")
+    except FileNotFoundError:
+        result.decisions.append("Git: comando 'git' non trovato, primo commit da fare a mano.")
+    except subprocess.CalledProcessError:
+        result.decisions.append("Git: primo commit fallito, farlo a mano nella cartella madre.")
+
+
 def build_report(result: InstallResult, agent: str) -> str:
     def section(title: str, items: list[str]) -> str:
         if not items:
@@ -306,6 +348,9 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
         f"- Updated: {', '.join(result.updated) if result.updated else 'none'}",
     ]
     append_log(target / "logs" / "install-log.md", log_lines, dry_run)
+
+    # Ultimo gesto: fotografia git dell'installazione completa.
+    ensure_first_commit(target, result, dry_run)
 
     return result
 
