@@ -271,6 +271,11 @@ gia' uso.
    - GitHub privato: copia su una repo privata. Sicuro, ma serve un account
      GitHub. Una volta configurato, il push lo fa l'agente da solo a fine
      sessione (regola del salvataggio automatico), non devo ricordarmene io.
+   AUTENTICAZIONE GITHUB - REGOLA FISSA: si usa SOLO GitHub CLI con login dal
+   browser (`gh auth login` → GitHub.com → HTTPS → login via web browser: il
+   cliente clicca Autorizza e basta). VIETATO far creare, copiare o incollare
+   token (ghp_...), password o chiavi al cliente: e' una procedura da
+   sviluppatori. Se `gh` manca, l'agente lo installa (es. winget/brew).
    - Copia/sincronizzazione su Drive o OneDrive: uso quello che ho gia'; comodo,
      ma la sincronizzazione continua puo' corrompere i file mentre l'agente
      scrive. Meglio come copia di backup, non come cartella di lavoro viva.
