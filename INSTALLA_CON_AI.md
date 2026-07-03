@@ -216,6 +216,16 @@ In `ecosistema/LIMITI.md` aggiungi:
 - nessun uso di file non autorizzati;
 - nessuna modifica/cancellazione di dati originali.
 
+Fase 5-ter - browser giusto (obbligatoria)
+Chiedi al cliente quale browser usa davvero (di solito Chrome) e verifica
+quale e' il browser predefinito di Windows/Mac. Se non coincidono, sistemalo
+TU: imposta il browser che il cliente usa come predefinito (se il sistema
+protegge il passaggio finale, apri tu la schermata giusta e digli solo dove
+fare un click). Poi prova reale: apri un link e conferma che si apre nel
+browser giusto. Serve perche' login e autorizzazioni (GitHub, Google,
+Claude) si aprono nel predefinito: se e' quello sbagliato, il cliente si
+ritrova su un browser dove non e' loggato.
+
 Fase 5-bis - apertura sempre giusta (obbligatoria)
 Il rischio piu' frequente e' che io apra l'agente nella cartella sbagliata e
 il lavoro finisca altrove. Chiudilo cosi':
