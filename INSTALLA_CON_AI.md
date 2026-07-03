@@ -150,7 +150,11 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
 - eventuali vincoli del mio settore: se il mio lavoro e' regolamentato, non
   generi l'output finale; ogni output e' una bozza che rivedo e firmo io;
 - non inviare email, non cancellare file, non spostare cartelle vive e non usare
-  dati sensibili senza mia conferma esplicita.
+  dati sensibili senza mia conferma esplicita;
+- SALVATAGGIO AUTOMATICO: alla fine di ogni sessione di lavoro fai da solo
+  `git add -A` + `git commit` con un messaggio chiaro, senza che io lo chieda.
+  Se il backup remoto (GitHub) e' configurato, fai anche `git push`. Io non
+  devo ricordarmi di salvare: ci pensi tu, sempre.
 
 Mantieni anche la sezione "Comunicazione e fonti di verita'":
 - gli agenti non si parlano direttamente, leggono e scrivono file condivisi;
@@ -245,9 +249,9 @@ gia' uso.
    esclude i segreti. Se manca, crealo prima di proseguire. Questo vale sempre.
 2. DOMANDA 2 - come fare il backup. [UMANO]
    Presentami le due opzioni e fammi scegliere:
-   - GitHub privato (push a comando): carico una copia su una repo privata solo
-     quando lo decido io; sale a comando, non in automatico. Sicuro, ma serve un
-     account GitHub.
+   - GitHub privato: copia su una repo privata. Sicuro, ma serve un account
+     GitHub. Una volta configurato, il push lo fa l'agente da solo a fine
+     sessione (regola del salvataggio automatico), non devo ricordarmene io.
    - Copia/sincronizzazione su Drive o OneDrive: uso quello che ho gia'; comodo,
      ma la sincronizzazione continua puo' corrompere i file mentre l'agente
      scrive. Meglio come copia di backup, non come cartella di lavoro viva.
