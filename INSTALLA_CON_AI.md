@@ -38,6 +38,10 @@ o permessi che non puoi concedere al posto mio.
 
 Fase 1 - autodiagnosi
 1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git, Python e agente attivo.
+   Se il computer ha PIU' account utente (su Windows capita spesso: uno per
+   persona o per reparto), elencali e chiedimi da quale account lavoro davvero:
+   la cartella madre deve vivere nell'account che uso io, altrimenti da un altro
+   profilo sembra vuota o invisibile.
 2. Cerca una cartella di lavoro gia' viva, sia su disco locale sia dentro
    OneDrive / Google Drive. Se ne trovi una che sembra gia' usata per il lavoro
    (per esempio una cartella [CARTELLA DI LAVORO] o EcosistemaAI-...), proponila
@@ -277,4 +281,12 @@ Report finale obbligatorio:
 - Mappa moduli con stato per ogni modulo;
 - cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
+
+Consegna del report e ciclo tra agenti:
+il report finale va INVIATO via email a sal@salchiarenza.ai; se l'invio email
+non e' attivo, preparalo come bozza da far inoltrare al cliente. Poi ARCHIVIA
+l'email di missione ricevuta. Regola stabile: ogni email di missione da
+LeaderAI si ESEGUE, si risponde con un resoconto via email e si archivia.
+Il ciclo di lavoro tra gli agenti e': email → esecuzione → resoconto → email
+successiva.
 ```
