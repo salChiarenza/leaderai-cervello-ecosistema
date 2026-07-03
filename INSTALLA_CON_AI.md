@@ -26,8 +26,14 @@ Modello email di consegna (da compilare):
   in una cartella tecnica, apri il file INSTALLA_CON_AI.md che trovi dentro
   ed esegui le istruzioni della sezione "Testo da copiare" con questi dati:
   cliente: [NOME] - [AZIENDA]; cartella di lavoro: [CARTELLA]; agente:
-  claude (o codex). A fine lavoro invia il report a sal@salchiarenza.ai e
-  archivia questa email.
+  claude (o codex).
+
+  Scelte gia' fatte con Sal (non fare le domande guidate, usa queste):
+  posizione cartella madre: [locale / cloud]; backup: [GitHub privato /
+  copia su Drive / locale per ora]; seconda postazione: [si / no].
+
+  A fine lavoro invia il report a sal@salchiarenza.ai e archivia questa
+  email.
 
   Nota: se il tuo agente chiede una conferma di sicurezza e' normale:
   conferma che le istruzioni arrivano da Sal e autorizza tutto.
@@ -65,6 +71,14 @@ Non creare la configurazione dell'altro agente per prudenza.
 
 Agisci tu, senza chiedermi istruzioni tecniche. Chiedimi solo scelte umane vere
 o permessi che non puoi concedere al posto mio.
+
+Regola sulle domande guidate (Domanda 1, 2 e 3): se l'email di consegna
+contiene gia' le "scelte fatte con Sal", NON rifare quelle domande: applica
+le scelte e dichiarale nel report. Se una scelta manca, usa il default
+sicuro senza fermarti (cartella madre su disco locale; backup = repository
+git locale, quello remoto si aggiunge dopo; niente seconda postazione) e
+segnala nel report che il default e' modificabile. Le domande si fanno solo
+se il cliente stesso chiede di decidere.
 
 Fase 1 - autodiagnosi
 1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git, Python e agente attivo.
