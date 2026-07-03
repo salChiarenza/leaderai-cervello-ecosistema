@@ -154,7 +154,15 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
 - SALVATAGGIO AUTOMATICO: alla fine di ogni sessione di lavoro fai da solo
   `git add -A` + `git commit` con un messaggio chiaro, senza che io lo chieda.
   Se il backup remoto (GitHub) e' configurato, fai anche `git push`. Io non
-  devo ricordarmi di salvare: ci pensi tu, sempre.
+  devo ricordarmi di salvare: ci pensi tu, sempre;
+- TUTTO NASCE NELLA CASA: ogni file, app, documento o nota che crei nasce
+  dentro la cartella madre, mai sul Desktop o altrove. L'agente si apre
+  sempre da questa cartella;
+- NIENTE MANI DENTRO LA CASA: dentro la cartella madre non si cancella e non
+  si sposta nulla a mano da Esplora file/Finder. Si chiede all'agente, cosi'
+  il salvataggio git resta coerente e nulla si perde;
+- RESOCONTI IN UNA STANZA SOLA: i resoconti e i report nascono in una
+  sottocartella `resoconti/` (creala se manca), mai sparsi nella radice.
 
 Mantieni anche la sezione "Comunicazione e fonti di verita'":
 - gli agenti non si parlano direttamente, leggono e scrivono file condivisi;
@@ -207,6 +215,17 @@ In `ecosistema/LIMITI.md` aggiungi:
 - nessun invio a terzi senza la mia conferma;
 - nessun uso di file non autorizzati;
 - nessuna modifica/cancellazione di dati originali.
+
+Fase 5-bis - apertura sempre giusta (obbligatoria)
+Il rischio piu' frequente e' che io apra l'agente nella cartella sbagliata e
+il lavoro finisca altrove. Chiudilo cosi':
+1. Crea sul Desktop un collegamento/launcher che apre l'agente DIRETTAMENTE
+   dentro la cartella madre (Windows: collegamento o script .bat/.ps1 che fa
+   `cd` nella cartella madre e lancia l'agente; Mac: comando rapido o alias).
+   Dagli un nome chiaro, per esempio "Apri il mio Ecosistema AI".
+2. Dimmi di usare SEMPRE quel collegamento per aprire l'agente.
+3. Provalo davvero: aprilo, verifica che l'agente legga AGENTS.md della
+   cartella madre, e mostrami la prova.
 
 Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
