@@ -4,6 +4,14 @@ Questo e' il testo da incollare nel Claude Code o Codex del cliente.
 La repo resta una sola. La modalita' cambia in base all'agente reale del
 cliente.
 
+Avviso da dare al cliente insieme al testo: e' normale che il suo agente,
+prima di eseguire, chieda una conferma di sicurezza (clonare una repo
+esterna, eseguire uno script, inviare un report via email sono azioni che
+un buon agente non fa alla cieca). Il cliente deve confermare che le
+istruzioni arrivano da Sal/LeaderAI, il suo consulente, e autorizzare
+l'esecuzione completa. Se l'agente propone di eseguire "solo la parte
+sicura", la risposta giusta e' autorizzare tutto lo script.
+
 ## Testo da copiare
 
 ```text
