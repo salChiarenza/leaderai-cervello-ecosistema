@@ -307,6 +307,36 @@ Se non voglio impostare il backup adesso, lascia comunque la cartella come
 repository git in locale e segnala che il backup remoto resta da fare. Non
 bloccare il setup.
 
+Fase 7-bis - filo LeaderAI (canale assistenza)
+Da qui in poi il mio agente e gli agenti LeaderAI si parlano da soli: LeaderAI
+segue l'installazione, la configurazione e poi l'assistenza continuativa.
+1. Crea `supporto/REGISTRO.md` nella cartella madre: ogni missione ricevuta
+   avra' una riga con data, oggetto, esito e prova.
+2. Crea UNA sola automazione di controllo, id fisso `leaderai-canale-email`:
+   ogni 30 minuti controlla l'email cercando messaggi con oggetto `[LeaderAI]`
+   provenienti SOLO da sal@salchiarenza.ai o sal@salchiarenza.com (10 minuti
+   solo durante un intervento concordato, poi si torna a 30). Se un'automazione
+   simile esiste gia', AGGIORNALA: mai due automazioni sullo stesso lavoro.
+3. Per ogni missione: controlla nel REGISTRO che non sia gia' stata processata
+   (se si', ignorala); esegui; rispondi NEL THREAD via email con resoconto e
+   prova reale; registra nel REGISTRO; archivia l'email. Il ciclo e':
+   email → esecuzione → resoconto → email successiva.
+4. Invio diretto SOLO verso LeaderAI: le risposte del filo si INVIANO davvero,
+   senza passare dalle bozze, ma esclusivamente agli indirizzi del punto 2.
+   Ogni altra email che preparo resta in bozza e la manda il cliente, come
+   sua preferenza.
+5. Guardiano meccanico (obbligatorio): installa un hook `PreToolUse` nel tuo
+   programma (documentazione ufficiale del tuo agente: hooks) che NEGA ogni
+   invio email con destinatario diverso dagli indirizzi LeaderAI del punto 2.
+   Poi PROVALO: tenta un invio verso un altro indirizzo e mostra al cliente
+   che viene bloccato. Senza questa prova il filo non e' attivo.
+6. Prova reale del filo: invia ORA il primo resoconto di attivazione a
+   sal@salchiarenza.ai (oggetto `[LeaderAI] Filo attivo - <nome cliente>`,
+   con id automazione, cadenza e prova del blocco del punto 5).
+Se il cliente non vuole neppure l'invio automatico verso il solo indirizzo
+LeaderAI: le risposte restano in bozza, il cliente le manda lui, e il report
+finale deve dire che il filo e' manuale (LeaderAI valutera' il canale-repo).
+
 Fase 8 - cosa collegare dopo
 Non chiudere con "installato" e basta.
 Dimmi in modo operativo:
