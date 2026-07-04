@@ -29,6 +29,20 @@ Modalita' installata: `{{agent}}`.
   `CLAUDE.md` senza richiesta esplicita LeaderAI.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
 
+## Autoprova (regola permanente)
+
+Un lavoro non e' finito quando "dovrebbe funzionare": e' finito quando l'agente
+lo ha PROVATO da solo e mostra la prova. Vale per configurazioni, script,
+analisi, collegamenti e riparazioni.
+
+- Script o installazione → eseguirlo davvero su una cartella di prova usa-e-getta,
+  mostrare il risultato reale (file creati, commit, output), poi eliminare la prova.
+- Fonte o collegamento → una lettura innocua con un dato vero mostrato
+  (oggetto email, titolo evento, nome file). Niente dato = `DA COLLEGARE`.
+- Documento o output per il cliente → aprirlo e rileggerlo come lo vedra' lui.
+
+Senza autoprova il lavoro si dichiara `DA COLLAUDARE`, mai finito.
+
 ## Comunicazione e fonti di verita'
 
 Gli agenti non si parlano direttamente. Si coordinano leggendo e scrivendo file
