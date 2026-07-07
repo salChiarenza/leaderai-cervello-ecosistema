@@ -5,6 +5,11 @@ Repo installabile per creare la cartella madre AI di un cliente.
 Questa repo e' letta sia da Claude Code sia da Codex. `CLAUDE.md`, se
 presente, deve essere un symlink o una copia di questo file.
 
+Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
+e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
+`templates/AGENTS.md` e le istruzioni operative della repo; poi ripara, prova e
+riporta gli scostamenti.
+
 ## Cosa fa
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
@@ -61,6 +66,25 @@ condivisi.
 Regola pratica: se una nota spiega "come si fa", non va in chat. Va nella
 procedura o nel file proprietario. La chat e' solo coordinamento temporaneo.
 
+## Protocollo missioni LeaderAI
+
+Il ciclo e' chiuso e semplice:
+
+`MISSIONE` -> `ESECUZIONE` -> `AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
+
+- `MISSIONE`: l'agente del cliente legge l'email numerata, apre link/file e
+  segue lo schema indicato.
+- `ESECUZIONE`: fa le azioni, ripara cio' che puo', prova cio' che dichiara.
+- `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
+  file toccati e blocchi umani veri.
+- `REPORT`: invia il report finale a `sal@salchiarenza.ai`.
+- `SAL_VERIFICA`: aspetta risposta LeaderAI.
+- `CONTINUA`: lavora ancora sulla stessa missione e rimanda report aggiornato.
+- `CHIUDI`: archivia la missione e registra la chiusura nei log.
+
+Non creare automatismi permanenti tra agenti: ogni giro nasce da missione umana
+o risposta esplicita LeaderAI.
+
 Dove mettere la cartella madre si decide caso per caso, con domande guidate, non
 con una regola fissa. Le opzioni sono disco locale oppure cartella sincronizzata
 (OneDrive / Google Drive). Avviso da dire chiaro: Claude Code, mentre scrive,
@@ -87,9 +111,12 @@ questa repo, quindi la missione deve stare tutta nel testo.
 Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
 agente "esegui il checkup LeaderAI", l'agente confronta il setup con la doc
 ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
-da solo il tecnico e invia il resoconto a Sal. Sorgente del metodo (lato
-LeaderAI): `leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` — le modifiche
-si specchiano nei due sensi.
+da solo il tecnico e invia il resoconto a Sal. Prima di giudicare censisce le
+cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
+si riconosce dai segnali di vita (memoria compilata, log, report, asset,
+commit, file di lavoro recenti, connettori provati), non dal nome. Sorgente del
+metodo (lato LeaderAI): `leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` -
+le modifiche si specchiano nei due sensi.
 
 ## Divieti
 

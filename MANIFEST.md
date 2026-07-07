@@ -7,6 +7,15 @@ Portare una cartella cliente a uno standard minimo operativo:
 1. Fase 1 - Cervello: istruzioni, memoria, log, agenti, report.
 2. Fase 2 - Ecosistema: fonti reali, processi, limiti, decisioni.
 
+## Ruolo del Manifest
+
+Questo file e' lo standard di conformita' della repo `salChiarenza/leaderai-cervello-ecosistema`.
+
+La cartella viva del cliente e' il caso reale. Il checkup non giudica a
+sensazione: confronta il caso reale con questo Manifest, con `templates/AGENTS.md`
+e con le istruzioni operative della repo. Se qualcosa manca, e' fuori standard:
+l'agente lo ripara se puo', lo prova e lo dichiara nel report.
+
 ## Regola
 
 L'agente non deve fare un esame al cliente.

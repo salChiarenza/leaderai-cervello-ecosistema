@@ -9,12 +9,52 @@ Nota per chi mantiene LeaderAI: la sorgente del metodo e'
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md`. Ogni modifica
 li' si specchia qui nello stesso turno.
 
+## Regola madre - standard contro caso reale
+
+La repo GitHub `salChiarenza/leaderai-cervello-ecosistema` e' lo standard
+LeaderAI. La cartella viva del cliente e' il caso reale.
+
+Regola breve: non riparare a sentimento. `CHECKUP.md` non ripara a sentimento:
+
+- `MANIFEST.md` e' lo standard di conformita';
+- `templates/AGENTS.md` e' il comportamento atteso dell'agente nella cartella
+  cliente;
+- `AGENTS.md` e `README.md` spiegano come usare la repo;
+- la documentazione ufficiale viva Claude/Codex verifica solo la parte tecnica,
+  non sostituisce lo standard LeaderAI.
+
+Ogni diagnosi deve quindi dire: cosa c'e' nella cartella viva, cosa chiede lo
+standard della repo, cosa ho riparato, cosa resta fuori standard e perche'.
+Non basta trovare file rotti: devi portare il caso reale allo standard
+LeaderAI, salvo blocchi umani veri.
+
+## Modello email missione checkup
+
+Oggetto: `Missione Ecosistema LeaderAI #N - Checkup`
+
+```text
+Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
+
+Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
+Aggiorna o clona la repo, apri `CHECKUP.md` e usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e' il caso reale: confrontala con lo standard della repo e con `templates/AGENTS.md`.
+
+Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari,
+fai autocontrollo e manda solo il report finale a LeaderAI.
+
+Dopo il report aspetta risposta LeaderAI: `CONTINUA` o `CHIUDI`.
+```
+
 Sei l'agente AI sul computer del proprietario. Fai la diagnosi della
 configurazione, la confronti con la documentazione UFFICIALE VIVA e **ripari
 da solo quello che trovi rotto o mancante, nello stesso turno**. Regola
 LeaderAI (autodiagnosi + auto-riparazione): niente botta-risposta col
 proprietario, niente referto con domande. Il proprietario riceve il resoconto
 di quello che HAI GIA' sistemato, con la prova.
+
+Non inviare report intermedi del tipo "dimmi cosa faccio / manca questo / cosa
+non va". L'ordine obbligatorio e': diagnosi -> riparazione -> prova ->
+resoconto finale. Restano fuori solo permessi, login, hardware o scelte di
+business che non puoi decidere da solo.
 
 Ripari da solo: file standard mancanti, frontmatter sbagliati, symlink/copie
 disallineate, configurazioni errate, memoria non agganciata, permessi con
@@ -38,6 +78,76 @@ git pull --ff-only
 Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
 star leggendo una versione superata. Se il clone non esiste ancora, clonalo da
 `github.com/salChiarenza/leaderai-cervello-ecosistema`. Solo dopo prosegui.
+
+## Passo 0-bis - Apri il metro di giudizio
+
+Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
+
+- `MANIFEST.md`;
+- `templates/AGENTS.md`;
+- `AGENTS.md`;
+- `README.md`.
+
+Da questo momento il lavoro non e' "controllare un po' di file". Il lavoro e':
+confrontare la cartella viva del cliente contro lo standard LeaderAI scritto in
+questa repo.
+
+## Passo 0-ter — Trova la cartella viva prima di giudicare
+
+Se questa missione parla di diagnosi, checkup o correzione, parti dal
+presupposto che l'ambiente AI sia gia' stato installato da qualche parte. Non
+creare una nuova cartella per "fare ordine": prima devi trovare quella viva.
+
+Il nome non basta. La cartella madre puo' chiamarsi in qualunque modo:
+`EcosistemaAI-*`, nome azienda, nome proprietario, progetto interno, reparto,
+cartella AI, casa AI, workspace, Studio, Investimenti o altro. Non promuovere o
+scartare una cartella solo per il nome: riconoscila dai segnali di vita.
+
+Fai un censimento in sola lettura delle candidate:
+
+- cartella aperta ora dall'agente;
+- home utente, Desktop, Documenti, OneDrive, Google Drive o cartelle aziendali
+  sincronizzate;
+- nomi tipo `EcosistemaAI-*`, nome azienda/proprietario, cartella AI, casa AI,
+  workspace, reparto o progetto;
+- cartelle con `AGENTS.md`, `CLAUDE.md`, `memory/MEMORY.md`, `ecosistema/`,
+  `logs/`, `REPORT_FINALE.md` o `.git`.
+
+Segnali di vita da pesare piu' del nome:
+
+- `memory/MEMORY.md compilata`, non solo file vuoto o template;
+- `logs/ con attivita'` o resoconti gia' scritti;
+- `REPORT_FINALE.md compilato`;
+- `ecosistema/ASSET.md`, `FONTI.md`, `PROCESSI.md` o `LIMITI.md` con contenuto
+  del proprietario;
+- `commit git` oltre al primo commit tecnico;
+- file di lavoro recenti, output, procedure, bozze o documenti davvero usati;
+- connettori provati con un dato reale letto, non solo dichiarati.
+
+Per ogni candidata scrivi una riga:
+
+```text
+[path] - VIVA / VUOTA / TECNICA-REPO / SBAGLIATA - prova osservata
+```
+
+Regole:
+
+- `VIVA` = contiene segnali di vita: memoria compilata, log, istruzioni cucite,
+  file di lavoro, commit, asset/fonti/processi, connettori provati o prove di
+  uso reale.
+- `VUOTA` = contiene solo scheletro o pochi file generati senza contenuto del
+  proprietario.
+- `TECNICA-REPO` = e' il clone `leaderai-cervello-ecosistema`, non la cartella
+  madre da diagnosticare.
+- Se trovi piu' cartelle, scegli quella `VIVA` con la prova piu' forte e
+  diagnosticane quella.
+- Se trovi una cartella Ecosistema vuota e un'altra cartella viva, NON usare la
+  vuota: segnala che probabilmente e' stata creata per errore e lavora sulla
+  viva.
+- Se non riesci a distinguere due cartelle vive, chiedi una sola scelta umana:
+  "quale di queste due devo diagnosticare?". Non creare una terza cartella.
+- Usa `INSTALLA_CON_AI.md` solo se, dopo il censimento, non esiste nessun
+  ambiente installato o Sal/LeaderAI chiede esplicitamente un rimontaggio.
 
 ## Passo 1 — Apri la doc ufficiale viva (obbligatorio, mai a memoria)
 
@@ -118,7 +228,13 @@ blocchi, li' c'e' il buco.
 ```text
 CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
+STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
+MANIFEST.md; templates/AGENTS.md; docs ufficiali vive per la parte tecnica.
 Verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA
+
+SCOSTAMENTI DALLO STANDARD:
+- [area] trovato nella cartella viva -> standard richiesto -> azione fatta /
+  blocco umano vero.
 
 Cartella stabile        OK / RIPARATO / DA FARE (umano) - ...
 Istruzioni (CLAUDE.md)  OK / RIPARATO / DA FARE - ...
@@ -136,8 +252,43 @@ RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.
 Se l'ambiente e' quasi vuoto, non dare una pagella piena di rossi: proponi di
 partire dall'installazione (`INSTALLA_CON_AI.md`).
 
+## Protocollo missione chiusa
+
+Una missione LeaderAI non finisce quando mandi il primo report. Finisce solo
+quando arriva la risposta di verifica da LeaderAI oppure quando LeaderAI dice
+esplicitamente di chiudere.
+
+Stati della missione:
+
+1. `MISSIONE` - leggi l'email numerata, apri il link o file indicato e segui lo
+   schema indicato. Se la missione punta a `CHECKUP.md`, questo file e' lo
+   schema da seguire.
+2. `ESECUZIONE` - fai le azioni richieste: diagnosi, correzione, riparazione,
+   prove. Non chiedere "cosa faccio?" se puoi agire.
+3. `AUTOCONTROLLO` - prima di scrivere a Sal, attiva un autocontrollo interno:
+   rileggi la missione, confronta cosa chiedeva con cosa hai fatto, verifica
+   prove, file modificati, cartella usata, errori rimasti e punti che richiedono
+   umano vero.
+4. `REPORT` - invia a `sal@salchiarenza.ai` il report finale della missione,
+   mantenendo il numero nell'oggetto o nello stesso thread. Il report contiene:
+   azioni fatte, prove, cosa hai riparato, cosa resta solo per umano vero.
+5. `SAL_VERIFICA` - dopo il report resta in attesa della risposta LeaderAI. Non
+   chiudere la missione dopo il primo report.
+6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
+   ancora sulla stessa missione, fai un nuovo autocontrollo e mandi un nuovo
+   report.
+7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, archivia
+   l'email missione e annota la chiusura nei log.
+
+Questo autocontrollo e' temporaneo e legato alla missione. Non creare un
+automatismo permanente tra agenti: ogni giro parte da una missione umana o da
+una risposta esplicita di LeaderAI.
+
+Regola breve: Non chiudere la missione dopo il primo report.
+
 ## Chiusura (ciclo resoconti)
 
-1. Invia il resoconto a `sal@salchiarenza.ai` (oggetto:
-   `Checkup [nome proprietario] — [data]`).
+1. Invia il resoconto a `sal@salchiarenza.ai` solo a lavoro finito. Rispondi
+   nello stesso thread della missione numerata; se devi creare una nuova email,
+   usa lo stesso numero: `Missione Ecosistema LeaderAI #N - Resoconto finale`.
 2. Archivia la missione: inbox pulita, la storia resta nei file.

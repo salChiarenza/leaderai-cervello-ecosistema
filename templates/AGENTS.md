@@ -96,20 +96,57 @@ Il modo in cui LeaderAI ti manda un lavoro e' **una email a te** (il tuo agente)
 non un testo che il proprietario ti copia-incolla. Quando il proprietario dice
 "leggi l'ultima email di Sal e falla":
 
+Se la missione punta a `CHECKUP.md`, la repo
+`salChiarenza/leaderai-cervello-ecosistema` e' lo standard e questa cartella e'
+il caso reale. Apri `MANIFEST.md` e `templates/AGENTS.md` della repo, confronta
+questa cartella con quello standard, ripara gli scostamenti riparabili e
+riporta cosa resta fuori standard solo se serve davvero l'umano.
+
 1. **Leggi** l'email nella sua Gmail: il corpo dell'email E' la missione.
 2. **Esegui** quello che chiede, fino in fondo, con l'Autoprova. Non proporre, non
    spiegare e basta: fai. Chiedi al proprietario solo per scelte vere o azioni
    irreversibili.
-3. **Riporta indietro:** a lavoro finito prepara e invia un resoconto a
-   `sal@salchiarenza.ai` con cosa hai fatto, la prova concreta e cosa resta
-   aperto. Se non puoi inviare email, lascia il resoconto come bozza che il
-   proprietario inoltra.
+3. **Riporta indietro solo alla fine:** se l'oggetto e' `Missione Ecosistema
+   LeaderAI #N - ...`, conserva quel numero nel resoconto. Prima diagnostica,
+   ripara tutto cio' che puoi riparare, ripeti le prove; solo a lavoro finito
+   invia un resoconto a `sal@salchiarenza.ai` con cosa hai fatto, prova concreta
+   e cosa resta aperto SOLO per umano vero (permesso, login, hardware, scelta
+   business). Vietato il referto intermedio "se manca qualcosa fammi sapere".
+   Se non puoi inviare email, lascia il resoconto come bozza che il proprietario
+   inoltra.
 4. **Archivia** l'email-missione dopo averla eseguita: inbox pulita, storia nei
    file/log.
 
 Il copia-incolla del testo vale **solo al primissimo contatto**, quando non leggi
 ancora la posta del proprietario. Appena la Gmail e' collegata, il lavoro lo fai
 tu leggendo l'email, non lui incollandotelo.
+
+## Protocollo missioni LeaderAI
+
+Ogni missione LeaderAI segue questo ciclo. Non saltare stati e non decidere tu
+che e' finita.
+
+Regola breve: non decidere tu che e' finita.
+
+1. `MISSIONE` - leggi l'email numerata, apri il link o file indicato e segui lo
+   schema indicato.
+2. `ESECUZIONE` - fai le azioni richieste. Se puoi riparare, ripari. Se puoi
+   provare, provi. Chiedi al proprietario solo permessi, login, hardware o
+   scelte vere.
+3. `AUTOCONTROLLO` - prima di scrivere a Sal, rileggi la missione e controlla
+   cosa chiedeva, cosa hai fatto, quali prove hai, quali file hai toccato e cosa
+   resta solo per umano vero.
+4. `REPORT` - manda il report finale a `sal@salchiarenza.ai`, mantenendo il
+   numero della missione nello stesso thread o nell'oggetto.
+5. `SAL_VERIFICA` - dopo il report aspetta la risposta LeaderAI: non chiudere
+   da solo.
+6. `CONTINUA` - se LeaderAI chiede correzioni o nuove azioni, lavora ancora
+   sulla stessa missione e rimanda un report aggiornato.
+7. `CHIUDI` - se LeaderAI conferma o dice di chiudere, archivia l'email
+   missione e annota la chiusura nei log.
+
+L'autocontrollo e' temporaneo e legato alla missione. Non creare automatismi
+permanenti tra agenti.
 
 ## Comunicazione e fonti di verita'
 
