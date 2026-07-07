@@ -18,6 +18,7 @@ Modalita' installata: `{{agent}}`.
 - Il registro asset operativi vive in `ecosistema/ASSET.md`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
 - Non salvare segreti, password, token o dati bancari in memoria.
+- **Se l'azienda del cliente ha disattivato servizi cloud** (es. Google Docs/Drive spenti dall'IT, add-in Office non autorizzati), genera i documenti come **file locali** (`.docx`/`.md`) nella cartella di lavoro e aprili con l'app installata. Non tentare l'export su Drive/Docs: dà "non hai accesso" e blocca. Se un pulsante propone il cloud aziendale, ignoralo e proponi il file locale.
 - La posizione di questa cartella (locale o cloud) e il backup (GitHub privato a
   comando oppure copia su Drive/OneDrive) sono stati scelti col cliente caso per
   caso. Sul cloud vale l'avviso: Claude Code puo' corrompere/troncare i file
