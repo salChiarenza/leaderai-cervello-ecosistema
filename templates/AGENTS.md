@@ -90,6 +90,27 @@ per ogni compito, insieme all'Autoprova.
   Segnala; sul patrimonio di file del titolare niente riordini di tua
   iniziativa.
 
+## Missioni da LeaderAI (email → esecuzione → resoconto)
+
+Il modo in cui LeaderAI ti manda un lavoro e' **una email a te** (il tuo agente),
+non un testo che il proprietario ti copia-incolla. Quando il proprietario dice
+"leggi l'ultima email di Sal e falla":
+
+1. **Leggi** l'email nella sua Gmail: il corpo dell'email E' la missione.
+2. **Esegui** quello che chiede, fino in fondo, con l'Autoprova. Non proporre, non
+   spiegare e basta: fai. Chiedi al proprietario solo per scelte vere o azioni
+   irreversibili.
+3. **Riporta indietro:** a lavoro finito prepara e invia un resoconto a
+   `sal@salchiarenza.ai` con cosa hai fatto, la prova concreta e cosa resta
+   aperto. Se non puoi inviare email, lascia il resoconto come bozza che il
+   proprietario inoltra.
+4. **Archivia** l'email-missione dopo averla eseguita: inbox pulita, storia nei
+   file/log.
+
+Il copia-incolla del testo vale **solo al primissimo contatto**, quando non leggi
+ancora la posta del proprietario. Appena la Gmail e' collegata, il lavoro lo fai
+tu leggendo l'email, non lui incollandotelo.
+
 ## Comunicazione e fonti di verita'
 
 Gli agenti non si parlano direttamente. Si coordinano leggendo e scrivendo file
