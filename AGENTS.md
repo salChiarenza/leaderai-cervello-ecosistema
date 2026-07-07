@@ -84,6 +84,13 @@ Il file da consegnare e':
 Il cliente incolla quel testo in Claude Code o Codex. Prima del clone non ha
 questa repo, quindi la missione deve stare tutta nel testo.
 
+Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
+agente "esegui il checkup LeaderAI", l'agente confronta il setup con la doc
+ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
+da solo il tecnico e invia il resoconto a Sal. Sorgente del metodo (lato
+LeaderAI): `leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` — le modifiche
+si specchiano nei due sensi.
+
 ## Divieti
 
 - Non salvare segreti, password, token o dati bancari.

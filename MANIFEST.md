@@ -59,6 +59,9 @@ Per Codex:
 
 Queste fonti vanno riverificate quando si aggiorna lo standard:
 
+- Claude Code, indice completo per agenti: `https://code.claude.com/docs/llms.txt`
+  (ogni pagina in markdown puro col suffisso `.md` — e' il meccanismo usato da
+  `CHECKUP.md` per confrontare il setup con la doc viva)
 - OpenAI Codex AGENTS.md: `https://developers.openai.com/codex/guides/agents-md`
 - OpenAI Codex hooks: `https://developers.openai.com/codex/hooks`
 - Claude Code memory: `https://code.claude.com/docs/en/memory`

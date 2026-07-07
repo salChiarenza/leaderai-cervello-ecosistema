@@ -17,6 +17,17 @@ Il testo fa clonare questa repo via Git, trova o crea la cartella madre nella
 posizione scelta col cliente e monta Cervello + Ecosistema senza trasformare il
 cliente in tecnico.
 
+Per il controllo periodico di un ambiente gia' installato:
+
+```text
+CHECKUP.md
+```
+
+Il proprietario dice al suo agente "esegui il checkup LeaderAI": l'agente
+confronta il setup con la documentazione ufficiale viva (indice
+`code.claude.com/docs/llms.txt`, pagine `.md`), ripara da solo il tecnico e
+invia il resoconto a Sal.
+
 Dove mettere la cartella madre si decide caso per caso con domande guidate
 (disco locale oppure cartella sincronizzata OneDrive / Google Drive). Avviso da
 dire chiaro: Claude Code, mentre scrive, puo' corrompere o troncare i file su
