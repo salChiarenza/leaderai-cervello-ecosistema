@@ -24,7 +24,22 @@ proprietario, scelte vere di business. Le istruzioni di business
 (`AGENTS.md`/`CLAUDE.md` del proprietario) NON si riscrivono da soli: li' si
 segnala e si propone.
 
-## Passo 0 — Apri la doc ufficiale viva (obbligatorio, mai a memoria)
+## Passo 0 — Aggiorna la repo prima di tutto (obbligatorio)
+
+Il tuo clone puo' essere vecchio: se non aggiorni, esegui una versione
+superata del metodo o non trovi file che nel frattempo sono stati aggiunti
+(es. questo stesso `CHECKUP.md`). Prima di qualunque altra cosa, dentro la
+cartella della repo:
+
+```
+git pull --ff-only
+```
+
+Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
+star leggendo una versione superata. Se il clone non esiste ancora, clonalo da
+`github.com/salChiarenza/leaderai-cervello-ecosistema`. Solo dopo prosegui.
+
+## Passo 1 — Apri la doc ufficiale viva (obbligatorio, mai a memoria)
 
 Le docs cambiano: il confronto si fa con la pagina di OGGI, non con quello che
 ricordi. La documentazione Claude Code e' fatta per gli agenti:
