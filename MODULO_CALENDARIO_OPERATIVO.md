@@ -1,15 +1,22 @@
 # Modulo Calendario Operativo
 
 Questo modulo organizza Google Calendar quando il cliente lavora guardando i
-colori, ma l'agente deve leggere categorie affidabili.
+colori e l'agente deve leggere categorie affidabili.
 
 ## Missione
 
 Creare o verificare un calendario operativo leggibile da persone e agente AI:
 
 - persone: continuano a riconoscere i colori;
-- agente: legge nome calendario, prefisso titolo, descrizione o etichetta;
+- agente: usa i colori solo se legge/scrive il valore tecnico e ha una legenda;
+- fallback: se i colori non sono collaudabili, legge nome calendario, prefisso
+  titolo, descrizione o etichetta;
 - report: mostra prove reali, non auto-dichiarazioni.
+
+Nota tecnica: Google Calendar API espone campi colore/label sugli eventi
+(`colorId` e, per i colori/label piu' recenti, `eventLabelId`), ma non tutte le
+superfici agente li mostrano o li scrivono nello stesso modo. Per questo decide
+il collaudo, non l'ipotesi.
 
 ## Quando usarlo
 
@@ -25,10 +32,20 @@ Usalo se il cliente:
 1. Verifica accesso reale a Google Calendar leggendo un evento vero, senza
    modificarlo.
 2. Chiedi al cliente cosa significano i colori attuali.
-3. Proponi massimo 6-8 calendari operativi, usando nomi chiari.
-4. Abbina a ogni calendario il colore che il team gia' riconosce.
-5. Crea solo eventi test o nuovi eventi approvati.
-6. Rileggi gli eventi creati e produci una tabella con prova.
+3. Scrivi la legenda colori in forma macchina: colore/label tecnico -> nome
+   umano -> significato operativo -> esempi.
+4. Testa la legenda su eventi veri o test:
+   - leggi colore/label di un evento esistente;
+   - crea evento test con colore/label scelto;
+   - rileggi l'evento test;
+   - confronta il risultato con la legenda.
+5. Se il test passa, mantieni il modello a colori e registra la legenda.
+6. Se il test non passa, proponi massimo 6-8 calendari operativi, usando nomi
+   chiari.
+7. Se usi calendari separati, abbina a ogni calendario il colore che il team
+   gia' riconosce.
+8. Crea solo eventi test o nuovi eventi approvati.
+9. Rileggi gli eventi creati e produci una tabella con prova.
 
 Schema consigliato per atelier/negozi:
 
@@ -43,7 +60,8 @@ Schema consigliato per atelier/negozi:
 
 - Non migrare eventi vecchi senza conferma esplicita.
 - Non cancellare o spostare eventi esistenti nel primo blocco.
-- Non usare il colore come unica fonte di verita'.
+- Non usare il colore come fonte di verita' se non e' stato collaudato con
+  legenda, lettura e scrittura.
 - Non creare calendari per ogni micro-caso.
 - Non dichiarare `ATTIVO` senza prova letta.
 
@@ -53,7 +71,8 @@ Schema consigliato per atelier/negozi:
 - `DA SCOPRIRE`: uso/colori non sono ancora chiari.
 - `DA COLLAUDARE`: accesso o struttura presenti, ma senza prova.
 - `INSTALLABILE`: il cliente autorizza creazione/riordino.
-- `ATTIVO`: calendari/colori/eventi test riletti e registrati.
+- `ATTIVO`: legenda colori collaudata oppure calendari/etichette creati o
+  confermati; eventi test riletti e registrati.
 
 ## Dove registrare
 
@@ -65,6 +84,6 @@ Schema consigliato per atelier/negozi:
 
 ## Tabella di collaudo
 
-| Calendario | Colore | Evento test | Prova letta | Stato |
-|---|---|---|---|---|
-| da compilare | da compilare | da compilare | da compilare | DA COLLAUDARE |
+| Modello | Colore/label | Calendario | Evento test | Prova letta | Stato |
+|---|---|---|---|---|---|
+| Legenda colori o calendari separati | da compilare | da compilare | da compilare | da compilare | DA COLLAUDARE |
