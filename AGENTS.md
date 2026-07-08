@@ -76,11 +76,12 @@ Il ciclo e' chiuso e semplice:
   segue lo schema indicato.
 - `ESECUZIONE`: fa le azioni, ripara cio' che puo', prova cio' che dichiara.
 - `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
-  file toccati e blocchi umani veri.
+  file toccati, blocchi umani veri e superfici aperte da lui.
 - `REPORT`: invia il report finale a `sal@salchiarenza.ai`.
 - `SAL_VERIFICA`: aspetta risposta LeaderAI.
 - `CONTINUA`: lavora ancora sulla stessa missione e rimanda report aggiornato.
-- `CHIUDI`: archivia la missione e registra la chiusura nei log.
+- `CHIUDI`: archivia la missione, chiude pagine/app aperte da lui e registra la
+  chiusura nei log.
 
 Non creare automatismi permanenti tra agenti: ogni giro nasce da missione umana
 o risposta esplicita LeaderAI.

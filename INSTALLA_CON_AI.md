@@ -382,6 +382,7 @@ Report finale obbligatorio:
 - Asset registrati in `ecosistema/ASSET.md`;
 - Mappa moduli con stato per ogni modulo;
 - clone tecnico: eliminato / mantenuto temporaneamente con motivo;
+- chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
 - cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
@@ -399,11 +400,13 @@ finito, mantenendo il numero della missione ricevuta; se l'invio email non e'
 attivo, preparalo come bozza da far inoltrare al cliente.
 
 Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
-file toccati e blocchi umani veri. Dopo il report vai in `SAL_VERIFICA`: non
-archiviare subito e non decidere tu che e' finita. Se LeaderAI risponde
+file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,
+form, preview, login, app temporanee). Dopo il report vai in `SAL_VERIFICA`:
+non archiviare subito e non decidere tu che e' finita. Se LeaderAI risponde
 `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo e mandi un
 report aggiornato. Se LeaderAI risponde `CHIUDI` o conferma che va bene, allora
-ARCHIVIA l'email di missione ricevuta e annota la chiusura nei log.
+ARCHIVIA l'email di missione ricevuta, chiudi le pagine/app aperte da te e
+annota la chiusura nei log.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
 cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un

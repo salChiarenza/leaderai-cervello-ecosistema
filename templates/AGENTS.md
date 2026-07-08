@@ -114,8 +114,13 @@ riporta cosa resta fuori standard solo se serve davvero l'umano.
    business). Vietato il referto intermedio "se manca qualcosa fammi sapere".
    Se non puoi inviare email, lascia il resoconto come bozza che il proprietario
    inoltra.
-4. **Archivia** l'email-missione dopo averla eseguita: inbox pulita, storia nei
-   file/log.
+4. **Chiudi l'ambiente usato:** prima di dire che hai finito, lascia in ordine
+   le superfici che hai aperto tu: archivia/parcheggia le email lavorate,
+   chiudi pagine web, tab browser, preview, form, login e app temporanee usate
+   solo per la missione. Non chiudere pagine personali del proprietario o
+   superfici che deve decidere lui: in quel caso dichiarale come handoff.
+5. **Archivia** l'email-missione dopo averla eseguita e dopo il `CHIUDI`:
+   inbox pulita, storia nei file/log.
 
 Il copia-incolla del testo vale **solo al primissimo contatto**, quando non leggi
 ancora la posta del proprietario. Appena la Gmail e' collegata, il lavoro lo fai
@@ -135,18 +140,36 @@ Regola breve: non decidere tu che e' finita.
    scelte vere.
 3. `AUTOCONTROLLO` - prima di scrivere a Sal, rileggi la missione e controlla
    cosa chiedeva, cosa hai fatto, quali prove hai, quali file hai toccato e cosa
-   resta solo per umano vero.
+   resta solo per umano vero. Controlla anche le superfici aperte da te:
+   email, browser, tab, form, preview, login, app temporanee.
 4. `REPORT` - manda il report finale a `sal@salchiarenza.ai`, mantenendo il
-   numero della missione nello stesso thread o nell'oggetto.
+   numero della missione nello stesso thread o nell'oggetto. Nel report indica
+   anche se email/browser/app sono state chiuse o cosa resta in handoff.
 5. `SAL_VERIFICA` - dopo il report aspetta la risposta LeaderAI: non chiudere
    da solo.
 6. `CONTINUA` - se LeaderAI chiede correzioni o nuove azioni, lavora ancora
    sulla stessa missione e rimanda un report aggiornato.
 7. `CHIUDI` - se LeaderAI conferma o dice di chiudere, archivia l'email
-   missione e annota la chiusura nei log.
+   missione, chiudi le pagine/app aperte da te e annota la chiusura nei log.
 
 L'autocontrollo e' temporaneo e legato alla missione. Non creare automatismi
 permanenti tra agenti.
+
+## Chiusura ambiente
+
+Un lavoro non e' finito se lascia sporco l'ambiente operativo.
+
+- Email: archivia o parcheggia le email/notifiche lavorate quando la missione
+  e' chiusa; niente Inbox piena di cose gia' gestite.
+- Browser: chiudi le pagine, tab, form, preview e login aperti da te per la
+  missione.
+- App: chiudi app o finestre temporanee aperte solo per verificare, compilare o
+  rispondere.
+- Handoff: se una pagina deve restare aperta per scelta del proprietario, dillo
+  chiaramente nel report e spiega cosa deve decidere.
+
+Non chiudere pagine personali o lavoro non tuo. Chiudi solo cio' che hai aperto
+o preso in carico tu per la missione.
 
 ## Comunicazione e fonti di verita'
 
