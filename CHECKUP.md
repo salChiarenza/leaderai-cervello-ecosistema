@@ -165,8 +165,9 @@ Regole:
 - `VUOTA` = contiene solo scheletro o pochi file generati senza contenuto del
   proprietario.
 - `TECNICA-REPO` = e' il clone tecnico della repo standard, non la cartella
-  madre da diagnosticare; puo' avere un nome neutro come `_ecosistema_setup/standard`
-  oppure il vecchio nome legacy `_leaderai_install/leaderai-cervello-ecosistema`.
+  madre da diagnosticare; dovrebbe vivere solo in una cartella temporanea di
+  sistema (`%TEMP%\ecosistema-ai-standard` o `/tmp/ecosistema-ai-standard`) oppure
+  puo' comparire col vecchio nome legacy `_leaderai_install/leaderai-cervello-ecosistema`.
   Se non contiene dati cliente e non serve piu' per il lavoro corrente, proponi
   o fai la pulizia richiesta dalla missione: sul PC cliente non devono restare
   cartelle tecniche LeaderAI visibili come lavoro.

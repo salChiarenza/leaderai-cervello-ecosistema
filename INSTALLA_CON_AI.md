@@ -24,7 +24,7 @@ Oggetto: `Missione Ecosistema LeaderAI #N - Installazione`
   Ciao [NOME], di' al tuo agente (Claude Code o Codex) di eseguire questo:
 
   Clona la repo https://github.com/salChiarenza/leaderai-cervello-ecosistema
-  in una cartella tecnica, apri il file INSTALLA_CON_AI.md che trovi dentro
+  in una cartella temporanea di sistema, apri il file INSTALLA_CON_AI.md che trovi dentro
   ed esegui le istruzioni della sezione "Testo da copiare" con questi dati:
   cliente: [NOME] - [AZIENDA]; cartella di lavoro: [CARTELLA]; agente:
   claude (o codex).
@@ -123,10 +123,17 @@ Fase 1 - autodiagnosi
 Fase 2 - prepara Git e Python
 1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
 2. Se Python manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
-3. Crea una cartella tecnica temporanea e neutra per il clone, separata dalla cartella madre finale, su disco locale. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come cartella finale. Per esempio:
-   <home>/_ecosistema_setup/standard
+3. Crea una cartella tecnica temporanea nella cartella temporanea di sistema,
+   separata dalla cartella madre finale. Non crearla in Documenti, Desktop,
+   Downloads, OneDrive, Google Drive o nella home/profilo utente come cartella
+   stabile. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come
+   cartella finale. Esempi:
+   - Windows: `%TEMP%\ecosistema-ai-standard`
+   - Mac/Linux: `/tmp/ecosistema-ai-standard`
+
    Questa cartella serve solo per installare o aggiornare lo standard: non e' la
-   consegna al cliente e non deve restare visibile come cartella di lavoro.
+   consegna al cliente e deve essere eliminata prima del report finale, salvo
+   blocco reale dichiarato.
 
 Fase 3 - clona o aggiorna la repo
 1. Se la cartella tecnica contiene gia' la repo, fai aggiornamento:
@@ -380,7 +387,8 @@ Report finale obbligatorio:
 
 Prima di inviare il report, ripulisci il clone tecnico usato per l'installazione:
 se non contiene dati del cliente e non ci sono modifiche locali da salvare,
-elimina la cartella tecnica (`_ecosistema_setup/standard` o eventuale vecchio
+elimina la cartella tecnica temporanea (`%TEMP%\ecosistema-ai-standard`,
+`/tmp/ecosistema-ai-standard` o eventuale vecchio legacy
 `_leaderai_install/leaderai-cervello-ecosistema`). Sul PC del cliente deve
 restare come lavoro visibile solo la cartella madre cliente. Se non puoi
 eliminarla, scrivi nel report il motivo concreto e chiedi conferma umana.
