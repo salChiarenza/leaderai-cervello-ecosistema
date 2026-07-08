@@ -167,6 +167,9 @@ Regole:
 - `TECNICA-REPO` = e' il clone tecnico della repo standard, non la cartella
   madre da diagnosticare; puo' avere un nome neutro come `_ecosistema_setup/standard`
   oppure il vecchio nome legacy `_leaderai_install/leaderai-cervello-ecosistema`.
+  Se non contiene dati cliente e non serve piu' per il lavoro corrente, proponi
+  o fai la pulizia richiesta dalla missione: sul PC cliente non devono restare
+  cartelle tecniche LeaderAI visibili come lavoro.
 - `SOSPETTA` = nome o contenuto richiama LeaderAI/Cervello/Ecosistema ma non e'
   chiaro se sia cartella viva, repo tecnica, copia installatore o doppione. Non
   ignorarla: apri al massimo l'albero a 2 livelli, verifica se contiene `.git`,

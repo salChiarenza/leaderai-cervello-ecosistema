@@ -123,8 +123,10 @@ Fase 1 - autodiagnosi
 Fase 2 - prepara Git e Python
 1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
 2. Se Python manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
-3. Crea una cartella tecnica neutra per il clone, separata dalla cartella madre finale, su disco locale. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come cartella finale. Per esempio:
+3. Crea una cartella tecnica temporanea e neutra per il clone, separata dalla cartella madre finale, su disco locale. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come cartella finale. Per esempio:
    <home>/_ecosistema_setup/standard
+   Questa cartella serve solo per installare o aggiornare lo standard: non e' la
+   consegna al cliente e non deve restare visibile come cartella di lavoro.
 
 Fase 3 - clona o aggiorna la repo
 1. Se la cartella tecnica contiene gia' la repo, fai aggiornamento:
@@ -372,8 +374,16 @@ Report finale obbligatorio:
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
 - Mappa moduli con stato per ogni modulo;
+- clone tecnico: eliminato / mantenuto temporaneamente con motivo;
 - cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
+
+Prima di inviare il report, ripulisci il clone tecnico usato per l'installazione:
+se non contiene dati del cliente e non ci sono modifiche locali da salvare,
+elimina la cartella tecnica (`_ecosistema_setup/standard` o eventuale vecchio
+`_leaderai_install/leaderai-cervello-ecosistema`). Sul PC del cliente deve
+restare come lavoro visibile solo la cartella madre cliente. Se non puoi
+eliminarla, scrivi nel report il motivo concreto e chiedi conferma umana.
 
 Consegna del report e ciclo tra agenti:
 il report finale va INVIATO via email a sal@salchiarenza.ai solo a lavoro
