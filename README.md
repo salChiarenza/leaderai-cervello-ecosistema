@@ -35,7 +35,9 @@ confronta il setup con la documentazione ufficiale viva (indice
 invia il resoconto a Sal. Prima di giudicare censisce le cartelle candidate:
 la cartella viva puo' chiamarsi in qualunque modo, quindi si riconosce dai
 segnali di vita (memoria compilata, log, report, asset, commit, file di lavoro
-recenti, connettori provati), non dal nome.
+recenti, connettori provati), non dal nome. La ricerca include anche nomi
+brandizzati o sbagliati come `LeaderAI`, `Leader AI`, `leader ai`, `leder ai`,
+`cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo` e `clone`.
 
 Ogni missione segue un ciclo chiuso: `MISSIONE` -> `ESECUZIONE` ->
 `AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.

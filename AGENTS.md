@@ -114,9 +114,13 @@ ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
 da solo il tecnico e invia il resoconto a Sal. Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
 si riconosce dai segnali di vita (memoria compilata, log, report, asset,
-commit, file di lavoro recenti, connettori provati), non dal nome. Sorgente del
-metodo (lato LeaderAI): `leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` -
-le modifiche si specchiano nei due sensi.
+commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca
+non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
+anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
+`leder ai`, `cervello`, `_leaderai`, `install`, `setup`, `repo`, `clone`) e
+classifica ogni risultato sospetto. Sorgente del metodo (lato LeaderAI):
+`leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` - le modifiche si
+specchiano nei due sensi.
 
 ## Divieti
 

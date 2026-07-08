@@ -26,6 +26,28 @@ class CheckupGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
+    def test_checkup_forces_extended_search_for_suspicious_leaderai_folders(self):
+        text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+
+        required = [
+            "ricerca estesa obbligatoria",
+            "LeaderAI",
+            "Leader AI",
+            "leader ai",
+            "leder ai",
+            "_leaderai",
+            "leaderai-cervello-ecosistema",
+            "Downloads",
+            "OneDrive",
+            "PowerShell",
+            "SOSPETTA",
+            "nessuna cartella sospetta",
+        ]
+
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+
 
 if __name__ == "__main__":
     unittest.main()

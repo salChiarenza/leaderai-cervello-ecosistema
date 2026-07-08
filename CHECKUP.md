@@ -38,6 +38,12 @@ Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
 Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
 Aggiorna o clona la repo, apri `CHECKUP.md` e usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e' il caso reale: confrontala con lo standard della repo e con `templates/AGENTS.md`.
 
+Prima di dichiarare che non ci sono doppioni o cartelle tecniche fuori posto,
+fai la ricerca estesa obbligatoria: cerca anche nomi non standard, nomi
+brandizzati e typo come `LeaderAI`, `Leader AI`, `leaderai`, `leader ai`,
+`leder ai`, `cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo`,
+`clone`. Ogni risultato va classificato e spiegato.
+
 Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari,
 fai autocontrollo e manda solo il report finale a LeaderAI.
 
@@ -103,15 +109,36 @@ Il nome non basta. La cartella madre puo' chiamarsi in qualunque modo:
 cartella AI, casa AI, workspace, Studio, Investimenti o altro. Non promuovere o
 scartare una cartella solo per il nome: riconoscila dai segnali di vita.
 
-Fai un censimento in sola lettura delle candidate:
+Fai un censimento in sola lettura delle candidate. Non limitarti al nome
+atteso e non cercare solo la repo tecnica esatta: cerca anche nomi umani,
+brandizzati, abbreviati o scritti male.
 
 - cartella aperta ora dall'agente;
-- home utente, Desktop, Documenti, OneDrive, Google Drive o cartelle aziendali
-  sincronizzate;
+- home utente e, se leggibili, altri profili utente della stessa macchina;
+- Desktop, Documenti, Downloads, OneDrive, Google Drive, iCloud Drive o cartelle
+  aziendali sincronizzate;
 - nomi tipo `EcosistemaAI-*`, nome azienda/proprietario, cartella AI, casa AI,
   workspace, reparto o progetto;
+- varianti e typo legati a LeaderAI: `LeaderAI`, `Leader AI`, `leaderai`,
+  `leader ai`, `leder ai`, `leader-ai`, `leader_ai`;
+- parole tecniche o miste: `cervello`, `ecosistema`, `_leaderai`,
+  `_leaderai_install`, `install`, `setup`, `repo`, `clone`,
+  `leaderai-cervello-ecosistema`;
 - cartelle con `AGENTS.md`, `CLAUDE.md`, `memory/MEMORY.md`, `ecosistema/`,
   `logs/`, `REPORT_FINALE.md` o `.git`.
+
+Su Windows, se puoi usare PowerShell, una ricerca minima accettabile e':
+
+```powershell
+$roots = @($env:USERPROFILE, "$env:USERPROFILE\Documents", "$env:USERPROFILE\Desktop", "$env:USERPROFILE\Downloads", "$env:USERPROFILE\OneDrive") | Where-Object { Test-Path $_ }
+$rx = '(?i)(leader\s*ai|leaderai|leder\s*ai|leader[-_]ai|cervello|ecosistema|_leaderai|install|setup|repo|clone)'
+Get-ChildItem -Path $roots -Directory -Recurse -ErrorAction SilentlyContinue |
+  Where-Object { $_.FullName -match $rx } |
+  Select-Object -ExpandProperty FullName
+```
+
+Se PowerShell non e' disponibile, fai comunque una ricerca equivalente con gli
+strumenti del sistema. Se non fai questa ricerca, non puoi scrivere "nessuna cartella sospetta".
 
 Segnali di vita da pesare piu' del nome:
 
@@ -127,7 +154,7 @@ Segnali di vita da pesare piu' del nome:
 Per ogni candidata scrivi una riga:
 
 ```text
-[path] - VIVA / VUOTA / TECNICA-REPO / SBAGLIATA - prova osservata
+[path] - VIVA / VUOTA / TECNICA-REPO / SBAGLIATA / SOSPETTA - prova osservata
 ```
 
 Regole:
@@ -139,6 +166,10 @@ Regole:
   proprietario.
 - `TECNICA-REPO` = e' il clone `leaderai-cervello-ecosistema`, non la cartella
   madre da diagnosticare.
+- `SOSPETTA` = nome o contenuto richiama LeaderAI/Cervello/Ecosistema ma non e'
+  chiaro se sia cartella viva, repo tecnica, copia installatore o doppione. Non
+  ignorarla: apri al massimo l'albero a 2 livelli, verifica se contiene `.git`,
+  file standard o dati cliente, e spiega cosa c'entra.
 - Se trovi piu' cartelle, scegli quella `VIVA` con la prova piu' forte e
   diagnosticane quella.
 - Se trovi una cartella Ecosistema vuota e un'altra cartella viva, NON usare la
