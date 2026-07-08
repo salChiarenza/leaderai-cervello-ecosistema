@@ -121,8 +121,8 @@ brandizzati, abbreviati o scritti male.
   workspace, reparto o progetto;
 - varianti e typo legati a LeaderAI: `LeaderAI`, `Leader AI`, `leaderai`,
   `leader ai`, `leder ai`, `leader-ai`, `leader_ai`;
-- parole tecniche o miste: `cervello`, `ecosistema`, `_leaderai`,
-  `_leaderai_install`, `install`, `setup`, `repo`, `clone`,
+- parole tecniche o miste: `cervello`, `ecosistema`, `_ecosistema_setup`,
+  `_leaderai`, `_leaderai_install` (legacy), `install`, `setup`, `standard`, `repo`, `clone`,
   `leaderai-cervello-ecosistema`;
 - cartelle con `AGENTS.md`, `CLAUDE.md`, `memory/MEMORY.md`, `ecosistema/`,
   `logs/`, `REPORT_FINALE.md` o `.git`.
@@ -164,8 +164,9 @@ Regole:
   uso reale.
 - `VUOTA` = contiene solo scheletro o pochi file generati senza contenuto del
   proprietario.
-- `TECNICA-REPO` = e' il clone `leaderai-cervello-ecosistema`, non la cartella
-  madre da diagnosticare.
+- `TECNICA-REPO` = e' il clone tecnico della repo standard, non la cartella
+  madre da diagnosticare; puo' avere un nome neutro come `_ecosistema_setup/standard`
+  oppure il vecchio nome legacy `_leaderai_install/leaderai-cervello-ecosistema`.
 - `SOSPETTA` = nome o contenuto richiama LeaderAI/Cervello/Ecosistema ma non e'
   chiaro se sia cartella viva, repo tecnica, copia installatore o doppione. Non
   ignorarla: apri al massimo l'albero a 2 livelli, verifica se contiene `.git`,

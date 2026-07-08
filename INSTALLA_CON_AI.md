@@ -123,8 +123,8 @@ Fase 1 - autodiagnosi
 Fase 2 - prepara Git e Python
 1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
 2. Se Python manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
-3. Crea una cartella tecnica per il clone, separata dalla cartella madre finale, su disco locale. Per esempio:
-   <home>/_leaderai_install/leaderai-cervello-ecosistema
+3. Crea una cartella tecnica neutra per il clone, separata dalla cartella madre finale, su disco locale. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come cartella finale. Per esempio:
+   <home>/_ecosistema_setup/standard
 
 Fase 3 - clona o aggiorna la repo
 1. Se la cartella tecnica contiene gia' la repo, fai aggiornamento:
