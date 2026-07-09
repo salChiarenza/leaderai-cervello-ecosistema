@@ -395,9 +395,11 @@ restare come lavoro visibile solo la cartella madre cliente. Se non puoi
 eliminarla, scrivi nel report il motivo concreto e chiedi conferma umana.
 
 Consegna del report e ciclo tra agenti:
-il report finale va INVIATO via email a sal@salchiarenza.ai solo a lavoro
-finito, mantenendo il numero della missione ricevuta; se l'invio email non e'
-attivo, preparalo come bozza da far inoltrare al cliente.
+il report finale va INVIATO DAVVERO via email a sal@salchiarenza.ai solo a
+lavoro finito, mantenendo il numero della missione ricevuta. Mai lasciato in
+bozza: una bozza non e' un resoconto ricevuto. Se l'invio email non e' attivo,
+e' un blocco da dichiarare subito al proprietario, non un'alternativa
+silenziosa.
 
 Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
 file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,

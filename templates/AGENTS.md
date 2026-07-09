@@ -112,8 +112,10 @@ riporta cosa resta fuori standard solo se serve davvero l'umano.
    invia un resoconto a `sal@salchiarenza.ai` con cosa hai fatto, prova concreta
    e cosa resta aperto SOLO per umano vero (permesso, login, hardware, scelta
    business). Vietato il referto intermedio "se manca qualcosa fammi sapere".
-   Se non puoi inviare email, lascia il resoconto come bozza che il proprietario
-   inoltra.
+   **Il resoconto si INVIA per davvero, mai lasciato in bozza**: una bozza non
+   e' un resoconto ricevuto. Se il canale email non e' collegato o l'invio non
+   riesce, e' un blocco da dichiarare subito al proprietario, non
+   un'alternativa silenziosa.
 4. **Chiudi l'ambiente usato:** prima di dire che hai finito, lascia in ordine
    le superfici che hai aperto tu: archivia/parcheggia le email lavorate,
    chiudi pagine web, tab browser, preview, form, login e app temporanee usate
