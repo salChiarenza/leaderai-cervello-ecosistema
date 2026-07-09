@@ -2,8 +2,9 @@
 
 Missione per l'agente del proprietario (Claude Code o Codex). Si lancia
 dicendo all'agente: "esegui il checkup LeaderAI" (questo file, `CHECKUP.md`,
-nella repo clonata). Si puo' rifare ogni volta che serve: dopo un
-aggiornamento, ogni tot settimane, o quando qualcosa non torna.
+nella repo gia' presente o letta come standard LeaderAI). Si puo' rifare ogni
+volta che serve: dopo un aggiornamento, ogni tot settimane, o quando qualcosa
+non torna.
 
 Nota per chi mantiene LeaderAI: la sorgente del metodo e'
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md`. Ogni modifica
@@ -36,7 +37,14 @@ Oggetto: `Missione Ecosistema LeaderAI #N - Checkup`
 Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
 
 Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
-Aggiorna o clona la repo, apri `CHECKUP.md` e usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e' il caso reale: confrontala con lo standard della repo e con `templates/AGENTS.md`.
+Se la repo e' gia' presente sul computer, aggiornala e apri `CHECKUP.md`.
+Se la repo locale non e' presente, usa GitHub come riferimento di lettura per
+`CHECKUP.md`, `MANIFEST.md` e `templates/AGENTS.md`. Crea un clone tecnico
+temporaneo solo dopo conferma esplicita.
+
+Usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e'
+il caso reale: confrontala con lo standard della repo e con
+`templates/AGENTS.md`.
 
 Prima di dichiarare che non ci sono doppioni o cartelle tecniche fuori posto,
 fai la ricerca estesa obbligatoria: cerca anche nomi non standard, nomi
@@ -70,20 +78,25 @@ proprietario, scelte vere di business. Le istruzioni di business
 (`AGENTS.md`/`CLAUDE.md` del proprietario) NON si riscrivono da soli: li' si
 segnala e si propone.
 
-## Passo 0 — Aggiorna la repo prima di tutto (obbligatorio)
+## Passo 0 — Usa lo standard LeaderAI aggiornato
 
-Il tuo clone puo' essere vecchio: se non aggiorni, esegui una versione
-superata del metodo o non trovi file che nel frattempo sono stati aggiunti
-(es. questo stesso `CHECKUP.md`). Prima di qualunque altra cosa, dentro la
-cartella della repo:
+Se la repo standard `salChiarenza/leaderai-cervello-ecosistema` e' gia'
+presente sul computer, entra nella cartella e aggiorna:
 
 ```
 git pull --ff-only
 ```
 
 Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
-star leggendo una versione superata. Se il clone non esiste ancora, clonalo da
-`github.com/salChiarenza/leaderai-cervello-ecosistema`. Solo dopo prosegui.
+star leggendo una versione superata.
+
+Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
+file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`, `AGENTS.md`,
+`README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
+leggerli online, chiedi una sola conferma per creare un clone tecnico
+temporaneo in cartella temporanea di sistema. Il checkup di un ambiente gia'
+installato parte dalla cartella viva del cliente, non dalla creazione di nuove
+cartelle tecniche.
 
 ## Passo 0-bis - Apri il metro di giudizio
 

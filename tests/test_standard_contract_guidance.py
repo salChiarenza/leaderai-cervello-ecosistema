@@ -33,7 +33,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "STANDARD APPLICATO",
             "Modello email missione checkup",
             "Missione Ecosistema LeaderAI #N - Checkup",
-            "usa `MANIFEST.md` come standard di conformita'",
+            "Usa `MANIFEST.md` come standard di conformita'",
         ]
 
         for phrase in required:

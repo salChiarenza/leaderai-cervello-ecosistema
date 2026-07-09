@@ -123,6 +123,11 @@ classifica ogni risultato sospetto. Sorgente del metodo (lato LeaderAI):
 `leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` - le modifiche si
 specchiano nei due sensi.
 
+Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
+presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
+per `CHECKUP.md`, `MANIFEST.md` e `templates/AGENTS.md`. Crea un clone tecnico
+temporaneo solo con conferma esplicita.
+
 ## Divieti
 
 - Non salvare segreti, password, token o dati bancari.

@@ -54,6 +54,30 @@ class TemporaryCloneGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
+    def test_checkup_does_not_clone_by_default(self):
+        raw = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+        text = compact(raw)
+
+        required = [
+            "Se la repo e' gia' presente sul computer",
+            "aggiornala",
+            "usa GitHub come riferimento di lettura",
+            "Crea un clone tecnico temporaneo solo dopo conferma esplicita",
+        ]
+
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+
+        forbidden = [
+            "Aggiorna o clona la repo",
+            "Se il clone non esiste ancora, clonalo",
+        ]
+
+        for phrase in forbidden:
+            with self.subTest(phrase=phrase):
+                self.assertNotIn(phrase, raw)
+
 
 if __name__ == "__main__":
     unittest.main()
