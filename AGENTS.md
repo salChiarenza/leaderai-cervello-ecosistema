@@ -78,10 +78,13 @@ Il ciclo e' chiuso e semplice:
 - `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
   file toccati, blocchi umani veri e superfici aperte da lui.
 - `REPORT`: invia il report finale a `sal@salchiarenza.ai`.
-- `SAL_VERIFICA`: aspetta risposta LeaderAI.
+- `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nei log/report.
 - `CONTINUA`: lavora ancora sulla stessa missione e rimanda report aggiornato.
-- `CHIUDI`: archivia la missione, chiude pagine/app aperte da lui e registra la
-  chiusura nei log.
+- `CHIUDI`: registra la chiusura nei log e chiude pagine/app aperte da lui.
+
+Regola posta: dopo aver letto e gestito una email o notifica, archiviala nello
+stesso giro. La Inbox contiene solo blocchi o decisioni immediate ancora attivi;
+`SAL_VERIFICA` resta tracciato nei log/report, non nella Inbox.
 
 Non creare automatismi permanenti tra agenti: ogni giro nasce da missione umana
 o risposta esplicita LeaderAI.

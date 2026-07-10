@@ -319,17 +319,18 @@ Stati della missione:
    prove, file modificati, cartella usata, errori rimasti, punti che richiedono
    umano vero e superfici aperte da te (email, browser, tab, form, preview, app
    temporanee).
-4. `REPORT` - invia a `sal@salchiarenza.ai` il report finale della missione,
+4. `REPORT` - archivia la email già gestita, poi invia a `sal@salchiarenza.ai`
+   il report finale della missione,
    mantenendo il numero nell'oggetto o nello stesso thread. Il report contiene:
    azioni fatte, prove, cosa hai riparato, cosa resta solo per umano vero e
    stato di chiusura ambiente.
-5. `SAL_VERIFICA` - dopo il report resta in attesa della risposta LeaderAI. Non
-   chiudere la missione dopo il primo report.
+5. `SAL_VERIFICA` - dopo il report resta in attesa della risposta LeaderAI; la
+   email lavorata è già archiviata e lo stato resta nei log/report.
 6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
    ancora sulla stessa missione, fai un nuovo autocontrollo e mandi un nuovo
    report.
-7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, archivia
-   l'email missione, chiudi pagine/app aperte da te e annota la chiusura nei log.
+7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, chiudi
+   pagine/app aperte da te e annota la chiusura nei log.
 
 Questo autocontrollo e' temporaneo e legato alla missione. Non creare un
 automatismo permanente tra agenti: ogni giro parte da una missione umana o da
@@ -342,7 +343,8 @@ Regola breve: Non chiudere la missione dopo il primo report.
 1. Invia il resoconto a `sal@salchiarenza.ai` solo a lavoro finito. Rispondi
    nello stesso thread della missione numerata; se devi creare una nuova email,
    usa lo stesso numero: `Missione Ecosistema LeaderAI #N - Resoconto finale`.
-2. Archivia la missione: inbox pulita, la storia resta nei file.
+2. Archivia la missione nello stesso giro in cui la leggi e la gestisci: Inbox
+   pulita, stato e storia restano nei file.
 3. Chiudi l'ambiente operativo usato per la missione: pagine web, tab browser,
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
    personali del proprietario o superfici che deve decidere lui: dichiarale come

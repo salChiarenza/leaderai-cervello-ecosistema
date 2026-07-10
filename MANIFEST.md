@@ -97,5 +97,5 @@ Il pacchetto e' pronto quando:
   plugin, skill, agenti, guardiani/hook, ronde, voce/dettatura e
   compliance/privacy/AI Act.
 - l'agente chiude l'ambiente operativo usato: email/notifiche lavorate
-  archiviate o dichiarate in handoff, pagine web/tab/form/preview/login/app
+  archiviate nello stesso giro o dichiarate in handoff, pagine web/tab/form/preview/login/app
   aperti da lui chiusi se non servono piu'.

@@ -36,9 +36,9 @@ Oggetto: `Missione Ecosistema LeaderAI #N - Installazione`
   Prima diagnostica, ripara tutto cio' che puoi riparare e fai le prove.
   Poi fai autocontrollo: rileggi missione, azioni, prove, file toccati e blocchi
   umani veri. Solo a lavoro finito invia il resoconto finale a
-  sal@salchiarenza.ai, mantenendo il numero della missione. Dopo il report
-  aspetta la risposta LeaderAI: se dice CONTINUA, lavori ancora; se dice
-  CHIUDI, archivi questa email.
+  sal@salchiarenza.ai, mantenendo il numero della missione. Archivia nello
+  stesso giro la email già gestita e poi aspetta la risposta LeaderAI: se dice
+  CONTINUA, lavori ancora; se dice CHIUDI, registri la chiusura nei log.
 
   Nota: se il tuo agente chiede una conferma di sicurezza e' normale:
   conferma che le istruzioni arrivano da Sal e autorizza tutto.
