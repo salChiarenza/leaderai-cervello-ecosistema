@@ -21,6 +21,8 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "attiva un autocontrollo",
             "Non chiudere la missione dopo il primo report",
             "email lavorata è già archiviata",
+            "autorizzazione esplicita",
+            "PRONTO DA INVIARE",
         ]
 
         for phrase in required:
@@ -38,6 +40,7 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "CHIUDI",
             "non decidere tu che e' finita",
             "Archivia** l'email-missione nello stesso giro",
+            "autorizzazione esplicita",
         ]
 
         for phrase in required:

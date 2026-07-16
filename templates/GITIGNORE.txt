@@ -1,0 +1,16 @@
+# Segreti del cliente: mai nella repo, mai nel backup.
+# Su ogni PC i connettori si ri-autorizzano con login.
+.secrets/
+*.env
+.env
+*.key
+*.pem
+*token*
+*secret*
+*password*
+*credential*
+
+# Rumore di sistema
+.DS_Store
+__pycache__/
+.pytest_cache/

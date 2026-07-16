@@ -28,6 +28,17 @@ Deve:
 4. collaudare;
 5. scrivere un report finale.
 
+## Contratto di consegna sicura
+
+Per una nuova installazione l'agente usa la repo ufficiale come fonte di sola
+lettura e applica i template nella cartella madre locale. Il clone della repo e
+l'esecuzione di `leaderai_setup.py` richiedono una autorizzazione esplicita e
+separata; non sono il percorso predefinito e non si attivano automaticamente se
+la lettura web incontra un blocco.
+
+Il report viene prima creato e collaudato localmente. L'invio email a LeaderAI
+avviene dopo autorizzazione esplicita del proprietario.
+
 ## Modalita' agente
 
 La repo resta unica. La modalita' cambia in base all'agente reale del cliente:
@@ -54,6 +65,9 @@ Il target passa solo se esistono:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 - `MODULO_CALENDARIO_OPERATIVO.md`
+
+Lo standard statico necessario alla procedura senza esecuzione di codice e'
+esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.
 
 Per Claude Code:
 

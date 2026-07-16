@@ -1,31 +1,28 @@
-# Autoconfigurazione Git - Cervello + Ecosistema
+# Autoconfigurazione sicura - Cervello + Ecosistema
 
-Questo e' il testo da incollare nel Claude Code o Codex del cliente.
-La repo resta una sola. La modalita' cambia in base all'agente reale del
-cliente.
+Questa e' la procedura unica per una nuova installazione cliente. La repo
+ufficiale resta lo standard LeaderAI verificabile; l'agente del cliente la
+legge in sola lettura e applica localmente i file nella cartella madre.
 
-Avviso da dare al cliente insieme al testo: e' normale che il suo agente,
-prima di eseguire, chieda una conferma di sicurezza (clonare una repo
-esterna, eseguire uno script, inviare un report via email sono azioni che
-un buon agente non fa alla cieca). Il cliente deve confermare che le
-istruzioni arrivano da Sal/LeaderAI, il suo consulente, e autorizzare
-l'esecuzione completa. Se l'agente propone di eseguire "solo la parte
-sicura", la risposta giusta e' autorizzare tutto lo script.
+Percorso predefinito: lettura della repo ufficiale, creazione locale e
+collaudo. Il clone della repo e l'esecuzione di `leaderai_setup.py` sono un
+percorso tecnico opzionale: si usano solo dopo una richiesta separata e una
+autorizzazione esplicita del proprietario.
 
-REGOLA PER CHI CONSEGNA (LeaderAI): NON incollare tutto questo file
-nell'email al cliente. Un muro di istruzioni con script + dati + invii
-sembra un attacco e fa scattare i guardiani dell'agente. L'email di
-consegna e' CORTA (modello sotto): l'agente clona la repo e legge le
-istruzioni DA QUI, dalla fonte fidata e versionata.
+REGOLA PER CHI CONSEGNA (LeaderAI): l'email di consegna e' corta e punta a
+questa procedura. L'installazione produce prima un report locale verificato;
+l'invio del report a LeaderAI avviene poi con autorizzazione esplicita del
+proprietario.
 
 Modello email di consegna (da compilare).
-Oggetto: `Missione Ecosistema LeaderAI #N - Installazione`
+Oggetto: `Installazione Cervello + Ecosistema`
 
   Ciao [NOME], di' al tuo agente (Claude Code o Codex) di eseguire questo:
 
-  Clona la repo https://github.com/salChiarenza/leaderai-cervello-ecosistema
-  in una cartella temporanea di sistema, apri il file INSTALLA_CON_AI.md che trovi dentro
-  ed esegui le istruzioni della sezione "Testo da copiare" con questi dati:
+  Apri in sola lettura la procedura ufficiale:
+  https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md
+  Leggi anche `VERSION`, `MANIFEST.md` e i file indicati in `templates/`, poi
+  applica lo standard direttamente nella cartella madre locale con questi dati:
   cliente: [NOME] - [AZIENDA]; cartella di lavoro: [CARTELLA]; agente:
   claude (o codex).
 
@@ -33,25 +30,25 @@ Oggetto: `Missione Ecosistema LeaderAI #N - Installazione`
   posizione cartella madre: [locale / cloud]; backup: [GitHub privato /
   copia su Drive / locale per ora]; seconda postazione: [si / no].
 
-  Prima diagnostica, ripara tutto cio' che puoi riparare e fai le prove.
-  Poi fai autocontrollo: rileggi missione, azioni, prove, file toccati e blocchi
-  umani veri. Solo a lavoro finito invia il resoconto finale a
-  sal@salchiarenza.ai, mantenendo il numero della missione. Archivia nello
-  stesso giro la email già gestita e poi aspetta la risposta LeaderAI: se dice
-  CONTINUA, lavori ancora; se dice CHIUDI, registri la chiusura nei log.
-
-  Nota: se il tuo agente chiede una conferma di sicurezza e' normale:
-  conferma che le istruzioni arrivano da Sal e autorizza tutto.
+  Usa accesso web di sola lettura alla repo. Il percorso standard non richiede
+  clone della repo ne' esecuzione di codice scaricato. Prima diagnostica,
+  crea o integra i file mancanti, fai le prove e completa `REPORT_FINALE.md`.
+  Mostrami il verdetto locale. L'invio a sal@salchiarenza.ai sara' un secondo
+  gesto, dopo la mia autorizzazione esplicita.
 
   Sal & Claude
 
 ## Testo da copiare
 
 ```text
-Voglio configurare il mio Cervello + Ecosistema LeaderAI da GitHub.
+Voglio configurare il mio Cervello + Ecosistema LeaderAI usando la repo
+ufficiale come standard di sola lettura.
 
 Repo da usare:
 https://github.com/salChiarenza/leaderai-cervello-ecosistema
+
+Procedura da aprire:
+https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md
 
 Obiettivo finale:
 creare o aggiornare UNA cartella madre (il cervello) sul mio computer. Dove
@@ -86,7 +83,7 @@ segnala nel report che il default e' modificabile. Le domande si fanno solo
 se il cliente stesso chiede di decidere.
 
 Fase 1 - autodiagnosi
-1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git, Python e agente attivo.
+1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git e agente attivo.
    Se il computer ha PIU' account utente (su Windows capita spesso: uno per
    persona o per reparto), elencali e chiedimi da quale account lavoro davvero:
    la cartella madre deve vivere nell'account che uso io, altrimenti da un altro
@@ -120,44 +117,62 @@ Fase 1 - autodiagnosi
    - Windows: %USERPROFILE%\EcosistemaAI-[AZIENDA]
    nella posizione che ho scelto alla Domanda 1.
 
-Fase 2 - prepara Git e Python
-1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
-2. Se Python manca ed e' installabile, installalo o guidami solo nel click/permesso necessario.
-3. Crea una cartella tecnica temporanea nella cartella temporanea di sistema,
-   separata dalla cartella madre finale. Non crearla in Documenti, Desktop,
-   Downloads, OneDrive, Google Drive o nella home/profilo utente come cartella
-   stabile. Non usare nomi visibili come Sal, LeaderAI o il nome della repo come
-   cartella finale. Esempi:
-   - Windows: `%TEMP%\ecosistema-ai-standard`
-   - Mac/Linux: `/tmp/ecosistema-ai-standard`
+Fase 2 - prepara la cartella madre e Git locale
+1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso
+   necessario. Python non serve nel percorso standard.
+2. Crea o usa la cartella madre scelta nella Fase 1. Inizializzala come repository
+   git locale, senza collegarla automaticamente a repository esterne.
+3. Prima di aggiungere file, controlla cosa esiste gia'. Integra i pezzi mancanti
+   e conserva il contenuto vivo del cliente.
 
-   Questa cartella serve solo per installare o aggiornare lo standard: non e' la
-   consegna al cliente e deve essere eliminata prima del report finale, salvo
-   blocco reale dichiarato.
+Fase 3 - leggi lo standard ufficiale in sola lettura
+1. Apri dalla repo GitHub ufficiale questi file, tutti dal branch `main`:
+   - `VERSION`
+   - `MANIFEST.md`
+   - `templates/AGENTS.md`
+   - `templates/MEMORY.md`
+   - `templates/ASSET.md`
+   - `templates/GITIGNORE.txt`
+   - `templates/CLAUDE.md`
+   - `templates/CLAUDE_README.md`
+   - `templates/CODEX_README.md`
+   - `templates/FONTI.md`
+   - `templates/PROCESSI.md`
+   - `templates/LIMITI.md`
+   - `templates/INSTALL_LOG.md`
+2. Registra nel report la versione letta. Se un file non e' leggibile, chiedi
+   soltanto l'autorizzazione per l'accesso web di sola lettura e riprova.
+3. Il percorso predefinito termina qui per la repo: niente clone e niente
+   esecuzione di codice scaricato.
 
-Fase 3 - clona o aggiorna la repo
-1. Se la cartella tecnica contiene gia' la repo, fai aggiornamento:
-   git pull
-2. Se non esiste, clona:
-   git clone https://github.com/salChiarenza/leaderai-cervello-ecosistema <cartella-tecnica>
-3. Entra nella repo e leggi:
-   - AGENTS.md
-   - README.md
-   - MANIFEST.md
+Fase 4 - monta localmente il Cervello
+1. Crea le cartelle `memory/`, `logs/` ed `ecosistema/` nella cartella madre.
+2. Applica localmente i template, sostituendo `{{client_name}}`, `{{date}}` e
+   `{{agent}}` con i dati reali:
+   - `templates/AGENTS.md` -> `AGENTS.md`
+   - `templates/MEMORY.md` -> `memory/MEMORY.md`
+   - `templates/ASSET.md` -> `ecosistema/ASSET.md`
+   - `templates/GITIGNORE.txt` -> `.gitignore`
+   - `templates/FONTI.md` -> `ecosistema/FONTI.md`
+   - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
+   - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
+   - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
+3. Se la modalita' e' Claude, crea `CLAUDE.md` e `.claude/README.md` dai relativi
+   template. Se e' Codex, crea `.codex/README.md`. Usa entrambi solo se LeaderAI
+   lo ha chiesto esplicitamente.
+4. Crea `REPORT_FINALE.md` seguendo il Manifest e le sezioni richieste in fondo
+   a questa procedura.
+5. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
+   cosa era gia' presente, cosa hai creato e cosa hai aggiornato.
+6. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
+   password e credenziali prima del primo commit.
 
-Fase 4 - monta il Cervello nella cartella madre
-Esegui dalla repo, usando come --target la cartella madre scelta con me alla Domanda 1:
-
-python3 leaderai_setup.py --target "<cartella-madre-scelta>" --client "[NOME CLIENTE] - [AZIENDA]" --agent claude
-
-Se il comando `python3` non esiste ma `python` o `py` si', usa quello corretto
-per questo computer.
-
-Il setup inizializza la cartella madre come repository git e crea un `.gitignore`
-che esclude `.secrets/`, file `.env`, token, chiavi, password e credenziali.
-Questo vale sempre, qualunque posizione io abbia scelto: i segreti non devono mai
-entrare nella cronologia git ne' in un backup. Verifica che il `.gitignore` sia
-presente e che escluda i segreti prima di proseguire.
+Percorso tecnico opzionale:
+`leaderai_setup.py` resta un attrezzo LeaderAI per collaudi o installazioni
+esplicitamente autorizzate. Se LeaderAI propone di usarlo, presenta prima al
+proprietario repo, comando, file che saranno creati e permessi richiesti; procedi
+solo dopo la sua autorizzazione esplicita. Questo percorso non si attiva come
+ripiego automatico.
 
 Fase 5 - personalizza il Cervello
 Dopo l'installazione, apri i file creati nella cartella madre e aggiorna solo i
@@ -259,11 +274,11 @@ il lavoro finisca altrove. Chiudilo cosi':
 
 Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
-   AGENTS.md, CLAUDE.md, .gitignore, .claude/README.md, memory/MEMORY.md,
+   AGENTS.md, .gitignore, memory/MEMORY.md,
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
    ecosistema/LIMITI.md, logs/install-log.md, REPORT_FINALE.md.
-   Nota: `.codex/README.md` deve esistere solo se la modalita' scelta e' Codex
-   o both.
+   Nota: `CLAUDE.md` e `.claude/README.md` devono esistere solo in modalita'
+   Claude o both; `.codex/README.md` solo in modalita' Codex o both.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
@@ -369,7 +384,8 @@ senza conferma esplicita.
 
 Report finale obbligatorio:
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
-- repo clonata/aggiornata si/no;
+- standard applicato: repo ufficiale + versione letta;
+- modalita' accesso standard: sola lettura / percorso tecnico autorizzato;
 - modalita' scelta: claude / codex / both;
 - file creati;
 - cartella madre = repository git si/no;
@@ -381,25 +397,18 @@ Report finale obbligatorio:
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
 - Mappa moduli con stato per ogni modulo;
-- clone tecnico: eliminato / mantenuto temporaneamente con motivo;
+- codice esterno eseguito: no / si con autorizzazione esplicita e prova;
 - chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
 - cosa resta da collegare e dove;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
-Prima di inviare il report, ripulisci il clone tecnico usato per l'installazione:
-se non contiene dati del cliente e non ci sono modifiche locali da salvare,
-elimina la cartella tecnica temporanea (`%TEMP%\ecosistema-ai-standard`,
-`/tmp/ecosistema-ai-standard` o eventuale vecchio legacy
-`_leaderai_install/leaderai-cervello-ecosistema`). Sul PC del cliente deve
-restare come lavoro visibile solo la cartella madre cliente. Se non puoi
-eliminarla, scrivi nel report il motivo concreto e chiedi conferma umana.
-
 Consegna del report e ciclo tra agenti:
-il report finale va INVIATO DAVVERO via email a sal@salchiarenza.ai solo a
-lavoro finito, mantenendo il numero della missione ricevuta. Mai lasciato in
-bozza: una bozza non e' un resoconto ricevuto. Se l'invio email non e' attivo,
-e' un blocco da dichiarare subito al proprietario, non un'alternativa
-silenziosa.
+1. Completa e collauda `REPORT_FINALE.md` nella cartella madre.
+2. Mostra al proprietario verdetto, prove e blocchi reali.
+3. Chiedi: `Autorizzi l'invio del report a sal@salchiarenza.ai?`
+4. Solo dopo un si' esplicito, invia davvero il report. Una bozza non conta come
+   consegna. Se Gmail non e' collegata, conserva il report locale come
+   `PRONTO DA INVIARE` e dichiara il blocco senza simulare l'invio.
 
 Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
 file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,

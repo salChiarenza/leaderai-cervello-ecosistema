@@ -10,31 +10,9 @@ from typing import Iterable
 
 
 ROOT = Path(__file__).resolve().parent
+STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 
-# Contenuto del .gitignore della cartella madre.
-# Tiene FUORI dalla repo i segreti del cliente: la cartella e' un repository git
-# e il backup scelto col cliente (GitHub privato o copia su Drive/OneDrive) non
-# deve mai contenere token, chiavi o password. Vale sempre, qualunque sia la
-# posizione scelta per la cartella madre.
-GITIGNORE_CONTENT = """\
-# Segreti del cliente: mai nella repo, mai nel backup.
-# Su ogni PC i connettori (Gmail, Calendar, Drive, Meta) si ri-autorizzano con login:
-# le chiavi restano per-macchina, non viaggiano nel backup.
-.secrets/
-*.env
-.env
-*.key
-*.pem
-*token*
-*secret*
-*password*
-*credential*
-
-# Rumore di sistema
-.DS_Store
-__pycache__/
-.pytest_cache/
-"""
+GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="utf-8")
 
 
 @dataclass
@@ -206,6 +184,11 @@ def build_report(result: InstallResult, agent: str) -> str:
         [
             "# Report finale LeaderAI",
             "",
+            "STANDARD APPLICATO",
+            "- Repo: salChiarenza/leaderai-cervello-ecosistema",
+            f"- Versione: {STANDARD_VERSION}",
+            "- Accesso: percorso tecnico autorizzato",
+            "",
             "FASE 1 - CERVELLO",
             f"- Agente attivo: {active_agent}",
             f"- Agganci attesi: {active_files}",
@@ -279,7 +262,7 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
         ensure_dir(target / ".codex", result, dry_run)
         ensure_text(
             target / ".codex" / "README.md",
-            "# Codex\n\nCodex deve partire dalla root cliente e leggere `AGENTS.md`.\n",
+            read_template("CODEX_README.md", context),
             result,
             force,
             dry_run,
@@ -289,14 +272,14 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
         ensure_dir(target / ".claude", result, dry_run)
         ensure_text(
             target / ".claude" / "README.md",
-            "# Claude Code\n\nClaude Code deve partire dalla root cliente e leggere `CLAUDE.md` / `AGENTS.md`.\n",
+            read_template("CLAUDE_README.md", context),
             result,
             force,
             dry_run,
         )
         ensure_text(
             target / "CLAUDE.md",
-            "# CLAUDE.md\n\nLeggi `AGENTS.md`: e' la fonte comune del Cervello cliente.\n",
+            read_template("CLAUDE.md", context),
             result,
             force,
             dry_run,
@@ -304,7 +287,7 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
 
     ensure_text(
         target / "ecosistema" / "FONTI.md",
-        "# Fonti\n\nMappa delle fonti vere del cliente.\n\n## Fonti trovate\n\n- Cartella madre: da compilare\n\n## Fonti da collegare\n\n- Cartelle operative: da collegare\n- Report/clienti: da collegare\n- Drive/OneDrive/server: da collegare\n- Email/calendario: da collegare solo se autorizzati\n- CRM/gestionale/fatture: da collegare solo se esiste una fonte reale\n\n## Regola\n\nNon inventare percorsi. Se una fonte non e' presente, lasciare `da collegare`.\n",
+        read_template("FONTI.md", context),
         result,
         force,
         dry_run,
@@ -318,14 +301,14 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
     )
     ensure_text(
         target / "ecosistema" / "PROCESSI.md",
-        "# Processi\n\nProcessi osservati o candidati.\n\n## Fase 1 - Cervello\n\n- Verifica lettura istruzioni e memoria\n- Verifica report finale\n\n## Fase 2 - Ecosistema\n\n- Processo: da collegare a una fonte reale\n- Fonte: da collegare\n- Frequenza: da definire\n- Output atteso: da definire\n",
+        read_template("PROCESSI.md", context),
         result,
         force,
         dry_run,
     )
     ensure_text(
         target / "ecosistema" / "LIMITI.md",
-        "# Limiti\n\nAzioni che richiedono conferma umana.\n\n## Sempre conferma prima di\n\n- Inviare email\n- Cancellare file\n- Spostare cartelle vive\n- Usare credenziali o dati sensibili\n",
+        read_template("LIMITI.md", context),
         result,
         force,
         dry_run,
@@ -336,7 +319,13 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
     elif agent == "claude":
         result.decisions.append("Codex non richiesto: non creato aggancio Codex oltre allo standard comune.")
 
-    ensure_text(target / "logs" / "install-log.md", "# Install log\n", result, False, dry_run)
+    ensure_text(
+        target / "logs" / "install-log.md",
+        read_template("INSTALL_LOG.md", context),
+        result,
+        False,
+        dry_run,
+    )
     ensure_text(target / "REPORT_FINALE.md", build_report(result, agent), result, force, dry_run)
 
     log_lines = [

@@ -20,6 +20,22 @@ class StandardContractGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
+    def test_manifest_declares_safe_delivery_contract(self):
+        raw = (ROOT / "MANIFEST.md").read_text(encoding="utf-8")
+        text = " ".join(raw.split())
+
+        required = [
+            "Contratto di consegna sicura",
+            "fonte di sola lettura",
+            "autorizzazione esplicita e separata",
+            "non sono il percorso predefinito",
+            "report viene prima creato e collaudato localmente",
+        ]
+
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, text)
+
     def test_checkup_forces_comparison_against_manifest_and_template(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
 
@@ -32,7 +48,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "SCOSTAMENTI DALLO STANDARD",
             "STANDARD APPLICATO",
             "Modello email missione checkup",
-            "Missione Ecosistema LeaderAI #N - Checkup",
+            "Oggetto: `Checkup Ecosistema`",
             "Usa `MANIFEST.md` come standard di conformita'",
         ]
 

@@ -78,12 +78,13 @@ Il ciclo e' chiuso e semplice:
 
 `MISSIONE` -> `ESECUZIONE` -> `AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
 
-- `MISSIONE`: l'agente del cliente legge l'email numerata, apre link/file e
+- `MISSIONE`: l'agente del cliente legge l'email con oggetto concreto, apre link/file e
   segue lo schema indicato.
 - `ESECUZIONE`: fa le azioni, ripara cio' che puo', prova cio' che dichiara.
 - `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
   file toccati, blocchi umani veri e superfici aperte da lui.
-- `REPORT`: invia il report finale a `sal@salchiarenza.ai`.
+- `REPORT`: completa e collauda il report locale; l'invio a
+  `sal@salchiarenza.ai` avviene dopo autorizzazione esplicita del proprietario.
 - `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nei log/report.
 - `CONTINUA`: lavora ancora sulla stessa missione e rimanda report aggiornato.
 - `CHIUDI`: registra la chiusura nei log e chiude pagine/app aperte da lui.
@@ -115,8 +116,11 @@ Il file da consegnare e':
 
 - `INSTALLA_CON_AI.md`
 
-Il cliente incolla quel testo in Claude Code o Codex. Prima del clone non ha
-questa repo, quindi la missione deve stare tutta nel testo.
+L'agente apre quel file dalla repo ufficiale in sola lettura, legge `VERSION`,
+`MANIFEST.md` e i template indicati, poi applica lo standard localmente. La
+procedura predefinita non richiede clone della repo ne' esecuzione di codice
+scaricato. `leaderai_setup.py` resta un attrezzo tecnico opzionale, utilizzabile
+solo dopo autorizzazione esplicita.
 
 Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
 agente "esegui il checkup LeaderAI", l'agente confronta il setup con la doc
@@ -136,6 +140,9 @@ Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
 presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
 per `CHECKUP.md`, `MANIFEST.md` e `templates/AGENTS.md`. Crea un clone tecnico
 temporaneo solo con conferma esplicita.
+
+Nella nuova installazione, invece, parte sempre dalla lettura web della repo e
+dal montaggio locale dei template. Il clone non e' un ripiego automatico.
 
 ## Divieti
 
@@ -185,10 +192,14 @@ Installazione manuale:
 python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
 ```
 
+Questo comando e' per uso tecnico verificato o per una installazione autorizzata
+esplicitamente; non e' il percorso cliente predefinito.
+
 ## Quando finisci una modifica
 
 1. Aggiorna `README.md`, `MANIFEST.md` o `INSTALLA_CON_AI.md` se cambia un fatto
    critico.
 2. Esegui i test.
-3. Commit e push su GitHub: la base cliente e' la repo, non il clone locale.
+3. Commit e push su GitHub: la base cliente e' la repo ufficiale, non copie o
+   fork paralleli.
 4. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.

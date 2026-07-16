@@ -19,9 +19,10 @@ Per installare tramite l'agente del cliente, usare:
 INSTALLA_CON_AI.md
 ```
 
-Il testo fa clonare questa repo via Git, trova o crea la cartella madre nella
-posizione scelta col cliente e monta Cervello + Ecosistema senza trasformare il
-cliente in tecnico.
+L'agente legge questa repo ufficiale in sola lettura, trova o crea la cartella
+madre nella posizione scelta col cliente e applica localmente i template dello
+standard. Il percorso cliente predefinito non clona la repo e non esegue codice
+scaricato.
 
 Per il controllo periodico di un ambiente gia' installato:
 
@@ -53,7 +54,7 @@ rischio in cambio della comodita'. Il backup si sceglie sempre col cliente
 sempre fuori dal git (`.gitignore`). Dettaglio in `INSTALLA_CON_AI.md`
 Domande 1, 2, 3 e Fase 7.
 
-Uso manuale:
+Uso tecnico opzionale, dopo autorizzazione esplicita:
 
 ```bash
 python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
@@ -104,6 +105,9 @@ solo se il cliente usa sia Claude sia Codex.
 
 Non sovrascrive file gia' presenti, salvo `--force`.
 
+La versione corrente dello standard e' in `VERSION`; le modifiche consegnabili
+sono registrate in `CHANGELOG.md`.
+
 ## Collaudo
 
 ```bash
@@ -112,6 +116,6 @@ python3 -m unittest discover -s tests
 
 ## Stato
 
-Versione installabile via Git. Prima di usarla con un cliente, leggere
-`AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita' giusta
-Claude/Codex, poi verificare che la repo GitHub sia aggiornata.
+Versione applicabile via lettura della repo ufficiale. Prima di usarla con un
+cliente, leggere `AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita'
+Claude/Codex e verificare `VERSION` e stato GitHub.

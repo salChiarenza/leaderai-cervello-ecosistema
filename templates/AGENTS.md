@@ -106,16 +106,14 @@ riporta cosa resta fuori standard solo se serve davvero l'umano.
 2. **Esegui** quello che chiede, fino in fondo, con l'Autoprova. Non proporre, non
    spiegare e basta: fai. Chiedi al proprietario solo per scelte vere o azioni
    irreversibili.
-3. **Riporta indietro solo alla fine:** se l'oggetto e' `Missione Ecosistema
-   LeaderAI #N - ...`, conserva quel numero nel resoconto. Prima diagnostica,
-   ripara tutto cio' che puoi riparare, ripeti le prove; solo a lavoro finito
-   invia un resoconto a `sal@salchiarenza.ai` con cosa hai fatto, prova concreta
-   e cosa resta aperto SOLO per umano vero (permesso, login, hardware, scelta
-   business). Vietato il referto intermedio "se manca qualcosa fammi sapere".
-   **Il resoconto si INVIA per davvero, mai lasciato in bozza**: una bozza non
-   e' un resoconto ricevuto. Se il canale email non e' collegato o l'invio non
-   riesce, e' un blocco da dichiarare subito al proprietario, non
-   un'alternativa silenziosa.
+3. **Riporta indietro solo alla fine:** prima diagnostica, ripara tutto cio' che
+   puoi riparare e ripeti le prove. A lavoro finito completa il resoconto
+   locale con cosa hai fatto, prova concreta e cosa resta aperto SOLO per umano
+   vero (permesso, login, hardware, scelta business). Mostralo al proprietario
+   e chiedi l'autorizzazione esplicita a inviarlo a `sal@salchiarenza.ai`.
+   Dopo il si', il resoconto si invia davvero: una bozza non e' un resoconto
+   ricevuto. Se il canale email non e' collegato o l'invio non riesce, il file
+   locale resta `PRONTO DA INVIARE` e il blocco viene dichiarato.
 4. **Chiudi l'ambiente usato:** prima di dire che hai finito, lascia in ordine
    le superfici che hai aperto tu: archivia nello stesso giro le email lavorate,
    chiudi pagine web, tab browser, preview, form, login e app temporanee usate
@@ -136,7 +134,7 @@ che e' finita.
 
 Regola breve: non decidere tu che e' finita.
 
-1. `MISSIONE` - leggi l'email numerata, apri il link o file indicato e segui lo
+1. `MISSIONE` - leggi l'email con oggetto concreto, apri il link o file indicato e segui lo
    schema indicato.
 2. `ESECUZIONE` - fai le azioni richieste. Se puoi riparare, ripari. Se puoi
    provare, provi. Chiedi al proprietario solo permessi, login, hardware o
@@ -145,9 +143,10 @@ Regola breve: non decidere tu che e' finita.
    cosa chiedeva, cosa hai fatto, quali prove hai, quali file hai toccato e cosa
    resta solo per umano vero. Controlla anche le superfici aperte da te:
    email, browser, tab, form, preview, login, app temporanee.
-4. `REPORT` - manda il report finale a `sal@salchiarenza.ai`, mantenendo il
-   numero della missione nello stesso thread o nell'oggetto. Nel report indica
-   anche se email/browser/app sono state chiuse o cosa resta in handoff.
+4. `REPORT` - completa il report locale, mostralo al proprietario e chiedi
+   autorizzazione esplicita. Dopo il si', mandalo a `sal@salchiarenza.ai`.
+   Nel report indica anche se email/browser/app sono state chiuse o cosa resta
+   in handoff.
 5. `SAL_VERIFICA` - dopo il report archivia la email già gestita, registra lo
    stato nei log e aspetta la risposta LeaderAI.
 6. `CONTINUA` - se LeaderAI chiede correzioni o nuove azioni, lavora ancora

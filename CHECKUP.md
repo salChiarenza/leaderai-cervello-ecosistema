@@ -31,7 +31,7 @@ LeaderAI, salvo blocchi umani veri.
 
 ## Modello email missione checkup
 
-Oggetto: `Missione Ecosistema LeaderAI #N - Checkup`
+Oggetto: `Checkup Ecosistema`
 
 ```text
 Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
@@ -52,8 +52,9 @@ brandizzati e typo come `LeaderAI`, `Leader AI`, `leaderai`, `leader ai`,
 `leder ai`, `cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo`,
 `clone`. Ogni risultato va classificato e spiegato.
 
-Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari,
-fai autocontrollo e manda solo il report finale a LeaderAI.
+Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari e
+completa il report finale locale. Mostralo al proprietario e chiedi la sua
+autorizzazione esplicita prima di inviarlo a LeaderAI.
 
 Dopo il report aspetta risposta LeaderAI: `CONTINUA` o `CHIUDI`.
 ```
@@ -309,7 +310,7 @@ esplicitamente di chiudere.
 
 Stati della missione:
 
-1. `MISSIONE` - leggi l'email numerata, apri il link o file indicato e segui lo
+1. `MISSIONE` - leggi l'email con oggetto concreto, apri il link o file indicato e segui lo
    schema indicato. Se la missione punta a `CHECKUP.md`, questo file e' lo
    schema da seguire.
 2. `ESECUZIONE` - fai le azioni richieste: diagnosi, correzione, riparazione,
@@ -319,13 +320,14 @@ Stati della missione:
    prove, file modificati, cartella usata, errori rimasti, punti che richiedono
    umano vero e superfici aperte da te (email, browser, tab, form, preview, app
    temporanee).
-4. `REPORT` - archivia la email già gestita, poi invia a `sal@salchiarenza.ai`
-   il report finale della missione,
-   mantenendo il numero nell'oggetto o nello stesso thread. Il report contiene:
-   azioni fatte, prove, cosa hai riparato, cosa resta solo per umano vero e
-   stato di chiusura ambiente.
-5. `SAL_VERIFICA` - dopo il report resta in attesa della risposta LeaderAI; la
-   email lavorata è già archiviata e lo stato resta nei log/report.
+4. `REPORT` - completa il report locale della missione con azioni fatte, prove,
+   cosa hai riparato, cosa resta solo per umano vero e stato di chiusura ambiente.
+   Mostralo al proprietario e chiedi autorizzazione esplicita; dopo
+   il si', invialo a `sal@salchiarenza.ai`.
+5. `SAL_VERIFICA` - dopo l'invio resta in attesa della risposta LeaderAI; la
+   email lavorata è già archiviata e lo stato resta nei log/report. Se l'invio
+   non e' ancora autorizzato, lo stato e' `PRONTO DA INVIARE`, non
+   `SAL_VERIFICA`.
 6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
    ancora sulla stessa missione, fai un nuovo autocontrollo e mandi un nuovo
    report.
@@ -340,10 +342,11 @@ Regola breve: Non chiudere la missione dopo il primo report.
 
 ## Chiusura (ciclo resoconti)
 
-1. Invia il resoconto a `sal@salchiarenza.ai` solo a lavoro finito. Rispondi
-   nello stesso thread della missione numerata; se devi creare una nuova email,
-   usa lo stesso numero: `Missione Ecosistema LeaderAI #N - Resoconto finale`.
-2. Archivia la missione nello stesso giro in cui la leggi e la gestisci: Inbox
+1. Completa il resoconto locale solo a lavoro finito, mostralo al proprietario
+   e chiedi l'autorizzazione esplicita all'invio. Dopo il si', invialo davvero
+   a `sal@salchiarenza.ai` nello stesso thread; se serve una nuova email usa
+   l'oggetto concreto `Resoconto checkup Ecosistema`.
+2. Dopo l'invio archivia la missione: Inbox
    pulita, stato e storia restano nei file.
 3. Chiudi l'ambiente operativo usato per la missione: pagine web, tab browser,
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
