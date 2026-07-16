@@ -28,6 +28,12 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 
+Moduli professionali versionati:
+
+- `moduli/portafogli/` - costruzione Core-Satellite, analisi, backtest,
+  monitoraggio e report cliente con motore deterministico e validazione del
+  banker. Installazione: `moduli/portafogli/INSTALLA_MODULO.md`.
+
 Il `REPORT_FINALE.md` deve includere la mappa moduli con stato per PEC/email
 certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,
 agenti/ruoli, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
@@ -162,6 +168,15 @@ Collaudo repo:
 
 ```bash
 python3 -m unittest discover -s tests
+```
+
+Collaudo diretto del modulo Portafogli:
+
+```bash
+python3 moduli/portafogli/portfolio_engine.py analizza \
+  --input moduli/portafogli/DATI_PORTAFOGLIO_MODELLO.csv \
+  --output /tmp/analisi-portafoglio.csv \
+  --report /tmp/report-calcoli.md
 ```
 
 Installazione manuale:

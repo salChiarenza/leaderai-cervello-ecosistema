@@ -93,6 +93,9 @@ Modulo specifico gia' disponibile:
 
 - `MODULO_CALENDARIO_OPERATIVO.md` - quando il cliente usa Calendar a colori e
   serve trasformare quella lettura visiva in struttura leggibile dall'agente.
+- `moduli/portafogli/` - Sistema Portafogli Core-Satellite: fonti autorizzate,
+  metodo del banker, calcoli deterministici, backtest, monitoraggio e report.
+  L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`.
 
 Il Cervello include anche la **mappa comunicazione**: stato e chiusure in
 `REPORT_FINALE.md`/`logs/`, procedure nei file proprietari, asset in

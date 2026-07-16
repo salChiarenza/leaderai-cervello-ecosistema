@@ -64,6 +64,24 @@ Per Codex:
 
 - `.codex/README.md`
 
+## Moduli professionali
+
+I moduli entrano nel target soltanto quando LeaderAI li assegna al cliente.
+
+### Sistema Portafogli Core-Satellite
+
+Sorgente: `moduli/portafogli/`.
+
+Il modulo passa quando:
+
+- crea `Costruzione Portafogli/` nella cartella viva;
+- preserva `METODO.md`, `FONTI.md` e `CORE.md` ai rilanci;
+- installa la skill Claude `gestisci-portafoglio`;
+- registra l'asset e il processo nell'Ecosistema cliente;
+- calcola pesi, drift, riallineamento, alert e backtest dai CSV normalizzati;
+- blocca target fuori universo e serie mensili incomplete;
+- produce un dossier tracciabile che il banker valida prima del report cliente.
+
 ## Fonti ufficiali da tenere vive
 
 Queste fonti vanno riverificate quando si aggiorna lo standard:

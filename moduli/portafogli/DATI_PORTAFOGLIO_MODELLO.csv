@@ -1,0 +1,3 @@
+strumento_id,nome,classe,componente,valuta,quantita,prezzo_corrente,cambio_eur,peso_target_pct,prezzo_riferimento,fonte,data_fonte,ammesso
+CORE_A,Fondo Core A,Obbligazionario,CORE,EUR,600,100,1,60,,Catalogo autorizzato,2026-07-15,SI
+SAT_B,Satellite B,Azionario,SATELLITE,USD,500,80,0.92,40,74,Provider autorizzato,2026-07-15,SI

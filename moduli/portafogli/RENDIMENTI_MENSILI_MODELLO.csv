@@ -1,0 +1,5 @@
+data,strumento_id,rendimento_mensile_pct,fonte,data_fonte
+2026-05,CORE_A,0.50,Report mensile,2026-06-05
+2026-05,SAT_B,1.20,Report mensile,2026-06-05
+2026-06,CORE_A,0.30,Report mensile,2026-07-05
+2026-06,SAT_B,-0.80,Report mensile,2026-07-05
