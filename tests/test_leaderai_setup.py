@@ -15,6 +15,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("AGENTS.md", result.created)
             self.assertTrue((target / "AGENTS.md").exists())
             self.assertTrue((target / "CLAUDE.md").exists())
+            self.assertIn("@AGENTS.md", (target / "CLAUDE.md").read_text(encoding="utf-8"))
             self.assertTrue((target / ".claude" / "README.md").exists())
             self.assertFalse((target / ".codex" / "README.md").exists())
             self.assertTrue((target / "memory" / "MEMORY.md").exists())
@@ -32,7 +33,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Asset operativi", asset)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("STANDARD APPLICATO", report)
-            self.assertIn("Versione: 0.2.0", report)
+            self.assertIn("Versione: 0.3.0", report)
             self.assertIn("FASE 2 - ECOSISTEMA", report)
             self.assertIn("MAPPA COMUNICAZIONE", report)
             self.assertIn("Procedure e 'come si fa'", report)
@@ -40,6 +41,8 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("PEC/email certificata", report)
             self.assertIn("Calendario operativo", report)
             self.assertIn("Skill per lavori ripetuti", report)
+            self.assertIn("Architettura adattiva", agents)
+            self.assertFalse((target / "resoconti").exists())
 
     def test_first_commit_photographs_install(self):
         # La cartella madre deve nascere come repository CON cronologia:
@@ -88,6 +91,15 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / ".claude" / "README.md").exists())
             self.assertTrue((target / ".codex" / "README.md").exists())
+
+    def test_technical_setup_refuses_unclassified_live_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "Azienda"
+            target.mkdir()
+            (target / "lavoro-reale.xlsx").write_text("dato", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "CHECKUP.md"):
+                leaderai_setup.run_setup(target, "Cliente Test", "claude")
 
 
 if __name__ == "__main__":

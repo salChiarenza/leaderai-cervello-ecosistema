@@ -204,6 +204,13 @@ def build_report(result: InstallResult, agent: str) -> str:
             "- Fonti da collegare: cartelle/report clienti, cataloghi, Drive/OneDrive, CRM/gestionale solo se esistono",
             "- Dove scrivere i collegamenti: `ecosistema/FONTI.md` per fonti, `ecosistema/ASSET.md` per asset, `ecosistema/PROCESSI.md` per processi, `ecosistema/LIMITI.md` per vincoli",
             "",
+            "ARCHITETTURA ADATTIVA",
+            "- Classificazione: da eseguire sul caso reale (`STANZA`, `FONTE`, `OUTPUT`, `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO`, `SOSPETTA`).",
+            "- Mappa stanze: da compilare nel router `AGENTS.md`; nessun nome business viene imposto dal setup.",
+            "- Collegamenti monte/valle: da derivare dai processi reali e collaudare dalla radice.",
+            "- Prove di instradamento: due richieste realistiche da eseguire dopo la discovery.",
+            "- LEZIONE CANDIDATA: nessuna in questa installazione tecnica; compilare se emerge un errore generalizzabile.",
+            "",
             "MAPPA COMUNICAZIONE",
             "- Regola: gli agenti non si parlano direttamente; leggono e scrivono file condivisi.",
             "- Stato e chiusura lavoro: `REPORT_FINALE.md` oppure `logs/install-log.md`.",
@@ -240,6 +247,13 @@ def build_report(result: InstallResult, agent: str) -> str:
 
 def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_run: bool = False) -> InstallResult:
     target = target.expanduser().resolve()
+    if target.exists() and any(target.iterdir()):
+        shows_existing_cervello = (target / "AGENTS.md").exists() or (target / "CLAUDE.md").exists()
+        if not shows_existing_cervello:
+            raise ValueError(
+                "Target gia' vivo senza Cervello riconosciuto: usa CHECKUP.md per censire "
+                "e integrare l'ambiente; lo setup tecnico non impone il telaio a una casa esistente."
+            )
     today = dt.datetime.now().strftime("%d/%m/%Y")
     stamp = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     context = {"client_name": client, "date": today, "agent": agent}
@@ -358,7 +372,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    result = run_setup(Path(args.target), args.client, args.agent, args.force, args.dry_run)
+    try:
+        result = run_setup(Path(args.target), args.client, args.agent, args.force, args.dry_run)
+    except ValueError as exc:
+        print(f"DA RIPARARE: {exc}")
+        return 2
 
     if args.quiet:
         print(f"{result.target} | created={len(result.created)} existing={len(result.existing)} updated={len(result.updated)}")

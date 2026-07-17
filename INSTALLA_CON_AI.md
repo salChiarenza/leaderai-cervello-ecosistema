@@ -178,6 +178,31 @@ Fase 5 - personalizza il Cervello
 Dopo l'installazione, apri i file creati nella cartella madre e aggiorna solo i
 punti necessari, senza cancellare il resto.
 
+Prima di aggiungere una struttura business, costruisci la mappa dell'ambiente
+reale:
+
+1. censisci le cartelle, le fonti, gli output, le skill, gli script, gli agenti,
+   i connettori, le procedure e gli archivi gia' presenti;
+2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
+   `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
+3. riconosci come stanza solo una funzione operativa stabile con fonti,
+   processi o output propri;
+4. aggiorna il registro delle stanze in `AGENTS.md` e collega ogni stanza alla
+   mappa madre;
+5. per ogni vera stanza crea o integra una mappa locale corta (`AGENTS.md` e,
+   in modalita' Claude, ponte `CLAUDE.md`) con scopo, contenuto, fonti, output,
+   capacita', collegamenti a monte e collegamenti a valle;
+6. collega direttamente due stanze solo quando un processo reale passa tra le
+   due;
+7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
+   spostare o eliminare stanze presenta una proposta e attendi la decisione del
+   proprietario.
+
+Skill, script, agenti, connettori, moduli e procedure sono capacita' della
+stanza che li usa. Se una capacita' e' gia' coperta, integrala o riusala. Una
+nuova stanza nasce solo quando nessuna stanza esistente puo' possedere quella
+funzione e il proprietario approva la proposta.
+
 In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole reali:
 - chi sono e cosa faccio [AZIENDA];
 - rispondi in italiano, chiaro e operativo;
@@ -196,8 +221,9 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
 - NIENTE MANI DENTRO LA CASA: dentro la cartella madre non si cancella e non
   si sposta nulla a mano da Esplora file/Finder. Si chiede all'agente, cosi'
   il salvataggio git resta coerente e nulla si perde;
-- RESOCONTI IN UNA STANZA SOLA: i resoconti e i report nascono in una
-  sottocartella `resoconti/` (creala se manca), mai sparsi nella radice.
+- OUTPUT NELLA CASA PROPRIETARIA: ogni resoconto o report vive nella stanza
+  responsabile del processo oppure nel report/log comune gia' previsto. Prima
+  usa la casa esistente; non creare una cartella `resoconti/` per abitudine.
 
 Mantieni anche la sezione "Comunicazione e fonti di verita'":
 - gli agenti non si parlano direttamente, leggono e scrivono file condivisi;
@@ -304,6 +330,12 @@ Fase 6 - collaudo
    (per esempio una bozza vuota di un documento ricorrente, con campi da
    compilare e, se il settore lo richiede, un disclaimer "bozza da rivedere").
 6. Se qualcosa non passa, correggi e riprova.
+7. Collauda la rete delle stanze con almeno due richieste realistiche partendo
+   dalla radice, senza suggerire il percorso. Per ciascuna registra:
+   richiesta -> stanza -> fonte -> capacita'/processo -> output. Se l'agente non
+   trova il percorso, correggi mappa o collegamenti e riprova.
+8. Verifica che ogni stanza sia raggiungibile dalla mappa madre, che nessuna
+   capacita' sia isolata e che non esistano due stanze per la stessa funzione.
 
 Fase 7 - backup e seconda postazione (scelta guidata)
 Serve a non perdere il lavoro e a usare l'Ecosistema da piu' di un computer.
@@ -377,6 +409,10 @@ Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
 del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
 non dalla memoria di chi sta seguendo la consegna.
 
+Ogni modulo `INSTALLABILE` o `ATTIVO` dichiara la stanza proprietaria. Prima
+riusa una capacita' equivalente gia' presente. La creazione di una nuova stanza
+resta una decisione strutturale esplicita del proprietario.
+
 Se il cliente usa l'agenda soprattutto tramite colori, leggi
 `MODULO_CALENDARIO_OPERATIVO.md` prima di proporre o creare calendari. Il primo
 blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
@@ -385,6 +421,7 @@ senza conferma esplicita.
 Report finale obbligatorio:
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
 - standard applicato: repo ufficiale + versione letta;
+- versione metodo registrata e versione precedente trovata, se esiste;
 - modalita' accesso standard: sola lettura / percorso tecnico autorizzato;
 - modalita' scelta: claude / codex / both;
 - file creati;
@@ -396,10 +433,15 @@ Report finale obbligatorio:
 - prova piccola completata si/no;
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
+- classificazione dell'ambiente e mappa delle stanze con monte/valle;
+- capacita' collegate a ogni stanza e possibili doppioni evitati;
+- almeno due prove di instradamento richiesta -> stanza -> fonte -> output;
 - Mappa moduli con stato per ogni modulo;
 - codice esterno eseguito: no / si con autorizzazione esplicita e prova;
 - chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
 - cosa resta da collegare e dove;
+- `LEZIONE CANDIDATA`: nessuna oppure caso, causa, regola generale e prova che
+  avrebbe intercettato l'errore;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
 Consegna del report e ciclo tra agenti:

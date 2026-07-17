@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -11,7 +12,6 @@ from pathlib import Path
 
 
 MODULE_NAME = "Sistema Portafogli Core-Satellite"
-ROOM_NAME = "Costruzione Portafogli"
 SOURCE = Path(__file__).resolve().parent
 
 
@@ -23,7 +23,6 @@ class InstallResult:
 
 
 MANAGED_FILES = {
-    "AGENTS.md": "CLIENTE_AGENTS.md",
     "PROCESSO.md": "PROCESSO.md",
     "SCHEMA_DATI.md": "SCHEMA_DATI.md",
     "portfolio_engine.py": "portfolio_engine.py",
@@ -80,18 +79,119 @@ def _append_once(path: Path, marker: str, block: str, result: InstallResult) -> 
     result.updated.append(str(path))
 
 
-def install(target: Path, update_managed: bool = False) -> InstallResult:
+def _resolve_room(target: Path, room_path: str | Path) -> Path:
+    relative = Path(room_path)
+    if relative.is_absolute() or not relative.parts or relative == Path("."):
+        raise ValueError("La stanza deve essere un percorso relativo alla cartella madre")
+    room = (target / relative).resolve()
+    if not room.is_relative_to(target):
+        raise ValueError("La stanza deve restare dentro la cartella madre")
+    return room
+
+
+def _validate_skill_name(skill_name: str) -> None:
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", skill_name):
+        raise ValueError(
+            "Il nome skill deve usare minuscole, numeri e trattini (es. portafogli-azimut)"
+        )
+
+
+def _install_skill(
+    destination: Path,
+    skill_name: str,
+    result: InstallResult,
+    update_managed: bool,
+) -> None:
+    content = (SOURCE / "SKILL.md").read_text(encoding="utf-8")
+    content = re.sub(r"(?m)^name: .+$", f"name: {skill_name}", content, count=1)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists() and not update_managed:
+        result.existing.append(str(destination))
+        return
+    if destination.exists() and destination.read_text(encoding="utf-8") == content:
+        result.existing.append(str(destination))
+        return
+    if destination.exists():
+        backup = destination.with_suffix(destination.suffix + ".leaderai-backup")
+        if not backup.exists():
+            shutil.copy2(destination, backup)
+            result.created.append(str(backup))
+        destination.write_text(content, encoding="utf-8")
+        result.updated.append(str(destination))
+        return
+    destination.write_text(content, encoding="utf-8")
+    result.created.append(str(destination))
+
+
+def install(
+    target: Path,
+    room_path: str | Path,
+    *,
+    skill_name: str | None = None,
+    create_room: bool = False,
+    update_managed: bool = False,
+) -> InstallResult:
     target = target.expanduser().resolve()
     if not target.exists() or not target.is_dir():
         raise ValueError(f"Cartella target assente: {target}")
-    if not (target / "AGENTS.md").exists() and not (target / "CLAUDE.md").exists():
+    if not (target / "AGENTS.md").exists():
         raise ValueError(
-            "La cartella target non mostra un Cervello installato: AGENTS.md/CLAUDE.md assenti"
+            "La cartella target non mostra il router del Cervello: AGENTS.md assente; "
+            "esegui prima CHECKUP.md"
         )
+    if skill_name:
+        _validate_skill_name(skill_name)
+        if not (target / "CLAUDE.md").exists() and not (target / ".claude").exists():
+            raise ValueError(
+                "Una skill Claude richiede un Cervello Claude gia' attivo; "
+                "ometti --skill-name o completa prima il checkup"
+            )
 
     result = InstallResult()
-    room = target / ROOM_NAME
-    room.mkdir(parents=True, exist_ok=True)
+    room = _resolve_room(target, room_path)
+    if room.exists() and not room.is_dir():
+        raise ValueError(f"La stanza scelta non e' una cartella: {room}")
+    if not room.exists():
+        if not create_room:
+            raise ValueError(
+                "La stanza scelta non esiste. Prima censisci l'ambiente; "
+                "creala solo dopo approvazione e rilancia con --create-room"
+            )
+        room.mkdir(parents=True)
+        result.created.append(str(room))
+
+    room_rel = room.relative_to(target).as_posix()
+
+    root_map_block = f"""## Stanza collegata: {room_rel}
+
+- Funzione: Sistema Portafogli Core-Satellite.
+- Mappa locale: `{room_rel}/AGENTS.md`.
+- Fonti e output: dichiarati nella stanza e nei registri `ecosistema/`.
+- A monte / a valle: compilare dai processi reali del proprietario.
+"""
+    _append_once(
+        target / "AGENTS.md",
+        f"## Stanza collegata: {room_rel}",
+        root_map_block,
+        result,
+    )
+
+    room_map = room / "AGENTS.md"
+    if room_map.exists():
+        module_map = f"""## Sistema Portafogli Core-Satellite
+
+Questa stanza possiede la capacita' Portafogli LeaderAI.
+
+- Processo: `{room_rel}/PROCESSO.md`
+- Fonti: `{room_rel}/FONTI.md`
+- Metodo professionale: `{room_rel}/METODO.md`
+- Motore numerico: `{room_rel}/portfolio_engine.py`
+- Collegamenti a monte e a valle: mantenere nella mappa della stanza e nel
+  registro processi della cartella madre.
+"""
+        _append_once(room_map, "## Sistema Portafogli Core-Satellite", module_map, result)
+    else:
+        _copy_if_missing(SOURCE / "CLIENTE_AGENTS.md", room_map, result)
 
     for destination_name, source_name in MANAGED_FILES.items():
         source = SOURCE / source_name
@@ -104,24 +204,29 @@ def install(target: Path, update_managed: bool = False) -> InstallResult:
     for destination_name, source_name in CUSTOM_FILES.items():
         _copy_if_missing(SOURCE / source_name, room / destination_name, result)
 
-    claude_map = room / "CLAUDE.md"
-    if not claude_map.exists():
-        shutil.copy2(room / "AGENTS.md", claude_map)
-        result.created.append(str(claude_map))
-    else:
-        result.existing.append(str(claude_map))
+    if (target / "CLAUDE.md").exists() or (target / ".claude").exists():
+        claude_map = room / "CLAUDE.md"
+        if not claude_map.exists():
+            claude_map.write_text("# CLAUDE.md\n\n@AGENTS.md\n", encoding="utf-8")
+            result.created.append(str(claude_map))
+        else:
+            result.existing.append(str(claude_map))
 
-    skill_destination = target / ".claude" / "skills" / "gestisci-portafoglio" / "SKILL.md"
-    if update_managed:
-        _update_managed(SOURCE / "SKILL.md", skill_destination, result)
-    else:
-        _copy_if_missing(SOURCE / "SKILL.md", skill_destination, result)
+    skill_reference = "nessuna nuova skill; riusare una capacita' equivalente se esiste"
+    if skill_name:
+        skill_destination = target / ".claude" / "skills" / skill_name / "SKILL.md"
+        _install_skill(skill_destination, skill_name, result, update_managed)
+        skill_reference = f"`.claude/skills/{skill_name}/SKILL.md`"
 
-    asset_block = (
-        "| Sistema Portafogli Core-Satellite | `Costruzione Portafogli/` | "
-        "costruzione, analisi, backtest, monitoraggio e report | "
-        "INSTALLATO - DA VALIDARE SU CASO REALE | modulo LeaderAI versionato |"
-    )
+    asset_block = f"""## Sistema Portafogli Core-Satellite
+
+- Tipo: `CAPACITA`
+- Stanza proprietaria: `{room_rel}/`
+- Uso: costruzione, analisi, backtest, monitoraggio e report.
+- Orchestrazione: {skill_reference}.
+- Stato: `INSTALLATO - DA VALIDARE SU CASO REALE`.
+- Prova: modulo LeaderAI versionato; collaudo fittizio e caso reale da registrare.
+"""
     _append_once(
         target / "ecosistema" / "ASSET.md",
         "Sistema Portafogli Core-Satellite",
@@ -129,13 +234,14 @@ def install(target: Path, update_managed: bool = False) -> InstallResult:
         result,
     )
 
-    process_block = """## Sistema Portafogli Core-Satellite
+    process_block = f"""## Sistema Portafogli Core-Satellite
 
-- Casa: `Costruzione Portafogli/`
-- Contratto: `Costruzione Portafogli/AGENTS.md`
-- Processo: `Costruzione Portafogli/PROCESSO.md`
-- Calcoli: `Costruzione Portafogli/portfolio_engine.py`
-- Orchestrazione Claude: `.claude/skills/gestisci-portafoglio/SKILL.md`
+- Stanza proprietaria: `{room_rel}/`
+- Contratto: `{room_rel}/AGENTS.md`
+- Processo: `{room_rel}/PROCESSO.md`
+- Calcoli: `{room_rel}/portfolio_engine.py`
+- Orchestrazione: {skill_reference}
+- A monte / a valle: compilare dai processi reali del proprietario.
 - Stato iniziale: installato, da configurare sulle fonti reali e validare col banker.
 """
     _append_once(
@@ -168,6 +274,20 @@ def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", type=Path, required=True)
     parser.add_argument(
+        "--room",
+        required=True,
+        help="percorso relativo della stanza proprietaria scelto dopo il censimento",
+    )
+    parser.add_argument(
+        "--create-room",
+        action="store_true",
+        help="crea la stanza indicata; usarlo solo dopo approvazione strutturale",
+    )
+    parser.add_argument(
+        "--skill-name",
+        help="installa una nuova skill Claude col nome scelto; omettere per riusare l'esistente",
+    )
+    parser.add_argument(
         "--update-managed",
         action="store_true",
         help="aggiorna file tecnici/versionati creando un backup una tantum",
@@ -178,7 +298,13 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     try:
-        result = install(args.target, args.update_managed)
+        result = install(
+            args.target,
+            args.room,
+            skill_name=args.skill_name,
+            create_room=args.create_room,
+            update_managed=args.update_managed,
+        )
     except ValueError as exc:
         print(f"DA RIPARARE: {exc}")
         return 2

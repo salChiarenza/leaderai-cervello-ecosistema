@@ -12,6 +12,9 @@ Indice della memoria condivisa del Cervello.
 ## Indice
 
 - `AGENTS.md` - mappa iniziale del Cervello e dell'Ecosistema.
+- `REPORT_FINALE.md` / `logs/install-log.md` - versione del metodo applicato,
+  ultimo collaudo e lezioni candidate.
 - `ecosistema/FONTI.md` - dove vivono le fonti vere del cliente.
+- `ecosistema/ASSET.md` - capacita' e asset collegati alle stanze che servono.
 - `ecosistema/PROCESSI.md` - processi osservati o candidati.
 - `ecosistema/LIMITI.md` - azioni che richiedono conferma umana.

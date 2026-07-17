@@ -1,9 +1,22 @@
-# Costruzione Portafogli — contratto della stanza
+# Sistema Portafogli — contratto della stanza proprietaria
 
 ## Scopo
 
-Questa stanza prepara portafogli Core-Satellite, revisioni, backtest,
-monitoraggio e report usando il metodo del banker e fonti autorizzate.
+Questa stanza possiede il processo Portafogli e prepara portafogli
+Core-Satellite, revisioni, backtest, monitoraggio e report usando il metodo del
+banker e fonti autorizzate. Il suo nome deriva dall'ecosistema reale del
+proprietario.
+
+## Collegamenti
+
+- A monte: compilare con le stanze e le fonti che forniscono mandato, universo,
+  dati cliente e dati di mercato.
+- A valle: compilare con le stanze o gli output che ricevono dossier, report,
+  storico e prossime revisioni.
+- Mappa madre: questa stanza deve essere raggiungibile dal `AGENTS.md` della
+  cartella madre.
+- Capacita': motore numerico, eventuali skill gia' presenti e procedure qui
+  registrate servono questa stanza; non sono stanze separate.
 
 ## Mappa
 
@@ -34,7 +47,7 @@ monitoraggio e report usando il metodo del banker e fonti autorizzate.
 - Ogni prezzo, cambio, rendimento e dato di mercato porta fonte e data.
 - Il motore esegue i calcoli; il testo cita i suoi output.
 - Dati incompleti producono una richiesta precisa o uno stato `DA COMPLETARE`.
-- Marco valida adeguatezza, strumenti, pesi, raccomandazione e firma.
+- Il banker valida adeguatezza, strumenti, pesi, raccomandazione e firma.
 - I dati cliente restano nella cartella autorizzata e nei limiti privacy aziendali.
 - Ogni output destinato al cliente include le avvertenze approvate dal banker.
 

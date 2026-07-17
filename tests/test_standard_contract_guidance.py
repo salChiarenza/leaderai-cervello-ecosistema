@@ -36,6 +36,26 @@ class StandardContractGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
+    def test_manifest_separates_fixed_frame_from_adaptive_rooms(self):
+        text = (ROOT / "MANIFEST.md").read_text(encoding="utf-8")
+
+        required = [
+            "Contratto architetturale adattivo",
+            "Telaio universale",
+            "Forma adattiva",
+            "STANZA",
+            "CAPACITA",
+            "collegamenti a monte e a valle",
+            "proposta strutturale",
+            "LEZIONE CANDIDATA",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase.lower(), text.lower())
+
+        portfolio_contract = text.split("### Sistema Portafogli Core-Satellite", 1)[1]
+        self.assertNotIn("crea `Costruzione Portafogli/`", portfolio_contract)
+
     def test_checkup_forces_comparison_against_manifest_and_template(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
 

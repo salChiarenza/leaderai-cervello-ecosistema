@@ -48,6 +48,24 @@ class CheckupGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
 
+    def test_checkup_audits_room_graph_and_routes(self):
+        text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+
+        required = [
+            "Censimento e rete delle stanze",
+            "STANZA",
+            "CAPACITA",
+            "collegamenti a monte e collegamenti a valle",
+            "ogni stanza sia raggiungibile",
+            "PROPOSTA STRUTTURALE",
+            "richiesta -> stanza -> fonte -> capacita'/processo -> output",
+            "LEZIONE CANDIDATA",
+            "VERSIONE METODO",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase.lower(), text.lower())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,6 +8,10 @@ ROOT = Path(__file__).resolve().parents[1]
 class OperationalCleanupGuidanceTest(unittest.TestCase):
     def test_client_template_requires_environment_cleanup(self):
         text = (ROOT / "templates" / "AGENTS.md").read_text(encoding="utf-8")
+        processes = (ROOT / "templates" / "PROCESSI.md").read_text(encoding="utf-8")
+
+        self.assertIn("Il protocollo completo vive in `ecosistema/PROCESSI.md`", text)
+        self.assertIn("chiudi solo le superfici aperte", text)
 
         required = [
             "Chiusura ambiente",
@@ -20,7 +24,7 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
 
         for phrase in required:
             with self.subTest(phrase=phrase):
-                self.assertIn(phrase, text)
+                self.assertIn(phrase, processes)
 
     def test_checkup_and_installation_report_cleanup_state(self):
         checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")

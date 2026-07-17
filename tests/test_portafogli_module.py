@@ -75,6 +75,12 @@ class PortfolioInstallerTest(unittest.TestCase):
             (target / "ecosistema").mkdir(parents=True)
             (target / "logs").mkdir()
             (target / "AGENTS.md").write_text("# Casa\n", encoding="utf-8")
+            (target / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+            room = target / "Portafoglio Modello"
+            room.mkdir()
+            (room / "AGENTS.md").write_text(
+                "# Portafoglio Modello\n\n## Collegamenti\n", encoding="utf-8"
+            )
             (target / "ecosistema" / "ASSET.md").write_text(
                 "# Asset\n\n| Asset | Casa | Uso | Stato | Note |\n|---|---|---|---|---|\n",
                 encoding="utf-8",
@@ -83,19 +89,52 @@ class PortfolioInstallerTest(unittest.TestCase):
                 "# Processi\n", encoding="utf-8"
             )
 
-            first = installer.install(target)
-            room = target / "Costruzione Portafogli"
+            first = installer.install(target, "Portafoglio Modello")
             self.assertTrue((room / "portfolio_engine.py").exists())
-            self.assertTrue((target / ".claude" / "skills" / "gestisci-portafoglio" / "SKILL.md").exists())
+            self.assertFalse((target / "Costruzione Portafogli").exists())
+            self.assertFalse((target / ".claude" / "skills" / "gestisci-portafoglio").exists())
+            self.assertEqual(
+                (room / "CLAUDE.md").read_text(encoding="utf-8"),
+                "# CLAUDE.md\n\n@AGENTS.md\n",
+            )
             self.assertIn("Sistema Portafogli Core-Satellite", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
+            self.assertIn("Portafoglio Modello", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
+            self.assertIn("Stanza collegata: Portafoglio Modello", (target / "AGENTS.md").read_text(encoding="utf-8"))
 
             custom = room / "METODO.md"
             custom.write_text("DECISIONE MARCO\n", encoding="utf-8")
-            second = installer.install(target)
+            second = installer.install(target, "Portafoglio Modello")
 
             self.assertEqual(custom.read_text(encoding="utf-8"), "DECISIONE MARCO\n")
             self.assertGreater(len(first.created), 0)
             self.assertGreater(len(second.existing), 0)
+
+    def test_new_room_requires_explicit_structural_approval(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "Casa"
+            target.mkdir()
+            (target / "AGENTS.md").write_text("# Casa\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "--create-room"):
+                installer.install(target, "Portafogli")
+
+            installer.install(target, "Portafogli", create_room=True)
+            self.assertTrue((target / "Portafogli" / "AGENTS.md").exists())
+
+    def test_new_skill_is_installed_only_when_named_explicitly(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "Casa"
+            room = target / "Investimenti"
+            room.mkdir(parents=True)
+            (target / "AGENTS.md").write_text("# Casa\n", encoding="utf-8")
+            (target / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+
+            installer.install(target, "Investimenti", skill_name="portafogli-azimut")
+
+            skill = target / ".claude" / "skills" / "portafogli-azimut" / "SKILL.md"
+            self.assertTrue(skill.exists())
+            self.assertIn("name: portafogli-azimut", skill.read_text(encoding="utf-8"))
+            self.assertFalse((target / ".claude" / "skills" / "gestisci-portafoglio").exists())
 
 
 if __name__ == "__main__":

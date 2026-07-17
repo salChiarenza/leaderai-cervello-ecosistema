@@ -31,21 +31,26 @@ class MissionLoopGuidanceTest(unittest.TestCase):
 
     def test_client_template_contains_closed_mission_loop(self):
         text = (ROOT / "templates" / "AGENTS.md").read_text(encoding="utf-8")
+        processes = (ROOT / "templates" / "PROCESSI.md").read_text(encoding="utf-8")
 
         required = [
-            "Protocollo missioni LeaderAI",
+            "Missioni da LeaderAI",
+            "Il protocollo completo vive in `ecosistema/PROCESSI.md`",
             "AUTOCONTROLLO",
             "SAL_VERIFICA",
             "CONTINUA",
             "CHIUDI",
-            "non decidere tu che e' finita",
-            "Archivia** l'email-missione nello stesso giro",
+            "l'agente non decide da solo",
+            "Archivia nello stesso giro",
             "autorizzazione esplicita",
         ]
 
         for phrase in required:
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, text)
+
+        self.assertIn("Protocollo missioni LeaderAI", processes)
+        self.assertIn("MISSIONE -> ESECUZIONE -> AUTOCONTROLLO", processes)
 
 
 if __name__ == "__main__":

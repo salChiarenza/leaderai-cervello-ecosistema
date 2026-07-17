@@ -4,7 +4,9 @@ Mappa delle fonti vere del cliente.
 
 ## Fonti trovate
 
-- Cartella madre: da compilare
+| Fonte | Percorso o accesso vero | Stanza/processo che la usa | Prova e data | Stato |
+|---|---|---|---|---|
+| Cartella madre | da compilare | Cervello/router | da provare | DA COLLEGARE |
 
 ## Fonti da collegare
 
@@ -17,3 +19,5 @@ Mappa delle fonti vere del cliente.
 ## Regola
 
 Non inventare percorsi. Se una fonte non e' presente, lasciare `da collegare`.
+Una fonte puo' servire piu' stanze: registrare i collegamenti reali senza
+copiarne il contenuto in piu' posti.

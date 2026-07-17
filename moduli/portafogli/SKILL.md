@@ -5,14 +5,18 @@ description: Usa il Sistema Portafogli quando il banker chiede costruzione Core-
 
 # Gestisci Portafoglio
 
-1. Apri `Costruzione Portafogli/AGENTS.md`.
-2. Leggi `METODO.md`, `FONTI.md`, `CORE.md` e la scheda del caso.
-3. Scegli in `PROCESSO.md` la modalità richiesta.
-4. Applica il gate fonti e dati.
-5. Esegui `portfolio_engine.py` per ogni numero destinato all'analisi o al report.
-6. Prepara il dossier interno con fatti, ipotesi e decisioni del banker.
-7. Genera il report cliente dalla versione validata.
-8. Aggiorna lo storico del caso.
+1. Apri `ecosistema/ASSET.md` e individua la stanza proprietaria registrata per
+   `Sistema Portafogli Core-Satellite`.
+2. Apri l'`AGENTS.md` di quella stanza. Se il collegamento manca o punta a una
+   cartella inesistente, fermati con stato `DA RIPARARE`: non creare una stanza
+   per supposizione.
+3. Leggi `METODO.md`, `FONTI.md`, `CORE.md` e la scheda del caso.
+4. Scegli in `PROCESSO.md` la modalita' richiesta.
+5. Applica il gate fonti e dati.
+6. Esegui `portfolio_engine.py` per ogni numero destinato all'analisi o al report.
+7. Prepara il dossier interno con fatti, ipotesi e decisioni del banker.
+8. Genera il report cliente dalla versione validata.
+9. Aggiorna lo storico del caso.
 
 Ogni output indica data di riferimento, fonti, limiti e passaggio di validazione
 professionale.

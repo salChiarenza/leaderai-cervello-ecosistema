@@ -12,15 +12,20 @@ costruzione Core-Satellite, revisione, backtest, monitoraggio e report cliente.
 
 L'agente del cliente legge `INSTALLA_MODULO.md` e lavora sulla cartella viva.
 
+Prima identifica la stanza che possiede davvero il processo. Il modulo non
+assegna il nome della stanza e non installa una nuova skill per default.
+
 Comando diretto:
 
 ```bash
-python3 moduli/portafogli/installa_portafogli.py --target "/percorso/cartella-madre"
+python3 moduli/portafogli/installa_portafogli.py \
+  --target "/percorso/cartella-madre" \
+  --room "Portafoglio Modello"
 ```
 
 ## Calcoli
 
-Dentro `Costruzione Portafogli`:
+Dentro la stanza proprietaria scelta:
 
 ```bash
 python3 portfolio_engine.py analizza --input DATI_PORTAFOGLIO.csv --output ANALISI.csv --report REPORT_CALCOLI.md

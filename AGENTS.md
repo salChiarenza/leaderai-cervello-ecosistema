@@ -3,12 +3,21 @@
 Repo installabile per creare la cartella madre AI di un cliente.
 
 Questa repo e' letta sia da Claude Code sia da Codex. `CLAUDE.md`, se
-presente, deve essere un symlink o una copia di questo file.
+presente, importa `AGENTS.md` con `@AGENTS.md` oppure e' un symlink: una copia
+indipendente crea drift.
 
 Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
 e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md` e le istruzioni operative della repo; poi ripara, prova e
 riporta gli scostamenti.
+
+Lo standard ha due strati: il telaio universale del Cervello e il metodo
+adattivo con cui si scoprono le stanze del cliente. La repo non assegna nomi di
+reparti o cartelle business: censisce l'ambiente reale, classifica stanze,
+fonti, output, capacita', infrastruttura e archivi, poi verifica che ogni stanza
+sia raggiungibile dalla mappa madre. Un modulo si integra nella stanza
+proprietaria; una nuova stanza richiede una proposta motivata e l'approvazione
+del proprietario.
 
 ## Cosa fa
 
@@ -28,11 +37,16 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 
+Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
+sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
+adattivo di `MANIFEST.md`.
+
 Moduli professionali versionati:
 
 - `moduli/portafogli/` - costruzione Core-Satellite, analisi, backtest,
   monitoraggio e report cliente con motore deterministico e validazione del
-  banker. Installazione: `moduli/portafogli/INSTALLA_MODULO.md`.
+  banker. L'agente sceglie prima la stanza proprietaria e poi segue
+  `moduli/portafogli/INSTALLA_MODULO.md`.
 
 Il `REPORT_FINALE.md` deve includere la mappa moduli con stato per PEC/email
 certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,

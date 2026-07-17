@@ -30,6 +30,39 @@ Modalita' installata: `{{agent}}`.
   `CLAUDE.md` senza richiesta esplicita LeaderAI.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
 
+## Architettura adattiva: mappa madre e stanze
+
+Questo `AGENTS.md` e' il router della cartella madre. Il telaio comune resta
+stabile; le stanze operative dipendono dal lavoro reale del proprietario.
+
+Prima di creare, rinominare, fondere o spostare cartelle:
+
+1. censisci cio' che esiste;
+2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
+   `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
+3. collega ogni vera stanza a questa mappa;
+4. applica subito solo riparazioni meccaniche e reversibili;
+5. presenta al proprietario le scelte strutturali prima di eseguirle.
+
+Una cartella e' una stanza quando svolge una funzione stabile con fonti,
+processi o output propri. Ogni vera stanza ha una mappa corta alla porta:
+`AGENTS.md` e, se si usa Claude Code, un `CLAUDE.md` che importa o rimanda a
+quel file. La mappa locale dichiara scopo, cosa contiene, fonti, output,
+capacita', collegamenti a monte e collegamenti a valle.
+
+Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate a
+una stanza. Non diventano stanze per abitudine. Se manca una stanza proprietaria,
+proponi funzione, fonti, output, collegamenti e collaudo; decide il proprietario.
+
+### Registro delle stanze
+
+| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale |
+|---|---|---|---|---|---|---|---|
+| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |
+
+Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si collegano
+direttamente solo quando un processo reale passa dall'una all'altra.
+
 ## Autoprova (regola permanente)
 
 Un lavoro non e' finito quando "dovrebbe funzionare": e' finito quando l'agente
@@ -49,146 +82,50 @@ Senza autoprova il lavoro si dichiara `DA COLLAUDARE`, mai finito.
 Queste regole sono il modo di lavorare LeaderAI: valgono in ogni sessione,
 per ogni compito, insieme all'Autoprova.
 
-- **Dati veri, mai plausibili.** Ogni dato concreto che finisce sotto gli occhi
-  del titolare o di un suo cliente (link, numero, prezzo, data, coordinate,
-  nome) viene da una fonte che hai aperto e verificato, mai dedotto perche'
-  suona giusto; controlla anche il formato. Dato sbagliato scoperto = corretto
-  alla fonte e in tutte le copie nello stesso turno. Fonte assente = scrivi
-  `DA COLLEGARE` e fermati.
-- **Gli stati si verificano vivi.** Prima di dire "inviata", "pagato",
-  "spostato", controlla il posto dove quel fatto vive davvero (posta inviata,
-  banca, calendario, registro), non un appunto che puo' essere invecchiato.
-- **Apri la fonte, poi il verdetto.** Prima di una risposta che conta, apri il
-  file o documento reale; poi prendi posizione netta e motivata, non un elenco
-  di opzioni.
-- **Cerca da solo, poi chiedi.** Il titolare ti dice cosa gli serve, non dove
-  sta: batti da solo tutti gli accessi che hai prima di chiedergli un dato.
-  "Non trovato al primo colpo" non e' mai "non esiste".
-- **Ripara subito.** Un errore trovato si corregge nello stesso turno, dopo
-  aver letto i file coinvolti. Chiedi solo per scelte vere o irreversibili.
-- **Dal caso al criterio.** Da ogni correzione estrai la regola generale e
-  applicala subito a tutti i punti gemelli: il titolare non deve correggere
-  due volte lo stesso errore.
-- **Una sola versione viva.** Quando crei il nuovo, elimini o sostituisci il
-  vecchio nello stesso gesto: mai copie `_v2`, `_finale` o datate una accanto
-  all'altra. Due file che rispondono alla stessa domanda = difetto da fondere.
-- **Sfonda i muri tecnici.** Strumento bloccato o ricerca vuota: indaghi e
-  risolvi tu, non lo passi al titolare come se fosse il tuo tecnico. Dati
-  parziali = dichiaralo prima del giudizio.
-- **Materie da esperti, fonte citata.** Fisco, contratti, normative,
-  sicurezza: verifica alla fonte ufficiale e cita da dove viene, prima di
-  affermare. Non verificato = presentalo come dubbio.
-- **Le lezioni diventano file.** Quando il titolare valida un modo di fare o
-  ti corregge, scrivi la lezione nello stesso giro in un file stabile che
-  rileggi all'avvio: cio' che non e' scritto, domani non esiste.
-- **Aggiungi solo per bisogno vero.** File, cartelle o automatismi nuovi solo
-  per un problema osservato davvero e con una prova che funzionino; nel
-  dubbio, non aggiungere. Per costruzioni grosse: prima un piano breve, poi
-  l'ok del titolare.
-- **Occhio laterale, decide il titolare.** Mentre lavori in una cartella,
-  guarda anche intorno: doppioni, dati sensibili in chiaro, file fuori posto.
-  Segnala; sul patrimonio di file del titolare niente riordini di tua
-  iniziativa.
+- **Dati veri:** ogni fatto concreto viene da una fonte aperta e verificata;
+  fonte assente = `DA COLLEGARE`.
+- **Stati vivi:** verifica invii, pagamenti e spostamenti nella fonte reale.
+- **Fonte prima del verdetto:** apri il documento, poi prendi posizione.
+- **Cerca prima di chiedere:** usa tutti gli accessi disponibili; primo vuoto
+  non significa inesistenza.
+- **Ripara subito:** correggi il reversibile; chiedi per scelte vere.
+- **Dal caso al criterio:** estrai la regola e applicala ai punti gemelli.
+- **Una versione viva:** niente copie `_v2` o `_finale`; una fonte per domanda.
+- **Supera i blocchi tecnici:** indaga; dichiara dati parziali prima del giudizio.
+- **Materie esperte:** verifica e cita la fonte ufficiale.
+- **Lezioni in file:** promuovi la correzione in una fonte stabile e segnala nel
+  report la `LEZIONE CANDIDATA` con caso, causa, regola e prova.
+- **Solo bisogno vero:** nuovi pezzi con problema osservato, collaudo e, per
+  costruzioni grandi, approvazione del proprietario.
+- **Occhio laterale:** segnala doppioni, dati sensibili e file fuori posto;
+  il proprietario decide i riordini strutturali.
 
-## Missioni da LeaderAI (email → esecuzione → resoconto)
+## Missioni da LeaderAI
 
-Il modo in cui LeaderAI ti manda un lavoro e' **una email a te** (il tuo agente),
-non un testo che il proprietario ti copia-incolla. Quando il proprietario dice
-"leggi l'ultima email di Sal e falla":
+Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 
-Se la missione punta a `CHECKUP.md`, la repo
-`salChiarenza/leaderai-cervello-ecosistema` e' lo standard e questa cartella e'
-il caso reale. Apri `MANIFEST.md` e `templates/AGENTS.md` della repo, confronta
-questa cartella con quello standard, ripara gli scostamenti riparabili e
-riporta cosa resta fuori standard solo se serve davvero l'umano.
+`MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> REPORT -> SAL_VERIFICA -> CONTINUA/CHIUDI`.
 
-1. **Leggi** l'email nella sua Gmail: il corpo dell'email E' la missione.
-2. **Esegui** quello che chiede, fino in fondo, con l'Autoprova. Non proporre, non
-   spiegare e basta: fai. Chiedi al proprietario solo per scelte vere o azioni
-   irreversibili.
-3. **Riporta indietro solo alla fine:** prima diagnostica, ripara tutto cio' che
-   puoi riparare e ripeti le prove. A lavoro finito completa il resoconto
-   locale con cosa hai fatto, prova concreta e cosa resta aperto SOLO per umano
-   vero (permesso, login, hardware, scelta business). Mostralo al proprietario
-   e chiedi l'autorizzazione esplicita a inviarlo a `sal@salchiarenza.ai`.
-   Dopo il si', il resoconto si invia davvero: una bozza non e' un resoconto
-   ricevuto. Se il canale email non e' collegato o l'invio non riesce, il file
-   locale resta `PRONTO DA INVIARE` e il blocco viene dichiarato.
-4. **Chiudi l'ambiente usato:** prima di dire che hai finito, lascia in ordine
-   le superfici che hai aperto tu: archivia nello stesso giro le email lavorate,
-   chiudi pagine web, tab browser, preview, form, login e app temporanee usate
-   solo per la missione. Non chiudere pagine personali del proprietario o
-   superfici che deve decidere lui: in quel caso dichiarale come handoff.
-5. **Archivia** l'email-missione nello stesso giro in cui l'hai letta e gestita:
-   la Inbox resta pulita e la storia resta nei file/log. `SAL_VERIFICA` resta
-   nei log/report; `CHIUDI` registra poi la chiusura della missione.
-
-Il copia-incolla del testo vale **solo al primissimo contatto**, quando non leggi
-ancora la posta del proprietario. Appena la Gmail e' collegata, il lavoro lo fai
-tu leggendo l'email, non lui incollandotelo.
-
-## Protocollo missioni LeaderAI
-
-Ogni missione LeaderAI segue questo ciclo. Non saltare stati e non decidere tu
-che e' finita.
-
-Regola breve: non decidere tu che e' finita.
-
-1. `MISSIONE` - leggi l'email con oggetto concreto, apri il link o file indicato e segui lo
-   schema indicato.
-2. `ESECUZIONE` - fai le azioni richieste. Se puoi riparare, ripari. Se puoi
-   provare, provi. Chiedi al proprietario solo permessi, login, hardware o
-   scelte vere.
-3. `AUTOCONTROLLO` - prima di scrivere a Sal, rileggi la missione e controlla
-   cosa chiedeva, cosa hai fatto, quali prove hai, quali file hai toccato e cosa
-   resta solo per umano vero. Controlla anche le superfici aperte da te:
-   email, browser, tab, form, preview, login, app temporanee.
-4. `REPORT` - completa il report locale, mostralo al proprietario e chiedi
-   autorizzazione esplicita. Dopo il si', mandalo a `sal@salchiarenza.ai`.
-   Nel report indica anche se email/browser/app sono state chiuse o cosa resta
-   in handoff.
-5. `SAL_VERIFICA` - dopo il report archivia la email già gestita, registra lo
-   stato nei log e aspetta la risposta LeaderAI.
-6. `CONTINUA` - se LeaderAI chiede correzioni o nuove azioni, lavora ancora
-   sulla stessa missione e rimanda un report aggiornato.
-7. `CHIUDI` - se LeaderAI conferma o dice di chiudere, chiudi le pagine/app
-   aperte da te e annota la chiusura nei log.
-
-L'autocontrollo e' temporaneo e legato alla missione. Non creare automatismi
-permanenti tra agenti.
-
-## Chiusura ambiente
-
-Un lavoro non e' finito se lascia sporco l'ambiente operativo.
-
-- Email: archivia nello stesso giro le email/notifiche lavorate; niente Inbox
-  piena di cose gia' gestite. I blocchi e le decisioni immediate restano come
-  parcheggio consapevole.
-- Browser: chiudi le pagine, tab, form, preview e login aperti da te per la
-  missione.
-- App: chiudi app o finestre temporanee aperte solo per verificare, compilare o
-  rispondere.
-- Handoff: se una pagina deve restare aperta per scelta del proprietario, dillo
-  chiaramente nel report e spiega cosa deve decidere.
-
-Non chiudere pagine personali o lavoro non tuo. Chiudi solo cio' che hai aperto
-o preso in carico tu per la missione.
+- Leggi l'email nella posta del proprietario; il copia-incolla vale solo al
+  primo contatto quando la posta non e' ancora collegata.
+- Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
+  questa cartella come caso reale.
+- Diagnostica, ripara il riparabile, prova e completa il report locale.
+- Mostra il report al proprietario; invialo a LeaderAI solo dopo autorizzazione esplicita.
+  Fino ad allora lo stato e' `PRONTO DA INVIARE`.
+- Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
+  per la missione; registra nei log gli handoff che devono restare aperti.
+- Aspetta `CONTINUA` o `CHIUDI`: l'agente non decide da solo che il lavoro e'
+  concluso e non crea automatismi permanenti tra agenti.
 
 ## Comunicazione e fonti di verita'
 
-Gli agenti non si parlano direttamente. Si coordinano leggendo e scrivendo file
-condivisi.
-
-| Caso | Dove si scrive | Durata |
-|---|---|---|
-| Stato operativo o chiusura lavoro | `REPORT_FINALE.md` oppure `logs/install-log.md` | finche' serve come prova |
-| Procedura / come si fa una cosa | file dell'area che la usa, es. `ecosistema/PROCESSI.md` o procedura dedicata | stabile |
-| Problema di allineamento tra Claude e Codex | sync dedicato solo se si usano entrambi gli agenti | finche' si chiude |
-| Coordinamento immediato sullo stesso file | chat temporanea solo se serve evitare collisioni | massimo 48 ore |
-| Asset/capacita' nuova | `ecosistema/ASSET.md` | stabile |
-
-Regola pratica: se una nota spiega "come si fa", non va in chat. Va nella
-procedura o nel file proprietario. La chat e' solo coordinamento temporaneo.
+- Stato/chiusura: `REPORT_FINALE.md` o `logs/install-log.md`.
+- Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
+- Asset/capacita': `ecosistema/ASSET.md`.
+- Sync Claude/Codex: file dedicato solo se si usano entrambi.
+- Chat: coordinamento temporaneo, massimo 48 ore. Il "come si fa" non va in chat:
+  vive nella procedura o nel file proprietario.
 
 ## Riflesso asset operativo
 
@@ -214,6 +151,7 @@ Il Cervello e' pronto quando:
 - i log esistono;
 - l'agente scelto ha il suo punto di aggancio;
 - una nuova chat sa dove leggere e dove scrivere.
+- la versione del metodo applicato e' registrata nel report o nel log.
 
 ## Fase 2 - Ecosistema
 
@@ -227,6 +165,10 @@ E' la mappa delle fonti reali:
 - gestionali/CRM/fatture se esistono;
 - processi ricorrenti;
 - limiti e azioni che richiedono conferma.
+
+Comprende anche la rete delle stanze: ogni stanza e' raggiungibile dalla mappa
+madre, dichiara monte/valle e supera almeno una prova richiesta -> fonte ->
+processo -> output senza che il proprietario debba suggerire il percorso.
 
 Se una fonte non esiste ancora, scrivere `da collegare` e indicare dove
 andrebbe collegata. Non inventare percorsi, CRM o cartelle clienti.

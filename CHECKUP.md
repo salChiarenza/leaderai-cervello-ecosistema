@@ -91,6 +91,11 @@ git pull --ff-only
 Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
 star leggendo una versione superata.
 
+Leggi `VERSION` e `CHANGELOG.md`. Cerca nel report o nei log della cartella viva
+l'ultima versione del metodo applicata. Registra entrambe nel checkup e applica
+le lezioni compatibili emerse dopo quella versione; aggiorna la versione
+applicata solo dopo aver ripetuto i collaudi.
+
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
 file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`, `AGENTS.md`,
 `README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
@@ -264,6 +269,26 @@ puoi:
    ufficiali o si contraddicono. Doppione trovato = segnala; cancelli solo
    cio' che hai creato tu, mai file del proprietario senza ok.
 
+## Passo 1-bis — Censimento e rete delle stanze
+
+Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale.
+
+1. Censisci gli elementi rilevanti e classificali come `STANZA`, `FONTE`,
+   `OUTPUT`, `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`.
+2. Una stanza e' una funzione operativa stabile con fonti, processi o output
+   propri. Una skill, uno script, un agente, un connettore, un modulo o una
+   procedura e' una capacita' della stanza che lo usa.
+3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
+   madre e abbia una mappa locale corta con scopo, fonti, output, capacita',
+   collegamenti a monte e collegamenti a valle. In modalita' Claude, il
+   `CLAUDE.md` locale importa o rimanda al relativo `AGENTS.md`.
+4. Verifica che ogni collegamento corrisponda a un processo reale, che nessuna
+   capacita' sia isolata e che due stanze non rispondano alla stessa funzione.
+5. Ripara e prova i difetti meccanici: ponti, link, puntatori e registri rotti.
+   Per fusioni, spostamenti, eliminazioni, nuove stanze o cambi di proprieta'
+   scrivi una `PROPOSTA STRUTTURALE` con causa, impatto e collaudo; decide il
+   proprietario.
+
 ## Passo 2 — Ecosistema (solo se il Passo 1 passa)
 
 Dai soli file dell'ambiente, in una sessione nuova, sapresti: chi e' il
@@ -273,6 +298,13 @@ innocua in sola lettura su ognuna)? Scegli 2 richieste realistiche per la sua
 attivita' e verifica se le eseguiresti senza fargli ripetere tutto. Dove ti
 blocchi, li' c'e' il buco.
 
+Per ciascuna prova registra il percorso effettivo:
+
+`richiesta -> stanza -> fonte -> capacita'/processo -> output`.
+
+Le due prove partono dalla radice senza suggerire all'agente la cartella o la
+skill. Se l'instradamento fallisce, correggi mappa o collegamenti e riprova.
+
 ## Output (dopo le riparazioni, non prima)
 
 ```text
@@ -280,6 +312,7 @@ CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
 STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
 MANIFEST.md; templates/AGENTS.md; docs ufficiali vive per la parte tecnica.
+VERSIONE METODO: installata [x] -> verificata oggi [y].
 Verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA
 
 SCOSTAMENTI DALLO STANDARD:
@@ -294,9 +327,16 @@ Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
 Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
+Classificazione         OK / RIPARATO / DA CHIARIRE - ...
+Mappa stanze            OK / RIPARATO / PROPOSTA STRUTTURALE - ...
+Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
+Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
+Prove di instradamento  OK / RIPARATO / NON PASSA - ...
 
 RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.
 RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.
+LEZIONE CANDIDATA: nessuna oppure caso -> causa -> regola generale -> prova che
+avrebbe intercettato l'errore.
 ```
 
 Se l'ambiente e' quasi vuoto, non dare una pagella piena di rossi: proponi di

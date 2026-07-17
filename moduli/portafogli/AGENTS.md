@@ -6,12 +6,14 @@ LeaderAI. Eredita le regole dalla radice della repo.
 ## Dentro
 
 - `INSTALLA_MODULO.md`: missione operativa per l'agente del cliente.
-- `installa_portafogli.py`: montaggio idempotente nella cartella viva.
+- `installa_portafogli.py`: montaggio idempotente nella stanza proprietaria
+  scelta dopo il censimento.
 - `portfolio_engine.py`: calcoli e backtest deterministici.
 - `PROCESSO.md`: flusso completo dal dato al report.
 - `SCHEMA_DATI.md`: contratto dei file CSV.
 - `*.template.md` e `*_MODELLO.*`: file iniziali da personalizzare.
-- `SKILL.md`: orchestratore Claude Code installato nella cartella cliente.
+- `SKILL.md`: orchestratore Claude Code opzionale; si installa solo se non
+  esiste gia' una capacita' equivalente e viene scelto un nome esplicito.
 
 ## Fuori
 

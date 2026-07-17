@@ -8,16 +8,16 @@ kit, app, servizio esterno, archivio o canale ufficiale.
 
 ## Registro
 
-| Asset | Tipo | Casa/fonte vera | Uso | Stato | Archivio/prove | Limiti |
-|---|---|---|---|---|---|---|
-| Cartella madre | Cervello | Questa cartella | Istruzioni, memoria, fonti e report | OK | `logs/`, git locale | Segreti fuori git |
+| Asset | Tipo | Casa/fonte vera | Stanza/e servite | Uso | Stato | Archivio/prove | Limiti |
+|---|---|---|---|---|---|---|---|
+| Cartella madre | Cervello | Questa cartella | Tutte | Istruzioni, memoria, fonti e report | OK | `logs/`, git locale | Segreti fuori git |
 
 ## Regola di aggiornamento
 
 Quando il cliente dice che esiste o va aggiunto un asset, l'agente aggiorna:
 
 1. la casa/fonte vera dell'asset;
-2. questo registro;
+2. la stanza o le stanze realmente servite e questo registro;
 3. `ecosistema/PROCESSI.md`, solo se cambia un lavoro ricorrente;
 4. `ecosistema/LIMITI.md`, solo se introduce rischi o conferme obbligatorie;
 5. `logs/install-log.md` o `REPORT_FINALE.md`, con cosa e' stato fatto.

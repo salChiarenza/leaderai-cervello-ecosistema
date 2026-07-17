@@ -11,6 +11,11 @@ caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md` e
 `templates/AGENTS.md`, ripara gli scostamenti riparabili, prova e poi manda il
 report finale.
 
+La repo fornisce un telaio minimo e un metodo adattivo. Il telaio rende stabile
+il Cervello; il metodo censisce il lavoro reale, riconosce le stanze gia' vive e
+le collega alla mappa madre. I nomi delle stanze appartengono al cliente, non al
+template.
+
 ## Uso rapido
 
 Per installare tramite l'agente del cliente, usare:
@@ -84,6 +89,11 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
 
+Questi pezzi sono infrastruttura comune. Le cartelle business vengono prima
+classificate come stanza, fonte, output, capacita', infrastruttura, archivio o
+elemento sospetto. Ogni vera stanza deve essere raggiungibile dalla radice e
+avere una mappa corta con fonti, output e collegamenti reali.
+
 Il report finale include anche la **mappa moduli**: PEC/email certificata,
 email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,
 skill, agenti, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI
@@ -96,7 +106,8 @@ Modulo specifico gia' disponibile:
   serve trasformare quella lettura visiva in struttura leggibile dall'agente.
 - `moduli/portafogli/` - Sistema Portafogli Core-Satellite: fonti autorizzate,
   metodo del banker, calcoli deterministici, backtest, monitoraggio e report.
-  L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`.
+  L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
+  la stanza proprietaria e integra il modulo senza creare una stanza concorrente.
 
 Il Cervello include anche la **mappa comunicazione**: stato e chiusure in
 `REPORT_FINALE.md`/`logs/`, procedure nei file proprietari, asset in

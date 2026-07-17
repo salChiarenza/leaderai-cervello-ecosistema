@@ -28,6 +28,61 @@ Deve:
 4. collaudare;
 5. scrivere un report finale.
 
+## Contratto architetturale adattivo
+
+La repo insegna **come leggere e governare** un Ecosistema. Il nome e il numero
+delle stanze nascono dal lavoro reale del proprietario.
+
+### Telaio universale
+
+Restano stabili in ogni installazione:
+
+- una sola cartella madre viva;
+- `AGENTS.md` alla radice come mappa e router comune;
+- `CLAUDE.md` come ponte verso `AGENTS.md` quando si usa Claude Code;
+- memoria indicizzata, log e registri di fonti, asset, processi e limiti;
+- versione del metodo applicato e prove di collaudo.
+
+### Forma adattiva
+
+Prima di creare, rinominare, fondere o spostare una cartella, l'agente censisce
+l'ambiente e classifica ogni elemento rilevante come:
+
+- `STANZA`: funzione operativa stabile, con fonti o processi propri;
+- `FONTE`: luogo da cui si leggono dati o documenti;
+- `OUTPUT`: risultato prodotto da una o piu' stanze;
+- `CAPACITA`: skill, script, agente, connettore, modulo o procedura;
+- `INFRASTRUTTURA`: supporto tecnico del Cervello;
+- `ARCHIVIO`: materiale storico non operativo;
+- `SOSPETTA`: elemento ancora da chiarire.
+
+Una vera stanza passa il contratto quando:
+
+1. e' raggiungibile dalla mappa madre;
+2. ha una mappa corta alla porta (`AGENTS.md` e, per Claude, ponte
+   `CLAUDE.md`) con scopo, fonti, output e modo di muoversi;
+3. dichiara collegamenti a monte e a valle solo per processi reali;
+4. usa una sola fonte di verita' per ogni dato o stato;
+5. registra le capacita' che la servono e la prova che funzionano.
+
+Le cartelle ordinarie non diventano automaticamente stanze. Skill, script e
+moduli restano capacita' collegate alla stanza proprietaria. Se nessuna stanza
+esistente puo' possederli, l'agente presenta una proposta con funzione, fonti,
+output, collegamenti e collaudo; il proprietario decide se nasce una stanza.
+
+Riparazioni meccaniche come ponti rotti, puntatori mancanti e registri non
+allineati possono essere applicate e provate. Spostamenti, fusioni, nuove
+stanze, eliminazioni e cambi di proprieta' restano una `PROPOSTA STRUTTURALE`
+da approvare.
+
+### Ciclo di apprendimento
+
+Ogni installazione e checkup registra la versione letta da `VERSION`. Un errore
+osservato sul cliente diventa una `LEZIONE CANDIDATA` nel report: caso, causa,
+regola generale e prova che avrebbe intercettato l'errore. LeaderAI valida la
+lezione, aggiorna questa repo con regola e test e la rende disponibile ai
+checkup successivi.
+
 ## Contratto di consegna sicura
 
 Per una nuova installazione l'agente usa la repo ufficiale come fonte di sola
@@ -64,7 +119,6 @@ Il target passa solo se esistono:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `REPORT_FINALE.md`
-- `MODULO_CALENDARIO_OPERATIVO.md`
 
 Lo standard statico necessario alla procedura senza esecuzione di codice e'
 esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.
@@ -81,6 +135,8 @@ Per Codex:
 ## Moduli professionali
 
 I moduli entrano nel target soltanto quando LeaderAI li assegna al cliente.
+`MODULO_CALENDARIO_OPERATIVO.md` e il Sistema Portafogli sono capacita'
+opzionali: non fanno parte del telaio minimo.
 
 ### Sistema Portafogli Core-Satellite
 
@@ -88,9 +144,12 @@ Sorgente: `moduli/portafogli/`.
 
 Il modulo passa quando:
 
-- crea `Costruzione Portafogli/` nella cartella viva;
+- viene integrato nella stanza proprietaria scelta dopo il censimento;
+- richiede conferma esplicita per creare una stanza quando nessuna esistente
+  puo' possedere il processo;
 - preserva `METODO.md`, `FONTI.md` e `CORE.md` ai rilanci;
-- installa la skill Claude `gestisci-portafoglio`;
+- riusa una capacita' esistente quando copre gia' il lavoro; una nuova skill si
+  installa solo dopo una scelta esplicita di nome e perimetro;
 - registra l'asset e il processo nell'Ecosistema cliente;
 - calcola pesi, drift, riallineamento, alert e backtest dai CSV normalizzati;
 - blocca target fuori universo e serie mensili incomplete;
@@ -117,6 +176,12 @@ Il pacchetto e' pronto quando:
 - produce log e report;
 - i test automatici passano;
 - una nuova chat dell'agente sa leggere `AGENTS.md` e dove salvare memoria/report.
+- la mappa madre raggiunge ogni stanza operativa e nessuna capacita' resta
+  isolata o promossa a stanza per abitudine.
+- almeno due prove di instradamento partono dalla radice e arrivano alla stanza,
+  alla fonte e all'output corretti senza suggerire il percorso all'agente.
+- il report registra versione del metodo, classificazione delle stanze,
+  collegamenti e possibili lezioni candidate.
 - il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema
   da collegare con fonti reali.
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
