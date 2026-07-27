@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.5 - 27/07/2026
+
+- Il contratto degli agenti della casa (`templates/AGENTS.md`) ora nomina
+  `AGENT_CHAT.md` come chat di gruppo: gli agenti sanno dove coordinarsi
+  leggendo le regole della casa, senza doverlo scoprire.
+
 ## 0.3.4 - 27/07/2026
 
 - Chat di gruppo nella casa cliente: `AGENT_CHAT.md` entra nel telaio

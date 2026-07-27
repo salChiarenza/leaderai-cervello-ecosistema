@@ -124,8 +124,11 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
 - Asset/capacita': `ecosistema/ASSET.md`.
 - Sync Claude/Codex: file dedicato solo se si usano entrambi.
-- Chat: coordinamento temporaneo, massimo 48 ore. Il "come si fa" non va in chat:
-  vive nella procedura o nel file proprietario.
+- Chat di gruppo: `AGENT_CHAT.md` nella cartella madre, bacheca comune di
+  tutti gli agenti della casa. Prima di modificare file importanti si annuncia
+  li'; note in cima, massimo 48 ore, poi si promuovono nel file proprietario.
+  Il "come si fa" vive nella procedura o nel file proprietario, la chat porta
+  solo il coordinamento.
 
 ## Riflesso asset operativo
 
