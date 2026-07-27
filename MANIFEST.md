@@ -112,6 +112,7 @@ Il target passa solo se esistono:
 - `.gitignore` che esclude i segreti (`.secrets/`, `*.env`, token, chiavi, credenziali)
 - la cartella madre e' un repository git (nella posizione scelta col cliente, locale o cloud; sul cloud vale l'avviso sul rischio corruzione)
 - `AGENTS.md`
+- `CLAUDE.md` (ponte di una riga `@AGENTS.md`, sempre presente)
 - `memory/MEMORY.md`
 - `logs/install-log.md`
 - `AGENT_CHAT.md` (chat di gruppo degli agenti della casa)

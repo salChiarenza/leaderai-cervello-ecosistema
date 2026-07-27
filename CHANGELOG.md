@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.6 - 27/07/2026
+
+- Il ponte `CLAUDE.md` (`@AGENTS.md`, una riga) c'e' SEMPRE nella cartella
+  madre, qualunque agente sia in uso: Claude Code legge `CLAUDE.md`, Codex
+  legge `AGENTS.md`. Fonti ufficiali verificate 27/07/2026:
+  code.claude.com/docs/en/memory#agents-md (import consigliato, su Windows
+  preferito al symlink) e learn.chatgpt.com/docs/agent-configuration/agents-md.
+- `.claude/` e `.codex/` restano legate all'agente realmente in uso.
+- Telaio, installatore, setup tecnico e contratto della casa allineati.
+
 ## 0.3.5 - 27/07/2026
 
 - Il contratto degli agenti della casa (`templates/AGENTS.md`) ora nomina

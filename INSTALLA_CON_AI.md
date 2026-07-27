@@ -182,11 +182,15 @@ Fase 4 - monta localmente il Cervello
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
    - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
+   - `templates/CLAUDE.md` -> `CLAUDE.md` (ponte, sempre)
    - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
      comune di tutti gli agenti della casa, regole d'uso dentro al file)
-3. Se la modalita' e' Claude, crea `CLAUDE.md` e `.claude/README.md` dai relativi
-   template. Se e' Codex, crea `.codex/README.md`. Usa entrambi solo se LeaderAI
-   lo ha chiesto esplicitamente.
+3. Crea SEMPRE `CLAUDE.md` dal template: e' il ponte di una riga (`@AGENTS.md`)
+   che fa leggere la mappa anche a Claude Code, qualunque agente sia in uso
+   oggi (Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`). Poi la
+   configurazione per agente: modalita' Claude -> `.claude/README.md`;
+   modalita' Codex -> `.codex/README.md`. Usa entrambe le configurazioni solo
+   se LeaderAI lo ha chiesto esplicitamente.
 4. Crea `REPORT_FINALE.md` seguendo il Manifest e le sezioni richieste in fondo
    a questa procedura.
 5. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report

@@ -283,18 +283,21 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             dry_run,
         )
 
+    # Il ponte CLAUDE.md (@AGENTS.md) c'e' SEMPRE, qualunque agente sia in uso:
+    # Claude Code legge CLAUDE.md, Codex legge AGENTS.md (doc 27/07/2026).
+    ensure_text(
+        target / "CLAUDE.md",
+        read_template("CLAUDE.md", context),
+        result,
+        force,
+        dry_run,
+    )
+
     if agent in {"claude", "both"}:
         ensure_dir(target / ".claude", result, dry_run)
         ensure_text(
             target / ".claude" / "README.md",
             read_template("CLAUDE_README.md", context),
-            result,
-            force,
-            dry_run,
-        )
-        ensure_text(
-            target / "CLAUDE.md",
-            read_template("CLAUDE.md", context),
             result,
             force,
             dry_run,

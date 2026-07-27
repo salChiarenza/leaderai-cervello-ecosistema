@@ -24,10 +24,13 @@ Modalita' installata: `{{agent}}`.
   caso. Sul cloud vale l'avviso: Claude Code puo' corrompere/troncare i file
   durante la scrittura. I segreti restano sempre nel `.gitignore`.
 - Se manca un pezzo standard, crearlo.
+- `CLAUDE.md` c'e' SEMPRE ed e' solo il ponte di una riga (`@AGENTS.md`)
+  verso questa mappa: Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`
+  (doc ufficiali verificate 27/07/2026). Se manca, crearlo dal template.
 - Se questa cartella e' stata installata per `claude`, non creare `.codex`
   senza richiesta esplicita LeaderAI.
-- Se questa cartella e' stata installata per `codex`, non creare `.claude` o
-  `CLAUDE.md` senza richiesta esplicita LeaderAI.
+- Se questa cartella e' stata installata per `codex`, non creare `.claude/`
+  senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
 
 ## Architettura adattiva: mappa madre e stanze

@@ -34,7 +34,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Asset operativi", asset)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("STANDARD APPLICATO", report)
-            self.assertIn("Versione: 0.3.5", report)
+            self.assertIn("Versione: 0.3.6", report)
             self.assertIn("FASE 2 - ECOSISTEMA", report)
             self.assertIn("MAPPA COMUNICAZIONE", report)
             self.assertIn("Procedure e 'come si fa'", report)
@@ -82,7 +82,9 @@ class LeaderAISetupTest(unittest.TestCase):
 
             self.assertIn("AGENTS.md", result.existing)
             self.assertEqual((target / "AGENTS.md").read_text(encoding="utf-8"), marker)
-            self.assertFalse((target / "CLAUDE.md").exists())
+            self.assertTrue((target / "CLAUDE.md").exists())
+            self.assertIn("@AGENTS.md", (target / "CLAUDE.md").read_text(encoding="utf-8"))
+            self.assertFalse((target / ".claude").exists())
 
     def test_both_is_explicit_and_creates_both_agent_hooks(self):
         with tempfile.TemporaryDirectory() as tmp:
