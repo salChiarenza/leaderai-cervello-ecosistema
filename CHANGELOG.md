@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.8 - 27/07/2026
+
+- Aggiunto il gate anti-collaudo circolare: una prova operativa deve esistere
+  prima del checkup ed essere indipendente dalla missione che lo avvia.
+- L'email di installazione, checkup o report non puo' dimostrare il collegamento
+  della casella usata nel lavoro quotidiano; una richiesta inventata durante il
+  checkup non puo' dimostrare un processo reale.
+- Il report registra ora la provenienza di ogni prova. Se manca una richiesta o
+  una fonte preesistente, il processo resta `DA COLLAUDARE` e il gate e'
+  obbligatoriamente `NON PASSA`.
+- Aggiunto un test di regressione nato dal caso Sansone, nel quale una checklist
+  inventata e l'email del checkup erano state accettate come prove reali.
+
 ## 0.3.7 - 27/07/2026
 
 - Contratto universale chiuso e provato: ogni `AGENTS.md` versionato ha accanto

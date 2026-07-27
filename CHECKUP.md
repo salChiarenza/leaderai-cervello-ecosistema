@@ -328,6 +328,10 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - in modalita' `both` manca uno dei due agganci;
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
+- una prova di processo o di fonte e' circolare, inventata durante il checkup
+  oppure creata soltanto per far passare il checkup;
+- una fonte operativa e' dichiarata attiva usando l'email della missione o del
+  checkup invece della fonte usata nel lavoro quotidiano.
 
 `PASSA CON ATTENZIONE` e `PASSA` sono ammessi solo dopo aver superato questo
 gate. Un ramo inattivo puo' restare assente e va riportato come `NON ATTIVO`,
@@ -369,6 +373,28 @@ Per ciascuna prova registra il percorso effettivo:
 Le due prove partono dalla radice senza suggerire all'agente la cartella o la
 skill. Se l'instradamento fallisce, correggi mappa o collegamenti e riprova.
 
+## Passo 2-bis — Gate anti-collaudo circolare
+
+Una prova reale deve esistere prima del checkup ed essere indipendente dalla
+missione che lo avvia.
+
+Non contano come prova operativa:
+
+- l'email della missione, del checkup o del report usata per dimostrare che la
+  casella di lavoro del cliente e' collegata;
+- una richiesta inventata dall'agente durante il checkup e poi presentata come
+  richiesta reale del cliente;
+- un file o un output creato soltanto per far passare il checkup;
+- una prova eseguita su account, cartella, fonte o agente diversi da quelli
+  usati nel lavoro quotidiano.
+
+Per ogni prova registra la provenienza: cosa esisteva prima del checkup, fonte o
+account reale, data o contesto osservabile e motivo per cui appartiene al
+processo quotidiano. Se una richiesta o una fonte indipendente non e'
+disponibile, scrivi `DA COLLAUDARE`: il processo operativo e il gate
+anti-circolare sono `NON PASSA`. Un test sintetico puo' dimostrare accesso
+tecnico minimo, mai il funzionamento reale dell'Ecosistema.
+
 ## Output (dopo le riparazioni, non prima)
 
 ```text
@@ -400,6 +426,11 @@ Mappa stanze            OK / RIPARATO / PROPOSTA STRUTTURALE - ...
 Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
 Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
 Prove di instradamento  OK / RIPARATO / NON PASSA - ...
+GATE ANTI-CIRCOLARE     PASSA / NON PASSA - ...
+
+PROVENIENZA PROVE:
+- prova [1]: esisteva prima del checkup [SI/NO] - fonte/account - data/contesto.
+- prova [2]: esisteva prima del checkup [SI/NO] - fonte/account - data/contesto.
 
 RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.
 RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.

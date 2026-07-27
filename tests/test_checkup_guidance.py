@@ -66,6 +66,24 @@ class CheckupGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase.lower(), text.lower())
 
+    def test_checkup_blocks_circular_operational_evidence(self):
+        text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+
+        required = [
+            "Gate anti-collaudo circolare",
+            "email della missione",
+            "richiesta inventata",
+            "creato soltanto per far passare il checkup",
+            "usati nel lavoro quotidiano",
+            "esisteva prima del checkup",
+            "PROVENIENZA PROVE",
+            "GATE ANTI-CIRCOLARE",
+            "NON PASSA",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase.lower(), text.lower())
+
 
 if __name__ == "__main__":
     unittest.main()
