@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.7 - 27/07/2026
+
+- Contratto universale chiuso e provato: ogni `AGENTS.md` versionato ha accanto
+  un `CLAUDE.md` Windows-safe con il solo import `@AGENTS.md`, anche quando il
+  cliente usa soltanto Codex. Le cartelle `.codex/` e `.claude/` restano invece
+  legate agli agenti realmente attivi.
+- Installatore reso conservativo sulle case gia' vive: `--force` ripara
+  esclusivamente il ponte canonico, non sovrascrive i file del cliente, blocca
+  target e registri attraversati da symlink, rifiuta file/directory del tipo
+  sbagliato e chiude le regole `.gitignore` sensibili in fondo al file, cosi'
+  una negazione precedente non puo' riaprire segreti.
+- Git locale reso prevedibile: primo commit solo sulle nuove installazioni,
+  nessuno staging/commit automatico nelle repo esistenti e rilanci identici
+  senza nuovi log o commit. Report e log dichiarano l'esito reale anche quando
+  il commit fallisce.
+- Checkup riscritto con rami Codex/Claude separati, gate bloccante verificabile,
+  uscita CLI non-zero sui blocchi, report aggiornabile senza verdetti obsoleti
+  e autorizzazione esplicita prima di qualunque invio.
+- Modulo Portafogli allineato allo stesso contratto, inclusi ponte locale,
+  rilevamento reale della configurazione Claude, preflight dei tipi e
+  protezione di percorsi, registri e backup da symlink. Ogni contenuto diverso
+  sostituito conserva un backup univoco, anche nelle riparazioni successive.
+- `EMAIL_CONSEGNA.md` e' la fonte unica dell'email operativa; la prova del
+  destinatario viene registrata solo dopo la verifica della versione pubblica.
+
 ## 0.3.6 - 27/07/2026
 
 - Il ponte `CLAUDE.md` (`@AGENTS.md`, una riga) c'e' SEMPRE nella cartella

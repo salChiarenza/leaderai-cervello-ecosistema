@@ -48,9 +48,9 @@ Prima di creare, rinominare, fondere o spostare cartelle:
 5. presenta al proprietario le scelte strutturali prima di eseguirle.
 
 Una cartella e' una stanza quando svolge una funzione stabile con fonti,
-processi o output propri. Ogni vera stanza ha una mappa corta alla porta:
-`AGENTS.md` e, se si usa Claude Code, un `CLAUDE.md` che importa o rimanda a
-quel file. La mappa locale dichiara scopo, cosa contiene, fonti, output,
+processi o output propri. Ogni vera stanza ha sempre una mappa corta alla
+porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
+(`@AGENTS.md`). La mappa locale dichiara scopo, cosa contiene, fonti, output,
 capacita', collegamenti a monte e collegamenti a valle.
 
 Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate a
@@ -114,12 +114,14 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il report locale.
-- Mostra il report al proprietario; invialo a LeaderAI solo dopo autorizzazione esplicita.
+- Mostra il report al proprietario; invialo a LeaderAI solo dopo
+  autorizzazione esplicita per quello specifico invio.
   Fino ad allora lo stato e' `PRONTO DA INVIARE`.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
   per la missione; registra nei log gli handoff che devono restare aperti.
-- Aspetta `CONTINUA` o `CHIUDI`: l'agente non decide da solo che il lavoro e'
-  concluso e non crea automatismi permanenti tra agenti.
+- Aspetta `CONTINUA` o `CHIUDI`: con `CONTINUA` aggiorna il report e chiede una
+  nuova autorizzazione prima dell'eventuale nuovo invio; l'agente non decide da solo
+  che il lavoro e' concluso e non crea automatismi permanenti tra agenti.
 
 ## Comunicazione e fonti di verita'
 

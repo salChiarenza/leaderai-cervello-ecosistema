@@ -6,9 +6,10 @@ nella repo gia' presente o letta come standard LeaderAI). Si puo' rifare ogni
 volta che serve: dopo un aggiornamento, ogni tot settimane, o quando qualcosa
 non torna.
 
-Nota per chi mantiene LeaderAI: la sorgente del metodo e'
-`leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md`. Ogni modifica
-li' si specchia qui nello stesso turno.
+Nota per chi mantiene LeaderAI: questo `CHECKUP.md` versionato e' la fonte
+unica della procedura. Nel workspace interno
+`leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` resta soltanto un
+puntatore a questa versione pubblicata.
 
 ## Regola madre - standard contro caso reale
 
@@ -204,78 +205,135 @@ Regole:
 - Usa `INSTALLA_CON_AI.md` solo se, dopo il censimento, non esiste nessun
   ambiente installato o Sal/LeaderAI chiede esplicitamente un rimontaggio.
 
-## Passo 1 — Apri la doc ufficiale viva (obbligatorio, mai a memoria)
+## Passo 1 — Contratto tecnico: telaio comune e rami attivi
 
-Le docs cambiano: il confronto si fa con la pagina di OGGI, non con quello che
-ricordi. La documentazione Claude Code e' fatta per gli agenti:
+Il Cervello ha un telaio comune indipendente dall'agente usato oggi:
 
-- indice completo: <https://code.claude.com/docs/llms.txt>
-- ogni pagina in markdown puro aggiungendo `.md` all'URL
-  (es. `https://code.claude.com/docs/en/memory.md`)
+- `AGENTS.md` esiste sempre alla radice ed e' la fonte unica delle istruzioni;
+- `CLAUDE.md` esiste sempre alla radice ed e' il ponte verso `AGENTS.md`;
+- il ponte conforme e Windows-safe e' un file regolare di una riga:
+  `@AGENTS.md`; i symlink legacy vanno convertiti;
+- il ponte/import e' l'unico collegamento conforme tra i due file;
+- Una copia indipendente non e' conforme: duplicare `AGENTS.md` dentro
+  `CLAUDE.md` crea drift;
 
-Pagine minime da aprire per questo checkup, con cosa guardarci:
+Le configurazioni specifiche restano separate e si controllano solo per gli
+agenti realmente attivi:
 
-| Pagina (`/en/…` + `.md`) | Cosa controllare li' |
-|---|---|
-| `memory` | CLAUDE.md e auto-memory: soglie, import, symlink |
-| `claude-directory` | cosa va dove dentro `.claude/` e nella root |
-| `settings` | scope project/local/user, struttura settings.json |
-| `permissions` | sintassi allow/ask/deny, anchor dei path, deny sui segreti |
-| `skills` | formato SKILL.md, description, invocazione |
-| `hooks` | struttura evento→matcher→hooks, exit code, placeholder |
-| `sub-agents` | frontmatter name/description, tools, model |
-| `mcp` | scope dei server, segreti via `${VAR}`, approvazioni |
-| `best-practices` | potatura CLAUDE.md, loop di verifica |
-| `costs` | consumo: server inutili, modelli leggeri, contesto |
+| Modalita' rilevata | Aggancio minimo obbligatorio | Configurazione tecnica da verificare |
+|---|---|---|
+| Codex | `AGENTS.md` + `.codex/README.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
+| Claude Code | `CLAUDE.md` + `.claude/README.md` | `.claude/settings.json` e `.claude/settings.local.json` se esistono o se servono impostazioni di progetto |
+| Entrambi | entrambi gli agganci | entrambi i rami, senza duplicare le istruzioni comuni |
 
-Se l'agente del proprietario e' **Codex**: stesso metodo, fonti sue —
-`https://developers.openai.com/codex/guides/agents-md` e
-`https://developers.openai.com/codex/hooks`; le case sono `.codex/`,
-`config.toml`, `AGENTS.md` e la memoria Codex.
+La modalita' `both` vale solo se risultano entrambi realmente attivi oppure se
+LeaderAI l'ha richiesta esplicitamente. Il checkup non crea la configurazione
+dell'altro agente per prudenza.
 
-## Passo 1 — Diagnosi e riparazione del Cervello
+### Fonti ufficiali verificate nel checkup
 
-Confronta l'ambiente con le pagine appena lette. Controlla, e ripara dove
-puoi:
+Le docs cambiano: apri oggi le fonti del ramo attivo, registra URL e data nel
+report e non rispondere a memoria.
 
-1. **Cartella di lavoro stabile** — non `Downloads`, `Desktop`, cartelle
-   temporanee o di conversazione. `AGENTS.md`/`CLAUDE.md` nella radice.
-2. **Istruzioni** — `CLAUDE.md` esiste, e' letto, e' CORTO (indicativamente
-   sotto le ~200 righe da doc): ogni riga passa il test "toglierla causerebbe
-   errori?". Roba usata solo a volte → skill o rules, non nel file globale.
-   Se c'e' anche `AGENTS.md`, `CLAUDE.md` deve essere un ponte/import verso
-   quel file oppure un symlink. Una copia indipendente non e' conforme perche'
-   puo' creare drift.
-3. **Settings e permessi** — `.claude/settings.json` con permessi in sintassi
-   valida (regole `Tool(specifier)` come da doc `permissions`); file
-   sensibili (`.env`, `.secrets/`) coperti da deny in lettura;
-   `settings.local.json` fuori da git; niente segreti in chiaro da nessuna
-   parte.
-4bis. **Chat di gruppo** — `AGENT_CHAT.md` presente nella cartella madre
-   (bacheca comune di tutti gli agenti della casa; template
-   `templates/AGENT_CHAT.md`). Se manca, creala dal template e registralo
-   come riparazione. Note vecchie oltre 48 ore vanno promosse nei file
-   proprietari e tolte dalla chat.
-4. **Memoria** — auto-memory agganciata, `memory/MEMORY.md` presente e
-   indice snello (le soglie di caricamento sono nella doc `memory`); niente
-   file inventati che la duplicano (`MEMORIA.md`, diari paralleli).
-5. **Skill, subagent, hook** — sono opzionali: se non c'e' un bisogno reale,
-   la loro assenza NON e' un errore. Se esistono: ogni skill ha `SKILL.md`
-   con description che dice quando usarla e corpo conciso; ogni subagent ha
-   frontmatter `name`/`description` e modello leggero se fa lavori semplici;
-   ogni hook usa `${CLAUDE_PROJECT_DIR}` (non path assoluti), matcher validi
-   e (se deve bloccare) exit code 2.
-6. **Connettori/MCP** — elenca le fonti collegate (email, calendario, Drive,
-   gestionale…). Segreti solo via variabili `${VAR}`, mai in chiaro nella
-   config; server configurati ma mai usati → proponi di spegnerli (consumo).
-   Se una fonte manca, scrivi `DA COLLEGARE`: non inventare accessi.
-7. **Loop di verifica** — esiste almeno un controllo eseguibile (test,
-   script, comando) con cui l'agente puo' provare il proprio lavoro?
-8. **Pezzi inventati o doppioni** — file/cartelle che duplicano funzioni
-   ufficiali o si contraddicono. Doppione trovato = segnala; cancelli solo
-   cio' che hai creato tu, mai file del proprietario senza ok.
+Fonti comuni minime:
 
-## Passo 1-bis — Censimento e rete delle stanze
+- Claude Code, `CLAUDE.md`, import `@AGENTS.md` e comportamento su Windows:
+  <https://code.claude.com/docs/en/memory>
+- OpenAI Codex, caricamento gerarchico di `AGENTS.md`:
+  <https://developers.openai.com/codex/guides/agents-md>
+
+Se e' attivo **Codex**, apri inoltre:
+
+- configurazione di base e `.codex/config.toml`:
+  <https://developers.openai.com/codex/config-basic>
+- riferimento di configurazione:
+  <https://developers.openai.com/codex/config-reference>
+- hook, solo se presenti:
+  <https://developers.openai.com/codex/hooks>
+
+Se e' attivo **Claude Code**, apri inoltre:
+
+- indice ufficiale per agenti: <https://code.claude.com/docs/llms.txt>
+- directory `.claude/`: <https://code.claude.com/docs/en/claude-directory>
+- settings: <https://code.claude.com/docs/en/settings>
+- permessi: <https://code.claude.com/docs/en/permissions>
+- hook, skill, subagent e MCP solo se presenti nell'ambiente.
+
+## Passo 1-bis — Diagnosi e riparazione del Cervello
+
+Confronta l'ambiente con `MANIFEST.md`, i template e le pagine ufficiali appena
+aperte. Controlla e ripara nello stesso turno dove puoi.
+
+### A. Telaio comune — sempre
+
+1. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
+   temporanee o cartelle tecniche dell'agente.
+2. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
+   dove stanno memoria, log, Ecosistema e report.
+3. **Ponte Claude universale** — `CLAUDE.md` esiste alla radice come file
+   regolare e contiene esattamente `@AGENTS.md` seguito da una nuova riga.
+   Converti i symlink legacy; una copia indipendente non e' conforme.
+4. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
+   (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Le note
+   oltre 48 ore vanno promosse nei file proprietari e tolte dalla chat.
+5. **Memoria** — `memory/MEMORY.md` esiste ed e' un indice snello; niente
+   duplicati inventati come `MEMORIA.md` o diari paralleli.
+6. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
+   password e credenziali prima di qualunque commit.
+
+### B. Ramo Codex — solo se Codex e' attivo
+
+1. Verifica `.codex/README.md`: deve dichiarare che Codex usa `AGENTS.md` come
+   istruzione comune e non deve duplicarne il contenuto.
+2. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
+   le configurazioni di progetto vengono caricate solo in un progetto trusted.
+3. Se servono impostazioni Codex di progetto e `.codex/config.toml` manca,
+   crealo con il minimo necessario e senza segreti.
+4. Hook, skill, MCP e agenti specializzati sono opzionali. Se presenti,
+   confrontali con la documentazione ufficiale, prova il caso reale e rimuovi
+   dal verdetto ogni presunzione non verificata.
+
+### C. Ramo Claude Code — solo se Claude Code e' attivo
+
+1. Verifica `.claude/README.md`: deve dichiarare che Claude Code entra dal
+   ponte `CLAUDE.md` e non deve duplicare `AGENTS.md`.
+2. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
+   `settings.local.json` resta locale e fuori da Git; nessun segreto in chiaro.
+3. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
+   crealo con il minimo necessario e senza segreti.
+4. Rule, hook, skill, subagent e MCP sono opzionali. Se presenti, verifica
+   sintassi e comportamento contro le pagine ufficiali vive; se devono
+   bloccare un'azione, prova davvero il blocco.
+
+### D. Prove comuni
+
+1. **Connettori/MCP** — elenca le fonti collegate e prova una lettura innocua
+   con un dato reale. Se manca la fonte, scrivi `DA COLLEGARE`.
+2. **Loop di verifica** — esegui almeno un controllo ripetibile che provi
+   mappa, ponte e aggancio dell'agente attivo.
+3. **Pezzi inventati o doppioni** — segnala file o cartelle che duplicano
+   funzioni ufficiali. Elimina solo cio' che hai creato tu; per i file del
+   proprietario serve conferma.
+
+## Gate di conformita' — verdetto bloccante
+
+Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
+
+- manca `AGENTS.md`;
+- manca `CLAUDE.md` oppure il ponte non risolve a `AGENTS.md`;
+- manca `AGENT_CHAT.md`;
+- la modalita' attiva non e' stata rilevata e dichiarata;
+- manca `.codex/README.md` quando Codex e' attivo;
+- manca `.claude/README.md` quando Claude Code e' attivo;
+- in modalita' `both` manca uno dei due agganci;
+- una configurazione necessaria all'agente attivo e' assente, non valida o
+  contiene segreti.
+
+`PASSA CON ATTENZIONE` e `PASSA` sono ammessi solo dopo aver superato questo
+gate. Un ramo inattivo puo' restare assente e va riportato come `NON ATTIVO`,
+mai come errore.
+
+## Passo 1-ter — Censimento e rete delle stanze
 
 Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale.
 
@@ -286,8 +344,8 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    procedura e' una capacita' della stanza che lo usa.
 3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia una mappa locale corta con scopo, fonti, output, capacita',
-   collegamenti a monte e collegamenti a valle. In modalita' Claude, il
-   `CLAUDE.md` locale importa o rimanda al relativo `AGENTS.md`.
+   collegamenti a monte e collegamenti a valle. Ogni vera stanza mantiene il
+   telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md` verso quella mappa.
 4. Verifica che ogni collegamento corrisponda a un processo reale, che nessuna
    capacita' sia isolata e che due stanze non rispondano alla stessa funzione.
 5. Ripara e prova i difetti meccanici: ponti, link, puntatori e registri rotti.
@@ -326,8 +384,11 @@ SCOSTAMENTI DALLO STANDARD:
   blocco umano vero.
 
 Cartella stabile        OK / RIPARATO / DA FARE (umano) - ...
-Istruzioni (CLAUDE.md)  OK / RIPARATO / DA FARE - ...
-Settings e permessi     OK / RIPARATO / DA FARE - ...
+Telaio AGENTS+CLAUDE    OK / RIPARATO / NON PASSA - prova del ponte...
+Modalita' attiva        CODEX / CLAUDE / BOTH - prova rilevata...
+Ramo Codex              OK / RIPARATO / NON ATTIVO / NON PASSA - ...
+Ramo Claude Code        OK / RIPARATO / NON ATTIVO / NON PASSA - ...
+Settings e permessi     OK / RIPARATO / NON ATTIVO / NON PASSA - ...
 Chat di gruppo          OK / RIPARATO / DA FARE - AGENT_CHAT.md presente e disciplinata
 Memoria                 OK / RIPARATO / DA FARE - ...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
@@ -369,15 +430,17 @@ Stati della missione:
    temporanee).
 4. `REPORT` - completa il report locale della missione con azioni fatte, prove,
    cosa hai riparato, cosa resta solo per umano vero e stato di chiusura ambiente.
-   Mostralo al proprietario e chiedi autorizzazione esplicita; dopo
-   il si', invialo a `sal@salchiarenza.ai`.
+   Mostralo al proprietario e chiedi autorizzazione esplicita.
+   Nessuna email parte automaticamente: l'invio e' un gesto separato, eseguito
+   solo dopo un "manda" o autorizzazione equivalente riferita a quel testo.
 5. `SAL_VERIFICA` - dopo l'invio resta in attesa della risposta LeaderAI; la
    email lavorata è già archiviata e lo stato resta nei log/report. Se l'invio
    non e' ancora autorizzato, lo stato e' `PRONTO DA INVIARE`, non
    `SAL_VERIFICA`.
 6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
-   ancora sulla stessa missione, fai un nuovo autocontrollo e mandi un nuovo
-   report.
+   ancora sulla stessa missione, fai un nuovo autocontrollo, aggiorni il report
+   locale e lo lasci `PRONTO DA INVIARE`. Mostralo al proprietario e chiedi una
+   nuova autorizzazione prima di ogni nuovo invio.
 7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, chiudi
    pagine/app aperte da te e annota la chiusura nei log.
 
@@ -390,8 +453,9 @@ Regola breve: Non chiudere la missione dopo il primo report.
 ## Chiusura (ciclo resoconti)
 
 1. Completa il resoconto locale solo a lavoro finito, mostralo al proprietario
-   e chiedi l'autorizzazione esplicita all'invio. Dopo il si', invialo davvero
-   a `sal@salchiarenza.ai` nello stesso thread; se serve una nuova email usa
+   e chiedi l'autorizzazione esplicita all'invio. L'invio non e' parte
+   automatica del checkup: dopo il si' esplicito, invialo davvero a
+   `sal@salchiarenza.ai` nello stesso thread; se serve una nuova email usa
    l'oggetto concreto `Resoconto checkup Ecosistema`.
 2. Dopo l'invio archivia la missione: Inbox
    pulita, stato e storia restano nei file.

@@ -19,6 +19,7 @@ ROOM_TABLE_HEADER = (
     "| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale |"
 )
 ROOM_TABLE_SEPARATOR = "|---|---|---|---|---|---|---|---|"
+CLAUDE_BRIDGE = "@AGENTS.md\n"
 
 
 @dataclass
@@ -47,7 +48,46 @@ CUSTOM_FILES = {
 }
 
 
+def _assert_regular_or_missing(path: Path, label: str) -> None:
+    if path.is_symlink():
+        raise ValueError(f"{label} collegato tramite symlink: {path}")
+    if path.exists() and not path.is_file():
+        raise ValueError(f"{label} occupato da una directory: {path}")
+
+
+def _assert_safe_backup(path: Path) -> None:
+    _assert_regular_or_missing(path, "Backup LeaderAI")
+
+
+def _assert_safe_backup_family(source: Path) -> None:
+    parent = source.parent
+    if not parent.exists() or not parent.is_dir():
+        return
+    base_name = source.name + ".leaderai-backup"
+    for candidate in parent.iterdir():
+        if candidate.name == base_name or candidate.name.startswith(base_name + "."):
+            _assert_safe_backup(candidate)
+
+
+def _backup_before_overwrite(source: Path, result: InstallResult) -> None:
+    _assert_safe_backup_family(source)
+    source_bytes = source.read_bytes()
+    base = source.with_name(source.name + ".leaderai-backup")
+    index = 1
+    while True:
+        candidate = base if index == 1 else base.with_name(f"{base.name}.{index}")
+        if candidate.exists():
+            if candidate.read_bytes() == source_bytes:
+                return
+            index += 1
+            continue
+        shutil.copy2(source, candidate)
+        result.created.append(str(candidate))
+        return
+
+
 def _copy_if_missing(source: Path, destination: Path, result: InstallResult) -> None:
+    _assert_regular_or_missing(destination, "File destinazione")
     if destination.exists():
         result.existing.append(str(destination))
         return
@@ -57,15 +97,13 @@ def _copy_if_missing(source: Path, destination: Path, result: InstallResult) -> 
 
 
 def _update_managed(source: Path, destination: Path, result: InstallResult) -> None:
+    _assert_regular_or_missing(destination, "File gestito")
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists() and destination.read_bytes() == source.read_bytes():
         result.existing.append(str(destination))
         return
     if destination.exists():
-        backup = destination.with_suffix(destination.suffix + ".leaderai-backup")
-        if not backup.exists():
-            shutil.copy2(destination, backup)
-            result.created.append(str(backup))
+        _backup_before_overwrite(destination, result)
         shutil.copy2(source, destination)
         result.updated.append(str(destination))
     else:
@@ -74,6 +112,7 @@ def _update_managed(source: Path, destination: Path, result: InstallResult) -> N
 
 
 def _append_once(path: Path, marker: str, block: str, result: InstallResult) -> None:
+    _assert_regular_or_missing(path, "Registro")
     if not path.exists():
         raise ValueError(f"Registro da aggiornare assente: {path}; esegui CHECKUP.md")
     content = path.read_text(encoding="utf-8")
@@ -86,6 +125,7 @@ def _append_once(path: Path, marker: str, block: str, result: InstallResult) -> 
 
 
 def _register_room(path: Path, room_rel: str, result: InstallResult) -> None:
+    _assert_regular_or_missing(path, "Mappa madre")
     content = path.read_text(encoding="utf-8")
     map_pointer = f"`{room_rel}/AGENTS.md`"
     row = (
@@ -136,12 +176,109 @@ e a valle si compilano soltanto dai processi reali del proprietario.
 
 def _resolve_room(target: Path, room_path: str | Path) -> Path:
     relative = Path(room_path)
-    if relative.is_absolute() or not relative.parts or relative == Path("."):
+    if (
+        relative.is_absolute()
+        or not relative.parts
+        or relative == Path(".")
+        or ".." in relative.parts
+    ):
         raise ValueError("La stanza deve essere un percorso relativo alla cartella madre")
-    room = (target / relative).resolve()
-    if not room.is_relative_to(target):
-        raise ValueError("La stanza deve restare dentro la cartella madre")
+    room = target / relative
+    current = target
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(
+                f"La stanza o una sua directory padre e' un symlink: {current}"
+            )
     return room
+
+
+def _bridge_state(path: Path, agents_path: Path) -> str:
+    if path.is_symlink():
+        try:
+            if path.resolve(strict=True) == agents_path.resolve(strict=True):
+                return "valid-symlink"
+        except (FileNotFoundError, RuntimeError):
+            pass
+        return "invalid"
+    if not path.exists():
+        return "missing"
+    if path.is_file() and path.read_text(encoding="utf-8") == CLAUDE_BRIDGE:
+        return "valid-file"
+    return "invalid"
+
+
+def _ensure_bridge(path: Path, agents_path: Path, result: InstallResult) -> None:
+    state = _bridge_state(path, agents_path)
+    if state == "valid-file":
+        result.existing.append(str(path))
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if state in {"invalid", "valid-symlink"}:
+        if path.is_symlink():
+            path.unlink()
+        elif path.is_file():
+            _backup_before_overwrite(path, result)
+            path.unlink()
+        else:
+            raise ValueError(f"Ponte CLAUDE non riparabile automaticamente: {path}")
+        status = result.updated
+    else:
+        status = result.created
+    path.write_text(CLAUDE_BRIDGE, encoding="utf-8")
+    status.append(str(path))
+
+
+def _assert_safe_target(target: Path) -> None:
+    root = Path(target.anchor)
+    current = root
+    for part in target.parts[1:-1]:
+        current = current / part
+        if current.is_symlink() and current.parent != root:
+            raise ValueError(
+                f"Directory antenata del target collegata tramite symlink: {current}"
+            )
+    nearest = target
+    while not nearest.exists() and not nearest.is_symlink():
+        parent = nearest.parent
+        if parent == nearest:
+            break
+        nearest = parent
+    if nearest != target and nearest.is_symlink():
+        raise ValueError(
+            f"Directory padre del target collegata tramite symlink: {nearest}"
+        )
+    if target.is_symlink():
+        raise ValueError(f"La cartella target e' un symlink: {target}")
+    for rel in ("ecosistema", "logs", ".claude", ".claude/skills"):
+        path = target / rel
+        if path.is_symlink():
+            raise ValueError(f"Directory operativa collegata tramite symlink: {path}")
+        if path.exists() and not path.is_dir():
+            raise ValueError(f"Directory operativa occupata da un file: {path}")
+    for rel in (
+        "AGENTS.md",
+        "ecosistema/ASSET.md",
+        "ecosistema/PROCESSI.md",
+        "logs/install-log.md",
+    ):
+        path = target / rel
+        if path.is_symlink():
+            raise ValueError(f"File operativo collegato tramite symlink: {path}")
+        if path.exists() and not path.is_file():
+            raise ValueError(f"File operativo occupato da una directory: {path}")
+
+
+def _assert_no_symlink_components(base: Path, destination: Path) -> None:
+    relative = destination.relative_to(base)
+    current = base
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise ValueError(
+                f"Percorso destinazione collegato tramite symlink: {current}"
+            )
 
 
 def _validate_skill_name(skill_name: str) -> None:
@@ -157,6 +294,7 @@ def _install_skill(
     result: InstallResult,
     update_managed: bool,
 ) -> None:
+    _assert_regular_or_missing(destination, "Skill Claude")
     content = (SOURCE / "SKILL.md").read_text(encoding="utf-8")
     content = re.sub(r"(?m)^name: .+$", f"name: {skill_name}", content, count=1)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -167,10 +305,7 @@ def _install_skill(
         result.existing.append(str(destination))
         return
     if destination.exists():
-        backup = destination.with_suffix(destination.suffix + ".leaderai-backup")
-        if not backup.exists():
-            shutil.copy2(destination, backup)
-            result.created.append(str(backup))
+        _backup_before_overwrite(destination, result)
         destination.write_text(content, encoding="utf-8")
         result.updated.append(str(destination))
         return
@@ -186,7 +321,8 @@ def install(
     create_room: bool = False,
     update_managed: bool = False,
 ) -> InstallResult:
-    target = target.expanduser().resolve()
+    target = target.expanduser().absolute()
+    _assert_safe_target(target)
     if not target.exists() or not target.is_dir():
         raise ValueError(f"Cartella target assente: {target}")
     if not (target / "AGENTS.md").exists():
@@ -196,16 +332,40 @@ def install(
         )
     if skill_name:
         _validate_skill_name(skill_name)
-        if not (target / "CLAUDE.md").exists() and not (target / ".claude").exists():
+        claude_readme = target / ".claude" / "README.md"
+        if not claude_readme.is_file() or claude_readme.is_symlink():
             raise ValueError(
-                "Una skill Claude richiede un Cervello Claude gia' attivo; "
+                "Una skill Claude richiede `.claude/README.md`: il solo ponte "
+                "CLAUDE.md non attiva Claude; "
                 "ometti --skill-name o completa prima il checkup"
             )
 
-    result = InstallResult()
     room = _resolve_room(target, room_path)
     if room.exists() and not room.is_dir():
         raise ValueError(f"La stanza scelta non e' una cartella: {room}")
+
+    room_destinations = [
+        room / "AGENTS.md",
+        room / "CLAUDE.md",
+        *(room / name for name in MANAGED_FILES),
+        *(room / name for name in CUSTOM_FILES),
+    ]
+    for destination in room_destinations:
+        _assert_regular_or_missing(destination, "File della stanza")
+    _assert_safe_backup_family(target / "CLAUDE.md")
+    _assert_safe_backup_family(room / "CLAUDE.md")
+    for destination in [room / name for name in MANAGED_FILES]:
+        _assert_safe_backup_family(destination)
+
+    skill_destination: Path | None = None
+    if skill_name:
+        skill_destination = target / ".claude" / "skills" / skill_name / "SKILL.md"
+        _assert_no_symlink_components(target, skill_destination)
+        _assert_regular_or_missing(skill_destination, "Skill Claude")
+        _assert_safe_backup_family(skill_destination)
+
+    result = InstallResult()
+    _ensure_bridge(target / "CLAUDE.md", target / "AGENTS.md", result)
     if not room.exists():
         if not create_room:
             raise ValueError(
@@ -251,17 +411,10 @@ Questa stanza possiede la capacita' Portafogli LeaderAI.
     for destination_name, source_name in CUSTOM_FILES.items():
         _copy_if_missing(SOURCE / source_name, room / destination_name, result)
 
-    if (target / "CLAUDE.md").exists() or (target / ".claude").exists():
-        claude_map = room / "CLAUDE.md"
-        if not claude_map.exists():
-            claude_map.write_text("# CLAUDE.md\n\n@AGENTS.md\n", encoding="utf-8")
-            result.created.append(str(claude_map))
-        else:
-            result.existing.append(str(claude_map))
+    _ensure_bridge(room / "CLAUDE.md", room / "AGENTS.md", result)
 
     skill_reference = "nessuna nuova skill; riusare una capacita' equivalente se esiste"
-    if skill_name:
-        skill_destination = target / ".claude" / "skills" / skill_name / "SKILL.md"
+    if skill_name and skill_destination is not None:
         _install_skill(skill_destination, skill_name, result, update_managed)
         skill_reference = f"`.claude/skills/{skill_name}/SKILL.md`"
 

@@ -39,7 +39,7 @@ Restano stabili in ogni installazione:
 
 - una sola cartella madre viva;
 - `AGENTS.md` alla radice come mappa e router comune;
-- `CLAUDE.md` come ponte verso `AGENTS.md` quando si usa Claude Code;
+- `CLAUDE.md` sempre presente come ponte di una riga (`@AGENTS.md`);
 - memoria indicizzata, log e registri di fonti, asset, processi e limiti;
 - versione del metodo applicato e prove di collaudo.
 
@@ -59,8 +59,8 @@ l'ambiente e classifica ogni elemento rilevante come:
 Una vera stanza passa il contratto quando:
 
 1. e' raggiungibile dalla mappa madre;
-2. ha una mappa corta alla porta (`AGENTS.md` e, per Claude, ponte
-   `CLAUDE.md`) con scopo, fonti, output e modo di muoversi;
+2. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
+   come ponte `@AGENTS.md`, con scopo, fonti, output e modo di muoversi;
 3. dichiara collegamenti a monte e a valle solo per processi reali;
 4. usa una sola fonte di verita' per ogni dato o stato;
 5. registra le capacita' che la servono e la prova che funzionano.
@@ -94,16 +94,22 @@ la lettura web incontra un blocco.
 Il report viene prima creato e collaudato localmente. L'invio email a LeaderAI
 avviene dopo autorizzazione esplicita del proprietario.
 
+Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
+README e Manifest lo richiamano senza duplicarne il corpo.
+
 ## Modalita' agente
 
-La repo resta unica. La modalita' cambia in base all'agente reale del cliente:
+La repo resta unica. La cartella madre e ogni vera stanza mantengono sempre il
+telaio comune `AGENTS.md` + `CLAUDE.md`. La modalita' seleziona soltanto la
+configurazione specifica dell'agente reale del cliente:
 
 - Claude Code -> `--agent claude`
 - Codex -> `--agent codex`
 - Entrambi -> `--agent both`, solo su richiesta esplicita LeaderAI
 
-Il Cervello passa quando e' pronto per l'agente usato oggi. Non e' necessario
-creare l'altro lato se il cliente non lo usa.
+`--agent claude` governa `.claude/`, `--agent codex` governa `.codex/` e
+`--agent both` governa entrambe. Nessuna modalita' rimuove o rende facoltativo
+il telaio comune.
 
 ## Standard minimo
 
@@ -127,7 +133,6 @@ esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.
 
 Per Claude Code:
 
-- `CLAUDE.md`
 - `.claude/README.md`
 
 Per Codex:
@@ -177,7 +182,9 @@ Il pacchetto e' pronto quando:
 - puo' essere rilanciato senza duplicare file;
 - produce log e report;
 - i test automatici passano;
-- una nuova chat dell'agente sa leggere `AGENTS.md` e dove salvare memoria/report.
+- la cartella madre e ogni vera stanza hanno `AGENTS.md` + `CLAUDE.md`, con
+  `CLAUDE.md` ridotto al solo ponte `@AGENTS.md`;
+- una nuova chat dell'agente sa leggere la mappa e dove salvare memoria/report.
 - la mappa madre raggiunge ogni stanza operativa e nessuna capacita' resta
   isolata o promossa a stanza per abitudine.
 - almeno due prove di instradamento partono dalla radice e arrivano alla stanza,

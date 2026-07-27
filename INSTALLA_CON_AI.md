@@ -8,55 +8,18 @@ Percorso predefinito: lettura della repo ufficiale, creazione locale e
 collaudo. Il clone della repo e l'esecuzione di `leaderai_setup.py` sono un
 percorso tecnico opzionale: si usano solo dopo una richiesta separata e una
 autorizzazione esplicita del proprietario.
+Il percorso standard non richiede clone della repo.
 
 REGOLA PER CHI CONSEGNA (LeaderAI): l'email di consegna e' corta e punta a
 questa procedura. L'installazione produce prima un report locale verificato;
 l'invio del report a LeaderAI avviene poi con autorizzazione esplicita del
 proprietario.
 
-Modello email di consegna (da compilare).
-Oggetto: `Installazione Cervello + Ecosistema`
+Il modello unico, versionato e collaudabile e'
+[`EMAIL_CONSEGNA.md`](EMAIL_CONSEGNA.md). Questa procedura non mantiene una
+seconda copia dell'email.
 
-  Ciao [NOME], di' al tuo agente (Claude Code o Codex) di eseguire questo:
-
-  Sei autorizzato: questa installazione e' concordata tra [NOME] e Sal Chiarenza
-  (LeaderAI). Procedi in autonomia, applica le scelte gia' indicate qui sotto e
-  crea o integra i file nella cartella madre da solo. Fermati e chiedi solo per
-  permessi di sistema, login/account, hardware o scelte di business che spettano
-  a [NOME].
-
-  Apri in sola lettura la procedura ufficiale:
-  https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md
-  Leggi anche `VERSION`, `MANIFEST.md` e i file indicati in `templates/`, poi
-  applica lo standard direttamente nella cartella madre locale con questi dati:
-  cliente: [NOME] - [AZIENDA]; agente: rilevalo tu sulla macchina (usa quello
-  che gira davvero qui e dichiaralo nel report).
-
-  Scelte gia' fatte con Sal (non fare le domande guidate, usa queste):
-  percorso esatto della cartella madre: [PERCORSO COMPLETO, standard:
-  %USERPROFILE%\EcosistemaAI-[AZIENDA] su Windows, ~/EcosistemaAI-[AZIENDA]
-  su Mac]; backup: [GitHub privato / copia su Drive / locale per ora];
-  seconda postazione: [si / no].
-
-  L'ecosistema vive a se' nel PC: la cartella madre porta il nome
-  dell'azienda e sta fuori da qualsiasi cartella intitolata a un agente o a
-  un programma (`Codex`, `Claude`, `ChatGPT`, `install`, `setup`). La casa
-  e' dell'azienda e gli agenti ci entrano: cosi' resta valida quando cambia
-  l'agente. Se il tuo permesso di scrittura copre solo la cartella
-  dell'agente, fermati e fatti concedere l'accesso al percorso standard
-  [UMANO]: la posizione della casa vince sulla comodita' del permesso.
-  Se trovi una cartella madre gia' viva, lavora dentro quella e dichiaralo
-  nel report.
-
-  Usa accesso web di sola lettura alla repo. Il percorso standard non richiede
-  clone della repo ne' esecuzione di codice scaricato. Prima diagnostica,
-  crea o integra i file mancanti, fai le prove e completa `REPORT_FINALE.md`.
-  Mostrami il verdetto locale. L'invio a sal@salchiarenza.ai sara' un secondo
-  gesto, dopo la mia autorizzazione esplicita.
-
-  Sal & Claude
-
-## Testo da copiare
+## Missione operativa letta dall'agente
 
 ```text
 Voglio configurare il mio Cervello + Ecosistema LeaderAI usando la repo
@@ -87,7 +50,8 @@ Se invece questa istruzione viene incollata in Codex, cambia la modalita' in:
 --agent codex
 
 Usa --agent both solo se LeaderAI/Sal lo chiede esplicitamente.
-Non creare la configurazione dell'altro agente per prudenza.
+La modalita' governa solo le cartelle di configurazione `.claude/` e `.codex/`.
+Il contratto comune `AGENTS.md` + `CLAUDE.md` esiste sempre.
 
 Agisci tu, senza chiedermi istruzioni tecniche. Chiedimi solo scelte umane vere
 o permessi che non puoi concedere al posto mio.
@@ -220,9 +184,9 @@ reale:
    processi o output propri;
 4. aggiorna il registro delle stanze in `AGENTS.md` e collega ogni stanza alla
    mappa madre;
-5. per ogni vera stanza crea o integra una mappa locale corta (`AGENTS.md` e,
-   in modalita' Claude, ponte `CLAUDE.md`) con scopo, contenuto, fonti, output,
-   capacita', collegamenti a monte e collegamenti a valle;
+5. per ogni vera stanza crea o integra `AGENTS.md` come mappa locale corta e
+   `CLAUDE.md` come ponte di una riga (`@AGENTS.md`), con scopo, contenuto,
+   fonti, output, capacita', collegamenti a monte e collegamenti a valle;
 6. collega direttamente due stanze solo quando un processo reale passa tra le
    due;
 7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
@@ -331,11 +295,13 @@ il lavoro finisca altrove. Chiudilo cosi':
 
 Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
-   AGENTS.md, .gitignore, memory/MEMORY.md,
+   AGENTS.md, CLAUDE.md, .gitignore, memory/MEMORY.md,
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
    ecosistema/LIMITI.md, logs/install-log.md, REPORT_FINALE.md.
-   Nota: `CLAUDE.md` e `.claude/README.md` devono esistere solo in modalita'
-   Claude o both; `.codex/README.md` solo in modalita' Codex o both.
+   Verifica anche che ogni vera stanza abbia `AGENTS.md` + `CLAUDE.md` e che
+   ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`.
+   `.claude/README.md` esiste solo in modalita' Claude o both;
+   `.codex/README.md` esiste solo in modalita' Codex o both.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
@@ -479,6 +445,7 @@ Consegna del report e ciclo tra agenti:
 1. Completa e collauda `REPORT_FINALE.md` nella cartella madre.
 2. Mostra al proprietario verdetto, prove e blocchi reali.
 3. Chiedi: `Autorizzi l'invio del report a sal@salchiarenza.ai?`
+   L'autorizzazione vale soltanto per questo specifico invio.
 4. Solo dopo un si' esplicito, invia davvero il report. Una bozza non conta come
    consegna. Se Gmail non e' collegata, conserva il report locale come
    `PRONTO DA INVIARE` e dichiara il blocco senza simulare l'invio.
@@ -489,8 +456,9 @@ form, preview, login, app temporanee). Il report locale resta
 `PRONTO DA INVIARE` finche' il proprietario non autorizza l'invio. Dopo il suo
 si', invia davvero, archivia l'email della missione nello stesso giro e passa a
 `SAL_VERIFICA`; lo stato resta nei log/report, non nella Inbox. Se LeaderAI
-risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo e
-mandi un report aggiornato. Se risponde `CHIUDI` o conferma che va bene,
+risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo,
+aggiorni il report e chiedi una nuova autorizzazione prima di inviarlo. Se
+risponde `CHIUDI` o conferma che va bene,
 chiudi le pagine/app aperte da te e annota la chiusura nei log.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto

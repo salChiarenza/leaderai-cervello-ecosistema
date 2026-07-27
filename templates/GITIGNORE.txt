@@ -1,3 +1,4 @@
+# BEGIN LEADERAI SAFETY RULES
 # Segreti del cliente: mai nella repo, mai nel backup.
 # Su ogni PC i connettori si ri-autorizzano con login.
 .secrets/
@@ -14,3 +15,4 @@
 .DS_Store
 __pycache__/
 .pytest_cache/
+# END LEADERAI SAFETY RULES

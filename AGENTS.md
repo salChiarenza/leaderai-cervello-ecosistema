@@ -2,9 +2,9 @@
 
 Repo installabile per creare la cartella madre AI di un cliente.
 
-Questa repo e' letta sia da Claude Code sia da Codex. `CLAUDE.md`, se
-presente, importa `AGENTS.md` con `@AGENTS.md` oppure e' un symlink: una copia
-indipendente crea drift.
+Questa repo e' letta sia da Claude Code sia da Codex. `AGENTS.md` e'
+la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
+`@AGENTS.md`. Una copia indipendente crea drift.
 
 Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
 e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
@@ -26,7 +26,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
-- `CLAUDE.md` se il cliente usa Claude Code
+- `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
 - `memory/MEMORY.md`
@@ -58,17 +58,20 @@ Il cliente non deve fare debug tecnico. L'agente del cliente fa autodiagnosi,
 installa o ripara cio' che manca, crea la cartella madre nel posto giusto e
 chiude solo dopo un collaudo reale.
 
-## Scelta agente
+## Telaio comune e scelta agente
 
-La repo e' una sola, ma l'installazione non deve creare tutto a caso.
+La repo e' una sola. Il contratto comune esiste sempre nella cartella madre e
+in ogni vera stanza: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte
+`@AGENTS.md`.
 
 - Se il cliente sta usando Claude Code, usare `--agent claude`.
 - Se il cliente sta usando Codex, usare `--agent codex`.
 - Usare `--agent both` solo se LeaderAI lo chiede esplicitamente per preparare
   la stessa cartella a entrambi gli agenti.
 
-L'agente cliente deve configurare solo la modalita' con cui sta lavorando. Non
-crea la configurazione dell'altro agente per prudenza o per abitudine.
+`--agent` governa soltanto la configurazione specifica: `.claude/` per Claude
+Code, `.codex/` per Codex o entrambe con `both`. Non governa la presenza del
+telaio comune `AGENTS.md` + `CLAUDE.md`.
 
 ## Comunicazione e fonti di verita'
 
@@ -97,10 +100,12 @@ Il ciclo e' chiuso e semplice:
 - `ESECUZIONE`: fa le azioni, ripara cio' che puo', prova cio' che dichiara.
 - `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
   file toccati, blocchi umani veri e superfici aperte da lui.
-- `REPORT`: completa e collauda il report locale; l'invio a
-  `sal@salchiarenza.ai` avviene dopo autorizzazione esplicita del proprietario.
+- `REPORT`: completa e collauda il report locale, lo mostra al proprietario e
+  lo lascia `PRONTO DA INVIARE`; l'invio a `sal@salchiarenza.ai` avviene solo
+  dopo autorizzazione esplicita del proprietario per quello specifico invio.
 - `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nei log/report.
-- `CONTINUA`: lavora ancora sulla stessa missione e rimanda report aggiornato.
+- `CONTINUA`: lavora ancora sulla stessa missione, aggiorna il report e chiede
+  una nuova autorizzazione prima dell'eventuale nuovo invio.
 - `CHIUDI`: registra la chiusura nei log e chiude pagine/app aperte da lui.
 
 Regola posta: dopo aver letto e gestito una email o notifica, archiviala nello
@@ -139,16 +144,17 @@ solo dopo autorizzazione esplicita.
 Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
 agente "esegui il checkup LeaderAI", l'agente confronta il setup con la doc
 ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
-da solo il tecnico e invia il resoconto a Sal. Prima di giudicare censisce le
+da solo il tecnico e prepara il resoconto per Sal. Lo invia solo dopo
+autorizzazione esplicita del proprietario. Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
 si riconosce dai segnali di vita (memoria compilata, log, report, asset,
 commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca
 non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
 anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
 `leder ai`, `cervello`, `_leaderai`, `install`, `setup`, `repo`, `clone`) e
-classifica ogni risultato sospetto. Sorgente del metodo (lato LeaderAI):
-`leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` - le modifiche si
-specchiano nei due sensi.
+classifica ogni risultato sospetto. La fonte unica del metodo e' il
+`CHECKUP.md` versionato in questa repo; nel workspace LeaderAI resta soltanto
+un puntatore alla versione pubblicata.
 
 Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
 presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
@@ -157,6 +163,10 @@ temporaneo solo con conferma esplicita.
 
 Nella nuova installazione, invece, parte sempre dalla lettura web della repo e
 dal montaggio locale dei template. Il clone non e' un ripiego automatico.
+
+Il modello unico dell'email di prima consegna vive in `EMAIL_CONSEGNA.md`.
+`INSTALLA_CON_AI.md` contiene soltanto la procedura esecutiva: niente copie
+parallele dell'email.
 
 ## Divieti
 
@@ -170,7 +180,9 @@ dal montaggio locale dei template. Il clone non e' un ripiego automatico.
   corruzione/troncamento; locale e' la via piu' sicura ma non e' l'unica.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
 - Non creare doppioni di cartelle se ne esiste gia' una viva.
-- Non sovrascrivere file esistenti senza `--force` e senza motivo chiaro.
+- Non sovrascrivere i file vivi del cliente. `--force` puo' riparare soltanto
+  il ponte canonico `CLAUDE.md`; ogni altra modifica richiede integrazione
+  esplicita e tracciata.
 - Non promettere output professionali regolamentati: l'agente prepara bozze,
   il professionista verifica, decide e firma.
 
