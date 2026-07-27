@@ -7,7 +7,7 @@ in `INSTALLA_CON_AI.md`; nessun altro file duplica questa email.
 
 `PROVA_DESTINATARIO_OK — 27/07/2026`
 
-Verifica anonima completata sulla versione pubblica `0.3.7`, commit `670dced`:
+Verifica anonima completata sulla versione pubblica `0.3.8`, commit `7eb7f04`:
 repo, `VERSION`, `EMAIL_CONSEGNA.md`, `INSTALLA_CON_AI.md`, `CHECKUP.md`,
 `templates/CLAUDE.md` e ponte Portafogli sono leggibili senza account. Il
 percorso descritto dalla sola email raggiunge tutti i file necessari.
