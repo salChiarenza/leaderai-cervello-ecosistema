@@ -33,7 +33,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Asset operativi", asset)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("STANDARD APPLICATO", report)
-            self.assertIn("Versione: 0.3.0", report)
+            self.assertIn("Versione: 0.3.2", report)
             self.assertIn("FASE 2 - ECOSISTEMA", report)
             self.assertIn("MAPPA COMUNICAZIONE", report)
             self.assertIn("Procedure e 'come si fa'", report)

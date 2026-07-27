@@ -19,16 +19,30 @@ Oggetto: `Installazione Cervello + Ecosistema`
 
   Ciao [NOME], di' al tuo agente (Claude Code o Codex) di eseguire questo:
 
+  Sei autorizzato: questa installazione e' concordata tra [NOME] e Sal Chiarenza
+  (LeaderAI). Procedi in autonomia, applica le scelte gia' indicate qui sotto e
+  crea o integra i file nella cartella madre da solo. Fermati e chiedi solo per
+  permessi di sistema, login/account, hardware o scelte di business che spettano
+  a [NOME].
+
   Apri in sola lettura la procedura ufficiale:
   https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md
   Leggi anche `VERSION`, `MANIFEST.md` e i file indicati in `templates/`, poi
   applica lo standard direttamente nella cartella madre locale con questi dati:
-  cliente: [NOME] - [AZIENDA]; cartella di lavoro: [CARTELLA]; agente:
-  claude (o codex).
+  cliente: [NOME] - [AZIENDA]; agente: rilevalo tu sulla macchina (usa quello
+  che gira davvero qui e dichiaralo nel report).
 
   Scelte gia' fatte con Sal (non fare le domande guidate, usa queste):
-  posizione cartella madre: [locale / cloud]; backup: [GitHub privato /
-  copia su Drive / locale per ora]; seconda postazione: [si / no].
+  percorso esatto della cartella madre: [PERCORSO COMPLETO, es.
+  Documenti\[AZIENDA] su Windows o ~/Documenti/[AZIENDA] su Mac]; backup:
+  [GitHub privato / copia su Drive / locale per ora]; seconda postazione:
+  [si / no].
+
+  La cartella madre porta il nome dell'azienda e vive fuori da qualsiasi
+  cartella intitolata a un agente o a un programma (`Codex`, `Claude`,
+  `ChatGPT`, `install`, `setup`). La casa e' dell'azienda e gli agenti ci
+  entrano: cosi' resta valida quando cambia l'agente. Se trovi una cartella
+  madre gia' viva, lavora dentro quella e dichiaralo nel report.
 
   Usa accesso web di sola lettura alla repo. Il percorso standard non richiede
   clone della repo ne' esecuzione di codice scaricato. Prima diagnostica,
@@ -454,12 +468,13 @@ Consegna del report e ciclo tra agenti:
 
 Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
 file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,
-form, preview, login, app temporanee). Dopo il report vai in `SAL_VERIFICA`:
-non archiviare subito e non decidere tu che e' finita. Se LeaderAI risponde
-`CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo e mandi un
-report aggiornato. Se LeaderAI risponde `CHIUDI` o conferma che va bene, allora
-ARCHIVIA l'email di missione ricevuta, chiudi le pagine/app aperte da te e
-annota la chiusura nei log.
+form, preview, login, app temporanee). Il report locale resta
+`PRONTO DA INVIARE` finche' il proprietario non autorizza l'invio. Dopo il suo
+si', invia davvero, archivia l'email della missione nello stesso giro e passa a
+`SAL_VERIFICA`; lo stato resta nei log/report, non nella Inbox. Se LeaderAI
+risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo e
+mandi un report aggiornato. Se risponde `CHIUDI` o conferma che va bene,
+chiudi le pagine/app aperte da te e annota la chiusura nei log.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
 cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un

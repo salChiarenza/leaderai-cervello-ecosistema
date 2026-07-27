@@ -13,6 +13,12 @@ from pathlib import Path
 
 MODULE_NAME = "Sistema Portafogli Core-Satellite"
 SOURCE = Path(__file__).resolve().parent
+REPO_ROOT = SOURCE.parents[1]
+TEMPLATES = REPO_ROOT / "templates"
+ROOM_TABLE_HEADER = (
+    "| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale |"
+)
+ROOM_TABLE_SEPARATOR = "|---|---|---|---|---|---|---|---|"
 
 
 @dataclass
@@ -69,13 +75,62 @@ def _update_managed(source: Path, destination: Path, result: InstallResult) -> N
 
 def _append_once(path: Path, marker: str, block: str, result: InstallResult) -> None:
     if not path.exists():
-        return
+        raise ValueError(f"Registro da aggiornare assente: {path}; esegui CHECKUP.md")
     content = path.read_text(encoding="utf-8")
     if marker in content:
         result.existing.append(str(path))
         return
     separator = "" if content.endswith("\n") else "\n"
     path.write_text(content + separator + "\n" + block.rstrip() + "\n", encoding="utf-8")
+    result.updated.append(str(path))
+
+
+def _register_room(path: Path, room_rel: str, result: InstallResult) -> None:
+    content = path.read_text(encoding="utf-8")
+    map_pointer = f"`{room_rel}/AGENTS.md`"
+    row = (
+        f"| `{room_rel}/` | Sistema Portafogli Core-Satellite | Da compilare | "
+        f"Da compilare | `{room_rel}/FONTI.md` | Analisi, dossier e report | "
+        f"Sistema Portafogli | {map_pointer} |"
+    )
+    section = "### Registro delle stanze"
+    if section not in content:
+        block = f"""{section}
+
+{ROOM_TABLE_HEADER}
+{ROOM_TABLE_SEPARATOR}
+{row}
+
+Ogni stanza deve essere raggiungibile da questa tabella. I collegamenti a monte
+e a valle si compilano soltanto dai processi reali del proprietario.
+"""
+        _append_once(path, section, block, result)
+        return
+
+    lines = content.splitlines()
+    try:
+        header_index = lines.index(ROOM_TABLE_HEADER)
+        if lines[header_index + 1] != ROOM_TABLE_SEPARATOR:
+            raise ValueError
+    except (ValueError, IndexError) as exc:
+        raise ValueError(
+            "Il Registro delle stanze esiste ma non segue il formato canonico; "
+            "riparalo con CHECKUP.md prima di installare il modulo"
+        ) from exc
+
+    table_end = header_index + 2
+    while table_end < len(lines) and lines[table_end].startswith("|"):
+        table_end += 1
+    if any(map_pointer in line for line in lines[header_index + 2 : table_end]):
+        result.existing.append(str(path))
+        return
+    table_rows = [
+        line
+        for line in lines[header_index + 2 : table_end]
+        if not line.startswith("| Da censire |")
+    ]
+    lines[header_index + 2 : table_end] = table_rows + [row]
+    path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     result.updated.append(str(path))
 
 
@@ -162,19 +217,11 @@ def install(
 
     room_rel = room.relative_to(target).as_posix()
 
-    root_map_block = f"""## Stanza collegata: {room_rel}
-
-- Funzione: Sistema Portafogli Core-Satellite.
-- Mappa locale: `{room_rel}/AGENTS.md`.
-- Fonti e output: dichiarati nella stanza e nei registri `ecosistema/`.
-- A monte / a valle: compilare dai processi reali del proprietario.
-"""
-    _append_once(
-        target / "AGENTS.md",
-        f"## Stanza collegata: {room_rel}",
-        root_map_block,
-        result,
+    _copy_if_missing(TEMPLATES / "ASSET.md", target / "ecosistema" / "ASSET.md", result)
+    _copy_if_missing(
+        TEMPLATES / "PROCESSI.md", target / "ecosistema" / "PROCESSI.md", result
     )
+    _register_room(target / "AGENTS.md", room_rel, result)
 
     room_map = room / "AGENTS.md"
     if room_map.exists():

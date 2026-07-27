@@ -53,11 +53,15 @@ proprietario.
 
 ## Struttura dei casi
 
-Quando parte un caso reale, crea `clienti/<codice-anonimo>/` con almeno:
+Prima censisci come la stanza organizza gia' i casi reali. Riusa nomi, percorsi
+e registri esistenti quando consentono di distinguere almeno:
 
-- `SCHEDA.md`
-- `DATI_PORTAFOGLIO.csv`
-- `STORICO.md`
+- scheda e mandato del caso;
+- dati di portafoglio usati dal motore;
+- storico delle decisioni e delle revisioni;
+- output numerici e report approvati.
 
-Gli output del motore e i report restano nello stesso caso. Il codice anonimo
-mantiene i nomi personali fuori da file riusabili o condivisibili.
+Se la stanza non ha ancora una convenzione, proponi al banker una struttura
+minima, per esempio `clienti/<codice-anonimo>/` con `SCHEDA.md`,
+`DATI_PORTAFOGLIO.csv` e `STORICO.md`. Creala solo dopo approvazione. Il codice
+anonimo mantiene i nomi personali fuori da file riusabili o condivisibili.

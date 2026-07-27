@@ -74,7 +74,10 @@ class PortfolioInstallerTest(unittest.TestCase):
             target = Path(tmp) / "Marco Investimenti"
             (target / "ecosistema").mkdir(parents=True)
             (target / "logs").mkdir()
-            (target / "AGENTS.md").write_text("# Casa\n", encoding="utf-8")
+            (target / "AGENTS.md").write_text(
+                (ROOT / "templates" / "AGENTS.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
             (target / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
             room = target / "Portafoglio Modello"
             room.mkdir()
@@ -99,13 +102,23 @@ class PortfolioInstallerTest(unittest.TestCase):
             )
             self.assertIn("Sistema Portafogli Core-Satellite", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
             self.assertIn("Portafoglio Modello", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
-            self.assertIn("Stanza collegata: Portafoglio Modello", (target / "AGENTS.md").read_text(encoding="utf-8"))
+            root_map = (target / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertIn("### Registro delle stanze", root_map)
+            self.assertIn("`Portafoglio Modello/AGENTS.md`", root_map)
+            self.assertNotIn("## Stanza collegata:", root_map)
+            self.assertNotIn("| Da censire |", root_map)
 
             custom = room / "METODO.md"
             custom.write_text("DECISIONE MARCO\n", encoding="utf-8")
             second = installer.install(target, "Portafoglio Modello")
 
             self.assertEqual(custom.read_text(encoding="utf-8"), "DECISIONE MARCO\n")
+            self.assertEqual(
+                (target / "AGENTS.md")
+                .read_text(encoding="utf-8")
+                .count("`Portafoglio Modello/AGENTS.md`"),
+                1,
+            )
             self.assertGreater(len(first.created), 0)
             self.assertGreater(len(second.existing), 0)
 
@@ -120,6 +133,14 @@ class PortfolioInstallerTest(unittest.TestCase):
 
             installer.install(target, "Portafogli", create_room=True)
             self.assertTrue((target / "Portafogli" / "AGENTS.md").exists())
+            self.assertIn(
+                "Sistema Portafogli Core-Satellite",
+                (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                "Sistema Portafogli Core-Satellite",
+                (target / "ecosistema" / "PROCESSI.md").read_text(encoding="utf-8"),
+            )
 
     def test_new_skill_is_installed_only_when_named_explicitly(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -243,8 +243,9 @@ puoi:
 2. **Istruzioni** — `CLAUDE.md` esiste, e' letto, e' CORTO (indicativamente
    sotto le ~200 righe da doc): ogni riga passa il test "toglierla causerebbe
    errori?". Roba usata solo a volte → skill o rules, non nel file globale.
-   Se c'e' anche `AGENTS.md`, i due devono coincidere (symlink o copia
-   coerente).
+   Se c'e' anche `AGENTS.md`, `CLAUDE.md` deve essere un ponte/import verso
+   quel file oppure un symlink. Una copia indipendente non e' conforme perche'
+   puo' creare drift.
 3. **Settings e permessi** — `.claude/settings.json` con permessi in sintassi
    valida (regole `Tool(specifier)` come da doc `permissions`); file
    sensibili (`.env`, `.secrets/`) coperti da deny in lettura;

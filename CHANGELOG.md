@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.3.2 - 27/07/2026
+
+- La cartella madre porta il nome dell'azienda e vive fuori da cartelle
+  intitolate a un agente o a un programma: la casa resta valida quando cambia
+  l'agente.
+- L'email di consegna indica il percorso completo della cartella madre invece
+  della sola scelta locale/cloud.
+- L'agente rileva sulla macchina quale assistente gira davvero e lo dichiara nel
+  report, invece di riceverlo scritto a distanza.
+
+## 0.3.1 - 17/07/2026
+
+- Il modulo Portafogli riusa anche la convenzione esistente dei casi; una
+  struttura minima nuova resta una proposta da approvare.
+- L'installer ripara i registri standard mancanti, registra la stanza nella
+  tabella canonica della mappa madre e non crea una seconda mappa parallela.
+- Puntatori Portafogli univoci vengono auto-riparati; i casi ambigui restano una
+  decisione del banker.
+- Installazione, checkup e modulo usano ora gli stessi stati email: report
+  locale `PRONTO DA INVIARE`, invio solo dopo autorizzazione, poi
+  `SAL_VERIFICA` con email archiviata.
+- Il checkup accetta `CLAUDE.md` solo come ponte/import o symlink verso
+  `AGENTS.md`, non come copia indipendente soggetta a drift.
+
 ## 0.3.0 - 17/07/2026
 
 - Lo standard distingue il telaio universale dalla forma aziendale adattiva:

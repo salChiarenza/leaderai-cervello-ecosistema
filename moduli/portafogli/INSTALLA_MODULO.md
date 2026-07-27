@@ -11,8 +11,7 @@ la cartella viva come caso reale.
    scostamenti tecnici riparabili e registra gli interventi.
 3. Censisci le cartelle e le capacita' Portafogli gia' presenti. Classifica
    stanze, fonti, output, skill, script e archivi. Individua la stanza che
-   possiede il processo; il nome puo' essere `Portafoglio Modello` o qualunque
-   altro nome reale.
+   possiede davvero il processo: usa il suo nome e il suo percorso reali.
 4. Se esiste una skill equivalente, riusala o integrala. Se nessuna stanza puo'
    possedere la funzione, presenta al proprietario una proposta con scopo,
    fonti, output, monte/valle e collaudo. Crea la stanza solo dopo il suo ok.
@@ -27,6 +26,9 @@ la cartella viva come caso reale.
    Usa `--create-room` soltanto se la nuova stanza e' stata approvata. Usa
    `--skill-name nome-scelto` soltanto se e' stata approvata una nuova skill.
 6. Apri nella stanza scelta `AGENTS.md`, `PROCESSO.md` e `SCHEMA_DATI.md`.
+   Prima di creare casi, riusa la convenzione della stanza; se non esiste,
+   proponi al banker la struttura minima descritta in `AGENTS.md` e attendi il
+   suo ok.
 7. Compila `FONTI.md` usando percorsi realmente trovati e una prova innocua in
    lettura. Ogni fonte porta data e stato `OK`, `DA AGGIORNARE` o `DA COLLEGARE`.
 8. Compila in bozza `METODO.md` e `CORE.md` con le decisioni già presenti nei
@@ -39,9 +41,12 @@ la cartella viva come caso reale.
    `logs/install-log.md` e nel report finale della missione.
 12. Commit della cartella viva se il repository Git è già configurato. Mantieni
    dati personali e segreti fuori dal commit.
-13. Archivia l'email della missione dopo averla gestita e invia davvero il
-    resoconto a `sal@salchiarenza.ai` con lo stesso numero missione.
-14. Attendi `CONTINUA` oppure `CHIUDI`.
+13. Completa il resoconto locale, mostralo al proprietario e chiedi
+    autorizzazione esplicita all'invio. Fino al suo si' lo stato e'
+    `PRONTO DA INVIARE`.
+14. Solo dopo il si', invia davvero il resoconto a `sal@salchiarenza.ai`,
+    archivia l'email della missione nello stesso giro e passa a `SAL_VERIFICA`.
+15. Attendi `CONTINUA` oppure `CHIUDI`.
 
 ## Esito richiesto
 

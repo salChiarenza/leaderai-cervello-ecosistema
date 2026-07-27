@@ -7,9 +7,12 @@ description: Usa il Sistema Portafogli quando il banker chiede costruzione Core-
 
 1. Apri `ecosistema/ASSET.md` e individua la stanza proprietaria registrata per
    `Sistema Portafogli Core-Satellite`.
-2. Apri l'`AGENTS.md` di quella stanza. Se il collegamento manca o punta a una
-   cartella inesistente, fermati con stato `DA RIPARARE`: non creare una stanza
-   per supposizione.
+2. Apri l'`AGENTS.md` di quella stanza. Se il collegamento manca o e' rotto,
+   censisci le stanze esistenti: quando una sola stanza possiede gia' processo,
+   fonti e motore Portafogli, ripara il puntatore nei registri e provalo. Se la
+   proprieta' e' ambigua o nessuna stanza e' adatta, fermati con stato
+   `DA RIPARARE` e presenta la decisione al banker. Non creare una stanza per
+   supposizione.
 3. Leggi `METODO.md`, `FONTI.md`, `CORE.md` e la scheda del caso.
 4. Scegli in `PROCESSO.md` la modalita' richiesta.
 5. Applica il gate fonti e dati.

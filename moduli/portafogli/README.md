@@ -20,7 +20,7 @@ Comando diretto:
 ```bash
 python3 moduli/portafogli/installa_portafogli.py \
   --target "/percorso/cartella-madre" \
-  --room "Portafoglio Modello"
+  --room "PERCORSO_RELATIVO_STANZA_REALE"
 ```
 
 ## Calcoli
