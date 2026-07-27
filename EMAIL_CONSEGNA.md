@@ -5,11 +5,12 @@ in `INSTALLA_CON_AI.md`; nessun altro file duplica questa email.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO: DA ESEGUIRE DOPO LA PUBBLICAZIONE DELLA VERSIONE`
+`PROVA_DESTINATARIO_OK — 27/07/2026`
 
-Il token `PROVA_DESTINATARIO_OK` si aggiunge soltanto dopo aver aperto davvero,
-da utente anonimo e partendo dalla sola email, repo, procedura, versione e
-template necessari.
+Verifica anonima completata sulla versione pubblica `0.3.7`, commit `670dced`:
+repo, `VERSION`, `EMAIL_CONSEGNA.md`, `INSTALLA_CON_AI.md`, `CHECKUP.md`,
+`templates/CLAUDE.md` e ponte Portafogli sono leggibili senza account. Il
+percorso descritto dalla sola email raggiunge tutti i file necessari.
 
 ## Controlli prima dell'invio
 
