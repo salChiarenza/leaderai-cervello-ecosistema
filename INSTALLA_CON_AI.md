@@ -164,6 +164,7 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/PROCESSI.md`
    - `templates/LIMITI.md`
    - `templates/INSTALL_LOG.md`
+   - `templates/AGENT_CHAT.md`
 2. Registra nel report la versione letta. Se un file non e' leggibile, chiedi
    soltanto l'autorizzazione per l'accesso web di sola lettura e riprova.
 3. Il percorso predefinito termina qui per la repo: niente clone e niente
@@ -181,6 +182,8 @@ Fase 4 - monta localmente il Cervello
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
    - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
+   - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
+     comune di tutti gli agenti della casa, regole d'uso dentro al file)
 3. Se la modalita' e' Claude, crea `CLAUDE.md` e `.claude/README.md` dai relativi
    template. Se e' Codex, crea `.codex/README.md`. Usa entrambi solo se LeaderAI
    lo ha chiesto esplicitamente.

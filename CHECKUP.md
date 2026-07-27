@@ -251,6 +251,11 @@ puoi:
    sensibili (`.env`, `.secrets/`) coperti da deny in lettura;
    `settings.local.json` fuori da git; niente segreti in chiaro da nessuna
    parte.
+4bis. **Chat di gruppo** — `AGENT_CHAT.md` presente nella cartella madre
+   (bacheca comune di tutti gli agenti della casa; template
+   `templates/AGENT_CHAT.md`). Se manca, creala dal template e registralo
+   come riparazione. Note vecchie oltre 48 ore vanno promosse nei file
+   proprietari e tolte dalla chat.
 4. **Memoria** — auto-memory agganciata, `memory/MEMORY.md` presente e
    indice snello (le soglie di caricamento sono nella doc `memory`); niente
    file inventati che la duplicano (`MEMORIA.md`, diari paralleli).

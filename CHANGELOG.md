@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.4 - 27/07/2026
+
+- Chat di gruppo nella casa cliente: `AGENT_CHAT.md` entra nel telaio
+  (template, installazione, setup tecnico e checkup). Tutti gli agenti della
+  casa si coordinano li', con regole di disciplina dentro al file.
+
 ## 0.3.3 - 27/07/2026
 
 - L'ecosistema vive a se' nel PC: percorso standard `EcosistemaAI-[AZIENDA]`

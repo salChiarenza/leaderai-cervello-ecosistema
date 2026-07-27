@@ -271,6 +271,7 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
 
     ensure_text(target / "AGENTS.md", read_template("AGENTS.md", context), result, force, dry_run)
     ensure_text(target / "memory" / "MEMORY.md", read_template("MEMORY.md", context), result, force, dry_run)
+    ensure_text(target / "AGENT_CHAT.md", read_template("AGENT_CHAT.md", context), result, force, dry_run)
 
     if agent in {"codex", "both"}:
         ensure_dir(target / ".codex", result, dry_run)

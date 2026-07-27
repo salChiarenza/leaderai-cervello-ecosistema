@@ -114,6 +114,7 @@ Il target passa solo se esistono:
 - `AGENTS.md`
 - `memory/MEMORY.md`
 - `logs/install-log.md`
+- `AGENT_CHAT.md` (chat di gruppo degli agenti della casa)
 - `ecosistema/FONTI.md`
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
