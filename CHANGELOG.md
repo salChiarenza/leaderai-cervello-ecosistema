@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.3 - 27/07/2026
+
+- L'ecosistema vive a se' nel PC: percorso standard `EcosistemaAI-[AZIENDA]`
+  nel profilo utente, fuori dalle cartelle di agenti e programmi.
+- Permesso di scrittura limitato alla cartella dell'agente = gesto umano:
+  l'agente si fa concedere l'accesso al percorso scelto invece di ripiegare
+  dentro la propria cartella (caso reale: casa creata in Documenti\Codex
+  perche' la sessione scriveva solo li').
+
 ## 0.3.2 - 27/07/2026
 
 - La cartella madre porta il nome dell'azienda e vive fuori da cartelle

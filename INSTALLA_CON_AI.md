@@ -33,16 +33,20 @@ Oggetto: `Installazione Cervello + Ecosistema`
   che gira davvero qui e dichiaralo nel report).
 
   Scelte gia' fatte con Sal (non fare le domande guidate, usa queste):
-  percorso esatto della cartella madre: [PERCORSO COMPLETO, es.
-  Documenti\[AZIENDA] su Windows o ~/Documenti/[AZIENDA] su Mac]; backup:
-  [GitHub privato / copia su Drive / locale per ora]; seconda postazione:
-  [si / no].
+  percorso esatto della cartella madre: [PERCORSO COMPLETO, standard:
+  %USERPROFILE%\EcosistemaAI-[AZIENDA] su Windows, ~/EcosistemaAI-[AZIENDA]
+  su Mac]; backup: [GitHub privato / copia su Drive / locale per ora];
+  seconda postazione: [si / no].
 
-  La cartella madre porta il nome dell'azienda e vive fuori da qualsiasi
-  cartella intitolata a un agente o a un programma (`Codex`, `Claude`,
-  `ChatGPT`, `install`, `setup`). La casa e' dell'azienda e gli agenti ci
-  entrano: cosi' resta valida quando cambia l'agente. Se trovi una cartella
-  madre gia' viva, lavora dentro quella e dichiaralo nel report.
+  L'ecosistema vive a se' nel PC: la cartella madre porta il nome
+  dell'azienda e sta fuori da qualsiasi cartella intitolata a un agente o a
+  un programma (`Codex`, `Claude`, `ChatGPT`, `install`, `setup`). La casa
+  e' dell'azienda e gli agenti ci entrano: cosi' resta valida quando cambia
+  l'agente. Se il tuo permesso di scrittura copre solo la cartella
+  dell'agente, fermati e fatti concedere l'accesso al percorso standard
+  [UMANO]: la posizione della casa vince sulla comodita' del permesso.
+  Se trovi una cartella madre gia' viva, lavora dentro quella e dichiaralo
+  nel report.
 
   Usa accesso web di sola lettura alla repo. Il percorso standard non richiede
   clone della repo ne' esecuzione di codice scaricato. Prima diagnostica,
@@ -130,6 +134,12 @@ Fase 1 - autodiagnosi
    - Mac/Linux: ~/EcosistemaAI-[AZIENDA]
    - Windows: %USERPROFILE%\EcosistemaAI-[AZIENDA]
    nella posizione che ho scelto alla Domanda 1.
+5. La cartella madre sta FUORI dalle cartelle degli agenti e dei programmi
+   (`Codex`, `Claude`, `ChatGPT`, cartelle di installazione): l'ecosistema
+   vive a se' nel PC e gli agenti ci entrano. Se il tuo permesso di
+   scrittura copre solo la cartella dell'agente, NON ripiegare li' dentro:
+   dichiaralo, fatti concedere l'accesso al percorso scelto [UMANO] e crea
+   la casa solo dove deve vivere.
 
 Fase 2 - prepara la cartella madre e Git locale
 1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso
