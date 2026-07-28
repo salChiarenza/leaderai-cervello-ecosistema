@@ -7,14 +7,14 @@ in `INSTALLA_CON_AI.md`; nessun altro file duplica questa email.
 
 `PROVA_DESTINATARIO_OK — 28/07/2026`
 
-Verifica in sessione anonima completata sulla versione pubblica `0.4.2`,
-commit `98b71e7a8b2c283cec66c7540f5197a2aa8a6e1e`.
-L'archivio pubblico misura `134788` byte e ha SHA-256
-`af86e6f939e9455c2289248431bb9b2d2919b6ff30795f6e156924cd1706f016`.
+Verifica in sessione anonima completata sulla versione pubblica `0.4.3`,
+commit `deadbc4aaa42df3bac0bed5e4eb9c1772e2c1d38`.
+L'archivio pubblico misura `136485` byte e ha SHA-256
+`14ec3222085ef4fdfc78b3d8880d153cf17d98068cf02451cc793046960b244f`.
 Dal solo archivio risultano leggibili `VERSION`, `INSTALLA_CON_AI.md`,
 `CHECKUP.md`, `MANIFEST.md`, l'Ispettore, il setup e i template per mappa,
 stanza e skill, incluso il gate finanziario del modulo Portafogli.
-Compilazione completata e `94` test superati.
+Compilazione completata e `96` test superati anche dall'archivio anonimo.
 
 ## Controlli prima dell'invio
 
@@ -46,7 +46,7 @@ compare la richiesta nativa di accesso, conferma quel singolo gesto.</p>
 <p>Affidagli questa missione:</p>
 
 <p>Apri in sola lettura la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI 0.4.2</a>
+<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI 0.4.3</a>
 e usa la
 <a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema">repo ufficiale</a>
 come standard.</p>
@@ -63,7 +63,7 @@ Seconda postazione: [SI / NO]</p>
 <code>.claude/</code> soltanto per Claude Code, entrambe soltanto se LeaderAI
 lo ha richiesto esplicitamente.</p>
 
-<p>Confronta la versione installata con <code>VERSION 0.4.2</code>, configura
+<p>Confronta la versione installata con <code>VERSION 0.4.3</code>, configura
 la memoria unica prevista per l'agente attivo e usa
 <code>ecosistema/STANZA_AGENTS.md</code> per ogni stanza reale. Lancia
 l'Ispettore, ripara i punti sicuri e prova le strade fino agli output.</p>
@@ -101,7 +101,7 @@ Rileva l'agente attivo. Il telaio comune comprende sempre AGENTS.md e
 CLAUDE.md con @AGENTS.md. Configura .codex/ soltanto per Codex, .claude/
 soltanto per Claude Code, entrambe soltanto su richiesta esplicita LeaderAI.
 
-Confronta la versione installata con VERSION 0.4.2, configura la memoria unica
+Confronta la versione installata con VERSION 0.4.3, configura la memoria unica
 prevista per l'agente attivo e usa ecosistema/STANZA_AGENTS.md per ogni stanza
 reale. Lancia l'Ispettore, ripara i punti sicuri e prova le strade fino agli
 output.
