@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.4 - 28/07/2026
+
+- L'email operativa dichiara un solo lettore reale. Il modello corrente usa
+  `AGENTE_CON_POSTA`: l'agente collegato alla casella del cliente riceve la
+  missione direttamente dalla prima riga.
+- Il proprietario compare nei soli gesti umani che l'agente gli presenta al
+  momento corretto; il report viene mostrato localmente e parte dopo il suo
+  comando `manda`.
+- Aggiunta una regressione che blocca il passaggio circolare `apri Claude e
+  digli di leggere questa email`.
+
 ## 0.4.3 - 28/07/2026
 
 - Una casa semplice puo' avere zero stanze: capacita', fonti e output possono

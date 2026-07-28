@@ -131,7 +131,11 @@ class CrossAgentContractTest(unittest.TestCase):
             email,
         )
         self.assertIn("autorizzazione esplicita", email)
-        self.assertIn("Nessun report o follow-up parte automaticamente", email)
+        self.assertIn(
+            "l'autorizzazione successiva del proprietario attiva "
+            "l'eventuale invio del report",
+            " ".join(email.split()),
+        )
         self.assertIn("PROVA_DESTINATARIO", email)
         self.assertIn(
             "[FIRMA AGENTE: Sal & Codex / Sal & Claude Code]",
@@ -146,6 +150,24 @@ class CrossAgentContractTest(unittest.TestCase):
         ]:
             with self.subTest(pointer=relative_path):
                 self.assertIn("EMAIL_CONSEGNA.md", self.read(relative_path))
+
+    def test_delivery_email_has_one_direct_operational_reader(self):
+        email = self.read("EMAIL_CONSEGNA.md")
+
+        self.assertIn("Modo corrente: `AGENTE_CON_POSTA`", email)
+        self.assertIn(
+            "Questa missione operativa e' per l'agente AI che gestisce",
+            email,
+        )
+        for mixed_reader_phrase in [
+            "Ciao [NOME]",
+            "apri [AGENTE ATTIVO",
+            "Affidagli questa missione",
+            "leggi l'ultima email",
+            "digli di leggere",
+        ]:
+            with self.subTest(phrase=mixed_reader_phrase):
+                self.assertNotIn(mixed_reader_phrase, email)
 
     def test_every_continue_requires_a_new_send_authorization(self):
         checkup = self.read("CHECKUP.md")
