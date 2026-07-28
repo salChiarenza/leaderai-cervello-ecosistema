@@ -87,12 +87,15 @@ del contratto comune.
 
 Nel target scelto crea solo i pezzi standard mancanti:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali,
+  `.claude/settings.local.json` e `REPORT_FINALE.md`
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se richiesto Codex
 - `.claude/README.md` se richiesto Claude Code
+- `.claude/settings.local.json` se richiesto Claude Code, con
+  `autoMemoryDirectory` sulla `memory/` della casa
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
 - `memory/MEMORY.md`
@@ -102,7 +105,8 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
-- `REPORT_FINALE.md`
+- `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
+- `REPORT_FINALE.md` come output temporaneo e datato della missione aperta
 
 Questi pezzi sono infrastruttura comune. Le cartelle business vengono prima
 classificate come stanza, fonte, output, capacita', infrastruttura, archivio o
@@ -110,12 +114,13 @@ elemento sospetto. Ogni vera stanza deve essere raggiungibile dalla radice e
 avere `AGENTS.md` + `CLAUDE.md`, con mappa corta, fonti, output e collegamenti
 reali.
 
-Ogni nuova stanza usa `templates/STANZA_AGENTS.md`. Prima del salvataggio
+Ogni nuova stanza usa il calco installato `ecosistema/STANZA_AGENTS.md`,
+generato dalla fonte repo `templates/STANZA_AGENTS.md`. Prima del salvataggio
 l'Ispettore controlla che ogni percorso visibile nella home abbia classe e
 proprietario, che le stanze siano collegate alla radice e che non restino
 cartelle generiche, vuote, doppie, tecniche o file sciolti senza casa.
 
-Il report finale include anche la **mappa moduli**: PEC/email certificata,
+Il report temporaneo include anche la **mappa moduli**: PEC/email certificata,
 email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,
 skill, agenti, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI
 Act. Ogni modulo deve avere uno stato, cosi' il prossimo passo non dipende
@@ -130,10 +135,16 @@ Modulo specifico gia' disponibile:
   L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
   la stanza proprietaria e integra il modulo senza creare una stanza concorrente.
 
-Il Cervello include anche la **mappa comunicazione**: stato e chiusure in
-`REPORT_FINALE.md`/`logs/`, procedure nei file proprietari, asset in
-`ecosistema/ASSET.md`, chat solo per coordinamento temporaneo e sync dedicato
-solo se il cliente usa sia Claude sia Codex.
+Il Cervello include anche la **mappa comunicazione**: stato business nel file
+proprietario della stanza, storia tecnica nel solo `logs/install-log.md`,
+report datato solo durante la missione, asset in `ecosistema/ASSET.md`, chat
+solo per coordinamento temporaneo e sync dedicato solo se il cliente usa sia
+Claude sia Codex.
+
+L'Ispettore confronta sempre la versione installata con il `VERSION` vivo,
+verifica che Claude usi una sola memoria, individua configurazioni credenziali
+fuori `.secrets/` senza aprirle, controlla firma/timbro e impedisce copie
+hardcoded di contenuti business modificabili.
 
 I file vivi del cliente restano intatti. `--force` serve soltanto a riparare il
 ponte canonico `CLAUDE.md` quando e' mancante o errato.

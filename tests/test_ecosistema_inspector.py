@@ -1,3 +1,5 @@
+import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -40,6 +42,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             "{{room_contents}}": "Pratiche",
             "{{room_sources}}": "Gestionale",
             "{{room_outputs}}": "Documenti",
+            "{{room_business_source}}": "NON APPLICABILE: nessun generatore",
             "{{room_capabilities}}": "App",
             "{{room_upstream}}": "Radice",
             "{{room_downstream}}": "Documenti",
@@ -60,6 +63,24 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             self.assertEqual(inspection.verdict, "PASSA")
             self.assertEqual(inspection.findings, [])
+            settings = json.loads(
+                (target / ".claude" / "settings.local.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(
+                settings["autoMemoryDirectory"],
+                str((target / "memory").absolute()),
+            )
+            tracked = subprocess.run(
+                ["git", "ls-files"],
+                cwd=str(target),
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout
+            self.assertNotIn(".claude/settings.local.json", tracked)
+            self.assertNotIn("REPORT_FINALE.md", tracked)
 
     def test_unclassified_generic_and_empty_folders_block_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -130,6 +151,111 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = ecosistema_inspector.inspect_ecosystem(target)
 
             self.assertIn("INSPECTOR_SKILL_MISSING", self.codes(inspection))
+
+    def test_santa_brigida_regression_is_non_passa(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "claude")
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    f"Versione standard applicata: `{leaderai_setup.STANDARD_VERSION}`.",
+                    "Versione standard applicata: `0.3.0`.",
+                ),
+                encoding="utf-8",
+            )
+            (target / ".claude" / "settings.local.json").write_text(
+                json.dumps(
+                    {
+                        "autoMemoryDirectory": str(
+                            Path(tmp) / "memoria-claude-esterna"
+                        )
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (target / "REPORT_FINALE.md").write_text(
+                "# Report finale del 22/07\n\nGestionale: DA SCOPRIRE\n",
+                encoding="utf-8",
+            )
+            documenti = target / "documenti"
+            documenti.mkdir()
+            (documenti / "guida.docx").write_text("derivato\n", encoding="utf-8")
+            app = target / "app-iscrizioni"
+            (app / "dati").mkdir(parents=True)
+            (app / "PROGETTO.md").write_text(
+                "# Progetto\n\n## Diario\n\n### 23/07/2026\n"
+                "Lavoro.\n\n## PROSSIMO\nScadenza 30/09.\n",
+                encoding="utf-8",
+            )
+            (app / "dati" / "config_posta.json").write_text(
+                "{}\n",
+                encoding="utf-8",
+            )
+            (app / "scheda_pdf.py").write_text(
+                'GUIDA = "La famiglia deve seguire questa procedura completa '
+                'per iscrivere ogni partecipante e consegnare tutti i documenti '
+                'richiesti dalla scuola."\n',
+                encoding="utf-8",
+            )
+            (app / "firma-scuola.png").write_bytes(b"test")
+            self.add_room_to_registry(target)
+
+            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            codes = self.codes(inspection)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            expected = {
+                "STANDARD_VERSION_OUTDATED",
+                "ROOM_AGENTS_MISSING",
+                "ROOM_CLAUDE_MISSING",
+                "UNCLASSIFIED_DIR",
+                "GENERIC_DIR",
+                "CLAUDE_MEMORY_DIVERGED",
+                "STALE_REPORT",
+                "CREDENTIAL_FILE_OUTSIDE_SECRETS",
+                "BUSINESS_SOURCE_UNDECLARED",
+                "BUSINESS_CONTENT_HARDCODED_RISK",
+                "SENSITIVE_ASSET_OUTSIDE_PROTECTED",
+                "SENSITIVE_ASSET_UNREGISTERED",
+                "PROJECT_CONTROL_OUT_OF_ORDER",
+            }
+            self.assertTrue(expected.issubset(codes), expected - codes)
+
+    def test_credential_path_in_git_history_requires_rotation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "claude")
+            config = target / "app-iscrizioni" / "dati" / "config_posta.json"
+            config.parent.mkdir(parents=True)
+            config.write_text("{}\n", encoding="utf-8")
+            subprocess.run(
+                ["git", "add", "-f", config.relative_to(target).as_posix()],
+                cwd=str(target),
+                check=True,
+                capture_output=True,
+            )
+            subprocess.run(
+                [
+                    "git",
+                    "-c",
+                    "user.name=Test",
+                    "-c",
+                    "user.email=test@example.invalid",
+                    "commit",
+                    "-m",
+                    "test config path",
+                ],
+                cwd=str(target),
+                check=True,
+                capture_output=True,
+            )
+            config.unlink()
+
+            inspection = ecosistema_inspector.inspect_ecosystem(target)
+
+            self.assertIn(
+                "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",
+                self.codes(inspection),
+            )
 
 
 if __name__ == "__main__":

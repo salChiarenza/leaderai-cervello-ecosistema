@@ -17,6 +17,10 @@ STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="utf-8")
 SUPPORTED_AGENTS = {"codex", "claude", "both"}
 CLAUDE_BRIDGE = "@AGENTS.md\n"
+LOCAL_ONLY_FILES = {
+    ".claude/settings.local.json",
+    "REPORT_FINALE.md",
+}
 STANDARD_DIRS = (
     "memory",
     "logs",
@@ -33,12 +37,14 @@ STANDARD_FILES = (
     "AGENT_CHAT.md",
     ".codex/README.md",
     ".claude/README.md",
+    ".claude/settings.local.json",
     ".agents/skills/ispettore-ecosistema/SKILL.md",
     ".claude/skills/ispettore-ecosistema/SKILL.md",
     "ecosistema/FONTI.md",
     "ecosistema/ASSET.md",
     "ecosistema/PROCESSI.md",
     "ecosistema/LIMITI.md",
+    "ecosistema/STANZA_AGENTS.md",
     "logs/install-log.md",
     "REPORT_FINALE.md",
 )
@@ -95,6 +101,62 @@ def ensure_text(path: Path, content: str, result: InstallResult, dry_run: bool) 
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content.rstrip() + "\n", encoding="utf-8")
     result.record("created", path)
+
+
+def ensure_claude_memory_settings(
+    path: Path,
+    target: Path,
+    result: InstallResult,
+    *,
+    new_install: bool,
+    dry_run: bool,
+) -> None:
+    desired = str((target / "memory").absolute())
+    if not path.exists():
+        content = json.dumps(
+            {"autoMemoryDirectory": desired},
+            ensure_ascii=False,
+            indent=2,
+        )
+        if not dry_run:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content + "\n", encoding="utf-8")
+        result.record("created", path)
+        return
+
+    try:
+        settings = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        result.record("existing", path)
+        result.blockers.append(
+            ".claude/settings.local.json non e' JSON valido: non posso "
+            "verificare la memoria unica senza correggerlo."
+        )
+        return
+    if not isinstance(settings, dict):
+        result.record("existing", path)
+        result.blockers.append(
+            ".claude/settings.local.json deve contenere un oggetto JSON."
+        )
+        return
+
+    current = settings.get("autoMemoryDirectory")
+    if current == desired:
+        result.record("existing", path)
+        return
+
+    result.record("existing", path)
+    if new_install:
+        result.blockers.append(
+            "autoMemoryDirectory non punta a memory/: verificare la "
+            "configurazione Claude prima di proseguire."
+        )
+    else:
+        result.blockers.append(
+            "Memoria Claude non allineata: confrontare con /memory, unire le "
+            "voci nella memory/ della casa e solo dopo aggiornare "
+            "autoMemoryDirectory. Nessuna memoria viene sovrascritta."
+        )
 
 
 def _claude_bridge_state(path: Path, agents_path: Path) -> str:
@@ -344,23 +406,26 @@ def ensure_first_commit(
         return
     candidates: list[str] = []
     for rel in dict.fromkeys(result.created + result.updated):
+        if rel in LOCAL_ONLY_FILES:
+            continue
         path = target / rel
         if path.is_file() and not path.is_symlink() and not rel.startswith(".git/"):
             candidates.append(rel)
     if not candidates:
         result.git_outcome = "Git: nessun file LeaderAI da fotografare."
         return
-    report_paths = [
+    rendered_report_paths = [
         target / "REPORT_FINALE.md",
         target / "logs" / "install-log.md",
     ]
+    committed_report_paths = [target / "logs" / "install-log.md"]
     rendered_outcome = result.git_outcome
 
     def refresh_outcome(after: str) -> None:
         nonlocal rendered_outcome
         before_text = rendered_outcome.removeprefix("Git: ")
         after_text = after.removeprefix("Git: ")
-        for path in report_paths:
+        for path in rendered_report_paths:
             if not path.is_file() or path.is_symlink():
                 continue
             current = path.read_text(encoding="utf-8")
@@ -394,7 +459,7 @@ def ensure_first_commit(
         refresh_outcome(result.git_outcome)
         final_report_paths = [
             path.relative_to(target).as_posix()
-            for path in report_paths
+            for path in committed_report_paths
             if path.is_file() and not path.is_symlink()
         ]
         if final_report_paths:
@@ -427,7 +492,7 @@ def ensure_first_commit(
         refresh_outcome(result.git_outcome)
 
 
-def build_report(result: InstallResult, agent: str) -> str:
+def build_report(result: InstallResult, agent: str, stamp: str) -> str:
     def section(title: str, items: list[str]) -> str:
         if not items:
             return f"{title}\n- Nessuno\n"
@@ -455,7 +520,12 @@ def build_report(result: InstallResult, agent: str) -> str:
 
     return "\n".join(
         [
-            "# Report finale LeaderAI",
+            "# Report missione LeaderAI",
+            "",
+            f"VALIDO AL: {stamp}",
+            "STATO MISSIONE: APERTA",
+            "Output temporaneo: non e' una fonte di stato e viene eliminato "
+            "dopo CHIUDI.",
             "",
             "STANDARD APPLICATO",
             "- Repo: salChiarenza/leaderai-cervello-ecosistema",
@@ -492,7 +562,9 @@ def build_report(result: InstallResult, agent: str) -> str:
             "",
             "MAPPA COMUNICAZIONE",
             "- Regola: gli agenti non si parlano direttamente; leggono e scrivono file condivisi.",
-            "- Stato e chiusura lavoro: `REPORT_FINALE.md` oppure `logs/install-log.md`.",
+            "- Stato business: file proprietario della stanza, con stato e prossimo passo in testa.",
+            "- Storia tecnica/strutturale: `logs/install-log.md`.",
+            "- Output della missione aperta: `REPORT_FINALE.md`, temporaneo e ignorato da Git.",
             "- Procedure e 'come si fa': file dell'area che le usa, non chat.",
             "- Asset/capacita' nuove: `ecosistema/ASSET.md`.",
             "- Coordinamento temporaneo sullo stesso file: chat solo se serve evitare collisioni, massimo 48 ore.",
@@ -541,10 +613,11 @@ def ensure_report(
     result: InstallResult,
     agent: str,
     event_key: str,
+    stamp: str,
     dry_run: bool,
 ) -> None:
-    report = build_report(result, agent).rstrip() + "\n"
     marker = f"<!-- LEADERAI-SETUP-EVENT:{event_key} -->"
+    report = build_report(result, agent, stamp).rstrip() + "\n"
     if not path.exists():
         if not dry_run:
             path.write_text(marker + "\n" + report, encoding="utf-8")
@@ -554,17 +627,15 @@ def ensure_report(
     if marker in current:
         result.record("existing", path)
         return
-    update = (
-        "\n\n"
-        + marker
-        + f"\n## Aggiornamento standard LeaderAI {STANDARD_VERSION}\n\n"
-        + report
-        + "\nQuesto e' l'esito corrente e supera il verdetto precedente, "
-        + "che resta preservato sopra come cronologia.\n"
-    )
+    if "<!-- LEADERAI-SETUP-EVENT:" not in current:
+        result.record("existing", path)
+        result.blockers.append(
+            "REPORT_FINALE.md esiste ma non e' riconoscibile come output "
+            "temporaneo LeaderAI: non viene sovrascritto."
+        )
+        return
     if not dry_run:
-        with path.open("a", encoding="utf-8") as handle:
-            handle.write(update)
+        path.write_text(marker + "\n" + report, encoding="utf-8")
     result.record("updated", path)
 
 
@@ -586,6 +657,7 @@ def ensure_event_log(
         f"## {stamp}",
         f"- Client: {client}",
         f"- Agent: {agent}",
+        f"- Standard version: {STANDARD_VERSION}",
         f"- Created: {', '.join(result.created) if result.created else 'none'}",
         f"- Updated: {', '.join(result.updated) if result.updated else 'none'}",
         f"- Warnings: {' | '.join(result.warnings) if result.warnings else 'none'}",
@@ -622,7 +694,12 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             )
     today = dt.datetime.now().strftime("%d/%m/%Y")
     stamp = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    context = {"client_name": client, "date": today, "agent": agent}
+    context = {
+        "client_name": client,
+        "date": today,
+        "agent": agent,
+        "version": STANDARD_VERSION,
+    }
     result = InstallResult(target=target)
 
     bridge_state = _claude_bridge_state(target / "CLAUDE.md", target / "AGENTS.md")
@@ -646,6 +723,7 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             result,
             agent,
             event_key,
+            stamp,
             dry_run,
         )
         ensure_event_log(
@@ -724,6 +802,13 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             result,
             dry_run,
         )
+        ensure_claude_memory_settings(
+            target / ".claude" / "settings.local.json",
+            target,
+            result,
+            new_install=new_install,
+            dry_run=dry_run,
+        )
 
     ensure_text(
         target / "ecosistema" / "FONTI.md",
@@ -749,6 +834,12 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
         result,
         dry_run,
     )
+    ensure_text(
+        target / "ecosistema" / "STANZA_AGENTS.md",
+        read_template("STANZA_AGENTS.md", context),
+        result,
+        dry_run,
+    )
 
     changed_before_report = bool(result.created or result.updated)
     event_needed = new_install or changed_before_report or bool(
@@ -761,6 +852,7 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             result,
             agent,
             event_key,
+            stamp,
             dry_run,
         )
         ensure_event_log(

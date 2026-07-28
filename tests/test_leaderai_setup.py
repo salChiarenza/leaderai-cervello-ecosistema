@@ -33,6 +33,10 @@ class LeaderAISetupTest(unittest.TestCase):
                 self.assertEqual((target / ".codex" / "README.md").exists(), has_codex)
                 self.assertEqual((target / ".claude" / "README.md").exists(), has_claude)
                 self.assertEqual(
+                    (target / ".claude" / "settings.local.json").exists(),
+                    has_claude,
+                )
+                self.assertEqual(
                     (
                         target
                         / ".agents"
@@ -402,9 +406,10 @@ class LeaderAISetupTest(unittest.TestCase):
                 self.assertEqual((target / rel).read_text(encoding="utf-8"), content)
             report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
             self.assertTrue(report.startswith(old_report))
-            self.assertIn("supera il verdetto precedente", report)
-            self.assertIn("`.codex/README.md` (Codex)", report)
-            self.assertIn("`.claude/README.md` (Claude Code)", report)
+            self.assertIn(
+                "REPORT_FINALE.md esiste ma non e' riconoscibile",
+                " | ".join(result.blockers),
+            )
             self.assertIn("CLAUDE.md", result.updated)
 
     def test_gitignore_adds_every_missing_required_rule_once(self):
@@ -670,7 +675,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertEqual(staged, "")
             self.assertIn("cliente-non-toccare.txt", untracked)
 
-    def test_migration_report_preserves_and_supersedes_old_verdict(self):
+    def test_unknown_report_is_preserved_and_blocks_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Migrazione"
             target.mkdir()
@@ -678,13 +683,32 @@ class LeaderAISetupTest(unittest.TestCase):
             old = "# Report vecchio\n\nVERDETTO\n- PASSA\n"
             (target / "REPORT_FINALE.md").write_text(old, encoding="utf-8")
 
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
 
             report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-            self.assertTrue(report.startswith(old))
-            self.assertIn("Aggiornamento standard LeaderAI", report)
-            self.assertIn("supera il verdetto precedente", report)
-            self.assertGreater(report.count("VERDETTO"), 1)
+            self.assertEqual(report, old)
+            self.assertIn(
+                "REPORT_FINALE.md esiste ma non e' riconoscibile",
+                " | ".join(result.blockers),
+            )
+
+    def test_managed_report_is_replaced_not_appended(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Migrazione"
+            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            report_path = target / "REPORT_FINALE.md"
+            old = report_path.read_text(encoding="utf-8")
+            (target / ".codex" / "README.md").unlink()
+
+            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+
+            report = report_path.read_text(encoding="utf-8")
+            self.assertNotEqual(report, old)
+            self.assertEqual(report.count("STATO MISSIONE:"), 1)
+            self.assertEqual(report.count("VERDETTO"), 1)
+            self.assertIn("VALIDO AL:", report)
+            self.assertNotIn("supera il verdetto precedente", report)
+            self.assertFalse(result.blockers)
 
     def test_run_setup_rejects_invalid_agent_before_writing(self):
         with tempfile.TemporaryDirectory() as tmp:

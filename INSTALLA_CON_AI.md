@@ -77,7 +77,7 @@ Fase 1 - autodiagnosi
    Il nome non basta: la cartella viva puo' chiamarsi in qualunque modo
    (nome azienda, progetto, reparto, cartella AI, casa AI, workspace). Guardala
    dai segnali di vita: `memory/MEMORY.md compilata`, `logs/ con attivita'`,
-   `REPORT_FINALE.md compilato`, `ecosistema/ASSET.md`, `commit git`, file di
+   `ecosistema/ASSET.md`, `commit git`, file di
    lavoro recenti o connettori provati. Se una cartella ha questi segnali, non
    creare una nuova cartella solo perche' il nome non e' quello atteso.
 3. DOMANDA 1 - dove mettere la cartella madre (il cervello). [UMANO]
@@ -138,8 +138,8 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
 
 Fase 4 - monta localmente il Cervello
 1. Crea le cartelle `memory/`, `logs/` ed `ecosistema/` nella cartella madre.
-2. Applica localmente i template, sostituendo `{{client_name}}`, `{{date}}` e
-   `{{agent}}` con i dati reali:
+2. Applica localmente i template, sostituendo `{{client_name}}`, `{{date}}`,
+   `{{agent}}` e `{{version}}` con i dati reali letti dalla repo:
    - `templates/AGENTS.md` -> `AGENTS.md`
    - `templates/MEMORY.md` -> `memory/MEMORY.md`
    - `templates/ASSET.md` -> `ecosistema/ASSET.md`
@@ -147,6 +147,7 @@ Fase 4 - monta localmente il Cervello
    - `templates/FONTI.md` -> `ecosistema/FONTI.md`
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
+   - `templates/STANZA_AGENTS.md` -> `ecosistema/STANZA_AGENTS.md`
    - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
    - `templates/CLAUDE.md` -> `CLAUDE.md` (ponte, sempre)
    - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
@@ -163,12 +164,19 @@ Fase 4 - monta localmente il Cervello
    configurazione per agente: modalita' Claude -> `.claude/README.md`;
    modalita' Codex -> `.codex/README.md`. Usa entrambe le configurazioni solo
    se LeaderAI lo ha chiesto esplicitamente.
-4. Crea `REPORT_FINALE.md` seguendo il Manifest e le sezioni richieste in fondo
-   a questa procedura.
-5. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
+4. Se Claude Code e' attivo, crea `.claude/settings.local.json` fuori Git con
+   `autoMemoryDirectory` uguale al percorso assoluto `memory/` della cartella
+   madre. Accetta il trust del workspace, apri `/memory` e prova che Claude usa
+   quella stessa destinazione. Se trovi una memoria auto esterna gia' piena,
+   confronta e unisci le voci prima di cambiare il percorso.
+5. Crea `REPORT_FINALE.md` come output temporaneo della missione con
+   `VALIDO AL` e `STATO MISSIONE: APERTA`; `.gitignore` lo esclude. Non e' una
+   fonte di stato e viene eliminato dopo `CHIUDI`.
+6. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
    cosa era gia' presente, cosa hai creato e cosa hai aggiornato.
-6. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
-   password e credenziali prima del primo commit.
+7. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
+   password, credenziali, `.claude/settings.local.json` e
+   `REPORT_FINALE.md` prima del primo commit.
 
 Percorso tecnico opzionale:
 `leaderai_setup.py` resta un attrezzo LeaderAI per collaudi o installazioni
@@ -193,7 +201,7 @@ reale:
 4. aggiorna il registro delle stanze in `AGENTS.md` e collega ogni stanza alla
    mappa madre;
 5. per ogni vera stanza crea o integra `AGENTS.md` da
-   `templates/STANZA_AGENTS.md` e `CLAUDE.md` come ponte di una riga
+   `ecosistema/STANZA_AGENTS.md` e `CLAUDE.md` come ponte di una riga
    (`@AGENTS.md`), con scopo, contenuto, fonti, output, capacita',
    collegamenti a monte e collegamenti a valle e dove scrivere;
 6. collega direttamente due stanze solo quando un processo reale passa tra le
@@ -234,12 +242,18 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
   si sposta nulla a mano da Esplora file/Finder. Si chiede all'agente, cosi'
   il salvataggio git resta coerente e nulla si perde;
 - OUTPUT NELLA CASA PROPRIETARIA: ogni resoconto o report vive nella stanza
-  responsabile del processo oppure nel report/log comune gia' previsto. Prima
-  usa la casa esistente; non creare una cartella `resoconti/` per abitudine.
+  responsabile del processo. Prima usa la casa esistente; non creare una
+  cartella `resoconti/` per abitudine;
+- CONTENUTI BUSINESS FUORI DAL CODICE: testi e regole che devo poter correggere
+  vivono in una fonte esterna al codice; app e script la leggono e generano
+  PDF/Word come derivati. Se la fonte manca, falliscono in modo visibile.
 
 Mantieni anche la sezione "Comunicazione e fonti di verita'":
 - gli agenti non si parlano direttamente, leggono e scrivono file condivisi;
-- stato e chiusure lavoro: `REPORT_FINALE.md` o `logs/install-log.md`;
+- stato corrente, prossimo passo e scadenze: in testa al file proprietario
+  della stanza; diario sotto, dal piu' recente;
+- storia tecnica/strutturale: soltanto `logs/install-log.md`;
+- `REPORT_FINALE.md`: output temporaneo e datato della missione aperta;
 - procedure e "come si fa": file dell'area che le usa, non chat;
 - asset/capacita' nuove: `ecosistema/ASSET.md`;
 - coordinamento temporaneo sullo stesso file: chat solo se serve evitare
@@ -266,6 +280,9 @@ In `ecosistema/ASSET.md` registra ogni risorsa operativa che emerge:
 - email/PEC, banca, gestionale, WhatsApp, Drive, fornitore, sito, repo, kit,
   app, archivio o servizio esterno;
 - per ogni asset indica casa/fonte vera, uso, stato, archivio/prove e limiti;
+- firma, timbro e sigillo sono asset ad alto rischio: file in `.secrets/` o
+  altra casa protetta fuori Git, soli metadati qui e conferma umana sul singolo
+  documento prima di applicarli o inviarli;
 - se il cliente dice "aggiungi", "abbiamo", "ho comprato", "attiva" o
   "collega" una nuova risorsa, aggiorna questo registro e poi solo i processi o
   limiti collegati che servono davvero.
@@ -277,6 +294,8 @@ Per PEC/email certificata chiedi sempre:
 - esistono ricevute o archivi da conservare?
 - ci sono credenziali dedicate o app password? Se si', devono stare solo in
   `.secrets/`, mai in Git, memoria o chat.
+  Controlla indice e history Git del solo percorso senza aprire il contenuto;
+  se l'esposizione non e' esclusa, blocca l'uso e proponi rotazione.
 Non segnare la PEC `ATTIVO` senza una prova reale di login o lettura/invio.
 Ogni invio a terzi richiede conferma umana esplicita.
 
@@ -314,7 +333,7 @@ Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
    AGENTS.md, CLAUDE.md, .gitignore, memory/MEMORY.md,
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
-   ecosistema/LIMITI.md, logs/install-log.md, REPORT_FINALE.md.
+   ecosistema/LIMITI.md, logs/install-log.md.
    Verifica anche che ogni vera stanza abbia `AGENTS.md` + `CLAUDE.md` e che
    ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`.
    `.claude/README.md` esiste solo in modalita' Claude o both;
@@ -322,8 +341,11 @@ Fase 6 - collaudo
    Verifica anche la skill `ispettore-ecosistema` nel percorso dell'agente
    attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per Codex,
    entrambe in modalita' both.
+   Se Claude e' attivo, verifica anche `.claude/settings.local.json`, trust del
+   workspace e `/memory` sulla stessa `memory/`.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
-   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
+   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi, credenziali,
+   `.claude/settings.local.json` e `REPORT_FINALE.md`, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
    lo crea da solo a fine corsa: se manca, fallo tu con `git add -A` +
    `git commit`, altrimenti il backup della Fase 7 parte da un repository vuoto.
@@ -359,6 +381,12 @@ Fase 6 - collaudo
    proprietario o stanze senza mappa. Registra la tabella
    `percorso | classe | proprietario | mappa locale | collegamento radice |
    azione | prova`.
+10. Confronta la versione in `AGENTS.md` con il `VERSION` appena letto: senza
+    confronto o con valori diversi il verdetto e' `NON PASSA`.
+11. Verifica: memoria unica; report temporaneo non versionato; contenuti
+    business con una fonte esterna al codice; configurazioni credenziali in
+    `.secrets/` e history controllata per percorso; firma/timbro registrati e
+    protetti; file progetto con stato, prossimo passo e scadenze in testa.
 
 Fase 7 - backup e seconda postazione (scelta guidata)
 Serve a non perdere il lavoro e a usare l'Ecosistema da piu' di un computer.
@@ -441,7 +469,7 @@ Se il cliente usa l'agenda soprattutto tramite colori, leggi
 blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
 senza conferma esplicita.
 
-Report finale obbligatorio:
+Report temporaneo obbligatorio per la missione:
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
 - standard applicato: repo ufficiale + versione letta;
 - versione metodo registrata e versione precedente trovata, se esiste;
@@ -450,6 +478,7 @@ Report finale obbligatorio:
 - file creati;
 - cartella madre = repository git si/no;
 - `.gitignore` esclude i segreti si/no;
+- memoria unica e, per Claude, prova `autoMemoryDirectory` + `/memory`;
 - backup scelto: GitHub privato / copia su Drive-OneDrive / da fare (Domanda 2);
 - seconda postazione impostata si/no/non serve;
 - Cervello verificato si/no;
@@ -460,6 +489,10 @@ Report finale obbligatorio:
 - tabella Ispettore di ogni percorso visibile nella home;
 - capacita' collegate a ogni stanza e possibili doppioni evitati;
 - almeno due prove di instradamento richiesta -> stanza -> fonte -> output;
+- fonti business esterne al codice e derivati verificati;
+- credenziali controllate per percorso/history senza leggere il contenuto;
+- firma/timbro protetti, registrati e limitati;
+- file progetto con stato/prossimo/scadenze in testa e diario ordinato;
 - Mappa moduli con stato per ogni modulo;
 - codice esterno eseguito: no / si con autorizzazione esplicita e prova;
 - chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
@@ -469,7 +502,8 @@ Report finale obbligatorio:
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
 Consegna del report e ciclo tra agenti:
-1. Completa e collauda `REPORT_FINALE.md` nella cartella madre.
+1. Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre, con
+   data/ora e stato missione.
 2. Mostra al proprietario verdetto, prove e blocchi reali.
 3. Chiedi: `Autorizzi l'invio del report a sal@salchiarenza.ai?`
    L'autorizzazione vale soltanto per questo specifico invio.
@@ -482,11 +516,13 @@ file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,
 form, preview, login, app temporanee). Il report locale resta
 `PRONTO DA INVIARE` finche' il proprietario non autorizza l'invio. Dopo il suo
 si', invia davvero, archivia l'email della missione nello stesso giro e passa a
-`SAL_VERIFICA`; lo stato resta nei log/report, non nella Inbox. Se LeaderAI
+   `SAL_VERIFICA`; lo stato resta nel report temporaneo, non nella Inbox. Se LeaderAI
 risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo,
 aggiorni il report e chiedi una nuova autorizzazione prima di inviarlo. Se
-risponde `CHIUDI` o conferma che va bene,
-chiudi le pagine/app aperte da te e annota la chiusura nei log.
+   risponde `CHIUDI` o conferma che va bene, promuovi i fatti nel file
+   proprietario della stanza, registra nel log solo gli eventuali cambi
+   tecnici/strutturali, elimina `REPORT_FINALE.md` e chiudi le pagine/app aperte
+   da te.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
 cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un

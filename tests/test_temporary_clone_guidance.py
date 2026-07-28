@@ -59,7 +59,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
     def test_report_is_local_before_external_send(self):
         text = compact((ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8"))
         required = [
-            "Completa e collauda `REPORT_FINALE.md` nella cartella madre",
+            "Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre",
             "Autorizzi l'invio del report a sal@salchiarenza.ai?",
             "Solo dopo un si' esplicito, invia davvero il report",
         ]

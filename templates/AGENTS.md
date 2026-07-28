@@ -8,12 +8,15 @@ Aiutare il cliente a lavorare meglio usando AI, senza inventare fonti e senza
 spargere memoria in posti casuali.
 
 Modalita' installata: `{{agent}}`.
+Versione standard applicata: `{{version}}`.
 
 ## Regole base
 
 - Prima leggere questa mappa.
 - La memoria condivisa vive in `memory/MEMORY.md`.
-- I log operativi vivono in `logs/`.
+- Per Claude Code `autoMemoryDirectory` punta alla stessa `memory/`: due
+  memorie attive sono un blocco, non due livelli complementari.
+- `logs/install-log.md` registra solo installazione e cambi strutturali.
 - La mappa dell'azienda vive in `ecosistema/`.
 - Il registro asset operativi vive in `ecosistema/ASSET.md`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
@@ -29,6 +32,11 @@ Modalita' installata: `{{agent}}`.
   (doc ufficiali verificate 27/07/2026). Se manca, crearlo dal template.
 - Se questa cartella e' stata installata per `claude`, non creare `.codex`
   senza richiesta esplicita LeaderAI.
+- Se Claude Code e' attivo, configura
+  `.claude/settings.local.json:autoMemoryDirectory` sul percorso assoluto
+  `memory/`, accetta il trust del workspace e verifica la destinazione con
+  `/memory`. Prima di spostare una memoria esterna, confronta e unisci le voci:
+  non perdere ne' duplicare apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
@@ -47,8 +55,8 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
 3. assegna un proprietario: nessuna cartella resta senza una stanza che la
    governa;
-4. se e' una vera stanza, creala o integrala da
-   `templates/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
+4. se e' una vera stanza, creala o integrala dal calco locale
+   `ecosistema/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
    `@AGENTS.md` e collegala nel registro qui sotto;
 5. se e' una sottocartella ordinaria, dichiarala nella mappa della stanza
    proprietaria senza trasformarla in una nuova stanza;
@@ -90,6 +98,7 @@ salvare verifica almeno:
 - nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
 - nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
 - nessun file sciolto nella home senza stanza proprietaria;
+- nessuna memoria parallela o report temporaneo presentato come stato vivo;
 - due percorsi reali `richiesta -> stanza -> fonte -> processo -> output`.
 
 Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene
@@ -156,7 +165,12 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 
 ## Comunicazione e fonti di verita'
 
-- Stato/chiusura: `REPORT_FINALE.md` o `logs/install-log.md`.
+- Stato business corrente: file proprietario della stanza, con stato, prossimo
+  passo e scadenze in testa; diario sotto, dal piu' recente.
+- Storia tecnica/strutturale: soltanto `logs/install-log.md`.
+- `REPORT_FINALE.md`: output temporaneo e datato della missione aperta, mai
+  fonte di stato. Dopo `CHIUDI` si promuovono i fatti nelle fonti proprietarie
+  e il report si elimina.
 - Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
 - Asset/capacita': `ecosistema/ASSET.md`.
 - Sync Claude/Codex: file dedicato solo se si usano entrambi.
@@ -176,7 +190,7 @@ Ogni asset deve lasciare quattro tracce:
 - casa/fonte vera;
 - riga in `ecosistema/ASSET.md`;
 - processo o limite aggiornato, solo se cambia davvero;
-- log finale in `logs/install-log.md` o `REPORT_FINALE.md`.
+- log in `logs/install-log.md` solo se cambia installazione o struttura.
 
 Esempi di asset: PEC, email, banca, auto, gestionale, Drive, WhatsApp,
 fornitore, sito, repo, kit, app o archivio.
@@ -186,11 +200,13 @@ fornitore, sito, repo, kit, app o archivio.
 Il Cervello e' pronto quando:
 
 - questa mappa esiste;
-- la memoria a file esiste;
+- la memoria unica a file esiste e Claude Code, se attivo, usa la stessa
+  directory tramite `autoMemoryDirectory`;
 - i log esistono;
 - l'agente scelto ha il suo punto di aggancio;
 - una nuova chat sa dove leggere e dove scrivere.
-- la versione del metodo applicato e' registrata nel report o nel log.
+- la versione del metodo applicato e' dichiarata in questa mappa e nel log
+  tecnico.
 
 ## Fase 2 - Ecosistema
 
@@ -228,9 +244,19 @@ voce/dettatura, compliance/privacy/AI Act.
 Se l'agenda vive di colori, applicare il modulo calendario operativo: colori per
 il team, categorie leggibili per l'agente, prova letta prima di `ATTIVO`.
 
+## Contenuti business e derivati
+
+Testi, regole, modelli e contenuti che il proprietario deve poter correggere
+vivono in una fonte esterna al codice, dichiarata nella stanza proprietaria.
+App e script leggono quella fonte e generano PDF, Word o altri derivati. Se la
+fonte manca o non e' valida, l'elaborazione fallisce in modo visibile: vietato
+usare una seconda copia hardcoded che diverge in silenzio.
+
 ## Report
 
-Ogni intervento importante chiude con `REPORT_FINALE.md` o con una voce in
-`logs/install-log.md`.
+Durante una missione si usa un solo `REPORT_FINALE.md`, con data/ora e stato
+`APERTA` o `PRONTO DA INVIARE`. E' un output temporaneo ignorato da Git. Dopo
+`CHIUDI`, i fatti stabili vengono promossi nel file proprietario o nel log
+tecnico se riguardano la struttura, poi il report viene eliminato.
 
 Creato da LeaderAI Cervello + Ecosistema il {{date}}.

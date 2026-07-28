@@ -100,10 +100,17 @@ git pull --ff-only
 Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
 star leggendo una versione superata.
 
-Leggi `VERSION` e `CHANGELOG.md`. Cerca nel report o nei log della cartella viva
-l'ultima versione del metodo applicata. Registra entrambe nel checkup e applica
-le lezioni compatibili emerse dopo quella versione; aggiorna la versione
-applicata solo dopo aver ripetuto i collaudi.
+Leggi davvero `VERSION` e `CHANGELOG.md`. La versione installata si legge prima
+dall'`AGENTS.md` della cartella viva e poi dal solo `logs/install-log.md`;
+un vecchio `REPORT_FINALE.md` puo' essere un indizio, mai la fonte corrente.
+Registra il confronto `installata -> standard vivo`, applica tutte le lezioni
+compatibili emerse dopo la versione installata e aggiorna `AGENTS.md` soltanto
+dopo aver ripetuto i collaudi.
+
+Se non riesci a leggere il `VERSION` corrente della repo ufficiale, se non
+riesci a determinare la versione installata o se i due valori non coincidono,
+il gate e' `NON PASSA`. Non si puo' certificare una 0.3.0 contro se stessa
+quando lo standard vivo e' gia' successivo.
 
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
 file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
@@ -234,7 +241,7 @@ agenti realmente attivi:
 | Modalita' rilevata | Aggancio minimo obbligatorio | Configurazione tecnica da verificare |
 |---|---|---|
 | Codex | `AGENTS.md` + `.codex/README.md` + `.agents/skills/ispettore-ecosistema/SKILL.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
-| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `.claude/settings.json` e `.claude/settings.local.json` se esistono o se servono impostazioni di progetto |
+| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `.claude/settings.local.json` con `autoMemoryDirectory` sulla `memory/` della casa; altre settings solo se servono |
 | Entrambi | entrambi gli agganci | entrambi i rami, senza duplicare le istruzioni comuni |
 
 La modalita' `both` vale solo se risultano entrambi realmente attivi oppure se
@@ -250,6 +257,8 @@ Fonti comuni minime:
 
 - Claude Code, `CLAUDE.md`, import `@AGENTS.md` e comportamento su Windows:
   <https://code.claude.com/docs/en/memory>
+- Claude Code, auto memory, `autoMemoryDirectory`, scope e trust del workspace:
+  <https://code.claude.com/docs/en/memory#storage-location>
 - OpenAI Codex, caricamento gerarchico di `AGENTS.md`:
   <https://developers.openai.com/codex/guides/agents-md>
 - OpenAI Codex, skill condivise di progetto in `.agents/skills/`:
@@ -291,10 +300,12 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 4. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
    (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Le note
    oltre 48 ore vanno promosse nei file proprietari e tolte dalla chat.
-5. **Memoria** — `memory/MEMORY.md` esiste ed e' un indice snello; niente
-   duplicati inventati come `MEMORIA.md` o diari paralleli.
+5. **Memoria unica** — `memory/MEMORY.md` esiste ed e' un indice snello;
+   niente duplicati inventati come `MEMORIA.md`, diari paralleli o memoria
+   auto dell'agente lasciata in un'altra directory.
 6. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
-   password e credenziali prima di qualunque commit.
+   password, credenziali, `.claude/settings.local.json` e
+   `REPORT_FINALE.md` prima di qualunque commit.
 
 ### B. Ramo Codex — solo se Codex e' attivo
 
@@ -316,11 +327,19 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    ponte `CLAUDE.md` e non deve duplicare `AGENTS.md`.
 2. Verifica `.claude/skills/ispettore-ecosistema/SKILL.md`: deve essere
    richiamabile e puntare alla procedura unica `CHECKUP.md`.
-3. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
-   `settings.local.json` resta locale e fuori da Git; nessun segreto in chiaro.
-4. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
+3. Apri `/memory` senza modificare nulla e confronta la destinazione con
+   `memory/` della cartella viva. `.claude/settings.local.json` deve restare
+   fuori Git e impostare `autoMemoryDirectory` sul percorso assoluto di quella
+   stessa cartella. Il valore e' attivo solo dopo il trust del workspace.
+4. Se esiste una memoria auto esterna con contenuti diversi, confronta le due
+   fonti, unisci le voci uniche nella `memory/` della casa, prova `/memory` e
+   solo dopo cambia il percorso. Non svuotare o abbandonare la memoria esterna
+   prima della prova.
+5. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
+   Nessun segreto in chiaro.
+6. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
    crealo con il minimo necessario e senza segreti.
-5. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
+7. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
    verifica sintassi e comportamento contro le pagine ufficiali vive; se devono
    bloccare un'azione, prova davvero il blocco.
 
@@ -338,6 +357,8 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 
 Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 
+- il `VERSION` corrente della repo ufficiale non e' stato letto, la versione
+  installata non e' determinabile o le due versioni non coincidono;
 - manca `AGENTS.md`;
 - manca `CLAUDE.md` oppure il ponte non risolve a `AGENTS.md`;
 - manca `AGENT_CHAT.md`;
@@ -348,6 +369,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - manca `.claude/skills/ispettore-ecosistema/SKILL.md` quando Claude Code e'
   attivo;
 - in modalita' `both` manca uno dei due agganci;
+- Claude Code e' attivo ma `autoMemoryDirectory` non punta alla `memory/` della
+  casa, il trust non e' confermato o esistono due memorie divergenti non
+  riconciliate;
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
 - una prova di processo o di fonte e' circolare, inventata durante il checkup
@@ -362,6 +386,16 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   lavoro vivo;
 - due stanze rispondono alla stessa funzione;
 - un file sciolto nella home non ha una stanza proprietaria;
+- `REPORT_FINALE.md` e' stantio, senza data/stato, versionato in Git o usato
+  come fonte corrente insieme al log;
+- un contenuto business modificabile ha due padroni, e' hardcoded nel codice o
+  produce derivati senza fallire visibilmente quando la fonte manca;
+- una configurazione credenziali vive fuori `.secrets/`, oppure la sua presenza
+  in indice/history Git non e' stata esclusa senza aprirne il contenuto;
+- firma, timbro o sigillo non sono protetti fuori Git, registrati per metadati
+  in `ASSET.md` e limitati da conferma umana sul singolo uso;
+- un file progetto non porta in testa stato corrente, prossimo passo e
+  scadenze, oppure il diario non e' sotto e ordinato dal piu' recente;
 - una delle due prove di instradamento non arriva dalla radice all'output.
 
 `PASSA CON ATTENZIONE` e `PASSA` sono ammessi solo dopo aver superato questo
@@ -382,7 +416,8 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    procedura e' una capacita' della stanza che lo usa.
 3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia una mappa locale costruita o integrata da
-   `templates/STANZA_AGENTS.md`: scopo, contenuto, fonti, output, capacita',
+   `ecosistema/STANZA_AGENTS.md` (calco locale installato dalla fonte repo
+   `templates/STANZA_AGENTS.md`): scopo, contenuto, fonti, output, capacita',
    collegamenti a monte e collegamenti a valle e dove scrivere. Ogni vera
    stanza mantiene il telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md`
    verso quella mappa.
@@ -411,6 +446,36 @@ l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target
 sostituisce il giudizio dell'agente sui processi e non cancella dati. Se la
 repo non e' locale, esegui gli stessi controlli con gli strumenti file
 disponibili senza creare un clone automatico.
+
+## Passo 1-quater — Unicita', protezione e ordine operativo
+
+Questi controlli usano le case gia' esistenti. Non creare una cartella
+`istituzionali/`, un nuovo registro o un secondo stato per chiuderli.
+
+1. **Stato e diario.** Per ogni file progetto, porta in testa stato corrente,
+   prossimo passo e scadenze con data/responsabile/azione. Il diario resta
+   sotto, dal piu' recente. `logs/install-log.md` registra soltanto
+   installazione, aggiornamenti versione e cambi di struttura; non tutta la
+   produzione business.
+2. **Report temporaneo.** Se `REPORT_FINALE.md` fotografa una missione vecchia,
+   promuovi i soli fatti ancora veri nelle fonti proprietarie, rimuovilo
+   dall'indice Git se necessario e crea il report corrente con `VALIDO AL` e
+   `STATO MISSIONE`. Dopo `CHIUDI` viene eliminato.
+3. **Contenuto business.** Cerca testi o regole editabili duplicati tra Word,
+   Markdown, database e codice. La fonte modificabile vive fuori dal codice,
+   e' registrata nella stanza e viene letta dall'app; PDF e Word generati sono
+   derivati. Se la fonte manca o non e' valida, l'app fallisce in modo visibile
+   e non usa una copia hardcoded.
+4. **Credenziali per percorso, non per contenuto.** Individua dai soli nomi e
+   metadati configurazioni di posta, PEC, SMTP, OAuth, token e app password
+   fuori `.secrets/`; non aprirle. Controlla `git ls-files` e la history del
+   solo percorso. Se l'esposizione non puo' essere esclusa, blocca l'uso e
+   proponi rotazione; altrimenti sposta la configurazione, aggiorna il puntatore
+   dell'app e riprova.
+5. **Asset ad alto rischio.** Firma, timbro e sigillo vivono in `.secrets/` o
+   altra casa protetta fuori Git. In `ecosistema/ASSET.md` registra soltanto
+   metadati, casa protetta, uso e limite; ogni applicazione o invio richiede
+   conferma umana sul documento preciso.
 
 ## Passo 2 — Ecosistema (solo se il Passo 1 passa)
 
@@ -473,6 +538,7 @@ Ramo Claude Code        OK / RIPARATO / NON ATTIVO / NON PASSA - ...
 Settings e permessi     OK / RIPARATO / NON ATTIVO / NON PASSA - ...
 Chat di gruppo          OK / RIPARATO / DA FARE - AGENT_CHAT.md presente e disciplinata
 Memoria                 OK / RIPARATO / DA FARE - ...
+Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
@@ -484,6 +550,11 @@ Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
 Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
 Cartelle generiche/vuote OK / RIPARATO / NON PASSA - ...
 File sciolti in home    OK / RIPARATO / NON PASSA - ...
+Stato/report/log        OK / RIPARATO / NON PASSA - una domanda, una fonte...
+Fonti business/codice   OK / RIPARATO / NON PASSA - fonte + derivati...
+Credenziali/history     OK / RIPARATO / NON PASSA - soli percorsi/metadati...
+Firma/timbro            OK / RIPARATO / NON PASSA - ASSET + casa + limite...
+File progetto           OK / RIPARATO / NON PASSA - stato/prossimo/scadenze...
 Skill Ispettore         OK / RIPARATO / NON PASSA - agente attivo...
 Prove di instradamento  OK / RIPARATO / NON PASSA - ...
 GATE ANTI-CIRCOLARE     PASSA / NON PASSA - ...
@@ -519,21 +590,24 @@ Stati della missione:
    prove, file modificati, cartella usata, errori rimasti, punti che richiedono
    umano vero e superfici aperte da te (email, browser, tab, form, preview, app
    temporanee).
-4. `REPORT` - completa il report locale della missione con azioni fatte, prove,
-   cosa hai riparato, cosa resta solo per umano vero e stato di chiusura ambiente.
+4. `REPORT` - crea o sostituisci il report locale temporaneo con `VALIDO AL`,
+   `STATO MISSIONE`, azioni fatte, prove, cosa hai riparato, cosa resta solo
+   per umano vero e stato di chiusura ambiente.
    Mostralo al proprietario e chiedi autorizzazione esplicita.
    Nessuna email parte automaticamente: l'invio e' un gesto separato, eseguito
    solo dopo un "manda" o autorizzazione equivalente riferita a quel testo.
 5. `SAL_VERIFICA` - dopo l'invio resta in attesa della risposta LeaderAI; la
-   email lavorata è già archiviata e lo stato resta nei log/report. Se l'invio
+   email lavorata è già archiviata e lo stato resta nel report temporaneo. Se l'invio
    non e' ancora autorizzato, lo stato e' `PRONTO DA INVIARE`, non
    `SAL_VERIFICA`.
 6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
    ancora sulla stessa missione, fai un nuovo autocontrollo, aggiorni il report
    locale e lo lasci `PRONTO DA INVIARE`. Mostralo al proprietario e chiedi una
    nuova autorizzazione prima di ogni nuovo invio.
-7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, chiudi
-   pagine/app aperte da te e annota la chiusura nei log.
+7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, promuovi i
+   fatti stabili nel file proprietario della stanza, usa
+   `logs/install-log.md` soltanto se e' cambiata la struttura/installazione,
+   elimina `REPORT_FINALE.md` e chiudi pagine/app aperte da te.
 
 Questo autocontrollo e' temporaneo e legato alla missione. Non creare un
 automatismo permanente tra agenti: ogni giro parte da una missione umana o da
@@ -548,8 +622,9 @@ Regola breve: Non chiudere la missione dopo il primo report.
    automatica del checkup: dopo il si' esplicito, invialo davvero a
    `sal@salchiarenza.ai` nello stesso thread; se serve una nuova email usa
    l'oggetto concreto `Resoconto checkup Ecosistema`.
-2. Dopo l'invio archivia la missione: Inbox
-   pulita, stato e storia restano nei file.
+2. Dopo l'invio archivia la missione: Inbox pulita, stato business nella fonte
+   proprietaria, storia tecnica nel solo install-log. Il report resta soltanto
+   finche' la missione non riceve `CHIUDI`.
 3. Chiudi l'ambiente operativo usato per la missione: pagine web, tab browser,
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
    personali del proprietario o superfici che deve decidere lui: dichiarale come

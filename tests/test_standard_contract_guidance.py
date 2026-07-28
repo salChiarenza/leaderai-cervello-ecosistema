@@ -29,7 +29,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "fonte di sola lettura",
             "autorizzazione esplicita e separata",
             "non sono il percorso predefinito",
-            "report viene prima creato e collaudato localmente",
+            "report di missione viene prima creato e collaudato localmente",
         ]
 
         for phrase in required:

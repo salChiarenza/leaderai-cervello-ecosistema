@@ -23,12 +23,15 @@ del proprietario.
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali,
+  `.claude/settings.local.json` e `REPORT_FINALE.md`
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
+- `.claude/settings.local.json` se serve Claude Code, con
+  `autoMemoryDirectory` sulla `memory/` della casa
 - skill `ispettore-ecosistema` nel percorso dell'agente attivo
 - `memory/MEMORY.md`
 - `logs/install-log.md`
@@ -36,7 +39,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
-- `REPORT_FINALE.md`
+- `REPORT_FINALE.md` solo come output temporaneo e datato della missione aperta
 
 Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
 sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
@@ -49,7 +52,7 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
-Il `REPORT_FINALE.md` deve includere la mappa moduli con stato per PEC/email
+Il report temporaneo della missione deve includere la mappa moduli con stato per PEC/email
 certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,
 agenti/ruoli, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
 
@@ -81,7 +84,9 @@ condivisi.
 
 | Caso | Dove si scrive nel Cervello/Ecosistema cliente | Durata |
 |---|---|---|
-| Stato operativo o chiusura lavoro | `REPORT_FINALE.md` oppure `logs/install-log.md` | finche' serve come prova |
+| Stato business corrente, prossimo passo, scadenze | file proprietario della stanza | finche' cambia |
+| Storia tecnica/strutturale | `logs/install-log.md` | stabile |
+| Output della missione aperta | `REPORT_FINALE.md`, datato e fuori Git | fino a `CHIUDI` |
 | Procedura / come si fa una cosa | file del reparto o dell'area che la usa, es. `ecosistema/PROCESSI.md` o una procedura dedicata | stabile |
 | Problema di allineamento tra Claude e Codex | un sync dedicato solo se il cliente usa entrambi gli agenti | finche' il sync si chiude |
 | Coordinamento immediato sullo stesso file | una chat temporanea solo se serve evitare collisioni | massimo 48 ore |
@@ -104,10 +109,12 @@ Il ciclo e' chiuso e semplice:
 - `REPORT`: completa e collauda il report locale, lo mostra al proprietario e
   lo lascia `PRONTO DA INVIARE`; l'invio a `sal@salchiarenza.ai` avviene solo
   dopo autorizzazione esplicita del proprietario per quello specifico invio.
-- `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nei log/report.
+- `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nel report
+  temporaneo.
 - `CONTINUA`: lavora ancora sulla stessa missione, aggiorna il report e chiede
   una nuova autorizzazione prima dell'eventuale nuovo invio.
-- `CHIUDI`: registra la chiusura nei log e chiude pagine/app aperte da lui.
+- `CHIUDI`: promuove i fatti nelle fonti proprietarie, usa il log solo per
+  cambi strutturali, elimina il report e chiude pagine/app aperte da lui.
 
 Regola posta: dopo aver letto e gestito una email o notifica, archiviala nello
 stesso giro. La Inbox contiene solo blocchi o decisioni immediate ancora attivi;
@@ -149,7 +156,7 @@ ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
 da solo il tecnico e prepara il resoconto per Sal. Lo invia solo dopo
 autorizzazione esplicita del proprietario. Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
-si riconosce dai segnali di vita (memoria compilata, log, report, asset,
+si riconosce dai segnali di vita (memoria compilata, log, asset,
 commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca
 non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
 anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
@@ -178,6 +185,13 @@ parallele dell'email.
   chiavi e credenziali stanno nel `.gitignore`. Questo vale sempre, qualunque
   posizione abbia scelto il cliente. I connettori si ri-autorizzano con login su
   ogni PC, le chiavi non viaggiano nel backup.
+- Non aprire file sospetti di contenere credenziali durante il censimento:
+  controllare percorso, indice e history Git; se l'esposizione non e' esclusa,
+  bloccare l'uso e proporre rotazione.
+- Non hardcodare nel codice testi o regole business editabili: la fonte resta
+  esterna, app e script generano derivati e falliscono visibilmente se manca.
+- Firma, timbro e sigillo stanno protetti fuori Git, sono registrati per soli
+  metadati in `ASSET.md` e richiedono conferma per ogni singolo uso.
 - Non imporre una posizione: la cartella madre puo' stare in locale o su cloud
   secondo la scelta del cliente. Sul cloud va dato l'avviso sul rischio
   corruzione/troncamento; locale e' la via piu' sicura ma non e' l'unica.
@@ -196,7 +210,8 @@ gestionale, Drive, WhatsApp, fornitore, sito, repo, kit, app, archivio), il
 cliente deve ritrovarla in `ecosistema/ASSET.md`.
 
 La regola e' una: casa/fonte vera + riga asset + eventuale processo/limite
-aggiornato + log. Se manca la fonte reale, resta `DA COLLEGARE`; non si inventa.
+aggiornato; il log si aggiorna soltanto se cambia installazione o struttura. Se
+manca la fonte reale, resta `DA COLLEGARE`; non si inventa.
 
 ## Comandi
 

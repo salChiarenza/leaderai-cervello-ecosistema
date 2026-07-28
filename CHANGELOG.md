@@ -2,13 +2,17 @@
 
 ## 0.4.0 - 28/07/2026
 
+- Il gate legge obbligatoriamente il `VERSION` vivo e lo confronta con la
+  versione installata registrata in `AGENTS.md`: assenza o differenza =
+  `NON PASSA`.
 - Il `CHECKUP.md` e' ora l'Ispettore Ecosistema richiamabile con frasi naturali
   come `lancia l'Ispettore`, senza creare una seconda procedura concorrente.
 - Ogni nuova cartella passa un ciclo obbligatorio: classificazione, stanza
   proprietaria, eventuale mappa locale, collegamento alla radice e prova.
-- Aggiunto `templates/STANZA_AGENTS.md`: ogni vera stanza dichiara scopo,
-  contenuto, fonti, output, capacita', monte, valle e dove scrivere; il ponte
-  locale resta `CLAUDE.md` con il solo `@AGENTS.md`.
+- Aggiunto `templates/STANZA_AGENTS.md`, installato anche come calco locale
+  `ecosistema/STANZA_AGENTS.md`: ogni vera stanza dichiara scopo, contenuto,
+  fonti, output, capacita', monte, valle e dove scrivere; il ponte locale resta
+  `CLAUDE.md` con il solo `@AGENTS.md`.
 - L'installazione monta la skill `ispettore-ecosistema` nel percorso
   dell'agente attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per
   Codex, entrambe soltanto in modalita' `both`.
@@ -18,9 +22,26 @@
 - Aggiunto `ecosistema_inspector.py`, preflight deterministico e in sola
   lettura; il giudizio sui processi e le riparazioni restano all'agente guidato
   dal `CHECKUP.md`.
+- Claude Code usa la stessa `memory/` della casa tramite
+  `.claude/settings.local.json:autoMemoryDirectory`, fuori Git e attiva dopo
+  trust; due memorie divergenti bloccano il verdetto finche' non vengono unite.
+- Stato business, storia tecnica e report non sono piu' intercambiabili: stato
+  e scadenze nel file proprietario, `install-log` solo per struttura,
+  `REPORT_FINALE.md` temporaneo, datato, ignorato da Git ed eliminato a
+  `CHIUDI`.
+- I contenuti business modificabili vivono fuori dal codice; app e script
+  producono derivati e falliscono visibilmente quando la fonte manca.
+- L'Ispettore rileva configurazioni credenziali fuori `.secrets/` senza
+  leggerle, controlla indice/history Git e richiede rotazione solo se
+  l'esposizione non e' esclusa.
+- Firma, timbro e sigillo sono asset ad alto rischio: file protetto fuori Git,
+  soli metadati in `ASSET.md`, conferma umana per ogni uso.
+- I file progetto portano in testa stato corrente, prossimo passo e scadenze;
+  il diario resta sotto e ordinato dal piu' recente.
 - Aggiunti test reali su una casa simulata: cartella `documenti` generica,
   stanza senza mappe, stanza conforme, funzioni duplicate, file sciolto e skill
-  dell'agente mancante.
+  dell'agente mancante; aggiunta anche la regressione integrale della revisione
+  operativa a sei giorni.
 
 ## 0.3.8 - 27/07/2026
 

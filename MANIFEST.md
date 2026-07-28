@@ -4,7 +4,7 @@
 
 Portare una cartella cliente a uno standard minimo operativo:
 
-1. Fase 1 - Cervello: istruzioni, memoria, log, agenti, report.
+1. Fase 1 - Cervello: istruzioni, memoria unica, log tecnico e agenti.
 2. Fase 2 - Ecosistema: fonti reali, processi, limiti, decisioni.
 
 ## Ruolo del Manifest
@@ -27,7 +27,7 @@ Deve:
 2. montare i pezzi standard mancanti;
 3. non sovrascrivere cio' che esiste;
 4. collaudare;
-5. scrivere un report finale.
+5. produrre un report di missione datato e temporaneo.
 
 ## Contratto architetturale adattivo
 
@@ -42,8 +42,20 @@ Restano stabili in ogni installazione:
 - `AGENTS.md` alla radice come mappa e router comune;
 - `CLAUDE.md` sempre presente come ponte di una riga (`@AGENTS.md`);
 - memoria indicizzata, log e registri di fonti, asset, processi e limiti;
+- calco locale `ecosistema/STANZA_AGENTS.md` per creare mappe senza dipendere
+  da un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
 - versione del metodo applicato e prove di collaudo.
+
+La versione installata vive nell'`AGENTS.md` della cartella madre. Ogni
+Ispettore legge anche il `VERSION` della repo ufficiale aggiornata e blocca il
+verdetto se non puo' confrontare i due valori o se non coincidono.
+
+Per Claude Code esiste una sola memoria: `.claude/settings.local.json` imposta
+`autoMemoryDirectory` sul percorso assoluto `memory/` della cartella madre. Il
+workspace deve essere trusted e `/memory` deve confermare la stessa
+destinazione. Se esiste una memoria auto esterna, le voci si confrontano e si
+uniscono prima di cambiare il percorso.
 
 ### Forma adattiva
 
@@ -67,7 +79,8 @@ Una vera stanza passa il contratto quando:
 4. usa una sola fonte di verita' per ogni dato o stato;
 5. registra le capacita' che la servono e la prova che funzionano.
 
-Il contratto locale nasce da `templates/STANZA_AGENTS.md`. Ogni cartella nuova
+Il contratto locale nasce dalla fonte repo `templates/STANZA_AGENTS.md` e viene
+installato come `ecosistema/STANZA_AGENTS.md`. Ogni cartella nuova
 viene classificata e assegnata a una stanza proprietaria prima del salvataggio.
 Le cartelle ordinarie non ricevono mappe inutili: vivono sotto la stanza che le
 governa. Una cartella generica, vuota, concorrente o senza proprietario blocca
@@ -82,6 +95,25 @@ Riparazioni meccaniche come ponti rotti, puntatori mancanti e registri non
 allineati possono essere applicate e provate. Spostamenti, fusioni, nuove
 stanze, eliminazioni e cambi di proprieta' restano una `PROPOSTA STRUTTURALE`
 da approvare.
+
+### Unicita' delle fonti e ciclo di vita
+
+- Stato business corrente, prossimo passo e scadenze vivono in testa al file
+  proprietario della stanza; il diario viene dopo, dal piu' recente.
+- `logs/install-log.md` registra soltanto installazione, versione e cambi
+  strutturali. Non e' il diario della produzione business.
+- `REPORT_FINALE.md` esiste soltanto durante una missione, con data/ora e stato.
+  E' ignorato da Git, non e' una fonte di stato e viene eliminato dopo `CHIUDI`
+  quando i fatti stabili sono stati promossi nelle fonti proprietarie.
+- Il contenuto business modificabile vive in una fonte esterna al codice,
+  dichiarata nella stanza. App e script generano PDF/Word come derivati e
+  falliscono visibilmente se la fonte manca; nessuna copia hardcoded silenziosa.
+- Configurazioni con credenziali, app password o token vivono in `.secrets/`.
+  L'Ispettore controlla percorso, indice e history Git senza aprire il
+  contenuto; propone rotazione quando l'esposizione non puo' essere esclusa.
+- Firma, timbro e sigillo sono asset ad alto rischio: file protetto fuori Git,
+  soli metadati e limiti in `ecosistema/ASSET.md`, uso sul singolo documento
+  soltanto con conferma umana.
 
 ### Ciclo di apprendimento
 
@@ -99,8 +131,9 @@ l'esecuzione di `leaderai_setup.py` richiedono una autorizzazione esplicita e
 separata; non sono il percorso predefinito e non si attivano automaticamente se
 la lettura web incontra un blocco.
 
-Il report viene prima creato e collaudato localmente. L'invio email a LeaderAI
-avviene dopo autorizzazione esplicita del proprietario.
+Il report di missione viene prima creato e collaudato localmente, con data/ora e
+stato. L'invio email a LeaderAI avviene dopo autorizzazione esplicita del
+proprietario; dopo `CHIUDI` il report temporaneo viene eliminato.
 
 Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
 README e Manifest lo richiamano senza duplicarne il corpo.
@@ -134,7 +167,7 @@ Il target passa solo se esistono:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
-- `REPORT_FINALE.md`
+- `ecosistema/STANZA_AGENTS.md`
 
 Lo standard statico necessario alla procedura senza esecuzione di codice e'
 esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.
@@ -143,6 +176,8 @@ Per Claude Code:
 
 - `.claude/README.md`
 - `.claude/skills/ispettore-ecosistema/SKILL.md`
+- `.claude/settings.local.json` fuori Git, con `autoMemoryDirectory` uguale al
+  percorso assoluto `memory/`, attivo dopo trust del workspace
 
 Per Codex:
 
@@ -200,6 +235,10 @@ Il pacchetto e' pronto quando:
 - l'Ispettore ha censito ogni cartella e file visibile nella home e non restano
   percorsi senza classe e proprietario, cartelle generiche o vuote, doppioni,
   stanze senza mappa o file sciolti senza casa;
+- la versione installata coincide con il `VERSION` vivo, Claude usa una sola
+  memoria, nessun report temporaneo e' trattato come stato stabile;
+- contenuti business modificabili, credenziali, firma/timbro e file progetto
+  rispettano il contratto di unicita', protezione e ordine;
 - almeno due prove di instradamento partono dalla radice e arrivano alla stanza,
   alla fonte e all'output corretti senza suggerire il percorso all'agente.
 - il report registra versione del metodo, classificazione delle stanze,
@@ -208,9 +247,10 @@ Il pacchetto e' pronto quando:
   da collegare con fonti reali.
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
   e solo i processi/limiti necessari aggiornati.
-- `AGENTS.md` e il report finale includono la mappa comunicazione: procedure nei
-  file proprietari, stato/report nei log, asset in `ecosistema/ASSET.md`, chat
-  solo temporanea e sync dedicato solo se esistono due agenti.
+- `AGENTS.md` e il report temporaneo includono la mappa comunicazione:
+  procedure e stato business nei file proprietari, storia tecnica nel log,
+  asset in `ecosistema/ASSET.md`, chat solo temporanea e sync dedicato solo se
+  esistono due agenti.
 - il report produce una mappa moduli con stato per PEC/email certificata,
   email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale,
   plugin, skill, agenti, guardiani/hook, ronde, voce/dettatura e

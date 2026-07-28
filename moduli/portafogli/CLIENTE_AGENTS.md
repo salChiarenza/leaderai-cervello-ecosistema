@@ -1,5 +1,11 @@
 # Sistema Portafogli — contratto della stanza proprietaria
 
+## Stato corrente e prossimo passo
+
+- Stato: dichiarato nel file del caso attivo.
+- Prossimo passo: dichiarato nel file del caso attivo.
+- Scadenze: prossima revisione e responsabile restano in testa al caso.
+
 ## Scopo
 
 Questa stanza possiede il processo Portafogli e prepara portafogli
@@ -7,18 +13,7 @@ Core-Satellite, revisioni, backtest, monitoraggio e report usando il metodo del
 banker e fonti autorizzate. Il suo nome deriva dall'ecosistema reale del
 proprietario.
 
-## Collegamenti
-
-- A monte: compilare con le stanze e le fonti che forniscono mandato, universo,
-  dati cliente e dati di mercato.
-- A valle: compilare con le stanze o gli output che ricevono dossier, report,
-  storico e prossime revisioni.
-- Mappa madre: questa stanza deve essere raggiungibile dal `AGENTS.md` della
-  cartella madre.
-- Capacita': motore numerico, eventuali skill gia' presenti e procedure qui
-  registrate servono questa stanza; non sono stanze separate.
-
-## Mappa
+## Dentro
 
 - `METODO.md`: decisioni professionali e criteri del banker.
 - `FONTI.md`: percorsi veri, proprietari, frequenza e data di verifica.
@@ -29,6 +24,42 @@ proprietario.
 - `SCHEDA_CLIENTE_MODELLO.md`: calco per ogni caso.
 - `REPORT_INTERNO_MODELLO.md`: dossier decisionale del banker.
 - `REPORT_CLIENTE_MODELLO.md`: struttura del documento cliente.
+
+## Fonti
+
+- `FONTI.md`, mandato e dati del caso autorizzato.
+- Dati di mercato con fonte e data.
+
+## Output
+
+- Calcoli, dossier interno, report cliente e storico delle revisioni.
+
+## Fonte business editabile
+
+- `METODO.md`, `CORE.md`, `REPORT_INTERNO_MODELLO.md` e
+  `REPORT_CLIENTE_MODELLO.md`; il motore produce derivati e non mantiene una
+  seconda copia dei contenuti nel codice.
+
+## Capacita
+
+- Motore numerico, skill gia' presenti e procedure registrate in questa stanza.
+  Sono capacita' della stanza, non stanze separate.
+
+## A monte
+
+- Compilare con le stanze e le fonti che forniscono mandato, universo, dati
+  cliente e dati di mercato.
+
+## A valle
+
+- Compilare con le stanze o gli output che ricevono dossier, report, storico e
+  prossime revisioni.
+
+## Dove scrivere
+
+- Stato, prossimo passo e scadenze nel file del caso attivo.
+- Fonti in `FONTI.md`; calcoli e report nella convenzione casi approvata.
+- Questa stanza deve essere raggiungibile dall'`AGENTS.md` della cartella madre.
 
 ## Ordine di lavoro
 

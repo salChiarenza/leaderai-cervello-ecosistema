@@ -5,7 +5,7 @@ Processi osservati o candidati.
 ## Fase 1 - Cervello
 
 - Verifica lettura istruzioni e memoria
-- Verifica report finale
+- Verifica report temporaneo della missione
 
 ## Fase 2 - Ecosistema
 
@@ -19,7 +19,8 @@ Processi osservati o candidati.
 
 Il report nasce e viene collaudato localmente. L'invio a LeaderAI richiede
 l'autorizzazione esplicita del proprietario. Le email lavorate si archiviano
-nello stesso giro; le decisioni e lo stato restano nei file e nei log.
+nello stesso giro; decisioni e stato restano nel file proprietario della
+stanza, il log registra soltanto cambi tecnici o strutturali.
 
 ## Chiusura ambiente
 

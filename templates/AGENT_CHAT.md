@@ -12,7 +12,7 @@ stessa cosa.
 3. **Massimo 20 righe per nota.** Se serve di piu', file dedicato e link qui.
 4. **Una nota vive 48 ore.** Poi si promuove nel file giusto (stato, procedura,
    `ecosistema/ASSET.md`) e si toglie da qui. La chat e' coordinamento; la
-   memoria vive in `memory/`, lo stato nei log e nei report.
+   memoria vive in `memory/`, lo stato nel file proprietario della stanza.
 5. **Leggere tutto il log prima di scrivere o di dichiarare "nessuna risposta".**
 6. Prima di modificare file importanti, annunciare qui cosa si tocca, per
    evitare che due agenti lavorino sullo stesso file insieme.

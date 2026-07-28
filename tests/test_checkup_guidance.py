@@ -67,6 +67,18 @@ class CheckupGuidanceTest(unittest.TestCase):
             "percorso | classe | proprietario",
             "cartelle generiche",
             "file sciolto nella home",
+            "il gate e' `NON PASSA`",
+            "autoMemoryDirectory",
+            "due memorie divergenti",
+            "REPORT_FINALE.md` e' stantio",
+            "fonte modificabile vive fuori dal codice",
+            "non aprirle",
+            "indice/history Git",
+            "Firma, timbro e sigillo",
+            "stato corrente",
+            "prossimo passo",
+            "scadenze",
+            "Non creare una cartella\n`istituzionali/`",
         ]
         for phrase in required:
             with self.subTest(phrase=phrase):

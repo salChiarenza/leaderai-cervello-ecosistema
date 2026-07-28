@@ -28,7 +28,9 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
 
     def test_checkup_and_installation_report_cleanup_state(self):
         checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
-        install = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
+        install = " ".join(
+            (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8").split()
+        )
 
         for phrase in [
             "stato di chiusura ambiente",
