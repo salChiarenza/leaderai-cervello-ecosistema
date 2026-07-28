@@ -34,7 +34,7 @@ class LeaderAISetupTest(unittest.TestCase):
                 self.assertEqual((target / ".claude" / "README.md").exists(), has_claude)
                 self.assertEqual(
                     (target / ".claude" / "settings.local.json").exists(),
-                    has_claude,
+                    False,
                 )
                 self.assertEqual(
                     (

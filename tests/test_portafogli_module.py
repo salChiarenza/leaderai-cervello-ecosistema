@@ -106,7 +106,10 @@ class PortfolioInstallerTest(unittest.TestCase):
             self.assertIn("### Registro delle stanze", root_map)
             self.assertIn("`Consulenza Clienti/AGENTS.md`", root_map)
             self.assertNotIn("## Stanza collegata:", root_map)
-            self.assertNotIn("| Da censire |", root_map)
+            self.assertNotIn(
+                "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |",
+                root_map,
+            )
 
             custom = room / "METODO.md"
             custom.write_text("DECISIONE MARCO\n", encoding="utf-8")

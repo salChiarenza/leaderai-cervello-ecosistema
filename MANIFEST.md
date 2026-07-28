@@ -51,11 +51,14 @@ La versione installata vive nell'`AGENTS.md` della cartella madre. Ogni
 Ispettore legge anche il `VERSION` della repo ufficiale aggiornata e blocca il
 verdetto se non puo' confrontare i due valori o se non coincidono.
 
-Per Claude Code esiste una sola memoria: `.claude/settings.local.json` imposta
-`autoMemoryDirectory` sul percorso assoluto `memory/` della cartella madre. Il
-workspace deve essere trusted e `/memory` deve confermare la stessa
-destinazione. Se esiste una memoria auto esterna, le voci si confrontano e si
-uniscono prima di cambiare il percorso.
+Per Claude Code esiste una sola memoria. `autoMemoryDirectory` viene impostato
+nelle **user settings** di ciascun computer (`~/.claude/settings.json`), oppure
+da policy o `--settings`: la documentazione ufficiale non accetta questa chiave
+nelle settings project/local. Il valore e' assoluto o inizia con `~/`, quindi
+su due PC puo' essere diverso pur puntando alla stessa cartella OneDrive.
+`/memory` deve confermare la destinazione su ogni postazione. Se esiste una
+memoria auto esterna, le voci si confrontano e si uniscono prima di cambiare il
+percorso.
 
 ### Forma adattiva
 
@@ -90,17 +93,25 @@ di lavorazione, per esempio `Portafoglio Modello`, resta `CAPACITA` o
 business autonoma con stato e decisioni propri. In dubbio il gate e'
 `NON PASSA`: l'agente non crea la mappa locale e non inventa una stanza.
 
+Una casa semplice puo' avere **zero stanze**. Quando una capacita', fonte o
+output non appartiene a una responsabilita' business autonoma, la cartella
+madre puo' possederlo direttamente: lo registra nell'`AGENTS.md` radice e in
+`ecosistema/ASSET.md` o `ecosistema/FONTI.md`. In questo caso non nasce una
+mappa locale. La crescita futura puo' promuoverlo a stanza solo quando emerge
+una responsabilita' business reale approvata dal proprietario.
+
 Il contratto locale nasce dalla fonte repo `templates/STANZA_AGENTS.md` e viene
 installato come `ecosistema/STANZA_AGENTS.md`. Ogni cartella nuova
-viene classificata e assegnata a una stanza proprietaria prima del salvataggio.
+viene classificata e assegnata alla cartella madre o a una stanza proprietaria
+prima del salvataggio.
 Le cartelle ordinarie non ricevono mappe inutili: vivono sotto la stanza che le
 governa. Una cartella generica, vuota, concorrente o senza proprietario blocca
 il collaudo.
 
 Le cartelle ordinarie non diventano automaticamente stanze. Skill, script e
-moduli restano capacita' collegate alla stanza proprietaria. Se nessuna stanza
-esistente puo' possederli, l'agente presenta una proposta con funzione, fonti,
-output, collegamenti e collaudo; il proprietario decide se nasce una stanza.
+moduli restano capacita' collegate alla cartella madre o alla stanza
+proprietaria. Una nuova stanza viene proposta solo quando emerge una
+responsabilita' business autonoma con stato e decisioni propri.
 
 Riparazioni meccaniche come ponti rotti, puntatori mancanti e registri non
 allineati possono essere applicate e provate. Spostamenti, fusioni, nuove
@@ -187,8 +198,9 @@ Per Claude Code:
 
 - `.claude/README.md`
 - `.claude/skills/ispettore-ecosistema/SKILL.md`
-- `.claude/settings.local.json` fuori Git, con `autoMemoryDirectory` uguale al
-  percorso assoluto `memory/`, attivo dopo trust del workspace
+- `autoMemoryDirectory` nelle user settings di ogni computer
+  (`~/.claude/settings.json`), con percorso assoluto verso la memoria canonica
+  dichiarata nella mappa madre e prova `/memory`
 
 Per Codex:
 
@@ -207,9 +219,10 @@ Sorgente: `moduli/portafogli/`.
 
 Il modulo passa quando:
 
-- viene integrato nella stanza proprietaria scelta dopo il censimento;
-- richiede conferma esplicita per creare una stanza quando nessuna esistente
-  puo' possedere il processo;
+- viene integrato nella cartella madre o nella stanza proprietaria scelta dopo
+  il censimento;
+- richiede conferma esplicita per creare una stanza quando emerge una nuova
+  responsabilita' business autonoma;
 - preserva `METODO.md`, `FONTI.md` e `CORE.md` ai rilanci;
 - riusa una capacita' esistente quando copre gia' il lavoro; una nuova skill si
   installa solo dopo una scelta esplicita di nome e perimetro;
@@ -254,8 +267,9 @@ Il pacchetto e' pronto quando:
   memoria, nessun report temporaneo e' trattato come stato stabile;
 - contenuti business modificabili, credenziali, firma/timbro e file progetto
   rispettano il contratto di unicita', protezione e ordine;
-- almeno due prove di instradamento partono dalla radice e arrivano alla stanza,
-  alla fonte e all'output corretti senza suggerire il percorso all'agente.
+- almeno due prove di instradamento partono dalla radice e arrivano alla
+  madre/stanza, alla fonte e all'output corretti senza suggerire il percorso
+  all'agente.
 - il report registra versione del metodo, classificazione delle stanze,
   collegamenti e possibili lezioni candidate.
 - il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema

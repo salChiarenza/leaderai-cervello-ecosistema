@@ -87,15 +87,15 @@ del contratto comune.
 
 Nel target scelto crea solo i pezzi standard mancanti:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali,
-  `.claude/settings.local.json` e `REPORT_FINALE.md`
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali e
+  `REPORT_FINALE.md`
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se richiesto Codex
 - `.claude/README.md` se richiesto Claude Code
-- `.claude/settings.local.json` se richiesto Claude Code, con
-  `autoMemoryDirectory` sulla `memory/` della casa
+- user settings Claude Code (`~/.claude/settings.json`) con
+  `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
 - `memory/MEMORY.md`
@@ -135,7 +135,8 @@ Modulo specifico gia' disponibile:
   strumenti, metodo del banker, calcoli deterministici, backtest, monitoraggio
   e report.
   L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
-  la stanza proprietaria e integra il modulo senza creare una stanza concorrente.
+  la cartella madre o la stanza proprietaria e integra il modulo senza creare
+  una stanza concorrente.
 
 Il Cervello include anche la **mappa comunicazione**: stato business nel file
 proprietario della stanza, storia tecnica nel solo `logs/install-log.md`,

@@ -164,18 +164,19 @@ Fase 4 - monta localmente il Cervello
    configurazione per agente: modalita' Claude -> `.claude/README.md`;
    modalita' Codex -> `.codex/README.md`. Usa entrambe le configurazioni solo
    se LeaderAI lo ha chiesto esplicitamente.
-4. Se Claude Code e' attivo, crea `.claude/settings.local.json` fuori Git con
-   `autoMemoryDirectory` uguale al percorso assoluto `memory/` della cartella
-   madre. Accetta il trust del workspace, apri `/memory` e prova che Claude usa
-   quella stessa destinazione. Se trovi una memoria auto esterna gia' piena,
-   confronta e unisci le voci prima di cambiare il percorso.
+4. Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user
+   settings di ogni computer (`~/.claude/settings.json`) con il percorso
+   assoluto della memoria canonica dichiarata nell'`AGENTS.md`. La chiave non
+   e' valida nelle settings project/local. Accetta il trust del workspace e
+   verifica ogni postazione con `/memory`. Se trovi una memoria auto esterna
+   gia' piena, confronta e unisci le voci prima di cambiare il percorso.
 5. Crea `REPORT_FINALE.md` come output temporaneo della missione con
    `VALIDO AL` e `STATO MISSIONE: APERTA`; `.gitignore` lo esclude. Non e' una
    fonte di stato e viene eliminato dopo `CHIUDI`.
 6. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
    cosa era gia' presente, cosa hai creato e cosa hai aggiornato.
 7. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
-   password, credenziali, `.claude/settings.local.json` e
+   password, credenziali e
    `REPORT_FINALE.md` prima del primo commit.
 
 Percorso tecnico opzionale:
@@ -341,11 +342,11 @@ Fase 6 - collaudo
    Verifica anche la skill `ispettore-ecosistema` nel percorso dell'agente
    attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per Codex,
    entrambe in modalita' both.
-   Se Claude e' attivo, verifica anche `.claude/settings.local.json`, trust del
-   workspace e `/memory` sulla stessa `memory/`.
+   Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
+   del workspace e `/memory` sulla memoria canonica.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi, credenziali,
-   `.claude/settings.local.json` e `REPORT_FINALE.md`, e che
+   `REPORT_FINALE.md`, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
    lo crea da solo a fine corsa: se manca, fallo tu con `git add -A` +
    `git commit`, altrimenti il backup della Fase 7 parte da un repository vuoto.
@@ -371,7 +372,7 @@ Fase 6 - collaudo
 6. Se qualcosa non passa, correggi e riprova.
 7. Collauda la rete delle stanze con almeno due richieste realistiche partendo
    dalla radice, senza suggerire il percorso. Per ciascuna registra:
-   richiesta -> stanza -> fonte -> capacita'/processo -> output. Se l'agente non
+   richiesta -> madre/stanza -> fonte -> capacita'/processo -> output. Se l'agente non
    trova il percorso, correggi mappa o collegamenti e riprova.
 8. Verifica che ogni stanza sia raggiungibile dalla mappa madre, che nessuna
    capacita' sia isolata e che non esistano due stanze per la stessa funzione.
@@ -460,9 +461,9 @@ Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
 del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
 non dalla memoria di chi sta seguendo la consegna.
 
-Ogni modulo `INSTALLABILE` o `ATTIVO` dichiara la stanza proprietaria. Prima
-riusa una capacita' equivalente gia' presente. La creazione di una nuova stanza
-resta una decisione strutturale esplicita del proprietario.
+Ogni modulo `INSTALLABILE` o `ATTIVO` dichiara la cartella madre o la stanza
+proprietaria. Prima riusa una capacita' equivalente gia' presente. La creazione
+di una nuova stanza resta una decisione strutturale esplicita del proprietario.
 
 Se il cliente usa l'agenda soprattutto tramite colori, leggi
 `MODULO_CALENDARIO_OPERATIVO.md` prima di proporre o creare calendari. Il primo
@@ -488,7 +489,7 @@ Report temporaneo obbligatorio per la missione:
 - classificazione dell'ambiente e mappa delle stanze con monte/valle;
 - tabella Ispettore di ogni percorso visibile nella home;
 - capacita' collegate a ogni stanza e possibili doppioni evitati;
-- almeno due prove di instradamento richiesta -> stanza -> fonte -> output;
+- almeno due prove di instradamento richiesta -> madre/stanza -> fonte -> output;
 - fonti business esterne al codice e derivati verificati;
 - credenziali controllate per percorso/history senza leggere il contenuto;
 - firma/timbro protetti, registrati e limitati;

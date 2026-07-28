@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.4.3 - 28/07/2026
+
+- Una casa semplice puo' avere zero stanze: capacita', fonti e output possono
+  essere posseduti direttamente dalla cartella madre e registrati nella mappa
+  radice, senza creare `AGENTS.md` e `CLAUDE.md` locali inutili.
+- Aggiunto il registro degli elementi posseduti dalla madre e il relativo
+  controllo deterministico. La regressione prova che `Portafoglio Modello`
+  passa come `CAPACITA` della madre senza essere promosso a stanza.
+- Corretto lo scope Claude Code: `autoMemoryDirectory` vive nelle user settings
+  di ogni computer (`~/.claude/settings.json`), con percorso assoluto locale e
+  prova `/memory`; le settings project/local vengono segnalate come invalide.
+- La memoria canonica e' dichiarata nella mappa madre. Un ambiente esistente
+  puo' conservare il proprio nome e percorso consolidato, anche su OneDrive,
+  dopo riconciliazione e prova su tutte le postazioni.
+
 ## 0.4.2 - 28/07/2026
 
 - Aggiunto il gate anti-falsa-stanza: una cartella e' `STANZA` solo quando

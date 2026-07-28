@@ -10,8 +10,8 @@ Indice della memoria condivisa del Cervello.
 - Non duplicare lo stato operativo: lo stato business vive nel file
   proprietario della stanza; il log e' solo tecnico e il report e' temporaneo.
 - Per Claude Code questa stessa cartella deve essere anche la destinazione di
-  auto memory tramite `autoMemoryDirectory`; due directory di memoria attive
-  sono un blocco da riconciliare.
+  auto memory tramite `autoMemoryDirectory` nelle user settings di ciascun
+  computer; due directory di memoria attive sono un blocco da riconciliare.
 
 ## Indice
 

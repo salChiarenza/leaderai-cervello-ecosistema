@@ -19,7 +19,6 @@ REQUIRED_FILES = (
     ".gitignore",
     "AGENTS.md",
     "CLAUDE.md",
-    "memory/MEMORY.md",
     "AGENT_CHAT.md",
     "logs/install-log.md",
     "ecosistema/FONTI.md",
@@ -198,7 +197,7 @@ def parse_room_registry(agents_text: str) -> list[Room]:
     if marker not in agents_text:
         return []
     section = agents_text.split(marker, 1)[1]
-    section = re.split(r"\n##\s", section, maxsplit=1)[0]
+    section = re.split(r"\n#{2,3}\s", section, maxsplit=1)[0]
     rooms: list[Room] = []
     for line in section.splitlines():
         cells = _table_cells(line)
@@ -210,6 +209,43 @@ def parse_room_registry(agents_text: str) -> list[Room]:
         if room is not None:
             rooms.append(room)
     return rooms
+
+
+def parse_root_owned_registry(agents_text: str) -> set[str]:
+    marker = "### Elementi posseduti direttamente dalla cartella madre"
+    if marker not in agents_text:
+        return set()
+    section = agents_text.split(marker, 1)[1]
+    section = re.split(r"\n#{2,3}\s", section, maxsplit=1)[0]
+    paths: set[str] = set()
+    for line in section.splitlines():
+        cells = _table_cells(line)
+        if len(cells) < 2:
+            continue
+        if all(set(cell) <= {"-", ":", " "} for cell in cells):
+            continue
+        raw = cells[0].strip("`").strip().replace("\\", "/").strip("/")
+        if _normalized(raw) in {"percorso", "da censire"}:
+            continue
+        candidate = Path(raw)
+        if raw and not candidate.is_absolute() and ".." not in candidate.parts:
+            paths.add(raw)
+    return paths
+
+
+def _canonical_memory_path(target: Path, agents_text: str) -> Path:
+    match = re.search(
+        r"Memoria canonica:\s*`([^`]+)`",
+        agents_text,
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return (target / "memory").resolve()
+    raw = match.group(1).strip().replace("\\", "/")
+    candidate = Path(raw).expanduser()
+    if not candidate.is_absolute():
+        candidate = target / candidate
+    return candidate.resolve()
 
 
 def _is_empty_dir(path: Path) -> bool:
@@ -479,7 +515,11 @@ def _project_control_issue(path: Path) -> str | None:
     return None
 
 
-def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
+def inspect_ecosystem(
+    target: Path,
+    agent: str = "auto",
+    claude_user_settings_path: Path | None = None,
+) -> Inspection:
     target = target.expanduser().resolve()
     findings: list[Finding] = []
     if not target.is_dir():
@@ -570,6 +610,16 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
 
     agents_path = target / "AGENTS.md"
     agents_text = agents_path.read_text(encoding="utf-8") if agents_path.is_file() else ""
+    canonical_memory = _canonical_memory_path(target, agents_text)
+    if not (canonical_memory / "MEMORY.md").is_file():
+        findings.append(
+            Finding(
+                "MISSING_CANONICAL_MEMORY_INDEX",
+                "BLOCKER",
+                str(canonical_memory / "MEMORY.md"),
+                "La memoria canonica dichiarata nella mappa madre non contiene MEMORY.md.",
+            )
+        )
     rooms = parse_room_registry(agents_text)
 
     seen_paths: set[str] = set()
@@ -675,7 +725,9 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                 )
             )
 
-    declared_top_levels = {Path(room.path).parts[0] for room in rooms if room.path}
+    root_owned = parse_root_owned_registry(agents_text)
+    declared_paths = {room.path for room in rooms if room.path} | root_owned
+    declared_top_levels = {Path(path).parts[0] for path in declared_paths}
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
         if not child.is_dir() or child.name in STANDARD_DIRS or child.name.startswith("."):
             continue
@@ -694,7 +746,7 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                     "GENERIC_DIR",
                     "BLOCKER",
                     child.name,
-                    "Nome generico: classificare i contenuti e portarli nella stanza proprietaria.",
+                    "Nome generico: classificare i contenuti e portarli alla cartella madre o alla stanza proprietaria.",
                 )
             )
         if _is_empty_dir(child):
@@ -711,14 +763,18 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
         if not child.is_file() or child.name.startswith("."):
             continue
-        if child.name in ALLOWED_ROOT_FILES or ".leaderai-backup" in child.name:
+        if (
+            child.name in ALLOWED_ROOT_FILES
+            or child.name in root_owned
+            or ".leaderai-backup" in child.name
+        ):
             continue
         findings.append(
             Finding(
                 "UNOWNED_ROOT_FILE",
                 "BLOCKER",
                 child.name,
-                "File sciolto nella home senza stanza proprietaria.",
+                "File sciolto nella home senza proprietario dichiarato.",
             )
         )
 
@@ -761,15 +817,44 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                 )
 
     if "claude" in active_agents:
-        settings_path = target / ".claude" / "settings.local.json"
-        desired_memory = (target / "memory").resolve()
+        project_settings_paths = (
+            target / ".claude" / "settings.json",
+            target / ".claude" / "settings.local.json",
+        )
+        for project_settings_path in project_settings_paths:
+            if not project_settings_path.is_file():
+                continue
+            try:
+                project_settings = json.loads(
+                    project_settings_path.read_text(encoding="utf-8")
+                )
+            except (OSError, json.JSONDecodeError):
+                project_settings = None
+            if isinstance(project_settings, dict) and "autoMemoryDirectory" in project_settings:
+                findings.append(
+                    Finding(
+                        "CLAUDE_MEMORY_SCOPE_INVALID",
+                        "BLOCKER",
+                        project_settings_path.relative_to(target).as_posix(),
+                        "autoMemoryDirectory non e' accettato nelle settings "
+                        "project/local: spostare la chiave nelle user settings.",
+                    )
+                )
+
+        settings_path = (
+            claude_user_settings_path.expanduser()
+            if claude_user_settings_path is not None
+            else Path.home() / ".claude" / "settings.json"
+        )
+        desired_memory = canonical_memory
+        settings_label = "~/.claude/settings.json"
         if not settings_path.is_file():
             findings.append(
                 Finding(
                     "CLAUDE_MEMORY_ROUTE_MISSING",
                     "BLOCKER",
-                    ".claude/settings.local.json",
-                    "Claude Code non punta auto memory alla memory/ della casa; "
+                    settings_label,
+                    "Claude Code non punta auto memory alla memoria canonica della casa; "
                     "verificare /memory e riconciliare l'eventuale memoria esterna.",
                 )
             )
@@ -788,7 +873,7 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                     Finding(
                         "CLAUDE_MEMORY_ROUTE_INVALID",
                         "BLOCKER",
-                        ".claude/settings.local.json",
+                        settings_label,
                         "autoMemoryDirectory assente o non valido.",
                     )
                 )
@@ -799,7 +884,7 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                         Finding(
                             "CLAUDE_MEMORY_ROUTE_INVALID",
                             "BLOCKER",
-                            ".claude/settings.local.json",
+                            settings_label,
                             "autoMemoryDirectory deve essere assoluto o iniziare con ~/.",
                         )
                     )
@@ -808,8 +893,8 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                         Finding(
                             "CLAUDE_MEMORY_DIVERGED",
                             "BLOCKER",
-                            ".claude/settings.local.json",
-                            "Auto memory punta fuori dalla memory/ della casa: "
+                            settings_label,
+                            "Auto memory punta fuori dalla memoria canonica della casa: "
                             "confrontare e unire le due memorie prima di cambiare il percorso.",
                         )
                     )

@@ -13,8 +13,9 @@ Versione standard applicata: `{{version}}`.
 ## Regole base
 
 - Prima leggere questa mappa.
+- Memoria canonica: `memory/`.
 - La memoria condivisa vive in `memory/MEMORY.md`.
-- Per Claude Code `autoMemoryDirectory` punta alla stessa `memory/`: due
+- Per Claude Code `autoMemoryDirectory` punta alla stessa memoria canonica: due
   memorie attive sono un blocco, non due livelli complementari.
 - `logs/install-log.md` registra solo installazione e cambi strutturali.
 - La mappa dell'azienda vive in `ecosistema/`.
@@ -32,11 +33,12 @@ Versione standard applicata: `{{version}}`.
   (doc ufficiali verificate 27/07/2026). Se manca, crearlo dal template.
 - Se questa cartella e' stata installata per `claude`, non creare `.codex`
   senza richiesta esplicita LeaderAI.
-- Se Claude Code e' attivo, configura
-  `.claude/settings.local.json:autoMemoryDirectory` sul percorso assoluto
-  `memory/`, accetta il trust del workspace e verifica la destinazione con
-  `/memory`. Prima di spostare una memoria esterna, confronta e unisci le voci:
-  non perdere ne' duplicare apprendimenti.
+- Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user settings
+  di ogni computer (`~/.claude/settings.json`) sul percorso assoluto della
+  memoria canonica, accetta il trust del workspace e verifica la destinazione
+  con `/memory`. La chiave non e' valida nelle settings project/local. Prima di
+  spostare una memoria esterna, confronta e unisci le voci: non perdere ne'
+  duplicare apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
@@ -53,8 +55,7 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
 1. censisci cio' che esiste;
 2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
-3. assegna un proprietario: nessuna cartella resta senza una stanza che la
-   governa;
+3. assegna un proprietario: la cartella madre oppure una stanza;
 4. se e' una vera stanza, creala o integrala dal calco locale
    `ecosistema/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
    `@AGENTS.md` e collegala nel registro qui sotto;
@@ -72,11 +73,11 @@ porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
 (`@AGENTS.md`). La mappa locale dichiara responsabilita' business, scopo, cosa
 contiene, fonti, output, capacita', collegamenti a monte e collegamenti a valle.
 
-Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate a
-una stanza. Un prodotto o un modello non diventa stanza perche' ha una pipeline
-completa. Se manca una stanza proprietaria, classifica `SOSPETTA`, proponi
-responsabilita' business, stato, decisioni, fonti, output, collegamenti e
-collaudo; decide il proprietario.
+Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate
+alla cartella madre o a una stanza. Una casa semplice puo' avere zero stanze.
+Un prodotto o un modello non diventa stanza perche' ha una pipeline completa.
+Una nuova stanza nasce solo quando emerge una responsabilita' business stabile
+con stato e decisioni propri, riconosciuta dal proprietario.
 
 ### Registro delle stanze
 
@@ -87,6 +88,16 @@ collaudo; decide il proprietario.
 La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.
 Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si
 collegano direttamente solo quando un processo reale passa dall'una all'altra.
+
+### Elementi posseduti direttamente dalla cartella madre
+
+| Percorso | Classe | Uso | Registro di dettaglio |
+|---|---|---|---|
+| Da censire | Da definire | Da definire dal lavoro reale | `ecosistema/ASSET.md` o `ecosistema/FONTI.md` |
+
+Questa tabella possiede capacita', fonti e output che non richiedono una stanza
+autonoma. Il percorso resta senza mappa locale; i dettagli vivono nel registro
+indicato.
 
 ### Ispettore Ecosistema
 
@@ -101,9 +112,9 @@ salvare verifica almeno:
 - nessuna cartella visibile senza classe e proprietario;
 - nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
 - nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
-- nessun file sciolto nella home senza stanza proprietaria;
+- nessun file sciolto nella home senza proprietario dichiarato;
 - nessuna memoria parallela o report temporaneo presentato come stato vivo;
-- due percorsi reali `richiesta -> stanza -> fonte -> processo -> output`.
+- due percorsi reali `richiesta -> madre/stanza -> fonte -> processo -> output`.
 
 Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene
 eliminato prima del salvataggio. I contenuti preesistenti del proprietario si

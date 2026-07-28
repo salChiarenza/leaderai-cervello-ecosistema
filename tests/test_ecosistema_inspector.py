@@ -18,7 +18,18 @@ class EcosistemaInspectorTest(unittest.TestCase):
     def make_target(self, root: str, agent: str = "claude") -> Path:
         target = Path(root) / "EcosistemaAI-Test"
         leaderai_setup.run_setup(target, "Cliente Test", agent)
+        self.claude_user_settings = Path(root) / "claude-user-settings.json"
+        self.claude_user_settings.write_text(
+            json.dumps({"autoMemoryDirectory": str((target / "memory").resolve())}),
+            encoding="utf-8",
+        )
         return target
+
+    def inspect(self, target: Path) -> ecosistema_inspector.Inspection:
+        return ecosistema_inspector.inspect_ecosystem(
+            target,
+            claude_user_settings_path=self.claude_user_settings,
+        )
 
     def add_room_to_registry(self, target: Path, row: str = ROOM_ROW) -> None:
         agents = target / "AGENTS.md"
@@ -62,18 +73,14 @@ class EcosistemaInspectorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
             self.assertEqual(inspection.findings, [])
-            settings = json.loads(
-                (target / ".claude" / "settings.local.json").read_text(
-                    encoding="utf-8"
-                )
-            )
+            settings = json.loads(self.claude_user_settings.read_text(encoding="utf-8"))
             self.assertEqual(
                 settings["autoMemoryDirectory"],
-                str((target / "memory").absolute()),
+                str((target / "memory").resolve()),
             )
             tracked = subprocess.run(
                 ["git", "ls-files"],
@@ -82,7 +89,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 capture_output=True,
                 text=True,
             ).stdout
-            self.assertNotIn(".claude/settings.local.json", tracked)
+            self.assertFalse((target / ".claude" / "settings.local.json").exists())
             self.assertNotIn("REPORT_FINALE.md", tracked)
 
     def test_unclassified_generic_and_empty_folders_block_pass(self):
@@ -93,7 +100,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             app.mkdir()
             (app / "app.txt").write_text("viva\n", encoding="utf-8")
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "NON PASSA")
             self.assertIn("UNCLASSIFIED_DIR", self.codes(inspection))
@@ -106,7 +113,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             (target / "app-iscrizioni").mkdir()
             self.add_room_to_registry(target)
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertIn("ROOM_AGENTS_MISSING", self.codes(inspection))
             self.assertIn("ROOM_CLAUDE_MISSING", self.codes(inspection))
@@ -117,7 +124,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.create_valid_room(target)
             self.add_room_to_registry(target)
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
 
@@ -140,13 +147,70 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "`Portafoglio Modello/AGENTS.md` |",
             )
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "NON PASSA")
             self.assertIn(
                 "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
                 self.codes(inspection),
             )
+
+    def test_root_can_own_portfolio_capability_without_creating_a_room(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            portfolio = target / "Portafoglio Modello"
+            portfolio.mkdir()
+            (portfolio / "motore.py").write_text("print('ok')\n", encoding="utf-8")
+            agents = target / "AGENTS.md"
+            text = agents.read_text(encoding="utf-8")
+            placeholder = (
+                "| Da censire | Da definire | Da definire dal lavoro reale | "
+                "`ecosistema/ASSET.md` o `ecosistema/FONTI.md` |"
+            )
+            row = (
+                "| `Portafoglio Modello` | CAPACITA | Costruzione portafogli | "
+                "`ecosistema/ASSET.md` |"
+            )
+            agents.write_text(text.replace(placeholder, row), encoding="utf-8")
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "PASSA")
+            self.assertFalse((portfolio / "AGENTS.md").exists())
+            self.assertFalse((portfolio / "CLAUDE.md").exists())
+
+    def test_existing_canonical_memory_can_keep_its_consolidated_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            canonical = target / "_claude-memory"
+            canonical.mkdir()
+            (canonical / "MEMORY.md").write_text("# Memoria viva\n", encoding="utf-8")
+            agents = target / "AGENTS.md"
+            text = agents.read_text(encoding="utf-8")
+            text = text.replace(
+                "Memoria canonica: `memory/`.",
+                "Memoria canonica: `_claude-memory/`.",
+            )
+            placeholder = (
+                "| Da censire | Da definire | Da definire dal lavoro reale | "
+                "`ecosistema/ASSET.md` o `ecosistema/FONTI.md` |"
+            )
+            row = (
+                "| `_claude-memory` | INFRASTRUTTURA | Memoria condivisa | "
+                "`_claude-memory/MEMORY.md` |"
+            )
+            agents.write_text(text.replace(placeholder, row), encoding="utf-8")
+            self.claude_user_settings.write_text(
+                json.dumps({"autoMemoryDirectory": str(canonical.resolve())}),
+                encoding="utf-8",
+            )
+            memory = target / "memory"
+            (memory / "MEMORY.md").unlink()
+            memory.rmdir()
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "PASSA")
 
     def test_duplicate_room_purpose_and_loose_root_file_block_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -167,7 +231,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             agents.write_text(text.replace(placeholder, rows), encoding="utf-8")
             (target / "VERSION").write_text("0.3.8\n", encoding="utf-8")
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertIn("DUPLICATE_ROOM_PURPOSE", self.codes(inspection))
             self.assertIn("UNOWNED_ROOT_FILE", self.codes(inspection))
@@ -178,7 +242,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             skill = target / ".claude" / "skills" / "ispettore-ecosistema"
             (skill / "SKILL.md").unlink()
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertIn("INSPECTOR_SKILL_MISSING", self.codes(inspection))
 
@@ -193,7 +257,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            (target / ".claude" / "settings.local.json").write_text(
+            self.claude_user_settings.write_text(
                 json.dumps(
                     {
                         "autoMemoryDirectory": str(
@@ -230,7 +294,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             (app / "firma-scuola.png").write_bytes(b"test")
             self.add_room_to_registry(target)
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
             codes = self.codes(inspection)
 
             self.assertEqual(inspection.verdict, "NON PASSA")
@@ -280,7 +344,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             )
             config.unlink()
 
-            inspection = ecosistema_inspector.inspect_ecosystem(target)
+            inspection = self.inspect(target)
 
             self.assertIn(
                 "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",

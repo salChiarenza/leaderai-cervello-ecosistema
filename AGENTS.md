@@ -15,23 +15,23 @@ Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. La repo non assegna nomi di
 reparti o cartelle business: censisce l'ambiente reale, classifica stanze,
 fonti, output, capacita', infrastruttura e archivi, poi verifica che ogni stanza
-sia raggiungibile dalla mappa madre. Un modulo si integra nella stanza
-proprietaria; una nuova stanza richiede una proposta motivata e l'approvazione
-del proprietario.
+sia raggiungibile dalla mappa madre. Un modulo si integra nella cartella madre
+o nella stanza proprietaria; una nuova stanza richiede una responsabilita'
+business autonoma e l'approvazione del proprietario.
 
 ## Cosa fa
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali,
-  `.claude/settings.local.json` e `REPORT_FINALE.md`
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali e
+  `REPORT_FINALE.md`
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
-- `.claude/settings.local.json` se serve Claude Code, con
-  `autoMemoryDirectory` sulla `memory/` della casa
+- user settings Claude Code (`~/.claude/settings.json`) con
+  `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
 - skill `ispettore-ecosistema` nel percorso dell'agente attivo
 - `memory/MEMORY.md`
 - `logs/install-log.md`
@@ -49,7 +49,7 @@ Moduli professionali versionati:
 
 - `moduli/portafogli/` - costruzione Core-Satellite, analisi, backtest,
   monitoraggio e report cliente con motore deterministico e validazione del
-  banker. L'agente sceglie prima la stanza proprietaria e poi segue
+  banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
 Il report temporaneo della missione deve includere la mappa moduli con stato per PEC/email

@@ -18,7 +18,6 @@ GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="u
 SUPPORTED_AGENTS = {"codex", "claude", "both"}
 CLAUDE_BRIDGE = "@AGENTS.md\n"
 LOCAL_ONLY_FILES = {
-    ".claude/settings.local.json",
     "REPORT_FINALE.md",
 }
 STANDARD_DIRS = (
@@ -37,7 +36,6 @@ STANDARD_FILES = (
     "AGENT_CHAT.md",
     ".codex/README.md",
     ".claude/README.md",
-    ".claude/settings.local.json",
     ".agents/skills/ispettore-ecosistema/SKILL.md",
     ".claude/skills/ispettore-ecosistema/SKILL.md",
     "ecosistema/FONTI.md",
@@ -101,62 +99,6 @@ def ensure_text(path: Path, content: str, result: InstallResult, dry_run: bool) 
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content.rstrip() + "\n", encoding="utf-8")
     result.record("created", path)
-
-
-def ensure_claude_memory_settings(
-    path: Path,
-    target: Path,
-    result: InstallResult,
-    *,
-    new_install: bool,
-    dry_run: bool,
-) -> None:
-    desired = str((target / "memory").absolute())
-    if not path.exists():
-        content = json.dumps(
-            {"autoMemoryDirectory": desired},
-            ensure_ascii=False,
-            indent=2,
-        )
-        if not dry_run:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content + "\n", encoding="utf-8")
-        result.record("created", path)
-        return
-
-    try:
-        settings = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        result.record("existing", path)
-        result.blockers.append(
-            ".claude/settings.local.json non e' JSON valido: non posso "
-            "verificare la memoria unica senza correggerlo."
-        )
-        return
-    if not isinstance(settings, dict):
-        result.record("existing", path)
-        result.blockers.append(
-            ".claude/settings.local.json deve contenere un oggetto JSON."
-        )
-        return
-
-    current = settings.get("autoMemoryDirectory")
-    if current == desired:
-        result.record("existing", path)
-        return
-
-    result.record("existing", path)
-    if new_install:
-        result.blockers.append(
-            "autoMemoryDirectory non punta a memory/: verificare la "
-            "configurazione Claude prima di proseguire."
-        )
-    else:
-        result.blockers.append(
-            "Memoria Claude non allineata: confrontare con /memory, unire le "
-            "voci nella memory/ della casa e solo dopo aggiornare "
-            "autoMemoryDirectory. Nessuna memoria viene sovrascritta."
-        )
 
 
 def _claude_bridge_state(path: Path, agents_path: Path) -> str:
@@ -802,14 +744,6 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             result,
             dry_run,
         )
-        ensure_claude_memory_settings(
-            target / ".claude" / "settings.local.json",
-            target,
-            result,
-            new_install=new_install,
-            dry_run=dry_run,
-        )
-
     ensure_text(
         target / "ecosistema" / "FONTI.md",
         read_template("FONTI.md", context),

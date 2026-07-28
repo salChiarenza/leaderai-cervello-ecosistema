@@ -58,7 +58,7 @@ class CheckupGuidanceTest(unittest.TestCase):
             "collegamenti a monte e collegamenti a valle",
             "ogni stanza sia raggiungibile",
             "PROPOSTA STRUTTURALE",
-            "richiesta -> stanza -> fonte -> capacita'/processo -> output",
+            "richiesta -> madre/stanza -> fonte -> capacita'/processo -> output",
             "LEZIONE CANDIDATA",
             "VERSIONE METODO",
             "Ispettore Ecosistema",

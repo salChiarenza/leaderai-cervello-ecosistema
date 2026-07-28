@@ -241,7 +241,7 @@ agenti realmente attivi:
 | Modalita' rilevata | Aggancio minimo obbligatorio | Configurazione tecnica da verificare |
 |---|---|---|
 | Codex | `AGENTS.md` + `.codex/README.md` + `.agents/skills/ispettore-ecosistema/SKILL.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
-| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `.claude/settings.local.json` con `autoMemoryDirectory` sulla `memory/` della casa; altre settings solo se servono |
+| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `autoMemoryDirectory` nelle user settings di ogni PC (`~/.claude/settings.json`) sulla memoria canonica della casa; altre settings solo se servono |
 | Entrambi | entrambi gli agganci | entrambi i rami, senza duplicare le istruzioni comuni |
 
 La modalita' `both` vale solo se risultano entrambi realmente attivi oppure se
@@ -300,11 +300,15 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 4. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
    (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Le note
    oltre 48 ore vanno promosse nei file proprietari e tolte dalla chat.
-5. **Memoria unica** — `memory/MEMORY.md` esiste ed e' un indice snello;
-   niente duplicati inventati come `MEMORIA.md`, diari paralleli o memoria
-   auto dell'agente lasciata in un'altra directory.
+5. **Memoria unica** — la mappa madre dichiara `Memoria canonica` e quella
+   directory contiene `MEMORY.md` come indice snello; `memory/` e' il nome
+   predefinito per le nuove installazioni, mentre una casa esistente puo'
+   conservare un nome consolidato. Niente duplicati inventati come
+   `MEMORIA.md`, diari paralleli o memoria auto dell'agente lasciata in
+   un'altra directory. Due memorie divergenti bloccano il verdetto finche' non
+   vengono riconciliate.
 6. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
-   password, credenziali, `.claude/settings.local.json` e
+   password, credenziali e
    `REPORT_FINALE.md` prima di qualunque commit.
 
 ### B. Ramo Codex — solo se Codex e' attivo
@@ -327,10 +331,11 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    ponte `CLAUDE.md` e non deve duplicare `AGENTS.md`.
 2. Verifica `.claude/skills/ispettore-ecosistema/SKILL.md`: deve essere
    richiamabile e puntare alla procedura unica `CHECKUP.md`.
-3. Apri `/memory` senza modificare nulla e confronta la destinazione con
-   `memory/` della cartella viva. `.claude/settings.local.json` deve restare
-   fuori Git e impostare `autoMemoryDirectory` sul percorso assoluto di quella
-   stessa cartella. Il valore e' attivo solo dopo il trust del workspace.
+3. Apri `/memory` senza modificare nulla e confronta la destinazione con la
+   memoria canonica dichiarata nell'`AGENTS.md`. Le user settings di ogni
+   computer (`~/.claude/settings.json`) impostano `autoMemoryDirectory` sul
+   percorso assoluto locale; la chiave non e' accettata nelle settings
+   project/local. Il valore e' attivo solo dopo il trust del workspace.
 4. Se esiste una memoria auto esterna con contenuti diversi, confronta le due
    fonti, unisci le voci uniche nella `memory/` della casa, prova `/memory` e
    solo dopo cambia il percorso. Non svuotare o abbandonare la memoria esterna
@@ -369,16 +374,17 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - manca `.claude/skills/ispettore-ecosistema/SKILL.md` quando Claude Code e'
   attivo;
 - in modalita' `both` manca uno dei due agganci;
-- Claude Code e' attivo ma `autoMemoryDirectory` non punta alla `memory/` della
-  casa, il trust non e' confermato o esistono due memorie divergenti non
-  riconciliate;
+- Claude Code e' attivo ma `autoMemoryDirectory` nelle user settings non punta
+  alla memoria canonica della casa, il trust non e' confermato o esistono due
+  memorie divergenti non riconciliate;
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
 - una prova di processo o di fonte e' circolare, inventata durante il checkup
   oppure creata soltanto per far passare il checkup;
 - una fonte operativa e' dichiarata attiva usando l'email della missione o del
   checkup invece della fonte usata nel lavoro quotidiano.
-- esiste una cartella visibile non classificata o senza stanza proprietaria;
+- esiste una cartella visibile non classificata o senza proprietario nella
+  cartella madre o in una stanza;
 - una vera stanza non e' collegata alla mappa madre, non ha `AGENTS.md` e
   `CLAUDE.md`, oppure la sua mappa locale non dichiara scopo, fonti, output,
   capacita', monte, valle e dove scrivere;
@@ -388,7 +394,7 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - restano cartelle generiche, vuote, concorrenti o tecniche presentate come
   lavoro vivo;
 - due stanze rispondono alla stessa funzione;
-- un file sciolto nella home non ha una stanza proprietaria;
+- un file sciolto nella home non ha un proprietario dichiarato;
 - `REPORT_FINALE.md` e' stantio, senza data/stato, versionato in Git o usato
   come fonte corrente insieme al log;
 - un contenuto business modificabile ha due padroni, e' hardcoded nel codice o
@@ -417,19 +423,21 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
 2. Una stanza e' una responsabilita' business stabile riconosciuta dal
    proprietario. Mantiene stato operativo, decisioni e lavoro corrente. Una
    skill, uno script, un agente, un connettore, un modulo, un modello o una
-   procedura e' una capacita' della stanza che lo usa. Una cartella piena di
-   fonti e output puo' essere una pipeline tecnica, non una stanza.
+   procedura e' una capacita' della cartella madre o della stanza che lo usa.
+   Una cartella piena di fonti e output puo' essere una pipeline tecnica, non una stanza.
    Prima di scrivere `STANZA`, rispondi con prove a quattro domande:
    - quale responsabilita' business possiede;
    - quale stato e quali decisioni mantiene;
    - quale lavoro riceve a monte e quale risultato consegna a valle;
    - se il proprietario usa davvero quel nome per la funzione, oppure e' solo
      il nome di un prodotto, progetto, modello, script o output.
-   Se una risposta manca, classifica `CAPACITA` o `SOSPETTA`, assegna la
-   cartella a una stanza gia' riconosciuta oppure porta al proprietario una
-   `PROPOSTA STRUTTURALE`. Il gate resta `NON PASSA` e non si crea la mappa
-   locale. Caso di regressione: `Portafoglio Modello` con motori, skill, fonti
-   e documenti non e' di per se' una stanza; e' una capacita' finche' la
+   Se una risposta manca, classifica `CAPACITA` o `SOSPETTA` e assegna la
+   cartella alla madre o a una stanza gia' riconosciuta. Una casa semplice puo'
+   avere zero stanze: l'`AGENTS.md` radice registra direttamente capacita',
+   fonti e output, senza mappe locali. Porta una `PROPOSTA STRUTTURALE` solo
+   quando emerge una responsabilita' business autonoma. Caso di regressione:
+   `Portafoglio Modello` con motori, skill, fonti e documenti non e' di per se'
+   una stanza; e' una capacita' posseduta dalla madre finche' la
    responsabilita' business non viene dimostrata.
 3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia una mappa locale costruita o integrata da
@@ -438,8 +446,9 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    collegamenti a monte e collegamenti a valle e dove scrivere. Ogni vera
    stanza mantiene il telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md`
    verso quella mappa.
-4. Verifica che ogni collegamento corrisponda a un processo reale, che nessuna
-   capacita' sia isolata e che due stanze non rispondano alla stessa funzione.
+4. Verifica che ogni collegamento corrisponda a un processo reale, che ogni
+   capacita' abbia come proprietario la madre o una stanza e che due stanze non
+   rispondano alla stessa funzione.
 5. Ripara e prova i difetti meccanici: mappe locali mancanti per stanze gia'
    riconosciute, ponti, link, puntatori e registri rotti. Elimina i residui
    vuoti o inutili creati dall'agente nella missione corrente. Per fusioni,
@@ -505,7 +514,7 @@ blocchi, li' c'e' il buco.
 
 Per ciascuna prova registra il percorso effettivo:
 
-`richiesta -> stanza -> fonte -> capacita'/processo -> output`.
+`richiesta -> madre/stanza -> fonte -> capacita'/processo -> output`.
 
 Le due prove partono dalla radice senza suggerire all'agente la cartella o la
 skill. Se l'instradamento fallisce, correggi mappa o collegamenti e riprova.
