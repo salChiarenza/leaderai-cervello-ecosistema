@@ -79,10 +79,10 @@ class PortfolioInstallerTest(unittest.TestCase):
                 encoding="utf-8",
             )
             (target / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
-            room = target / "Portafoglio Modello"
+            room = target / "Consulenza Clienti"
             room.mkdir()
             (room / "AGENTS.md").write_text(
-                "# Portafoglio Modello\n\n## Collegamenti\n", encoding="utf-8"
+                "# Consulenza Clienti\n\n## Collegamenti\n", encoding="utf-8"
             )
             (target / "ecosistema" / "ASSET.md").write_text(
                 "# Asset\n\n| Asset | Casa | Uso | Stato | Note |\n|---|---|---|---|---|\n",
@@ -92,7 +92,7 @@ class PortfolioInstallerTest(unittest.TestCase):
                 "# Processi\n", encoding="utf-8"
             )
 
-            first = installer.install(target, "Portafoglio Modello")
+            first = installer.install(target, "Consulenza Clienti")
             self.assertTrue((room / "portfolio_engine.py").exists())
             self.assertFalse((target / "Costruzione Portafogli").exists())
             self.assertFalse((target / ".claude" / "skills" / "gestisci-portafoglio").exists())
@@ -101,22 +101,22 @@ class PortfolioInstallerTest(unittest.TestCase):
                 "@AGENTS.md\n",
             )
             self.assertIn("Sistema Portafogli Core-Satellite", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
-            self.assertIn("Portafoglio Modello", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
+            self.assertIn("Consulenza Clienti", (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8"))
             root_map = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("### Registro delle stanze", root_map)
-            self.assertIn("`Portafoglio Modello/AGENTS.md`", root_map)
+            self.assertIn("`Consulenza Clienti/AGENTS.md`", root_map)
             self.assertNotIn("## Stanza collegata:", root_map)
             self.assertNotIn("| Da censire |", root_map)
 
             custom = room / "METODO.md"
             custom.write_text("DECISIONE MARCO\n", encoding="utf-8")
-            second = installer.install(target, "Portafoglio Modello")
+            second = installer.install(target, "Consulenza Clienti")
 
             self.assertEqual(custom.read_text(encoding="utf-8"), "DECISIONE MARCO\n")
             self.assertEqual(
                 (target / "AGENTS.md")
                 .read_text(encoding="utf-8")
-                .count("`Portafoglio Modello/AGENTS.md`"),
+                .count("`Consulenza Clienti/AGENTS.md`"),
                 1,
             )
             self.assertGreater(len(first.created), 0)

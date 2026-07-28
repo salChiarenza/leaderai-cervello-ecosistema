@@ -39,6 +39,9 @@ class EcosistemaInspectorTest(unittest.TestCase):
         replacements = {
             "{{room_name}}": "Iscrizioni",
             "{{room_purpose}}": "Gestire iscrizioni",
+            "{{room_business_responsibility}}": (
+                "Mantiene lo stato delle pratiche e le decisioni sulle iscrizioni"
+            ),
             "{{room_contents}}": "Pratiche",
             "{{room_sources}}": "Gestionale",
             "{{room_outputs}}": "Documenti",
@@ -117,6 +120,33 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = ecosistema_inspector.inspect_ecosystem(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
+
+    def test_technical_portfolio_pipeline_is_not_proven_as_a_room(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target, "Portafoglio Modello")
+            room_map = target / "Portafoglio Modello" / "AGENTS.md"
+            room_map.write_text(
+                room_map.read_text(encoding="utf-8").replace(
+                    "Mantiene lo stato delle pratiche e le decisioni sulle iscrizioni",
+                    "DA DEFINIRE: contiene skill, motori, modelli e report",
+                ),
+                encoding="utf-8",
+            )
+            self.add_room_to_registry(
+                target,
+                "| [Portafoglio Modello](Portafoglio Modello) | Costruire modelli | "
+                "Fonti | Report | Dati | Documenti | Script | "
+                "`Portafoglio Modello/AGENTS.md` |",
+            )
+
+            inspection = ecosistema_inspector.inspect_ecosystem(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn(
+                "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
+                self.codes(inspection),
+            )
 
     def test_duplicate_room_purpose_and_loose_root_file_block_pass(self):
         with tempfile.TemporaryDirectory() as tmp:

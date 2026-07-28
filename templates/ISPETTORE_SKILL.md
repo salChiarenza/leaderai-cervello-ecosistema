@@ -22,6 +22,10 @@ La fonte unica della procedura e' `CHECKUP.md` nella repo ufficiale
    valori diversi il verdetto e' `NON PASSA`.
 5. Ogni vera stanza deve essere raggiungibile dalla mappa madre e avere
    `AGENTS.md` + `CLAUDE.md`, con `CLAUDE.md` uguale a `@AGENTS.md`.
+   Prima di chiamarla stanza, prova la responsabilita' business, lo stato e le
+   decisioni che governa. Script, skill, modelli, fonti e output, anche se
+   formano una pipeline completa, non bastano. In dubbio usa `CAPACITA` o
+   `SOSPETTA` e il verdetto resta `NON PASSA`.
 6. Nessuna cartella resta senza classe e proprietario. Cartelle generiche,
    vuote, doppie, tecniche o sospette impediscono `PASSA` finche' non vengono
    risolte o portate al proprietario come decisione precisa.

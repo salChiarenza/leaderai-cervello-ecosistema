@@ -13,6 +13,13 @@ Core-Satellite, revisioni, backtest, monitoraggio e report usando il metodo del
 banker e fonti autorizzate. Il suo nome deriva dall'ecosistema reale del
 proprietario.
 
+## Responsabilita business
+
+La stanza governa il lavoro corrente sui portafogli dei clienti, le decisioni
+del banker sul metodo applicato e lo stato dei casi reali. Motori, modelli,
+skill e report sono capacita' o output della stanza, non la prova che una
+cartella tecnica sia una stanza.
+
 ## Dentro
 
 - `METODO.md`: decisioni professionali e criteri del banker.

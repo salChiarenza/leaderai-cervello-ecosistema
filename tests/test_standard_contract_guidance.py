@@ -48,6 +48,8 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "collegamenti a monte e a valle",
             "proposta strutturale",
             "LEZIONE CANDIDATA",
+            "responsabilita' business",
+            "`Portafoglio Modello`",
         ]
         for phrase in required:
             with self.subTest(phrase=phrase):

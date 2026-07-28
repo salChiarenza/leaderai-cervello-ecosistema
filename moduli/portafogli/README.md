@@ -13,8 +13,12 @@ costruzione Core-Satellite, revisione, backtest, monitoraggio e report cliente.
 
 L'agente del cliente legge `INSTALLA_MODULO.md` e lavora sulla cartella viva.
 
-Prima identifica la stanza che possiede davvero il processo. Il modulo non
-assegna il nome della stanza e non installa una nuova skill per default.
+Prima identifica la stanza che possiede davvero la responsabilita' business,
+lo stato e le decisioni del processo. Una cartella chiamata `Portafoglio
+Modello` non diventa stanza perche' contiene motori, fonti e report: resta una
+capacita' finche' il banker non riconosce una funzione business autonoma. Il
+modulo non assegna il nome della stanza e non installa una nuova skill per
+default.
 
 La skill esistente viene integrata con `VERIFICA_FINANZIARIA.md`; su una nuova
 installazione il nome viene scelto esplicitamente. La descrizione della skill

@@ -62,7 +62,8 @@ uniscono prima di cambiare il percorso.
 Prima di creare, rinominare, fondere o spostare una cartella, l'agente censisce
 l'ambiente e classifica ogni elemento rilevante come:
 
-- `STANZA`: funzione operativa stabile, con fonti o processi propri;
+- `STANZA`: responsabilita' business stabile riconosciuta dal proprietario,
+  che mantiene stato, decisioni e lavoro corrente;
 - `FONTE`: luogo da cui si leggono dati o documenti;
 - `OUTPUT`: risultato prodotto da una o piu' stanze;
 - `CAPACITA`: skill, script, agente, connettore, modulo o procedura;
@@ -72,12 +73,22 @@ l'ambiente e classifica ogni elemento rilevante come:
 
 Una vera stanza passa il contratto quando:
 
-1. e' raggiungibile dalla mappa madre;
-2. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
+1. dichiara quale responsabilita' business possiede, quali decisioni mantiene
+   e quale stato operativo governa;
+2. e' raggiungibile dalla mappa madre;
+3. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
    come ponte `@AGENTS.md`, con scopo, fonti, output e modo di muoversi;
-3. dichiara collegamenti a monte e a valle solo per processi reali;
-4. usa una sola fonte di verita' per ogni dato o stato;
-5. registra le capacita' che la servono e la prova che funzionano.
+4. dichiara collegamenti a monte e a valle solo per processi reali;
+5. usa una sola fonte di verita' per ogni dato o stato;
+6. registra le capacita' che la servono e la prova che funzionano.
+
+Script, skill, modelli, fonti e output possono formare una pipeline completa
+senza costituire una stanza. Descrivono **come** si esegue un lavoro; la stanza
+descrive **chi possiede la responsabilita' business**. Un nome di prodotto o
+di lavorazione, per esempio `Portafoglio Modello`, resta `CAPACITA` o
+`SOSPETTA` finche' il proprietario non dimostra che e' anche una funzione
+business autonoma con stato e decisioni propri. In dubbio il gate e'
+`NON PASSA`: l'agente non crea la mappa locale e non inventa una stanza.
 
 Il contratto locale nasce dalla fonte repo `templates/STANZA_AGENTS.md` e viene
 installato come `ecosistema/STANZA_AGENTS.md`. Ogni cartella nuova

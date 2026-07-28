@@ -6,7 +6,9 @@ description: Usa automaticamente il Sistema Portafogli quando un lavoro finanzia
 # Gestisci Portafoglio
 
 1. Apri `ecosistema/ASSET.md` e individua la stanza proprietaria registrata per
-   `Sistema Portafogli Core-Satellite`.
+   `Sistema Portafogli Core-Satellite`. Verifica che possieda una
+   responsabilita' business, stato e decisioni: un nome di prodotto o modello
+   con script e output non basta a dimostrare una stanza.
 2. Apri l'`AGENTS.md` di quella stanza. Se il collegamento manca o e' rotto,
    censisci le stanze esistenti: quando una sola stanza possiede gia' processo,
    fonti e motore Portafogli, ripara il puntatore nei registri e provalo. Se la

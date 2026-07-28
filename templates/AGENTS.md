@@ -64,15 +64,19 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
 7. presenta al proprietario fusioni, spostamenti, eliminazioni o cambi di
    proprieta' che coinvolgono contenuti preesistenti.
 
-Una cartella e' una stanza quando svolge una funzione stabile con fonti,
-processi o output propri. Ogni vera stanza ha sempre una mappa corta alla
+Una cartella e' una stanza quando possiede una responsabilita' business stabile
+riconosciuta dal proprietario e mantiene stato, decisioni e lavoro corrente.
+Contenere fonti, script, modelli e output non basta: quella puo' essere una
+pipeline o una capacita'. Ogni vera stanza ha sempre una mappa corta alla
 porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
-(`@AGENTS.md`). La mappa locale dichiara scopo, cosa contiene, fonti, output,
-capacita', collegamenti a monte e collegamenti a valle.
+(`@AGENTS.md`). La mappa locale dichiara responsabilita' business, scopo, cosa
+contiene, fonti, output, capacita', collegamenti a monte e collegamenti a valle.
 
 Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate a
-una stanza. Non diventano stanze per abitudine. Se manca una stanza proprietaria,
-proponi funzione, fonti, output, collegamenti e collaudo; decide il proprietario.
+una stanza. Un prodotto o un modello non diventa stanza perche' ha una pipeline
+completa. Se manca una stanza proprietaria, classifica `SOSPETTA`, proponi
+responsabilita' business, stato, decisioni, fonti, output, collegamenti e
+collaudo; decide il proprietario.
 
 ### Registro delle stanze
 

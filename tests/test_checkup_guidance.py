@@ -64,7 +64,7 @@ class CheckupGuidanceTest(unittest.TestCase):
             "Ispettore Ecosistema",
             "cartella visibile non classificata",
             "templates/STANZA_AGENTS.md",
-            "percorso | classe | proprietario",
+            "percorso | classe | responsabilita business | proprietario",
             "cartelle generiche",
             "file sciolto nella home",
             "il gate e' `NON PASSA`",
@@ -79,6 +79,9 @@ class CheckupGuidanceTest(unittest.TestCase):
             "prossimo passo",
             "scadenze",
             "Non creare una cartella\n`istituzionali/`",
+            "responsabilita' business",
+            "`Portafoglio Modello`",
+            "pipeline tecnica, non una stanza",
         ]
         for phrase in required:
             with self.subTest(phrase=phrase):

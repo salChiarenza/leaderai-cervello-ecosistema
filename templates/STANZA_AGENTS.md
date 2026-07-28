@@ -12,6 +12,14 @@ Questa e' la mappa locale della stanza `{{room_name}}`.
 
 {{room_purpose}}
 
+## Responsabilita business
+
+{{room_business_responsibility}}
+
+Descrivere la funzione aziendale riconosciuta dal proprietario, lo stato che
+mantiene e le decisioni che governa. Elencare script, skill, modelli o output
+non dimostra una stanza.
+
 ## Dentro
 
 - {{room_contents}}
@@ -61,5 +69,8 @@ Questa e' la mappa locale della stanza `{{room_name}}`.
 - Nei file progetto lo stato corrente, il prossimo passo e le scadenze stanno
   in testa; il diario viene dopo ed e' ordinato dal piu' recente.
 - Una nuova stanza nasce solo quando nessuna stanza esistente puo' possedere
-  quella funzione e il proprietario approva la proposta strutturale.
+  quella responsabilita' business e il proprietario approva la proposta
+  strutturale.
+- Una cartella con una pipeline completa di fonti, script, modelli e output
+  resta `CAPACITA` se non mantiene stato e decisioni di una funzione business.
 - `CLAUDE.md` in questa stanza contiene soltanto `@AGENTS.md`.

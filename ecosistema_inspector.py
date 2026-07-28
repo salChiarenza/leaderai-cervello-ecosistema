@@ -67,6 +67,7 @@ GENERIC_NAMES = {
 ROOM_REQUIRED_TERMS = (
     "stato corrente e prossimo passo",
     "scopo",
+    "responsabilita business",
     "dentro",
     "fonti",
     "output",
@@ -75,6 +76,13 @@ ROOM_REQUIRED_TERMS = (
     "a valle",
     "dove scrivere",
     "fonte business editabile",
+)
+
+UNPROVEN_ROOM_RESPONSIBILITY_TERMS = (
+    "{{",
+    "da definire",
+    "da compilare",
+    "non applicabile",
 )
 
 CREDENTIAL_NAME_TERMS = {
@@ -423,6 +431,19 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
     return findings
 
 
+def _room_business_responsibility_is_proven(content: str) -> bool:
+    match = re.search(
+        r"(?ms)^##\s+responsabilita business\s*$\s*(.*?)(?=^##\s|\Z)",
+        content,
+    )
+    if not match:
+        return False
+    section = match.group(1).strip()
+    if not section:
+        return False
+    return not any(term in section for term in UNPROVEN_ROOM_RESPONSIBILITY_TERMS)
+
+
 def _project_control_issue(path: Path) -> str | None:
     text = _normalized(path.read_text(encoding="utf-8"))
     headings = [
@@ -622,6 +643,17 @@ def inspect_ecosystem(target: Path, agent: str = "auto") -> Inspection:
                         "BLOCKER",
                         f"{room.path}/AGENTS.md",
                         "Sezioni mancanti: " + ", ".join(missing_terms) + ".",
+                    )
+                )
+            elif not _room_business_responsibility_is_proven(content):
+                findings.append(
+                    Finding(
+                        "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
+                        "BLOCKER",
+                        f"{room.path}/AGENTS.md",
+                        "La mappa non prova una responsabilita' business reale "
+                        "con stato e decisioni: script, modelli e output non "
+                        "bastano a dimostrare una stanza.",
                     )
                 )
         if not room_claude.is_file():

@@ -11,13 +11,16 @@ la cartella viva come caso reale.
    scostamenti tecnici riparabili e registra gli interventi.
 3. Censisci le cartelle e le capacita' Portafogli gia' presenti. Classifica
    stanze, fonti, output, skill, script e archivi. Individua la stanza che
-   possiede davvero il processo: usa il suo nome e il suo percorso reali.
+   possiede davvero la responsabilita' business, lo stato e le decisioni del
+   processo: usa il suo nome e il suo percorso reali. Non promuovere
+   `Portafoglio Modello` o un'altra cartella tecnica a stanza soltanto perche'
+   contiene una pipeline completa.
 4. Se esiste una skill equivalente, riusala e integra il gate
    `VERIFICA_FINANZIARIA.md`: la descrizione deve attivarla automaticamente
    quando compaiono numeri finanziari, fondi, titoli, ISIN o verifiche sullo
-   stato di uno strumento. Se nessuna stanza puo' possedere la funzione,
-   presenta al proprietario una proposta con scopo, fonti, output, monte/valle
-   e collaudo. Crea la stanza solo dopo il suo ok.
+   stato di uno strumento. Se nessuna stanza puo' possedere la responsabilita'
+   business, presenta al proprietario una proposta con stato, decisioni, scopo,
+   fonti, output, monte/valle e collaudo. Crea la stanza solo dopo il suo ok.
 5. Esegui sulla stanza scelta:
 
    ```bash

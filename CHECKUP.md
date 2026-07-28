@@ -382,6 +382,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - una vera stanza non e' collegata alla mappa madre, non ha `AGENTS.md` e
   `CLAUDE.md`, oppure la sua mappa locale non dichiara scopo, fonti, output,
   capacita', monte, valle e dove scrivere;
+- una cartella e' stata dichiarata stanza soltanto perche' contiene skill,
+  script, modelli, fonti o output, senza una responsabilita' business
+  riconosciuta, stato operativo e decisioni proprie;
 - restano cartelle generiche, vuote, concorrenti o tecniche presentate come
   lavoro vivo;
 - due stanze rispondono alla stessa funzione;
@@ -411,9 +414,23 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    Parti da tutte le cartelle e dai file visibili nella home, poi apri l'albero
    a due livelli delle voci non standard. Nessun percorso resta fuori dalla
    tabella di censimento.
-2. Una stanza e' una funzione operativa stabile con fonti, processi o output
-   propri. Una skill, uno script, un agente, un connettore, un modulo o una
-   procedura e' una capacita' della stanza che lo usa.
+2. Una stanza e' una responsabilita' business stabile riconosciuta dal
+   proprietario. Mantiene stato operativo, decisioni e lavoro corrente. Una
+   skill, uno script, un agente, un connettore, un modulo, un modello o una
+   procedura e' una capacita' della stanza che lo usa. Una cartella piena di
+   fonti e output puo' essere una pipeline tecnica, non una stanza.
+   Prima di scrivere `STANZA`, rispondi con prove a quattro domande:
+   - quale responsabilita' business possiede;
+   - quale stato e quali decisioni mantiene;
+   - quale lavoro riceve a monte e quale risultato consegna a valle;
+   - se il proprietario usa davvero quel nome per la funzione, oppure e' solo
+     il nome di un prodotto, progetto, modello, script o output.
+   Se una risposta manca, classifica `CAPACITA` o `SOSPETTA`, assegna la
+   cartella a una stanza gia' riconosciuta oppure porta al proprietario una
+   `PROPOSTA STRUTTURALE`. Il gate resta `NON PASSA` e non si crea la mappa
+   locale. Caso di regressione: `Portafoglio Modello` con motori, skill, fonti
+   e documenti non e' di per se' una stanza; e' una capacita' finche' la
+   responsabilita' business non viene dimostrata.
 3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia una mappa locale costruita o integrata da
    `ecosistema/STANZA_AGENTS.md` (calco locale installato dalla fonte repo
@@ -438,7 +455,7 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
 
 Tabella obbligatoria del censimento:
 
-`percorso | classe | proprietario | mappa locale | collegamento radice | azione | prova`
+`percorso | classe | responsabilita business | proprietario | mappa locale | collegamento radice | azione | prova`
 
 Se la repo ufficiale e' gia' presente localmente e il proprietario autorizza
 l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.2 - 28/07/2026
+
+- Aggiunto il gate anti-falsa-stanza: una cartella e' `STANZA` solo quando
+  possiede una responsabilita' business riconosciuta, mantiene stato e
+  decisioni e governa lavoro corrente.
+- Script, skill, modelli, fonti e output possono formare una pipeline completa
+  senza creare una stanza; in caso ambiguo la classe resta `CAPACITA` o
+  `SOSPETTA` e il verdetto e' `NON PASSA`.
+- Aggiunta la regressione `Portafoglio Modello`: il nome di un prodotto o di
+  una lavorazione non dimostra una funzione aziendale autonoma.
+- Il contratto locale e l'Ispettore richiedono ora una sezione esplicita
+  `Responsabilita business`; il preflight blocca placeholder e dichiarazioni
+  non risolte.
+- Gli esempi del modulo Portafogli usano una stanza business neutra e non
+  insegnano piu' a trattare `Portafoglio Modello` come stanza.
+
 ## 0.4.1 - 28/07/2026
 
 - Il modulo Portafogli include il gate unico `VERIFICA_FINANZIARIA.md`, attivo
