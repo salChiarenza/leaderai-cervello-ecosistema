@@ -5,12 +5,15 @@ in `INSTALLA_CON_AI.md`; nessun altro file duplica questa email.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 27/07/2026`
+`PROVA_DESTINATARIO_OK — 28/07/2026`
 
-Verifica anonima completata sulla versione pubblica `0.3.8`, commit `7eb7f04`:
-repo, `VERSION`, `EMAIL_CONSEGNA.md`, `INSTALLA_CON_AI.md`, `CHECKUP.md`,
-`templates/CLAUDE.md` e ponte Portafogli sono leggibili senza account. Il
-percorso descritto dalla sola email raggiunge tutti i file necessari.
+Verifica in sessione anonima completata sulla versione pubblica `0.4.0`,
+commit `ba75e1998f66b449a3d8c494a0fde9fc7976a8f1`.
+L'archivio pubblico misura `126426` byte e ha SHA-256
+`eecc2e8530bf804c807cd8feb0448e7ff31fe5aca478d2ab219fe138f13a37ed`.
+Dal solo archivio risultano leggibili `VERSION`, `INSTALLA_CON_AI.md`,
+`CHECKUP.md`, `MANIFEST.md`, l'Ispettore, il setup e i template per mappa,
+stanza e skill. Compilazione completata e `88` test superati.
 
 ## Controlli prima dell'invio
 
@@ -42,7 +45,7 @@ compare la richiesta nativa di accesso, conferma quel singolo gesto.</p>
 <p>Affidagli questa missione:</p>
 
 <p>Apri in sola lettura la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI</a>
+<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI 0.4.0</a>
 e usa la
 <a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema">repo ufficiale</a>
 come standard.</p>
@@ -59,8 +62,13 @@ Seconda postazione: [SI / NO]</p>
 <code>.claude/</code> soltanto per Claude Code, entrambe soltanto se LeaderAI
 lo ha richiesto esplicitamente.</p>
 
-<p>Diagnostica, integra, prova e completa <code>REPORT_FINALE.md</code>.
-Mostrami il report locale. Ogni invio email successivo richiede una mia nuova
+<p>Confronta la versione installata con <code>VERSION 0.4.0</code>, configura
+la memoria unica prevista per l'agente attivo e usa
+<code>ecosistema/STANZA_AGENTS.md</code> per ogni stanza reale. Lancia
+l'Ispettore, ripara i punti sicuri e prova le strade fino agli output.</p>
+
+<p>Completa il <code>REPORT_FINALE.md</code> temporaneo con data e stato e
+mostramelo localmente. Ogni invio email successivo richiede una mia nuova
 autorizzazione esplicita.</p>
 
 <p>[FIRMA AGENTE: Sal &amp; Codex / Sal &amp; Claude Code]</p>
@@ -92,8 +100,13 @@ Rileva l'agente attivo. Il telaio comune comprende sempre AGENTS.md e
 CLAUDE.md con @AGENTS.md. Configura .codex/ soltanto per Codex, .claude/
 soltanto per Claude Code, entrambe soltanto su richiesta esplicita LeaderAI.
 
-Diagnostica, integra, prova e completa REPORT_FINALE.md. Mostrami il report
-locale. Ogni invio email successivo richiede una mia nuova autorizzazione
+Confronta la versione installata con VERSION 0.4.0, configura la memoria unica
+prevista per l'agente attivo e usa ecosistema/STANZA_AGENTS.md per ogni stanza
+reale. Lancia l'Ispettore, ripara i punti sicuri e prova le strade fino agli
+output.
+
+Completa il REPORT_FINALE.md temporaneo con data e stato e mostramelo
+localmente. Ogni invio email successivo richiede una mia nuova autorizzazione
 esplicita.
 
 [FIRMA AGENTE: Sal & Codex / Sal & Claude Code]
