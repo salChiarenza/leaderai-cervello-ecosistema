@@ -30,6 +30,7 @@ class InstallResult:
 
 
 MANAGED_FILES = {
+    "VERIFICA_FINANZIARIA.md": "VERIFICA_FINANZIARIA.md",
     "PROCESSO.md": "PROCESSO.md",
     "SCHEMA_DATI.md": "SCHEMA_DATI.md",
     "portfolio_engine.py": "portfolio_engine.py",
@@ -390,6 +391,7 @@ def install(
 Questa stanza possiede la capacita' Portafogli LeaderAI.
 
 - Processo: `{room_rel}/PROCESSO.md`
+- Verifica finanziaria: `{room_rel}/VERIFICA_FINANZIARIA.md`
 - Fonti: `{room_rel}/FONTI.md`
 - Metodo professionale: `{room_rel}/METODO.md`
 - Motore numerico: `{room_rel}/portfolio_engine.py`
@@ -439,6 +441,7 @@ Questa stanza possiede la capacita' Portafogli LeaderAI.
 - Stanza proprietaria: `{room_rel}/`
 - Contratto: `{room_rel}/AGENTS.md`
 - Processo: `{room_rel}/PROCESSO.md`
+- Verifica finanziaria: `{room_rel}/VERIFICA_FINANZIARIA.md`
 - Calcoli: `{room_rel}/portfolio_engine.py`
 - Orchestrazione: {skill_reference}
 - A monte / a valle: compilare dai processi reali del proprietario.

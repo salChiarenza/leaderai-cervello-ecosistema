@@ -6,6 +6,7 @@ cartella Cervello + Ecosistema LeaderAI.
 ## Risultato
 
 Il modulo collega fonti autorizzate, metodo del banker, calcoli verificabili,
+controllo corrente di identita', stato e collocabilita' degli strumenti,
 costruzione Core-Satellite, revisione, backtest, monitoraggio e report cliente.
 
 ## Installazione agente
@@ -14,6 +15,11 @@ L'agente del cliente legge `INSTALLA_MODULO.md` e lavora sulla cartella viva.
 
 Prima identifica la stanza che possiede davvero il processo. Il modulo non
 assegna il nome della stanza e non installa una nuova skill per default.
+
+La skill esistente viene integrata con `VERIFICA_FINANZIARIA.md`; su una nuova
+installazione il nome viene scelto esplicitamente. La descrizione della skill
+attiva il controllo quando compaiono numeri finanziari, fondi, titoli, ISIN o
+richieste sullo stato di uno strumento.
 
 Comando diretto:
 
@@ -34,5 +40,6 @@ python3 portfolio_engine.py backtest --portfolio DATI_PORTAFOGLIO.csv --returns 
 
 ## Perimetro professionale
 
-Il sistema prepara analisi e bozze tracciabili. Il banker valida adeguatezza,
-strumenti, pesi, messaggio al cliente e firma.
+Il sistema prepara analisi e bozze tracciabili. Ogni report cliente richiede
+gate finanziario `PASSA`; il banker valida adeguatezza, strumenti, pesi,
+messaggio al cliente e firma.

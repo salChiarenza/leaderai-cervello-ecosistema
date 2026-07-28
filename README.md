@@ -131,7 +131,9 @@ Modulo specifico gia' disponibile:
 - `MODULO_CALENDARIO_OPERATIVO.md` - quando il cliente usa Calendar a colori e
   serve trasformare quella lettura visiva in struttura leggibile dall'agente.
 - `moduli/portafogli/` - Sistema Portafogli Core-Satellite: fonti autorizzate,
-  metodo del banker, calcoli deterministici, backtest, monitoraggio e report.
+  verifica automatica di numeri, identita', stato e collocabilita' degli
+  strumenti, metodo del banker, calcoli deterministici, backtest, monitoraggio
+  e report.
   L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
   la stanza proprietaria e integra il modulo senza creare una stanza concorrente.
 

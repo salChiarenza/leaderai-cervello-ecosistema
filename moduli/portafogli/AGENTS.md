@@ -9,6 +9,8 @@ LeaderAI. Eredita le regole dalla radice della repo.
 - `installa_portafogli.py`: montaggio idempotente nella stanza proprietaria
   scelta dopo il censimento.
 - `portfolio_engine.py`: calcoli e backtest deterministici.
+- `VERIFICA_FINANZIARIA.md`: gate unico per numeri, identità, stato e
+  collocabilità degli strumenti.
 - `PROCESSO.md`: flusso completo dal dato al report.
 - `SCHEMA_DATI.md`: contratto dei file CSV.
 - `*.template.md` e `*_MODELLO.*`: file iniziali da personalizzare.
@@ -25,6 +27,7 @@ LeaderAI. Eredita le regole dalla radice della repo.
 
 1. Mantieni il modulo riavviabile e conservativo sui file personalizzati.
 2. Ogni calcolo numerico passa da `portfolio_engine.py` e dai test.
-3. Ogni campo concreto porta fonte e data.
-4. Aggiorna `VERSION`, README, Manifest e test quando cambia il contratto.
-5. Esegui `python3 -m unittest discover -s tests` dalla radice prima del rilascio.
+3. Ogni numero e strumento passa da `VERIFICA_FINANZIARIA.md`.
+4. Ogni campo concreto porta fonte e data.
+5. Aggiorna `VERSION`, README, Manifest e test quando cambia il contratto.
+6. Esegui `python3 -m unittest discover -s tests` dalla radice prima del rilascio.

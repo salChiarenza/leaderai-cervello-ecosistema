@@ -18,6 +18,8 @@ proprietario.
 - `METODO.md`: decisioni professionali e criteri del banker.
 - `FONTI.md`: percorsi veri, proprietari, frequenza e data di verifica.
 - `CORE.md`: modelli Core approvati e pesi.
+- `VERIFICA_FINANZIARIA.md`: gate obbligatorio per numeri, strumenti, stato e
+  collocabilità.
 - `PROCESSO.md`: sequenza operativa completa.
 - `SCHEMA_DATI.md`: campi obbligatori e unità.
 - `portfolio_engine.py`: fonte dei calcoli numerici.
@@ -63,8 +65,10 @@ proprietario.
 
 ## Ordine di lavoro
 
-1. Leggi `METODO.md`, `FONTI.md`, `CORE.md` e la scheda del caso.
-2. Verifica fonti, date, valute, ammissibilità e campi obbligatori.
+1. Leggi `VERIFICA_FINANZIARIA.md`, `METODO.md`, `FONTI.md`, `CORE.md` e la
+   scheda del caso.
+2. Verifica fonti, date, valute, identità, stato, collocabilità e campi
+   obbligatori.
 3. Normalizza i dati secondo `SCHEMA_DATI.md`.
 4. Esegui il motore e conserva CSV e report prodotti.
 5. Prepara alternative e motivazioni distinguendo fatti, ipotesi e decisioni.
@@ -75,9 +79,14 @@ proprietario.
 ## Regole professionali
 
 - Il catalogo collocabile registrato in `FONTI.md` definisce l'universo delle proposte.
-- Ogni prezzo, cambio, rendimento e dato di mercato porta fonte e data.
+- Ogni numero materiale e ogni strumento attivano il gate di
+  `VERIFICA_FINANZIARIA.md`.
+- Ogni prezzo, cambio, rendimento e dato di mercato porta fonte, data e
+  ricalcolo quando applicabile.
+- Esistenza dello strumento e collocabilità sono prove distinte.
 - Il motore esegue i calcoli; il testo cita i suoi output.
-- Dati incompleti producono una richiesta precisa o uno stato `DA COMPLETARE`.
+- Dati o stati critici incompleti producono `ESITO SOSPESO` con la prova da
+  recuperare.
 - Il banker valida adeguatezza, strumenti, pesi, raccomandazione e firma.
 - I dati cliente restano nella cartella autorizzata e nei limiti privacy aziendali.
 - Ogni output destinato al cliente include le avvertenze approvate dal banker.

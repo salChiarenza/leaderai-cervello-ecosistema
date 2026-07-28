@@ -29,5 +29,6 @@ Periodo/data di riferimento: `[DATA]`
 
 ## Fonti e avvertenze
 
-[Fonti, data, benchmark, costi/fiscalità inclusi o esclusi e avvertenze
-approvate dal banker.]
+[Fonti primarie, data/ora di riferimento, identità e stato degli strumenti,
+benchmark, costi/fiscalità inclusi o esclusi e avvertenze approvate dal
+banker.]

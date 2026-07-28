@@ -1,13 +1,17 @@
 # Processo operativo Portafogli
 
-## Gate 1 — Caso e fonti
+## Gate 1 — Caso, fonti e strumenti
 
 1. Leggi la scheda cliente, profilo, obiettivi, orizzonte, liquidità e vincoli.
-2. Apri le fonti registrate in `FONTI.md` e annota la data di verifica.
-3. Confronta ogni strumento proposto con l'universo collocabile.
-4. Registra dati mancanti e decisioni professionali richieste.
+2. Apri `VERIFICA_FINANZIARIA.md` e applica il gate a numeri e strumenti.
+3. Apri le fonti registrate in `FONTI.md` e annota la data/ora di verifica.
+4. Verifica per ogni strumento identità, ISIN, classe, valuta e stato corrente.
+5. Confronta separatamente ogni strumento con l'universo collocabile.
+6. Registra nel dossier la fonte primaria, la prova, gli eventuali dati
+   divergenti e le decisioni professionali richieste.
 
-Esito: `PRONTO AI CALCOLI` oppure `DA COMPLETARE` con elenco preciso.
+Esito: `PASSA - PRONTO AI CALCOLI` oppure `ESITO SOSPESO` con elenco preciso
+delle prove mancanti.
 
 ## Gate 2 — Normalizzazione
 
@@ -56,10 +60,11 @@ Esito: quadratura al 100%, totale EUR, drift, importi e alert calcolati.
 ## Routine settimanale
 
 1. Aggiorna prezzi, cambi e fonti dei satelliti.
-2. Esegui `analizza`.
-3. Evidenzia movimenti assoluti pari o superiori alla soglia registrata in `METODO.md`.
-4. Prepara un elenco breve: fatto, impatto, azione da valutare.
-5. Registra la revisione nello storico del caso.
+2. Riconferma stato e collocabilità degli strumenti toccati dalla revisione.
+3. Esegui `analizza`.
+4. Evidenzia movimenti assoluti pari o superiori alla soglia registrata in `METODO.md`.
+5. Prepara un elenco breve: fatto, impatto, azione da valutare.
+6. Registra la revisione nello storico del caso.
 
 ## Aggiornamento annuale
 
@@ -71,5 +76,6 @@ Esito: quadratura al 100%, totale EUR, drift, importi e alert calcolati.
 
 ## Chiusura del caso
 
-Il caso è pronto per il cliente quando dati, calcoli, validazione del banker,
-report e storico risultano allineati alla stessa data di riferimento.
+Il caso è pronto per il cliente quando il gate finanziario è `PASSA` e dati,
+calcoli, stato degli strumenti, collocabilità, validazione del banker, report e
+storico risultano allineati alla stessa data di riferimento.

@@ -10,6 +10,18 @@
 |---|---|---|---|
 | | | | |
 
+## Gate verifica finanziaria
+
+Esito: `PASSA / ESITO SOSPESO`
+
+| Elemento | Identificativo | Affermazione/numero | Fonte primaria | Data fonte | Verifica | Calcolo | Esito |
+|---|---|---|---|---|---|---|---|
+| | | | | | | | |
+
+Correzioni emerse nel secondo controllo:
+
+-
+
 ## Situazione attuale
 
 - Totale EUR:
@@ -43,6 +55,7 @@
 ## Controllo finale
 
 - [ ] Fonti aggiornate
+- [ ] Identità, stato e collocabilità degli strumenti verificati
 - [ ] Dati completi
 - [ ] Output motore verificati
 - [ ] Adeguatezza validata dal banker

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.1 - 28/07/2026
+
+- Il modulo Portafogli include il gate unico `VERIFICA_FINANZIARIA.md`, attivo
+  su numeri finanziari, fondi, ETF, titoli, ISIN e richieste sullo stato di uno
+  strumento.
+- La skill distingue identita' e stato corrente del prodotto dalla sua
+  collocabilita' nel catalogo autorizzato.
+- Ogni numero materiale porta fonte, data/ora, valuta, periodo, formula e
+  ricalcolo; ogni strumento porta identificativo, classe, valuta e stato tra
+  attivo, chiuso, sospeso, incorporato, rinominato, liquidato o non verificato.
+- Il secondo controllo cerca anche evidenze contrarie alla prima risposta; il
+  consenso tra modelli resta una revisione aggiuntiva e non sostituisce la
+  fonte primaria.
+- Un elemento critico privo di prova produce `ESITO SOSPESO`; il report cliente
+  nasce soltanto dal gate `PASSA` validato dal banker.
+
 ## 0.4.0 - 28/07/2026
 
 - Il gate legge obbligatoriamente il `VERSION` vivo e lo confronta con la

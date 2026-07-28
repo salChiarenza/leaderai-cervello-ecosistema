@@ -203,8 +203,12 @@ Il modulo passa quando:
 - riusa una capacita' esistente quando copre gia' il lavoro; una nuova skill si
   installa solo dopo una scelta esplicita di nome e perimetro;
 - registra l'asset e il processo nell'Ecosistema cliente;
+- applica `VERIFICA_FINANZIARIA.md` ogni volta che compaiono numeri finanziari
+  o strumenti e separa stato del prodotto da collocabilita';
 - calcola pesi, drift, riallineamento, alert e backtest dai CSV normalizzati;
 - blocca target fuori universo e serie mensili incomplete;
+- produce `ESITO SOSPESO` quando identita', stato, collocabilita', fonte o
+  calcolo di un elemento critico non sono verificati;
 - produce un dossier tracciabile che il banker valida prima del report cliente.
 
 ## Fonti ufficiali da tenere vive
