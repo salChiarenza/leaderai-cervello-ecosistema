@@ -12,7 +12,14 @@ lettore. Il proprietario interviene nei gesti umani che l'agente gli presenta.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIPETERE — versione 0.4.4`
+`PROVA_DESTINATARIO_OK — 28/07/2026`
+
+Verifica completata partendo dal solo archivio pubblico della versione `0.4.4`,
+commit funzionale `c4c5451db4a314b3ea70d04edb8af59b3ecebf9b`.
+L'archivio misura `136703` byte e ha SHA-256
+`11ff1ae9b0f11a919006d2ac06f42dacd1a9c400275144937b17e0df040f804a`.
+La versione letta dall'archivio e' `0.4.4` e tutti i `97` test risultano
+superati.
 
 ## Controlli prima dell'invio
 
