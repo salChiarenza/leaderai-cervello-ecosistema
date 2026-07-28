@@ -1,10 +1,16 @@
-# Checkup — il Cervello a confronto con i docs ufficiali
+# Ispettore Ecosistema — checkup, riparazione e collaudo delle strade
 
 Missione per l'agente del proprietario (Claude Code o Codex). Si lancia
-dicendo all'agente: "esegui il checkup LeaderAI" (questo file, `CHECKUP.md`,
-nella repo gia' presente o letta come standard LeaderAI). Si puo' rifare ogni
-volta che serve: dopo un aggiornamento, ogni tot settimane, o quando qualcosa
-non torna.
+dicendo all'agente `lancia l'Ispettore`, `esegui il checkup LeaderAI`,
+`controlla l'Ecosistema`, `verifica le strade` o `cerca doppioni`. La skill
+`ispettore-ecosistema` porta sempre a questo file, che resta la fonte unica
+della procedura. Si puo' rifare dopo un aggiornamento, un cambiamento
+strutturale, periodicamente o quando qualcosa non torna.
+
+L'Ispettore non e' una pagella. Censisce la casa viva, classifica ogni
+percorso, ripara i difetti sicuri, prova gli instradamenti e blocca la chiusura
+finche' restano cartelle senza proprietario, stanze senza mappa, doppioni,
+residui tecnici o percorsi che l'agente non sa seguire.
 
 Nota per chi mantiene LeaderAI: questo `CHECKUP.md` versionato e' la fonte
 unica della procedura. Nel workspace interno
@@ -21,6 +27,7 @@ Regola breve: non riparare a sentimento. `CHECKUP.md` non ripara a sentimento:
 - `MANIFEST.md` e' lo standard di conformita';
 - `templates/AGENTS.md` e' il comportamento atteso dell'agente nella cartella
   cliente;
+- `templates/STANZA_AGENTS.md` e' il contratto locale di ogni vera stanza;
 - `AGENTS.md` e `README.md` spiegano come usare la repo;
 - la documentazione ufficiale viva Claude/Codex verifica solo la parte tecnica,
   non sostituisce lo standard LeaderAI.
@@ -40,12 +47,13 @@ Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
 Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
 Se la repo e' gia' presente sul computer, aggiornala e apri `CHECKUP.md`.
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per
-`CHECKUP.md`, `MANIFEST.md` e `templates/AGENTS.md`. Crea un clone tecnico
-temporaneo solo dopo conferma esplicita.
+`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+`templates/STANZA_AGENTS.md` e `templates/ISPETTORE_SKILL.md`. Crea un clone
+tecnico temporaneo solo dopo conferma esplicita.
 
 Usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e'
 il caso reale: confrontala con lo standard della repo e con
-`templates/AGENTS.md`.
+`templates/AGENTS.md` e `templates/STANZA_AGENTS.md`.
 
 Prima di dichiarare che non ci sono doppioni o cartelle tecniche fuori posto,
 fai la ricerca estesa obbligatoria: cerca anche nomi non standard, nomi
@@ -98,7 +106,8 @@ le lezioni compatibili emerse dopo quella versione; aggiorna la versione
 applicata solo dopo aver ripetuto i collaudi.
 
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
-file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`, `AGENTS.md`,
+file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+`templates/STANZA_AGENTS.md`, `templates/ISPETTORE_SKILL.md`, `AGENTS.md`,
 `README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
 leggerli online, chiedi una sola conferma per creare un clone tecnico
 temporaneo in cartella temporanea di sistema. Il checkup di un ambiente gia'
@@ -111,6 +120,8 @@ Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 
 - `MANIFEST.md`;
 - `templates/AGENTS.md`;
+- `templates/STANZA_AGENTS.md`;
+- `templates/ISPETTORE_SKILL.md`;
 - `AGENTS.md`;
 - `README.md`.
 
@@ -222,8 +233,8 @@ agenti realmente attivi:
 
 | Modalita' rilevata | Aggancio minimo obbligatorio | Configurazione tecnica da verificare |
 |---|---|---|
-| Codex | `AGENTS.md` + `.codex/README.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
-| Claude Code | `CLAUDE.md` + `.claude/README.md` | `.claude/settings.json` e `.claude/settings.local.json` se esistono o se servono impostazioni di progetto |
+| Codex | `AGENTS.md` + `.codex/README.md` + `.agents/skills/ispettore-ecosistema/SKILL.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
+| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `.claude/settings.json` e `.claude/settings.local.json` se esistono o se servono impostazioni di progetto |
 | Entrambi | entrambi gli agganci | entrambi i rami, senza duplicare le istruzioni comuni |
 
 La modalita' `both` vale solo se risultano entrambi realmente attivi oppure se
@@ -241,6 +252,10 @@ Fonti comuni minime:
   <https://code.claude.com/docs/en/memory>
 - OpenAI Codex, caricamento gerarchico di `AGENTS.md`:
   <https://developers.openai.com/codex/guides/agents-md>
+- OpenAI Codex, skill condivise di progetto in `.agents/skills/`:
+  <https://learn.chatgpt.com/docs/build-skills>
+- Claude Code, skill di progetto in `.claude/skills/`:
+  <https://code.claude.com/docs/en/slash-commands>
 
 Se e' attivo **Codex**, apri inoltre:
 
@@ -285,24 +300,28 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 
 1. Verifica `.codex/README.md`: deve dichiarare che Codex usa `AGENTS.md` come
    istruzione comune e non deve duplicarne il contenuto.
-2. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
+2. Verifica `.agents/skills/ispettore-ecosistema/SKILL.md`: deve essere
+   richiamabile e puntare alla procedura unica `CHECKUP.md`.
+3. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
    le configurazioni di progetto vengono caricate solo in un progetto trusted.
-3. Se servono impostazioni Codex di progetto e `.codex/config.toml` manca,
+4. Se servono impostazioni Codex di progetto e `.codex/config.toml` manca,
    crealo con il minimo necessario e senza segreti.
-4. Hook, skill, MCP e agenti specializzati sono opzionali. Se presenti,
-   confrontali con la documentazione ufficiale, prova il caso reale e rimuovi
-   dal verdetto ogni presunzione non verificata.
+5. Le altre skill, hook, MCP e agenti specializzati sono opzionali. Se
+   presenti, confrontali con la documentazione ufficiale, prova il caso reale e
+   rimuovi dal verdetto ogni presunzione non verificata.
 
 ### C. Ramo Claude Code — solo se Claude Code e' attivo
 
 1. Verifica `.claude/README.md`: deve dichiarare che Claude Code entra dal
    ponte `CLAUDE.md` e non deve duplicare `AGENTS.md`.
-2. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
+2. Verifica `.claude/skills/ispettore-ecosistema/SKILL.md`: deve essere
+   richiamabile e puntare alla procedura unica `CHECKUP.md`.
+3. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
    `settings.local.json` resta locale e fuori da Git; nessun segreto in chiaro.
-3. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
+4. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
    crealo con il minimo necessario e senza segreti.
-4. Rule, hook, skill, subagent e MCP sono opzionali. Se presenti, verifica
-   sintassi e comportamento contro le pagine ufficiali vive; se devono
+5. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
+   verifica sintassi e comportamento contro le pagine ufficiali vive; se devono
    bloccare un'azione, prova davvero il blocco.
 
 ### D. Prove comuni
@@ -325,6 +344,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - la modalita' attiva non e' stata rilevata e dichiarata;
 - manca `.codex/README.md` quando Codex e' attivo;
 - manca `.claude/README.md` quando Claude Code e' attivo;
+- manca `.agents/skills/ispettore-ecosistema/SKILL.md` quando Codex e' attivo;
+- manca `.claude/skills/ispettore-ecosistema/SKILL.md` quando Claude Code e'
+  attivo;
 - in modalita' `both` manca uno dei due agganci;
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
@@ -332,6 +354,15 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   oppure creata soltanto per far passare il checkup;
 - una fonte operativa e' dichiarata attiva usando l'email della missione o del
   checkup invece della fonte usata nel lavoro quotidiano.
+- esiste una cartella visibile non classificata o senza stanza proprietaria;
+- una vera stanza non e' collegata alla mappa madre, non ha `AGENTS.md` e
+  `CLAUDE.md`, oppure la sua mappa locale non dichiara scopo, fonti, output,
+  capacita', monte, valle e dove scrivere;
+- restano cartelle generiche, vuote, concorrenti o tecniche presentate come
+  lavoro vivo;
+- due stanze rispondono alla stessa funzione;
+- un file sciolto nella home non ha una stanza proprietaria;
+- una delle due prove di instradamento non arriva dalla radice all'output.
 
 `PASSA CON ATTENZIONE` e `PASSA` sono ammessi solo dopo aver superato questo
 gate. Un ramo inattivo puo' restare assente e va riportato come `NON ATTIVO`,
@@ -343,19 +374,43 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
 
 1. Censisci gli elementi rilevanti e classificali come `STANZA`, `FONTE`,
    `OUTPUT`, `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`.
+   Parti da tutte le cartelle e dai file visibili nella home, poi apri l'albero
+   a due livelli delle voci non standard. Nessun percorso resta fuori dalla
+   tabella di censimento.
 2. Una stanza e' una funzione operativa stabile con fonti, processi o output
    propri. Una skill, uno script, un agente, un connettore, un modulo o una
    procedura e' una capacita' della stanza che lo usa.
 3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
-   madre e abbia una mappa locale corta con scopo, fonti, output, capacita',
-   collegamenti a monte e collegamenti a valle. Ogni vera stanza mantiene il
-   telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md` verso quella mappa.
+   madre e abbia una mappa locale costruita o integrata da
+   `templates/STANZA_AGENTS.md`: scopo, contenuto, fonti, output, capacita',
+   collegamenti a monte e collegamenti a valle e dove scrivere. Ogni vera
+   stanza mantiene il telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md`
+   verso quella mappa.
 4. Verifica che ogni collegamento corrisponda a un processo reale, che nessuna
    capacita' sia isolata e che due stanze non rispondano alla stessa funzione.
-5. Ripara e prova i difetti meccanici: ponti, link, puntatori e registri rotti.
-   Per fusioni, spostamenti, eliminazioni, nuove stanze o cambi di proprieta'
-   scrivi una `PROPOSTA STRUTTURALE` con causa, impatto e collaudo; decide il
-   proprietario.
+5. Ripara e prova i difetti meccanici: mappe locali mancanti per stanze gia'
+   riconosciute, ponti, link, puntatori e registri rotti. Elimina i residui
+   vuoti o inutili creati dall'agente nella missione corrente. Per fusioni,
+   spostamenti, eliminazioni, nuove stanze o cambi di proprieta' che toccano
+   contenuti preesistenti scrivi una `PROPOSTA STRUTTURALE` con causa, impatto
+   e collaudo; decide il proprietario.
+6. Tratta nomi generici come `documenti`, `output`, `exports`, `varie`, `misc`,
+   `temp` o `nuova cartella` come `SOSPETTA` finche' contenuti e proprietario
+   non sono chiari. Una cartella generica non passa perche' contiene file.
+7. Confronta le nuove cartelle col salvataggio precedente: nessun percorso
+   creato nel lavoro corrente entra nel commit senza classe, proprietario e
+   prova.
+
+Tabella obbligatoria del censimento:
+
+`percorso | classe | proprietario | mappa locale | collegamento radice | azione | prova`
+
+Se la repo ufficiale e' gia' presente localmente e il proprietario autorizza
+l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target
+<cartella-viva>` fornisce il preflight deterministico. Il preflight non
+sostituisce il giudizio dell'agente sui processi e non cancella dati. Se la
+repo non e' locale, esegui gli stessi controlli con gli strumenti file
+disponibili senza creare un clone automatico.
 
 ## Passo 2 — Ecosistema (solo se il Passo 1 passa)
 
@@ -401,7 +456,8 @@ tecnico minimo, mai il funzionamento reale dell'Ecosistema.
 CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
 STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
-MANIFEST.md; templates/AGENTS.md; docs ufficiali vive per la parte tecnica.
+MANIFEST.md; templates/AGENTS.md; templates/STANZA_AGENTS.md;
+templates/ISPETTORE_SKILL.md; docs ufficiali vive per la parte tecnica.
 VERSIONE METODO: installata [x] -> verificata oggi [y].
 Verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA
 
@@ -421,10 +477,14 @@ Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
 Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
-Classificazione         OK / RIPARATO / DA CHIARIRE - ...
+Percorsi censiti        OK / RIPARATO / NON PASSA - nessun percorso escluso...
+Classificazione         OK / RIPARATO / NON PASSA - ...
 Mappa stanze            OK / RIPARATO / PROPOSTA STRUTTURALE - ...
 Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
 Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
+Cartelle generiche/vuote OK / RIPARATO / NON PASSA - ...
+File sciolti in home    OK / RIPARATO / NON PASSA - ...
+Skill Ispettore         OK / RIPARATO / NON PASSA - agente attivo...
 Prove di instradamento  OK / RIPARATO / NON PASSA - ...
 GATE ANTI-CIRCOLARE     PASSA / NON PASSA - ...
 

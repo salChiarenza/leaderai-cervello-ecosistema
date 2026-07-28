@@ -17,7 +17,15 @@ STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="utf-8")
 SUPPORTED_AGENTS = {"codex", "claude", "both"}
 CLAUDE_BRIDGE = "@AGENTS.md\n"
-STANDARD_DIRS = ("memory", "logs", "ecosistema", ".codex", ".claude", ".git")
+STANDARD_DIRS = (
+    "memory",
+    "logs",
+    "ecosistema",
+    ".codex",
+    ".claude",
+    ".agents",
+    ".git",
+)
 STANDARD_FILES = (
     ".gitignore",
     "AGENTS.md",
@@ -25,6 +33,8 @@ STANDARD_FILES = (
     "AGENT_CHAT.md",
     ".codex/README.md",
     ".claude/README.md",
+    ".agents/skills/ispettore-ecosistema/SKILL.md",
+    ".claude/skills/ispettore-ecosistema/SKILL.md",
     "ecosistema/FONTI.md",
     "ecosistema/ASSET.md",
     "ecosistema/PROCESSI.md",
@@ -436,6 +446,12 @@ def build_report(result: InstallResult, agent: str) -> str:
     if present(".claude/README.md"):
         actual_configs.append("`.claude/README.md` (Claude Code)")
     configs_text = ", ".join(actual_configs) if actual_configs else "nessuna"
+    inspector_skills: list[str] = []
+    if present(".agents/skills/ispettore-ecosistema/SKILL.md"):
+        inspector_skills.append("Codex")
+    if present(".claude/skills/ispettore-ecosistema/SKILL.md"):
+        inspector_skills.append("Claude Code")
+    inspector_text = ", ".join(inspector_skills) if inspector_skills else "mancante"
 
     return "\n".join(
         [
@@ -450,6 +466,7 @@ def build_report(result: InstallResult, agent: str) -> str:
             "- File comuni sempre presenti: `AGENTS.md`, `CLAUDE.md` (ponte `@AGENTS.md`).",
             f"- Agente richiesto: {agent}",
             f"- Configurazioni realmente presenti: {configs_text}",
+            f"- Ispettore Ecosistema richiamabile da: {inspector_text}",
             section("- Creato:", result.created).rstrip(),
             section("- Gia' presente:", result.existing).rstrip(),
             section("- Aggiornato:", result.updated).rstrip(),
@@ -489,7 +506,7 @@ def build_report(result: InstallResult, agent: str) -> str:
             "- Drive/OneDrive/cartelle operative: DA SCOPRIRE",
             "- CRM/gestionale/export: DA SCOPRIRE",
             "- Plugin/connettori: DA SCOPRIRE",
-            "- Skill per lavori ripetuti: DA SCOPRIRE",
+            "- Skill per lavori ripetuti: Ispettore Ecosistema ATTIVO; altre DA SCOPRIRE",
             "- Agenti/ruoli dedicati: DA SCOPRIRE",
             "- Guardiani/hook: DA SCOPRIRE",
             "- Ronde/monitoraggi: DA SCOPRIRE",
@@ -676,6 +693,13 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
             result,
             dry_run,
         )
+        ensure_dir(target / ".agents" / "skills" / "ispettore-ecosistema", result, dry_run)
+        ensure_text(
+            target / ".agents" / "skills" / "ispettore-ecosistema" / "SKILL.md",
+            read_template("ISPETTORE_SKILL.md", context),
+            result,
+            dry_run,
+        )
 
     ensure_claude_bridge(
         target / "CLAUDE.md",
@@ -690,6 +714,13 @@ def run_setup(target: Path, client: str, agent: str, force: bool = False, dry_ru
         ensure_text(
             target / ".claude" / "README.md",
             read_template("CLAUDE_README.md", context),
+            result,
+            dry_run,
+        )
+        ensure_dir(target / ".claude" / "skills" / "ispettore-ecosistema", result, dry_run)
+        ensure_text(
+            target / ".claude" / "skills" / "ispettore-ecosistema" / "SKILL.md",
+            read_template("ISPETTORE_SKILL.md", context),
             result,
             dry_run,
         )

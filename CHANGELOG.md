@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.4.0 - 28/07/2026
+
+- Il `CHECKUP.md` e' ora l'Ispettore Ecosistema richiamabile con frasi naturali
+  come `lancia l'Ispettore`, senza creare una seconda procedura concorrente.
+- Ogni nuova cartella passa un ciclo obbligatorio: classificazione, stanza
+  proprietaria, eventuale mappa locale, collegamento alla radice e prova.
+- Aggiunto `templates/STANZA_AGENTS.md`: ogni vera stanza dichiara scopo,
+  contenuto, fonti, output, capacita', monte, valle e dove scrivere; il ponte
+  locale resta `CLAUDE.md` con il solo `@AGENTS.md`.
+- L'installazione monta la skill `ispettore-ecosistema` nel percorso
+  dell'agente attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per
+  Codex, entrambe soltanto in modalita' `both`.
+- Il gate blocca cartelle visibili senza classe o proprietario, stanze senza
+  mappa, cartelle generiche, vuote, doppie o tecniche, file sciolti nella home e
+  instradamenti che non arrivano all'output.
+- Aggiunto `ecosistema_inspector.py`, preflight deterministico e in sola
+  lettura; il giudizio sui processi e le riparazioni restano all'agente guidato
+  dal `CHECKUP.md`.
+- Aggiunti test reali su una casa simulata: cartella `documenti` generica,
+  stanza senza mappe, stanza conforme, funzioni duplicate, file sciolto e skill
+  dell'agente mancante.
+
 ## 0.3.8 - 27/07/2026
 
 - Aggiunto il gate anti-collaudo circolare: una prova operativa deve esistere

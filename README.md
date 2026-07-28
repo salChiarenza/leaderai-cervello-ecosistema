@@ -7,10 +7,10 @@ fa checkup e riparazione quando l'ambiente esiste gia', scrive log e lascia un
 report finale.
 
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
-caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md` e
-`templates/AGENTS.md`, ripara gli scostamenti riparabili, prova e prepara il
-report finale. L'invio avviene solo dopo autorizzazione esplicita del
-proprietario.
+caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
+`templates/AGENTS.md` e `templates/STANZA_AGENTS.md`, ripara gli scostamenti
+riparabili, prova e prepara il report finale. L'invio avviene solo dopo
+autorizzazione esplicita del proprietario.
 
 La repo fornisce un telaio minimo e un metodo adattivo. Il telaio rende stabile
 il Cervello; il metodo censisce il lavoro reale, riconosce le stanze gia' vive e
@@ -40,8 +40,10 @@ Per il controllo periodico di un ambiente gia' installato:
 CHECKUP.md
 ```
 
-Il proprietario dice al suo agente "esegui il checkup LeaderAI": l'agente
-confronta il setup con la documentazione ufficiale viva (indice
+Il proprietario dice al suo agente `lancia l'Ispettore` oppure
+`esegui il checkup LeaderAI`: la skill `ispettore-ecosistema` apre la fonte
+unica `CHECKUP.md` e l'agente confronta il setup con la documentazione
+ufficiale viva (indice
 `code.claude.com/docs/llms.txt`, pagine `.md`), ripara da solo il tecnico e
 prepara il resoconto per Sal. Lo invia soltanto dopo autorizzazione esplicita
 del proprietario. Prima di giudicare censisce le cartelle candidate:
@@ -91,6 +93,8 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se richiesto Codex
 - `.claude/README.md` se richiesto Claude Code
+- `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
+- `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
 - `memory/MEMORY.md`
 - `AGENT_CHAT.md`
 - `logs/install-log.md`
@@ -105,6 +109,11 @@ classificate come stanza, fonte, output, capacita', infrastruttura, archivio o
 elemento sospetto. Ogni vera stanza deve essere raggiungibile dalla radice e
 avere `AGENTS.md` + `CLAUDE.md`, con mappa corta, fonti, output e collegamenti
 reali.
+
+Ogni nuova stanza usa `templates/STANZA_AGENTS.md`. Prima del salvataggio
+l'Ispettore controlla che ogni percorso visibile nella home abbia classe e
+proprietario, che le stanze siano collegate alla radice e che non restino
+cartelle generiche, vuote, doppie, tecniche o file sciolti senza casa.
 
 Il report finale include anche la **mappa moduli**: PEC/email certificata,
 email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,
@@ -136,6 +145,13 @@ sono registrate in `CHANGELOG.md`.
 
 ```bash
 python3 -m unittest discover -s tests
+```
+
+Preflight strutturale opzionale e in sola lettura, quando la repo e' locale e
+l'esecuzione e' stata autorizzata:
+
+```bash
+python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
 ```
 
 ## Stato

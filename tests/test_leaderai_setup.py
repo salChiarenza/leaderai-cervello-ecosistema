@@ -32,6 +32,26 @@ class LeaderAISetupTest(unittest.TestCase):
                 )
                 self.assertEqual((target / ".codex" / "README.md").exists(), has_codex)
                 self.assertEqual((target / ".claude" / "README.md").exists(), has_claude)
+                self.assertEqual(
+                    (
+                        target
+                        / ".agents"
+                        / "skills"
+                        / "ispettore-ecosistema"
+                        / "SKILL.md"
+                    ).exists(),
+                    has_codex,
+                )
+                self.assertEqual(
+                    (
+                        target
+                        / ".claude"
+                        / "skills"
+                        / "ispettore-ecosistema"
+                        / "SKILL.md"
+                    ).exists(),
+                    has_claude,
+                )
 
                 report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
                 self.assertIn(
@@ -52,6 +72,24 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("@AGENTS.md", (target / "CLAUDE.md").read_text(encoding="utf-8"))
             self.assertTrue((target / ".claude" / "README.md").exists())
             self.assertFalse((target / ".codex" / "README.md").exists())
+            self.assertTrue(
+                (
+                    target
+                    / ".claude"
+                    / "skills"
+                    / "ispettore-ecosistema"
+                    / "SKILL.md"
+                ).exists()
+            )
+            self.assertFalse(
+                (
+                    target
+                    / ".agents"
+                    / "skills"
+                    / "ispettore-ecosistema"
+                    / "SKILL.md"
+                ).exists()
+            )
             self.assertTrue((target / "memory" / "MEMORY.md").exists())
             self.assertTrue((target / "ecosistema" / "FONTI.md").exists())
             self.assertTrue((target / "ecosistema" / "ASSET.md").exists())
@@ -68,7 +106,10 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Asset operativi", asset)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("STANDARD APPLICATO", report)
-            self.assertIn("Versione: 0.3.8", report)
+            self.assertIn(
+                f"Versione: {leaderai_setup.STANDARD_VERSION}",
+                report,
+            )
             self.assertIn("FASE 2 - ECOSISTEMA", report)
             self.assertIn("MAPPA COMUNICAZIONE", report)
             self.assertIn("Procedure e 'come si fa'", report)
@@ -126,6 +167,24 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / ".claude" / "README.md").exists())
             self.assertTrue((target / ".codex" / "README.md").exists())
+            self.assertTrue(
+                (
+                    target
+                    / ".claude"
+                    / "skills"
+                    / "ispettore-ecosistema"
+                    / "SKILL.md"
+                ).exists()
+            )
+            self.assertTrue(
+                (
+                    target
+                    / ".agents"
+                    / "skills"
+                    / "ispettore-ecosistema"
+                    / "SKILL.md"
+                ).exists()
+            )
 
     def test_migrates_pre_036_codex_install_by_adding_common_bridge(self):
         with tempfile.TemporaryDirectory() as tmp:

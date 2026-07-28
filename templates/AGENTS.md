@@ -38,14 +38,23 @@ Modalita' installata: `{{agent}}`.
 Questo `AGENTS.md` e' il router della cartella madre. Il telaio comune resta
 stabile; le stanze operative dipendono dal lavoro reale del proprietario.
 
-Prima di creare, rinominare, fondere o spostare cartelle:
+### Ciclo obbligatorio delle cartelle
+
+Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
 
 1. censisci cio' che esiste;
 2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
-3. collega ogni vera stanza a questa mappa;
-4. applica subito solo riparazioni meccaniche e reversibili;
-5. presenta al proprietario le scelte strutturali prima di eseguirle.
+3. assegna un proprietario: nessuna cartella resta senza una stanza che la
+   governa;
+4. se e' una vera stanza, creala o integrala da
+   `templates/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
+   `@AGENTS.md` e collegala nel registro qui sotto;
+5. se e' una sottocartella ordinaria, dichiarala nella mappa della stanza
+   proprietaria senza trasformarla in una nuova stanza;
+6. applica subito le riparazioni meccaniche e reversibili;
+7. presenta al proprietario fusioni, spostamenti, eliminazioni o cambi di
+   proprieta' che coinvolgono contenuti preesistenti.
 
 Una cartella e' una stanza quando svolge una funzione stabile con fonti,
 processi o output propri. Ogni vera stanza ha sempre una mappa corta alla
@@ -63,8 +72,30 @@ proponi funzione, fonti, output, collegamenti e collaudo; decide il proprietario
 |---|---|---|---|---|---|---|---|
 | Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |
 
-Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si collegano
-direttamente solo quando un processo reale passa dall'una all'altra.
+La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.
+Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si
+collegano direttamente solo quando un processo reale passa dall'una all'altra.
+
+### Ispettore Ecosistema
+
+Se il proprietario dice `lancia l'Ispettore`, `controlla l'Ecosistema`,
+`verifica le strade`, `cerca doppioni` o formule equivalenti, usa la skill
+`ispettore-ecosistema` dell'agente attivo e applica il `CHECKUP.md` ufficiale.
+La capacita' e' registrata in `ecosistema/ASSET.md`.
+
+L'Ispettore e' obbligatorio anche dopo un cambiamento strutturale. Prima di
+salvare verifica almeno:
+
+- nessuna cartella visibile senza classe e proprietario;
+- nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
+- nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
+- nessun file sciolto nella home senza stanza proprietaria;
+- due percorsi reali `richiesta -> stanza -> fonte -> processo -> output`.
+
+Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene
+eliminato prima del salvataggio. I contenuti preesistenti del proprietario si
+spostano, fondono o eliminano solo dopo conferma. Finche' resta uno di questi
+buchi il verdetto e' `NON PASSA`.
 
 ## Autoprova (regola permanente)
 

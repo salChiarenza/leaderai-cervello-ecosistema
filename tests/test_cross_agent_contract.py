@@ -96,6 +96,16 @@ class CrossAgentContractTest(unittest.TestCase):
             "manca `.claude/README.md` quando Claude Code e' attivo",
             gate,
         )
+        self.assertIn(
+            "manca `.agents/skills/ispettore-ecosistema/SKILL.md` "
+            "quando Codex e' attivo",
+            gate,
+        )
+        self.assertIn(
+            "manca `.claude/skills/ispettore-ecosistema/SKILL.md` "
+            "quando Claude Code e'",
+            gate,
+        )
         self.assertIn("obbligatoriamente `NON PASSA`", gate)
         self.assertIn("PASSA CON ATTENZIONE", gate)
 

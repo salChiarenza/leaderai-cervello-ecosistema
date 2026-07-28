@@ -8,8 +8,8 @@ la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
 
 Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
 e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
-`templates/AGENTS.md` e le istruzioni operative della repo; poi ripara, prova e
-riporta gli scostamenti.
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e le istruzioni operative
+della repo; poi ripara, prova e riporta gli scostamenti.
 
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. La repo non assegna nomi di
@@ -29,6 +29,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
+- skill `ispettore-ecosistema` nel percorso dell'agente attivo
 - `memory/MEMORY.md`
 - `logs/install-log.md`
 - `ecosistema/FONTI.md`
@@ -142,7 +143,8 @@ scaricato. `leaderai_setup.py` resta un attrezzo tecnico opzionale, utilizzabile
 solo dopo autorizzazione esplicita.
 
 Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
-agente "esegui il checkup LeaderAI", l'agente confronta il setup con la doc
+agente `lancia l'Ispettore` oppure `esegui il checkup LeaderAI`; la skill
+`ispettore-ecosistema` apre la fonte unica e l'agente confronta il setup con la doc
 ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
 da solo il tecnico e prepara il resoconto per Sal. Lo invia solo dopo
 autorizzazione esplicita del proprietario. Prima di giudicare censisce le
@@ -158,8 +160,9 @@ un puntatore alla versione pubblicata.
 
 Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
 presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
-per `CHECKUP.md`, `MANIFEST.md` e `templates/AGENTS.md`. Crea un clone tecnico
-temporaneo solo con conferma esplicita.
+per `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+`templates/STANZA_AGENTS.md` e `templates/ISPETTORE_SKILL.md`. Crea un clone
+tecnico temporaneo solo con conferma esplicita.
 
 Nella nuova installazione, invece, parte sempre dalla lettura web della repo e
 dal montaggio locale dei template. Il clone non e' un ripiego automatico.
@@ -201,6 +204,12 @@ Collaudo repo:
 
 ```bash
 python3 -m unittest discover -s tests
+```
+
+Preflight strutturale opzionale e in sola lettura:
+
+```bash
+python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
 ```
 
 Collaudo diretto del modulo Portafogli:

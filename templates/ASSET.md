@@ -11,6 +11,7 @@ kit, app, servizio esterno, archivio o canale ufficiale.
 | Asset | Tipo | Casa/fonte vera | Stanza/e servite | Uso | Stato | Archivio/prove | Limiti |
 |---|---|---|---|---|---|---|---|
 | Cartella madre | Cervello | Questa cartella | Tutte | Istruzioni, memoria, fonti e report | OK | `logs/`, git locale | Segreti fuori git |
+| Ispettore Ecosistema | Capacita | Repo `salChiarenza/leaderai-cervello-ecosistema`, `CHECKUP.md` | Tutte | Censimento, riparazione e collaudo delle strade | ATTIVO | Skill dell'agente attivo | Non elimina contenuti preesistenti senza conferma |
 
 ## Regola di aggiornamento
 

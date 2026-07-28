@@ -118,6 +118,8 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `VERSION`
    - `MANIFEST.md`
    - `templates/AGENTS.md`
+   - `templates/STANZA_AGENTS.md`
+   - `templates/ISPETTORE_SKILL.md`
    - `templates/MEMORY.md`
    - `templates/ASSET.md`
    - `templates/GITIGNORE.txt`
@@ -149,6 +151,12 @@ Fase 4 - monta localmente il Cervello
    - `templates/CLAUDE.md` -> `CLAUDE.md` (ponte, sempre)
    - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
      comune di tutti gli agenti della casa, regole d'uso dentro al file)
+   - modalita' Claude -> `templates/ISPETTORE_SKILL.md` in
+     `.claude/skills/ispettore-ecosistema/SKILL.md`
+   - modalita' Codex -> `templates/ISPETTORE_SKILL.md` in
+     `.agents/skills/ispettore-ecosistema/SKILL.md`
+   - modalita' both -> entrambe le skill, identiche e puntate allo stesso
+     `CHECKUP.md`
 3. Crea SEMPRE `CLAUDE.md` dal template: e' il ponte di una riga (`@AGENTS.md`)
    che fa leggere la mappa anche a Claude Code, qualunque agente sia in uso
    oggi (Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`). Poi la
@@ -184,9 +192,10 @@ reale:
    processi o output propri;
 4. aggiorna il registro delle stanze in `AGENTS.md` e collega ogni stanza alla
    mappa madre;
-5. per ogni vera stanza crea o integra `AGENTS.md` come mappa locale corta e
-   `CLAUDE.md` come ponte di una riga (`@AGENTS.md`), con scopo, contenuto,
-   fonti, output, capacita', collegamenti a monte e collegamenti a valle;
+5. per ogni vera stanza crea o integra `AGENTS.md` da
+   `templates/STANZA_AGENTS.md` e `CLAUDE.md` come ponte di una riga
+   (`@AGENTS.md`), con scopo, contenuto, fonti, output, capacita',
+   collegamenti a monte e collegamenti a valle e dove scrivere;
 6. collega direttamente due stanze solo quando un processo reale passa tra le
    due;
 7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
@@ -197,6 +206,14 @@ Skill, script, agenti, connettori, moduli e procedure sono capacita' della
 stanza che li usa. Se una capacita' e' gia' coperta, integrala o riusala. Una
 nuova stanza nasce solo quando nessuna stanza esistente puo' possedere quella
 funzione e il proprietario approva la proposta.
+
+Ogni cartella nuova passa lo stesso ciclo prima del salvataggio: classe,
+proprietario, eventuale mappa locale, collegamento alla radice e prova. Nomi
+generici come `documenti`, `output`, `exports`, `varie`, `misc`, `temp` o
+`nuova cartella` restano `SOSPETTA` finche' non vengono ricondotti alla stanza
+proprietaria. Un residuo vuoto o inutile creato dall'agente nello stesso
+lavoro viene rimosso prima del commit; contenuti preesistenti si spostano,
+fondono o eliminano solo dopo conferma.
 
 In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole reali:
 - chi sono e cosa faccio [AZIENDA];
@@ -302,6 +319,9 @@ Fase 6 - collaudo
    ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`.
    `.claude/README.md` esiste solo in modalita' Claude o both;
    `.codex/README.md` esiste solo in modalita' Codex o both.
+   Verifica anche la skill `ispettore-ecosistema` nel percorso dell'agente
+   attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per Codex,
+   entrambe in modalita' both.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
@@ -333,6 +353,12 @@ Fase 6 - collaudo
    trova il percorso, correggi mappa o collegamenti e riprova.
 8. Verifica che ogni stanza sia raggiungibile dalla mappa madre, che nessuna
    capacita' sia isolata e che non esistano due stanze per la stessa funzione.
+9. Lancia l'Ispettore sul risultato: censisci ogni cartella e file visibile
+   nella home, classifica i percorsi, ripara i buchi sicuri e blocca il
+   verdetto se restano cartelle generiche, vuote, doppie, tecniche, senza
+   proprietario o stanze senza mappa. Registra la tabella
+   `percorso | classe | proprietario | mappa locale | collegamento radice |
+   azione | prova`.
 
 Fase 7 - backup e seconda postazione (scelta guidata)
 Serve a non perdere il lavoro e a usare l'Ecosistema da piu' di un computer.
@@ -431,6 +457,7 @@ Report finale obbligatorio:
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
 - classificazione dell'ambiente e mappa delle stanze con monte/valle;
+- tabella Ispettore di ogni percorso visibile nella home;
 - capacita' collegate a ogni stanza e possibili doppioni evitati;
 - almeno due prove di instradamento richiesta -> stanza -> fonte -> output;
 - Mappa moduli con stato per ogni modulo;

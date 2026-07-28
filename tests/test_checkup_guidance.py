@@ -61,6 +61,12 @@ class CheckupGuidanceTest(unittest.TestCase):
             "richiesta -> stanza -> fonte -> capacita'/processo -> output",
             "LEZIONE CANDIDATA",
             "VERSIONE METODO",
+            "Ispettore Ecosistema",
+            "cartella visibile non classificata",
+            "templates/STANZA_AGENTS.md",
+            "percorso | classe | proprietario",
+            "cartelle generiche",
+            "file sciolto nella home",
         ]
         for phrase in required:
             with self.subTest(phrase=phrase):

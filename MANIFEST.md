@@ -12,9 +12,10 @@ Portare una cartella cliente a uno standard minimo operativo:
 Questo file e' lo standard di conformita' della repo `salChiarenza/leaderai-cervello-ecosistema`.
 
 La cartella viva del cliente e' il caso reale. Il checkup non giudica a
-sensazione: confronta il caso reale con questo Manifest, con `templates/AGENTS.md`
-e con le istruzioni operative della repo. Se qualcosa manca, e' fuori standard:
-l'agente lo ripara se puo', lo prova e lo dichiara nel report.
+sensazione: confronta il caso reale con questo Manifest, con
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e con le istruzioni
+operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara
+se puo', lo prova e lo dichiara nel report.
 
 ## Regola
 
@@ -41,6 +42,7 @@ Restano stabili in ogni installazione:
 - `AGENTS.md` alla radice come mappa e router comune;
 - `CLAUDE.md` sempre presente come ponte di una riga (`@AGENTS.md`);
 - memoria indicizzata, log e registri di fonti, asset, processi e limiti;
+- Ispettore Ecosistema richiamabile dall'agente attivo;
 - versione del metodo applicato e prove di collaudo.
 
 ### Forma adattiva
@@ -64,6 +66,12 @@ Una vera stanza passa il contratto quando:
 3. dichiara collegamenti a monte e a valle solo per processi reali;
 4. usa una sola fonte di verita' per ogni dato o stato;
 5. registra le capacita' che la servono e la prova che funzionano.
+
+Il contratto locale nasce da `templates/STANZA_AGENTS.md`. Ogni cartella nuova
+viene classificata e assegnata a una stanza proprietaria prima del salvataggio.
+Le cartelle ordinarie non ricevono mappe inutili: vivono sotto la stanza che le
+governa. Una cartella generica, vuota, concorrente o senza proprietario blocca
+il collaudo.
 
 Le cartelle ordinarie non diventano automaticamente stanze. Skill, script e
 moduli restano capacita' collegate alla stanza proprietaria. Se nessuna stanza
@@ -134,10 +142,12 @@ esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.
 Per Claude Code:
 
 - `.claude/README.md`
+- `.claude/skills/ispettore-ecosistema/SKILL.md`
 
 Per Codex:
 
 - `.codex/README.md`
+- `.agents/skills/ispettore-ecosistema/SKILL.md`
 
 ## Moduli professionali
 
@@ -187,6 +197,9 @@ Il pacchetto e' pronto quando:
 - una nuova chat dell'agente sa leggere la mappa e dove salvare memoria/report.
 - la mappa madre raggiunge ogni stanza operativa e nessuna capacita' resta
   isolata o promossa a stanza per abitudine.
+- l'Ispettore ha censito ogni cartella e file visibile nella home e non restano
+  percorsi senza classe e proprietario, cartelle generiche o vuote, doppioni,
+  stanze senza mappa o file sciolti senza casa;
 - almeno due prove di instradamento partono dalla radice e arrivano alla stanza,
   alla fonte e all'output corretti senza suggerire il percorso all'agente.
 - il report registra versione del metodo, classificazione delle stanze,
