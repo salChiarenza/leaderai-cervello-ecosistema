@@ -113,7 +113,7 @@ il gate e' `NON PASSA`. Non si puo' certificare una 0.3.0 contro se stessa
 quando lo standard vivo e' gia' successivo.
 
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
-file standard (`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+file standard (`CHECKUP.md`, `install_contract.json`, `MANIFEST.md`, `templates/AGENTS.md`,
 `templates/STANZA_AGENTS.md`, `templates/ISPETTORE_SKILL.md`, `AGENTS.md`,
 `README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
 leggerli online, chiedi una sola conferma per creare un clone tecnico
@@ -125,6 +125,7 @@ cartelle tecniche.
 
 Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 
+- `install_contract.json`;
 - `MANIFEST.md`;
 - `templates/AGENTS.md`;
 - `templates/STANZA_AGENTS.md`;
@@ -134,7 +135,8 @@ Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 
 Da questo momento il lavoro non e' "controllare un po' di file". Il lavoro e':
 confrontare la cartella viva del cliente contro lo standard LeaderAI scritto in
-questa repo.
+questa repo. File obbligatori e rami dell'agente si ricavano dal contratto
+macchina; le liste narrative lo spiegano e non lo sostituiscono.
 
 ## Passo 0-ter — Trova la cartella viva prima di giudicare
 
@@ -290,31 +292,43 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 
 ### A. Telaio comune — sempre
 
-1. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
+1. **Gate di ingresso reale** — prima di leggere altri file dichiara superficie
+   e ambiente (Codex Desktop/CLI o Claude Code; Windows nativo/WSL/macOS),
+   progetto primario o directory corrente, percorso della cartella madre e
+   istruzioni caricate. La task/sessione deve essere nuova e nata dalla
+   cartella madre. Mostra tre regole lette da `AGENTS.md`; una email o un
+   documento aperto altrove non costituiscono accesso al Cervello. Percorso
+   diverso = `FUORI DAL CERVELLO`, nessuna scrittura e un solo gesto preciso
+   per aprire la cartella madre.
+2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
-2. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
+3. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
    dove stanno memoria, log, Ecosistema e report.
-3. **Ponte Claude universale** — `CLAUDE.md` esiste alla radice come file
+4. **Ponte Claude universale** — `CLAUDE.md` esiste alla radice come file
    regolare e contiene esattamente `@AGENTS.md` seguito da una nuova riga.
    Converti i symlink legacy; una copia indipendente non e' conforme.
-4. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
-   (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Le note
-   oltre 48 ore vanno promosse nei file proprietari e tolte dalla chat.
-5. **Memoria unica** — la mappa madre dichiara `Memoria canonica` e quella
+5. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
+   (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Ogni
+   nuova sessione legge tutto il log; ogni handoff dichiara ID missione,
+   proprietario, stato, base Git, prove e prossimo agente. Le note oltre 48 ore
+   vanno promosse nei file proprietari e tolte dalla chat.
+6. **Memoria unica** — la mappa madre dichiara `Memoria canonica` e quella
    directory contiene `MEMORY.md` come indice snello; `memory/` e' il nome
    predefinito per le nuove installazioni, mentre una casa esistente puo'
    conservare un nome consolidato. Niente duplicati inventati come
    `MEMORIA.md`, diari paralleli o memoria auto dell'agente lasciata in
    un'altra directory. Due memorie divergenti bloccano il verdetto finche' non
    vengono riconciliate.
-6. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
+7. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
    password, credenziali e
    `REPORT_FINALE.md` prima di qualunque commit.
 
 ### B. Ramo Codex — solo se Codex e' attivo
 
 1. Verifica `.codex/README.md`: deve dichiarare che Codex usa `AGENTS.md` come
-   istruzione comune e non deve duplicarne il contenuto.
+   istruzione comune e non deve duplicarne il contenuto. In Desktop la cartella
+   madre e' il progetto locale primario; in CLI e' la directory scelta con
+   `-C` o quella corrente. Dopo ogni correzione apri una nuova task.
 2. Verifica `.agents/skills/ispettore-ecosistema/SKILL.md`: deve essere
    richiamabile e puntare alla procedura unica `CHECKUP.md`.
 3. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
@@ -334,8 +348,11 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 3. Apri `/memory` senza modificare nulla e confronta la destinazione con la
    memoria canonica dichiarata nell'`AGENTS.md`. Le user settings di ogni
    computer (`~/.claude/settings.json`) impostano `autoMemoryDirectory` sul
-   percorso assoluto locale; la chiave non e' accettata nelle settings
-   project/local. Il valore e' attivo solo dopo il trust del workspace.
+   percorso portabile `~/...` quando la memoria e' sotto la home di quella
+   macchina. Un percorso assoluto e' valido soltanto se e' stato letto sulla
+   stessa macchina e la memoria vive fuori dalla home. La chiave non e'
+   accettata nelle settings project/local. Il valore e' attivo solo dopo il
+   trust del workspace.
 4. Se esiste una memoria auto esterna con contenuti diversi, confronta le due
    fonti, unisci le voci uniche nella `memory/` della casa, prova `/memory` e
    solo dopo cambia il percorso. Non svuotare o abbandonare la memoria esterna
@@ -357,6 +374,14 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 3. **Pezzi inventati o doppioni** — segnala file o cartelle che duplicano
    funzioni ufficiali. Elimina solo cio' che hai creato tu; per i file del
    proprietario serve conferma.
+4. **Brand Identity senza indizi** — in una nuova task/sessione nata dalla
+   cartella madre esegui la richiesta esatta `Crea la Brand Identity`.
+   Il prompt non contiene percorsi, nomi file, stanze, fonti, skill o output.
+   Registra il percorso autonomo `madre/stanza -> fonte brand -> output`.
+5. **Continuita' `both`** — Codex lascia in `AGENT_CHAT.md` un handoff con ID
+   missione; una nuova sessione Claude Code lo prende in carico e continua;
+   una nuova task Codex rilegge e chiude. Una sola casa e tre sessioni
+   distinte.
 
 ## Gate di conformita' — verdetto bloccante
 
@@ -365,6 +390,8 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - il `VERSION` corrente della repo ufficiale non e' stato letto, la versione
   installata non e' determinabile o le due versioni non coincidono;
 - manca `AGENTS.md`;
+- la task/sessione non e' nata dalla cartella madre, il progetto primario/CWD
+  non coincide, oppure non sono state mostrate tre regole lette da `AGENTS.md`;
 - manca `CLAUDE.md` oppure il ponte non risolve a `AGENTS.md`;
 - manca `AGENT_CHAT.md`;
 - la modalita' attiva non e' stata rilevata e dichiarata;
@@ -374,6 +401,10 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - manca `.claude/skills/ispettore-ecosistema/SKILL.md` quando Claude Code e'
   attivo;
 - in modalita' `both` manca uno dei due agganci;
+- la prova `Crea la Brand Identity` contiene indizi tecnici, non raggiunge una
+  fonte brand reale o scrive l'output fuori dalla responsabilita' proprietaria;
+- in modalita' `both` il passaggio Codex -> Claude Code -> Codex non e' stato
+  eseguito con un solo ID missione e sessioni nuove;
 - Claude Code e' attivo ma `autoMemoryDirectory` nelle user settings non punta
   alla memoria canonica della casa, il trust non e' confermato o esistono due
   memorie divergenti non riconciliate;
@@ -645,8 +676,8 @@ Regola breve: Non chiudere la missione dopo il primo report.
 
 1. Completa il resoconto locale solo a lavoro finito, mostralo al proprietario
    e chiedi l'autorizzazione esplicita all'invio. L'invio non e' parte
-   automatica del checkup: dopo il si' esplicito, invialo davvero a
-   `sal@salchiarenza.ai` nello stesso thread; se serve una nuova email usa
+   automatica del checkup: dopo il si' esplicito, invialo davvero allo stesso
+   mittente LeaderAI verificato nello stesso thread; se serve una nuova email usa
    l'oggetto concreto `Resoconto checkup Ecosistema`.
 2. Dopo l'invio archivia la missione: Inbox pulita, stato business nella fonte
    proprietaria, storia tecnica nel solo install-log. Il report resta soltanto

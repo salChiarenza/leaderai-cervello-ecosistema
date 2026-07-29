@@ -60,8 +60,8 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         text = compact((ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8"))
         required = [
             "Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre",
-            "Autorizzi l'invio del report a sal@salchiarenza.ai?",
-            "Solo dopo un si' esplicito, invia davvero il report",
+            "Autorizzi l'invio del report in risposta allo stesso mittente LeaderAI verificato?",
+            "Solo dopo un si' esplicito, invia davvero il report in risposta alla missione verificata",
         ]
 
         for phrase in required:

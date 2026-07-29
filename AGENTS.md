@@ -11,6 +11,10 @@ e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e le istruzioni operative
 della repo; poi ripara, prova e riporta gli scostamenti.
 
+`install_contract.json` e' la fonte macchina unica per installazione manuale,
+setup tecnico, Ispettore e harness di rilascio. Vietato mantenere una seconda
+lista di file obbligatori o rami agente.
+
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. La repo non assegna nomi di
 reparti o cartelle business: censisce l'ambiente reale, classifica stanze,
@@ -34,11 +38,13 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
   `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
 - skill `ispettore-ecosistema` nel percorso dell'agente attivo
 - `memory/MEMORY.md`
+- `AGENT_CHAT.md`
 - `logs/install-log.md`
 - `ecosistema/FONTI.md`
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
+- `ecosistema/STANZA_AGENTS.md`
 - `REPORT_FINALE.md` solo come output temporaneo e datato della missione aperta
 
 Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
@@ -218,7 +224,13 @@ manca la fonte reale, resta `DA COLLEGARE`; non si inventa.
 Collaudo repo:
 
 ```bash
-python3 -m unittest discover -s tests
+python3 -m tests.gate --quick
+```
+
+Collaudo completo di rilascio, su macchina con Codex e Claude autenticati:
+
+```bash
+python3 -m tests.gate --release --agents codex,claude
 ```
 
 Preflight strutturale opzionale e in sola lettura:
@@ -250,6 +262,13 @@ esplicitamente; non e' il percorso cliente predefinito.
 1. Aggiorna `README.md`, `MANIFEST.md` o `INSTALLA_CON_AI.md` se cambia un fatto
    critico.
 2. Esegui i test.
-3. Commit e push su GitHub: la base cliente e' la repo ufficiale, non copie o
+3. Per un rilascio esegui il gate completo: autenticazione mancante, timeout,
+   test saltati o prova live fallita bloccano commit e push.
+4. Commit e push su GitHub: la base cliente e' la repo ufficiale, non copie o
    fork paralleli.
-4. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.
+5. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.
+Ogni collaudo parte da una nuova task/sessione con la cartella madre come
+progetto primario/CWD. Una task aperta fuori root non vede il Cervello:
+percorso corrente, `AGENTS.md` caricato e tre regole mostrate sono prove
+obbligatorie. Il gate comportamentale include `Crea la Brand Identity` senza
+indizi tecnici.

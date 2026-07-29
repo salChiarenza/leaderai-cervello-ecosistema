@@ -10,34 +10,35 @@ import unicodedata
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
+import install_contract
+
 
 CLAUDE_BRIDGE = "@AGENTS.md\n"
 ROOT = Path(__file__).resolve().parent
 STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
-
-REQUIRED_FILES = (
-    ".gitignore",
-    "AGENTS.md",
-    "CLAUDE.md",
-    "AGENT_CHAT.md",
-    "logs/install-log.md",
-    "ecosistema/FONTI.md",
-    "ecosistema/ASSET.md",
-    "ecosistema/PROCESSI.md",
-    "ecosistema/LIMITI.md",
-    "ecosistema/STANZA_AGENTS.md",
+CONTRACT = install_contract.CONTRACT
+GITIGNORE_REQUIRED_RULES = tuple(
+    line.strip()
+    for line in (ROOT / "templates" / "GITIGNORE.txt")
+    .read_text(encoding="utf-8")
+    .splitlines()
+    if line.strip() and not line.lstrip().startswith("#")
 )
 
+REQUIRED_FILES = tuple(CONTRACT["common"]["required"])
+
 STANDARD_DIRS = {
-    "memory",
-    "logs",
-    "ecosistema",
-    ".codex",
-    ".claude",
-    ".agents",
-    ".git",
-    ".secrets",
-}
+    Path(rel).parts[0]
+    for agent_name in CONTRACT["supported_agents"]
+    for rel in (
+        install_contract.required_paths(CONTRACT, agent_name)
+        + [
+            rule.destination
+            for rule in install_contract.template_rules(CONTRACT, agent_name)
+        ]
+    )
+    if len(Path(rel).parts) > 1
+} | {".git", ".secrets"}
 
 ALLOWED_ROOT_FILES = {
     ".gitignore",
@@ -255,15 +256,19 @@ def _is_empty_dir(path: Path) -> bool:
         return False
 
 
+def _symlink_component(target: Path, relative: str | Path) -> Path | None:
+    current = target
+    for part in Path(relative).parts:
+        current = current / part
+        if current.is_symlink():
+            return current
+    return None
+
+
 def _active_agents(target: Path, requested: str) -> set[str]:
     if requested != "auto":
         return {"codex", "claude"} if requested == "both" else {requested}
-    active: set[str] = set()
-    if (target / ".codex" / "README.md").is_file():
-        active.add("codex")
-    if (target / ".claude" / "README.md").is_file():
-        active.add("claude")
-    return active
+    return install_contract.detected_agents(CONTRACT, target)
 
 
 def _extract_installed_version(target: Path) -> str | None:
@@ -538,7 +543,21 @@ def inspect_ecosystem(
     agent: str = "auto",
     claude_user_settings_path: Path | None = None,
 ) -> Inspection:
-    target = target.expanduser().resolve()
+    requested_target = target.expanduser()
+    if requested_target.is_symlink():
+        return Inspection(
+            target=str(requested_target),
+            rooms=[],
+            findings=[
+                Finding(
+                    "TARGET_SYMLINK",
+                    "BLOCKER",
+                    ".",
+                    "La cartella madre non puo' essere un collegamento simbolico.",
+                )
+            ],
+        )
+    target = requested_target.resolve()
     findings: list[Finding] = []
     if not target.is_dir():
         return Inspection(
@@ -552,6 +571,40 @@ def inspect_ecosystem(
                     "La cartella viva non esiste o non e' una directory.",
                 )
             ],
+        )
+
+    agents_path = target / "AGENTS.md"
+    agents_text = (
+        agents_path.read_text(encoding="utf-8")
+        if agents_path.is_file() and not agents_path.is_symlink()
+        else ""
+    )
+    declared_mode = install_contract.declared_agent(agents_text)
+    detected_agents = install_contract.detected_agents(CONTRACT, target)
+    detected_mode = (
+        "both"
+        if detected_agents == {"codex", "claude"}
+        else (next(iter(detected_agents)) if len(detected_agents) == 1 else None)
+    )
+    requested_mode = agent if agent != "auto" else (declared_mode or detected_mode)
+    if requested_mode is None:
+        findings.append(
+            Finding(
+                "ACTIVE_AGENT_UNKNOWN",
+                "BLOCKER",
+                "AGENTS.md",
+                "Modalita' agente non dichiarata e nessun ramo agente riconoscibile.",
+            )
+        )
+    elif declared_mode is not None and agent != "auto" and declared_mode != agent:
+        findings.append(
+            Finding(
+                "AGENT_MODE_MISMATCH",
+                "BLOCKER",
+                "AGENTS.md",
+                f"La casa dichiara {declared_mode}, ma il controllo richiede {agent}. "
+                "Usare both o una migrazione esplicita.",
+            )
         )
 
     installed_version = _extract_installed_version(target)
@@ -577,8 +630,25 @@ def inspect_ecosystem(
             )
         )
 
-    for rel in REQUIRED_FILES:
+    required_files = (
+        install_contract.required_paths(CONTRACT, requested_mode)
+        if requested_mode is not None
+        else list(REQUIRED_FILES)
+    )
+    for rel in required_files:
         path = target / rel
+        linked = _symlink_component(target, rel)
+        if linked is not None:
+            findings.append(
+                Finding(
+                    "STANDARD_PATH_SYMLINK",
+                    "BLOCKER",
+                    rel,
+                    "Un file o un suo antenato e' un symlink: lo standard deve "
+                    "vivere dentro la cartella madre.",
+                )
+            )
+            continue
         if not path.is_file():
             findings.append(
                 Finding(
@@ -588,9 +658,127 @@ def inspect_ecosystem(
                     "File obbligatorio dello standard assente.",
                 )
             )
+    if requested_mode is not None:
+        for rel in install_contract.forbidden_paths(CONTRACT, requested_mode):
+            path = target / rel
+            if path.exists() or path.is_symlink():
+                findings.append(
+                    Finding(
+                        "FORBIDDEN_STANDARD_FILE",
+                        "BLOCKER",
+                        rel,
+                        f"Il file appartiene a un ramo vietato in modalita' "
+                        f"{requested_mode}. Usare both o una migrazione esplicita.",
+                    )
+                )
+
+    if (
+        requested_mode is None
+        or "git_baseline"
+        in install_contract.external_effects(CONTRACT, requested_mode)
+    ):
+        gitignore_path = target / ".gitignore"
+        if gitignore_path.is_file() and not gitignore_path.is_symlink():
+            gitignore_lines = {
+                line.strip()
+                for line in gitignore_path.read_text(
+                    encoding="utf-8", errors="replace"
+                ).splitlines()
+            }
+            missing_ignore_rules = sorted(
+                set(GITIGNORE_REQUIRED_RULES) - gitignore_lines
+            )
+            if missing_ignore_rules:
+                findings.append(
+                    Finding(
+                        "GITIGNORE_RULES_MISSING",
+                        "BLOCKER",
+                        ".gitignore",
+                        "Regole di sicurezza mancanti: "
+                        + ", ".join(missing_ignore_rules),
+                    )
+                )
+
+        git_dir = target / ".git"
+        if git_dir.is_symlink():
+            findings.append(
+                Finding(
+                    "GIT_REPOSITORY_SYMLINK",
+                    "BLOCKER",
+                    ".git",
+                    "La baseline Git deve appartenere alla cartella madre.",
+                )
+            )
+        elif not git_dir.is_dir():
+            findings.append(
+                Finding(
+                    "GIT_REPOSITORY_MISSING",
+                    "BLOCKER",
+                    ".git",
+                    "La casa non ha ancora una baseline Git verificabile.",
+                )
+            )
+        else:
+            try:
+                head = subprocess.run(
+                    ["git", "rev-parse", "--verify", "HEAD"],
+                    cwd=str(target),
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+            except OSError:
+                head = None
+            if head is None or head.returncode != 0:
+                findings.append(
+                    Finding(
+                        "GIT_BASELINE_MISSING",
+                        "BLOCKER",
+                        ".git",
+                        "Repository presente senza primo commit verificabile.",
+                    )
+                )
+
+            safety_paths = (
+                "REPORT_FINALE.md",
+                ".secrets/prova.txt",
+                "prova.env",
+                "api-token-prova.txt",
+                "client-secret-prova.txt",
+                "client-password-prova.txt",
+                "client-credential-prova.txt",
+            )
+            ineffective = []
+            for relative in safety_paths:
+                try:
+                    ignored = subprocess.run(
+                        ["git", "check-ignore", "--quiet", "--", relative],
+                        cwd=str(target),
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                    )
+                except OSError:
+                    ignored = None
+                if ignored is None or ignored.returncode != 0:
+                    ineffective.append(relative)
+            if ineffective:
+                findings.append(
+                    Finding(
+                        "GITIGNORE_INEFFECTIVE",
+                        "BLOCKER",
+                        ".gitignore",
+                        "Le esclusioni non proteggono: "
+                        + ", ".join(ineffective),
+                    )
+                )
 
     root_bridge = target / "CLAUDE.md"
-    if root_bridge.is_file() and root_bridge.read_text(encoding="utf-8") != CLAUDE_BRIDGE:
+    if (
+        root_bridge.is_file()
+        and not root_bridge.is_symlink()
+        and root_bridge.read_text(encoding="utf-8") != CLAUDE_BRIDGE
+    ):
         findings.append(
             Finding(
                 "INVALID_ROOT_BRIDGE",
@@ -601,7 +789,16 @@ def inspect_ecosystem(
         )
 
     report_path = target / "REPORT_FINALE.md"
-    if report_path.is_file():
+    if report_path.is_symlink():
+        findings.append(
+            Finding(
+                "TEMP_REPORT_SYMLINK",
+                "BLOCKER",
+                "REPORT_FINALE.md",
+                "Il report temporaneo deve essere un file locale.",
+            )
+        )
+    elif report_path.is_file():
         report = report_path.read_text(encoding="utf-8")
         normalized_report = _normalized(report)
         if "valido al:" not in normalized_report or "stato missione:" not in normalized_report:
@@ -626,8 +823,6 @@ def inspect_ecosystem(
                 )
             )
 
-    agents_path = target / "AGENTS.md"
-    agents_text = agents_path.read_text(encoding="utf-8") if agents_path.is_file() else ""
     canonical_memory = _canonical_memory_path(target, agents_text)
     if not (canonical_memory / "MEMORY.md").is_file():
         findings.append(
@@ -679,6 +874,18 @@ def inspect_ecosystem(
                 purposes[purpose_key] = room.path
 
         room_path = target / room.path
+        linked = _symlink_component(target, room.path)
+        if linked is not None:
+            findings.append(
+                Finding(
+                    "ROOM_PATH_SYMLINK",
+                    "BLOCKER",
+                    room.path,
+                    "La stanza o un suo antenato e' un symlink fuori dal "
+                    "contratto della cartella madre.",
+                )
+            )
+            continue
         if not room_path.is_dir():
             findings.append(
                 Finding(
@@ -692,7 +899,16 @@ def inspect_ecosystem(
 
         room_agents = room_path / "AGENTS.md"
         room_claude = room_path / "CLAUDE.md"
-        if not room_agents.is_file():
+        if room_agents.is_symlink():
+            findings.append(
+                Finding(
+                    "ROOM_MAP_SYMLINK",
+                    "BLOCKER",
+                    f"{room.path}/AGENTS.md",
+                    "La mappa della stanza deve essere un file locale.",
+                )
+            )
+        elif not room_agents.is_file():
             findings.append(
                 Finding(
                     "ROOM_AGENTS_MISSING",
@@ -724,7 +940,16 @@ def inspect_ecosystem(
                         "bastano a dimostrare una stanza.",
                     )
                 )
-        if not room_claude.is_file():
+        if room_claude.is_symlink():
+            findings.append(
+                Finding(
+                    "ROOM_BRIDGE_SYMLINK",
+                    "BLOCKER",
+                    f"{room.path}/CLAUDE.md",
+                    "Il ponte della stanza deve essere un file locale.",
+                )
+            )
+        elif not room_claude.is_file():
             findings.append(
                 Finding(
                     "ROOM_CLAUDE_MISSING",
@@ -796,16 +1021,13 @@ def inspect_ecosystem(
             )
         )
 
-    active_agents = _active_agents(target, agent)
+    active_agents = _active_agents(
+        target,
+        requested_mode if requested_mode is not None else "auto",
+    )
     if not active_agents:
-        findings.append(
-            Finding(
-                "ACTIVE_AGENT_UNKNOWN",
-                "BLOCKER",
-                ".",
-                "Impossibile determinare l'agente attivo.",
-            )
-        )
+        # Il finding e' gia' emesso sopra con la fonte della modalita'.
+        pass
     skill_paths = {
         "codex": ".agents/skills/ispettore-ecosistema/SKILL.md",
         "claude": ".claude/skills/ispettore-ecosistema/SKILL.md",
@@ -865,7 +1087,11 @@ def inspect_ecosystem(
             else Path.home() / ".claude" / "settings.json"
         )
         desired_memory = canonical_memory
-        settings_label = "~/.claude/settings.json"
+        settings_label = (
+            str(settings_path)
+            if claude_user_settings_path is not None
+            else "~/.claude/settings.json"
+        )
         if not settings_path.is_file():
             findings.append(
                 Finding(
@@ -1071,13 +1297,28 @@ def parse_args() -> argparse.Namespace:
         choices=("auto", "codex", "claude", "both"),
         default="auto",
     )
+    parser.add_argument(
+        "--claude-user-settings",
+        help=(
+            "Percorso user settings Claude letto su questa macchina. "
+            "Default: ~/.claude/settings.json."
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Emette JSON.")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    inspection = inspect_ecosystem(Path(args.target), args.agent)
+    inspection = inspect_ecosystem(
+        Path(args.target),
+        args.agent,
+        claude_user_settings_path=(
+            Path(args.claude_user_settings)
+            if args.claude_user_settings
+            else None
+        ),
+    )
     if args.json:
         print(json.dumps(inspection.to_dict(), ensure_ascii=False, indent=2))
     else:

@@ -19,6 +19,49 @@ Il modello unico, versionato e collaudabile e'
 [`EMAIL_CONSEGNA.md`](EMAIL_CONSEGNA.md). Questa procedura non mantiene una
 seconda copia dell'email.
 
+## Nucleo deterministico di installazione
+
+Questa sezione delimitata e' il percorso minimo verificabile per montare il
+telaio. Il collaudo di rilascio legge questo nucleo, `install_contract.json` e
+i template; la missione cliente continua poi con le fasi successive per
+personalizzazione, fonti reali e prove macchina.
+
+<!-- START_NUCLEO_INSTALLAZIONE -->
+
+1. Leggi `VERSION`, `install_contract.json` e i template dichiarati dal
+   contratto. La fotografia standard resta in sola lettura.
+2. Usa o crea una sola cartella madre nel percorso gia' deciso. Non creare
+   stanze, fonti, asset o connettori inventati.
+3. Applica le regole `common` del contratto e soltanto il ramo `codex`,
+   `claude` o `both` richiesto. Sostituisci `{{client_name}}`, `{{date}}`,
+   `{{agent}}` e `{{version}}`; `CLAUDE.md` resta il ponte esatto
+   `@AGENTS.md`. In una casa nuova usa copia e sostituzione meccanica in batch
+   dai template: non riscrivere i file uno alla volta.
+4. La fotografia puo' avere file protetti in sola lettura. La fonte resta
+   intoccabile; dopo la copia rendi scrivibili soltanto i file creati nella
+   cartella madre, prima di personalizzarli. Non cambiare mai i permessi della
+   fotografia standard.
+5. Per Claude in un collaudo isolato non toccare le user settings: registra
+   `autoMemoryDirectory` come `DA COLLAUDARE`. Sulla macchina cliente lo
+   configuri e lo provi seguendo la Fase 4.
+6. Inizializza Git locale. Prima del commit usa la allowlist dei file standard
+   del contratto, rileggi lo staging e controlla nomi e contenuti per segreti.
+   Il primo messaggio contiene la frase `installazione iniziale`.
+7. Crea `REPORT_FINALE.md` temporaneo e ignorato da Git con `VALIDO AL`,
+   `STATO MISSIONE: APERTA`, standard/versione, modalita', prove, limiti e una
+   sezione `## Verdetto`. Nel collaudo anonimo usa `PASSA CON ATTENZIONE`
+   quando il telaio e' completo e restano soltanto prove macchina differite;
+   usa `NON PASSA` per ogni difetto del telaio.
+8. Registra `default_browser`, `desktop_launcher` e `remote_backup` come
+   `DA COLLAUDARE` o `DA COLLEGARE` nel collaudo anonimo. Sulla macchina
+   cliente diventano `OK` soltanto dopo prova reale.
+9. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
+   report fuori Git, commit iniziale e fotografia standard intatta.
+10. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
+   copiato nella casa.
+
+<!-- END_NUCLEO_INSTALLAZIONE -->
+
 ## Missione operativa letta dall'agente
 
 ```text
@@ -116,6 +159,7 @@ Fase 2 - prepara la cartella madre e Git locale
 Fase 3 - leggi lo standard ufficiale in sola lettura
 1. Apri dalla repo GitHub ufficiale questi file, tutti dal branch `main`:
    - `VERSION`
+   - `install_contract.json`
    - `MANIFEST.md`
    - `templates/AGENTS.md`
    - `templates/STANZA_AGENTS.md`
@@ -138,8 +182,10 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
 
 Fase 4 - monta localmente il Cervello
 1. Crea le cartelle `memory/`, `logs/` ed `ecosistema/` nella cartella madre.
-2. Applica localmente i template, sostituendo `{{client_name}}`, `{{date}}`,
-   `{{agent}}` e `{{version}}` con i dati reali letti dalla repo:
+2. Usa `install_contract.json` come lista macchina unica dei template, dei file
+   obbligatori e del ramo agente. Applica localmente i template, sostituendo
+   `{{client_name}}`, `{{date}}`, `{{agent}}` e `{{version}}` con i dati reali
+   letti dalla repo:
    - `templates/AGENTS.md` -> `AGENTS.md`
    - `templates/MEMORY.md` -> `memory/MEMORY.md`
    - `templates/ASSET.md` -> `ecosistema/ASSET.md`
@@ -165,11 +211,14 @@ Fase 4 - monta localmente il Cervello
    modalita' Codex -> `.codex/README.md`. Usa entrambe le configurazioni solo
    se LeaderAI lo ha chiesto esplicitamente.
 4. Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user
-   settings di ogni computer (`~/.claude/settings.json`) con il percorso
-   assoluto della memoria canonica dichiarata nell'`AGENTS.md`. La chiave non
-   e' valida nelle settings project/local. Accetta il trust del workspace e
-   verifica ogni postazione con `/memory`. Se trovi una memoria auto esterna
-   gia' piena, confronta e unisci le voci prima di cambiare il percorso.
+   settings di ogni computer (`~/.claude/settings.json`) con la forma portabile
+   `~/...` della memoria canonica dichiarata nell'`AGENTS.md` quando vive sotto
+   la home di quella macchina. Usa un percorso assoluto soltanto dopo averlo
+   letto sulla stessa macchina e soltanto se la memoria vive fuori dalla home.
+   La chiave non e' valida nelle settings project/local. Accetta il trust del
+   workspace e verifica ogni postazione con `/memory`. Se trovi una memoria
+   auto esterna gia' piena, confronta e unisci le voci prima di cambiare il
+   percorso.
 5. Crea `REPORT_FINALE.md` come output temporaneo della missione con
    `VALIDO AL` e `STATO MISSIONE: APERTA`; `.gitignore` lo esclude. Non e' una
    fonte di stato e viene eliminato dopo `CHIUDI`.
@@ -232,10 +281,14 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
   generi l'output finale; ogni output e' una bozza che rivedo e firmo io;
 - non inviare email, non cancellare file, non spostare cartelle vive e non usare
   dati sensibili senza mia conferma esplicita;
-- SALVATAGGIO AUTOMATICO: alla fine di ogni sessione di lavoro fai da solo
-  `git add -A` + `git commit` con un messaggio chiaro, senza che io lo chieda.
-  Se il backup remoto (GitHub) e' configurato, fai anche `git push`. Io non
-  devo ricordarmi di salvare: ci pensi tu, sempre;
+- SALVATAGGIO AUTOMATICO: alla fine di ogni sessione di lavoro prepara da solo
+  il primo commit con una allowlist dei file standard dichiarati in
+  `install_contract.json`, rileggi i nomi in staging e controlla che non
+  contengano segreti. Non usare `git add -A` come scorciatoia. Crea il commit
+  con un messaggio chiaro, senza che io lo chieda.
+  Se il backup remoto (GitHub) e' configurato, dimmi se esistono commit da
+  pubblicare; esegui `git push` soltanto dopo il mio comando. Il salvataggio
+  locale resta automatico;
 - TUTTO NASCE NELLA CASA: ogni file, app, documento o nota che crei nasce
   dentro la cartella madre, mai sul Desktop o altrove. L'agente si apre
   sempre da questa cartella;
@@ -309,7 +362,7 @@ In `ecosistema/LIMITI.md` aggiungi:
 - nessun uso di file non autorizzati;
 - nessuna modifica/cancellazione di dati originali.
 
-Fase 5-ter - browser giusto (obbligatoria)
+Fase 5-ter - browser giusto (obbligatoria sulla macchina cliente)
 Chiedi al cliente quale browser usa davvero (di solito Chrome) e verifica
 quale e' il browser predefinito di Windows/Mac. Se non coincidono, sistemalo
 TU: imposta il browser che il cliente usa come predefinito (se il sistema
@@ -318,17 +371,37 @@ fare un click). Poi prova reale: apri un link e conferma che si apre nel
 browser giusto. Serve perche' login e autorizzazioni (GitHub, Google,
 Claude) si aprono nel predefinito: se e' quello sbagliato, il cliente si
 ritrova su un browser dove non e' loggato.
+Nel gate anonimo di rilascio questa prova resta `DA COLLAUDARE`: richiede il
+browser e le preferenze della macchina reale.
 
-Fase 5-bis - apertura sempre giusta (obbligatoria)
-Il rischio piu' frequente e' che io apra l'agente nella cartella sbagliata e
-il lavoro finisca altrove. Chiudilo cosi':
-1. Crea sul Desktop un collegamento/launcher che apre l'agente DIRETTAMENTE
-   dentro la cartella madre (Windows: collegamento o script .bat/.ps1 che fa
-   `cd` nella cartella madre e lancia l'agente; Mac: comando rapido o alias).
-   Dagli un nome chiaro, per esempio "Apri il mio Ecosistema AI".
-2. Dimmi di usare SEMPRE quel collegamento per aprire l'agente.
-3. Provalo davvero: aprilo, verifica che l'agente legga AGENTS.md della
-   cartella madre, e mostrami la prova.
+Fase 5-bis - apertura sempre giusta (obbligatoria sulla macchina cliente)
+Il rischio piu' frequente e' che l'agente venga aperto nella cartella
+sbagliata: vede la task o l'email, ma nasce senza Cervello ed Ecosistema.
+Chiudilo cosi':
+1. Rileva e dichiara la superficie reale: Codex Desktop, Codex CLI, Claude
+   Code, Windows nativo, WSL o macOS. Non mescolare percorsi Windows e WSL.
+2. Codex Desktop: apri la cartella madre come progetto locale primario con
+   `Ctrl+O` / **Add new project**, seleziona la cartella e crea una nuova task.
+   Dal terminale, se disponibile, `codex app "<CARTELLA_MADRE>"` e' una
+   scorciatoia equivalente.
+3. Codex CLI: usa `codex -C "<CARTELLA_MADRE>"` oppure avvialo da quella
+   directory. Claude Code: entra nella cartella madre e avvia una nuova
+   sessione; `/context` deve mostrare `CLAUDE.md` e `AGENTS.md`.
+4. Prima del trust fai un inventario read-only di provenienza, `AGENTS.md`,
+   `.codex/config.toml`, `.claude/settings*`, hook e skill. Una configurazione
+   inattesa produce `BLOCCO`; il trust arriva dopo questa verifica.
+5. Crea un launcher solo se serve davvero al cliente. Usa comandi che trattano
+   il percorso come valore letterale e prova anche spazi, accenti, parentesi e
+   `&`; conserva un launcher esistente diverso invece di sovrascriverlo.
+6. Prova da una posizione estranea alla casa. La nuova task/sessione deve
+   dichiarare percorso corrente, mappa caricata e tre regole lette da
+   `AGENTS.md`. Percorso diverso = `FUORI DAL CERVELLO`, nessuna scrittura.
+7. Esegui quindi, senza aggiungere percorsi o indizi, la richiesta esatta:
+   `Crea la Brand Identity`. La prova passa solo se l'agente instrada dalla
+   mappa madre alla responsabilita' proprietaria, apre fonti brand reali e
+   crea o aggiorna l'output nella casa corretta.
+Nel gate anonimo di rilascio il gesto Desktop resta `DA COLLAUDARE`: il gate
+prova sessioni nuove dentro una casa anonima e conserva le evidenze.
 
 Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
@@ -348,8 +421,9 @@ Fase 6 - collaudo
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi, credenziali,
    `REPORT_FINALE.md`, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
-   lo crea da solo a fine corsa: se manca, fallo tu con `git add -A` +
-   `git commit`, altrimenti il backup della Fase 7 parte da un repository vuoto.
+   lo crea da solo a fine corsa: se manca, usa la allowlist del contratto,
+   rileggi lo staging, esegui il controllo segreti e poi `git commit`.
+   Altrimenti il backup della Fase 7 parte da un repository vuoto.
 3. Prova delle fonti (obbligatoria). Per ogni fonte disponibile fai una prova
    innocua di SOLA LETTURA e mostrami il dato vero appena letto:
    - email: oggetto e mittente di una mail recente, senza inviare nulla;
@@ -398,8 +472,9 @@ gia' uso.
 2. DOMANDA 2 - come fare il backup. [UMANO]
    Presentami le due opzioni e fammi scegliere:
    - GitHub privato: copia su una repo privata. Sicuro, ma serve un account
-     GitHub. Una volta configurato, il push lo fa l'agente da solo a fine
-     sessione (regola del salvataggio automatico), non devo ricordarmene io.
+     GitHub. Una volta configurato, l'agente salva localmente a fine sessione
+     e propone il push quando esistono commit da pubblicare. Il push parte
+     soltanto dopo un comando esplicito.
    AUTENTICAZIONE GITHUB - REGOLA FISSA: si usa SOLO GitHub CLI con login dal
    browser (`gh auth login` → GitHub.com → HTTPS → login via web browser: il
    cliente clicca Autorizza e basta). VIETATO far creare, copiare o incollare
@@ -410,6 +485,8 @@ gia' uso.
      scrive. Meglio come copia di backup, non come cartella di lavoro viva.
    L'account e l'autorizzazione (GitHub o cloud) li attivo io: tu guidami a voce,
    non creare account ne' inserire password al posto mio.
+   Nel gate anonimo di rilascio il backup remoto resta `DA COLLAUDARE` perche'
+   richiede una scelta e un account reali.
 3. DOMANDA 3 - seconda postazione, se mi serve. [UMANO]
    Coerente con la Domanda 2:
    - se ho scelto GitHub: sull'altro PC si fa `clone` della stessa repo e si
@@ -484,6 +561,12 @@ Report temporaneo obbligatorio per la missione:
 - seconda postazione impostata si/no/non serve;
 - Cervello verificato si/no;
 - prova piccola completata si/no;
+- ingresso reale: superficie, progetto primario/CWD, nuova task/sessione,
+  `AGENTS.md` caricato e tre regole mostrate;
+- prova senza indizi `Crea la Brand Identity`: percorso
+  madre/stanza -> fonte brand -> output, con esito;
+- continuita' chat di gruppo in modalita' `both`: Codex -> Claude Code ->
+  Codex, con un solo ID missione e tre sessioni distinte;
 - Ecosistema: fonti trovate, con stato (OK / DA CONFERMARE / DA COLLEGARE) e per ogni OK la prova del dato letto;
 - Asset registrati in `ecosistema/ASSET.md`;
 - classificazione dell'ambiente e mappa delle stanze con monte/valle;
@@ -506,10 +589,14 @@ Consegna del report e ciclo tra agenti:
 1. Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre, con
    data/ora e stato missione.
 2. Mostra al proprietario verdetto, prove e blocchi reali.
-3. Chiedi: `Autorizzi l'invio del report a sal@salchiarenza.ai?`
-   L'autorizzazione vale soltanto per questo specifico invio.
-4. Solo dopo un si' esplicito, invia davvero il report. Una bozza non conta come
-   consegna. Se Gmail non e' collegata, conserva il report locale come
+3. Mostra destinatario, oggetto, versione del report e azione esterna esatta.
+   Chiedi: `Autorizzi l'invio del report in risposta allo stesso mittente
+   LeaderAI verificato?`
+   L'autorizzazione vale soltanto per questo specifico
+   invio; parole come "manda avanti il lavoro" non autorizzano la posta.
+4. Solo dopo un si' esplicito, invia davvero il report in risposta alla
+   missione verificata. Una bozza non conta come consegna. Se Gmail non e'
+   collegata, conserva il report locale come
    `PRONTO DA INVIARE` e dichiara il blocco senza simulare l'invio.
 
 Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,

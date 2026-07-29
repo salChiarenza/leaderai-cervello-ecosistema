@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -17,12 +18,19 @@ ROOM_ROW = (
 class EcosistemaInspectorTest(unittest.TestCase):
     def make_target(self, root: str, agent: str = "claude") -> Path:
         target = Path(root) / "EcosistemaAI-Test"
-        leaderai_setup.run_setup(target, "Cliente Test", agent)
         self.claude_user_settings = Path(root) / "claude-user-settings.json"
-        self.claude_user_settings.write_text(
-            json.dumps({"autoMemoryDirectory": str((target / "memory").resolve())}),
-            encoding="utf-8",
+        leaderai_setup.run_setup(
+            target,
+            "Cliente Test",
+            agent,
+            claude_user_settings_path=(
+                self.claude_user_settings
+                if agent in {"claude", "both"}
+                else None
+            ),
         )
+        if agent == "codex":
+            self.claude_user_settings.write_text("{}\n", encoding="utf-8")
         return target
 
     def inspect(self, target: Path) -> ecosistema_inspector.Inspection:
@@ -127,6 +135,61 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
+
+    def test_declared_room_symlink_outside_house_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            external = Path(tmp) / "stanza-esterna"
+            external.mkdir()
+            (external / "AGENTS.md").write_text(
+                "# Stanza\n\n## Responsabilita business\nMantiene stato e decisioni.\n",
+                encoding="utf-8",
+            )
+            (external / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+            (target / "app-iscrizioni").symlink_to(external, target_is_directory=True)
+            self.add_room_to_registry(target)
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("ROOM_PATH_SYMLINK", self.codes(inspection))
+
+    def test_required_agents_symlink_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            external = Path(tmp) / "AGENTS-esterno.md"
+            external.write_text(
+                (target / "AGENTS.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (target / "AGENTS.md").unlink()
+            (target / "AGENTS.md").symlink_to(external)
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("STANDARD_PATH_SYMLINK", self.codes(inspection))
+
+    def test_empty_gitignore_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / ".gitignore").write_text("", encoding="utf-8")
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("GITIGNORE_RULES_MISSING", self.codes(inspection))
+            self.assertIn("GITIGNORE_INEFFECTIVE", self.codes(inspection))
+
+    def test_missing_git_repository_is_blocker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            shutil.rmtree(target / ".git")
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("GIT_REPOSITORY_MISSING", self.codes(inspection))
 
     def test_technical_portfolio_pipeline_is_not_proven_as_a_room(self):
         with tempfile.TemporaryDirectory() as tmp:

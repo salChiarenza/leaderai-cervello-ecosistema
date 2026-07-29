@@ -17,6 +17,12 @@ sensazione: confronta il caso reale con questo Manifest, con
 operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara
 se puo', lo prova e lo dichiara nel report.
 
+`install_contract.json` traduce questo standard nel contratto macchina del
+nucleo d'installazione. La procedura manuale, `leaderai_setup.py`, l'Ispettore
+e il collaudo non mantengono liste concorrenti. Browser, launcher e backup
+remoto sono controlli d'ambiente dichiarati nel contratto: si provano sulla
+macchina cliente e restano `DA COLLAUDARE` nel gate anonimo.
+
 ## Regola
 
 L'agente non deve fare un esame al cliente.
@@ -45,6 +51,9 @@ Restano stabili in ogni installazione:
 - calco locale `ecosistema/STANZA_AGENTS.md` per creare mappe senza dipendere
   da un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
+- ingresso verificato: cartella madre come progetto primario/CWD e nuova
+  task/sessione che legge la mappa prima del lavoro;
+- chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
 - versione del metodo applicato e prove di collaudo.
 
 La versione installata vive nell'`AGENTS.md` della cartella madre. Ogni
@@ -178,6 +187,11 @@ l'esecuzione di `leaderai_setup.py` richiedono una autorizzazione esplicita e
 separata; non sono il percorso predefinito e non si attivano automaticamente se
 la lettura web incontra un blocco.
 
+Installazione manuale e setup tecnico devono produrre lo stesso telaio per la
+stessa modalita'. Il rilascio lo prova in una cartella vuota con percorso
+difficile, usando una sessione reale che riceve soltanto la procedura e lo
+standard statico.
+
 Il report di missione viene prima creato e collaudato localmente, con data/ora e
 stato. L'invio email a LeaderAI avviene dopo autorizzazione esplicita del
 proprietario; dopo `CHIUDI` il report temporaneo viene eliminato.
@@ -231,6 +245,35 @@ Per Codex:
 
 - `.codex/README.md`
 - `.agents/skills/ispettore-ecosistema/SKILL.md`
+- Codex Desktop con cartella madre come progetto locale primario oppure Codex
+  CLI avviato con la cartella madre come `-C`/directory corrente
+
+## Gate di rilascio del prodotto
+
+La suite deterministica passa soltanto con almeno un test eseguito, zero errori
+e zero test saltati. Il gate completo richiede inoltre:
+
+1. una sessione Codex reale e una sessione Claude Code reale;
+2. due richieste business anonime senza suggerire file o percorsi;
+3. instradamento dalla mappa madre alla stanza, alla fonte e all'output;
+4. nessuna contaminazione tra stanze o scrittura nella fonte storica;
+5. installazione manuale reale per entrambi gli agenti, senza clone, Python o
+   `leaderai_setup.py`;
+6. cartella finale conforme, repository Git pulito e prove conservate;
+7. stato bloccante per CLI assente, login mancante, timeout o oracolo fallito.
+8. richiesta esatta `Crea la Brand Identity`, senza indizi tecnici nel prompt,
+   con fonte brand reale e output nella responsabilita' proprietaria.
+
+I controlli macchina `default_browser`, `desktop_launcher` e `remote_backup`
+sono dichiarati in `install_contract.json`. Il gate anonimo verifica che
+restino esplicitamente `DA COLLAUDARE`; il loro `OK` nasce soltanto dalla prova
+sulla macchina cliente.
+
+Comando unico:
+
+```bash
+python3 -m tests.gate --release --agents codex,claude
+```
 
 ## Moduli professionali
 

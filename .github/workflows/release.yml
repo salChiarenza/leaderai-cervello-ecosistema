@@ -1,0 +1,67 @@
+name: Release gate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_live_release:
+        description: "Esegui il gate live su runner LeaderAI gia autenticato"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic:
+    name: Deterministic - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Copia in percorso difficile (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: cp -R "$GITHUB_WORKSPACE" "$RUNNER_TEMP/Prova città d'Artù"
+
+      - name: Copia in percorso difficile (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: >-
+          Copy-Item -LiteralPath $env:GITHUB_WORKSPACE
+          -Destination "$env:RUNNER_TEMP\Prova città d'Artù" -Recurse
+
+      - name: Gate rapido
+        working-directory: ${{ runner.temp }}/Prova città d'Artù
+        run: python -m tests.gate --quick
+
+      - name: Suite deterministica diretta
+        working-directory: ${{ runner.temp }}/Prova città d'Artù
+        run: python -m unittest discover -s tests
+
+  live-release:
+    name: Live release - runner autenticato
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      inputs.run_live_release
+    runs-on:
+      - self-hosted
+      - leaderai-authenticated
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gate completo Codex e Claude
+        run: >-
+          python3 -m tests.gate --release --agents codex,claude
+          --evidence-dir "${{ runner.temp }}/leaderai-release-evidence"

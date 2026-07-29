@@ -127,9 +127,11 @@ class CrossAgentContractTest(unittest.TestCase):
         )
         self.assertIn(
             "https://github.com/salChiarenza/leaderai-cervello-ecosistema/"
-            "blob/main/INSTALLA_CON_AI.md",
+            "blob/v[VERSIONE VERIFICATA]/INSTALLA_CON_AI.md",
             email,
         )
+        self.assertIn("SHA256 verificato", email)
+        self.assertNotIn("/blob/main/", email)
         self.assertIn("autorizzazione esplicita", email)
         self.assertIn(
             "l'autorizzazione successiva del proprietario attiva "
@@ -137,6 +139,9 @@ class CrossAgentContractTest(unittest.TestCase):
             " ".join(email.split()),
         )
         self.assertIn("PROVA_DESTINATARIO", email)
+        if "PROVA_DESTINATARIO_OK" in email:
+            version = self.read("VERSION").strip()
+            self.assertIn(f"versione `{version}`", email)
         self.assertIn(
             "[FIRMA AGENTE: Sal & Codex / Sal & Claude Code]",
             email,
@@ -150,6 +155,24 @@ class CrossAgentContractTest(unittest.TestCase):
         ]:
             with self.subTest(pointer=relative_path):
                 self.assertIn("EMAIL_CONSEGNA.md", self.read(relative_path))
+
+    def test_checkup_and_inspector_skill_read_machine_contract(self):
+        self.assertIn("install_contract.json", self.read("CHECKUP.md"))
+        self.assertIn(
+            "install_contract.json",
+            self.read("templates/ISPETTORE_SKILL.md"),
+        )
+
+    def test_remote_push_requires_explicit_command(self):
+        install = self.read("INSTALLA_CON_AI.md")
+        self.assertIn(
+            "esegui `git push` soltanto dopo il mio comando",
+            install,
+        )
+        self.assertNotIn(
+            "il push lo fa l'agente da solo a fine sessione",
+            install,
+        )
 
     def test_delivery_email_has_one_direct_operational_reader(self):
         email = self.read("EMAIL_CONSEGNA.md")
@@ -175,6 +198,53 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertNotIn("fai un nuovo autocontrollo e mandi un nuovo", checkup)
         self.assertIn("nuova autorizzazione prima di ogni nuovo invio", checkup)
         self.assertIn("manca `AGENT_CHAT.md`", checkup)
+
+    def test_entrypoint_gate_is_in_installation_and_agent_boot_files(self):
+        install = self.read("INSTALLA_CON_AI.md")
+        checkup = self.read("CHECKUP.md")
+        codex = self.read("templates/CODEX_README.md")
+        claude = self.read("templates/CLAUDE_README.md")
+        agents = self.read("templates/AGENTS.md")
+
+        for text in (install, checkup, codex, agents):
+            normalized = " ".join(text.split())
+            self.assertIn("FUORI DAL CERVELLO", normalized)
+            self.assertIn("nuova task", normalized)
+            self.assertIn("tre regole", normalized)
+        self.assertIn("progetto locale primario", codex)
+        self.assertIn('codex app "<CARTELLA_MADRE>"', codex)
+        self.assertIn('codex -C "<CARTELLA_MADRE>"', codex)
+        self.assertIn("nuova sessione", claude)
+        self.assertIn("/context", claude)
+        self.assertIn("/memory", claude)
+
+    def test_brand_identity_and_cross_agent_handoff_are_blocking_checks(self):
+        checkup = self.read("CHECKUP.md")
+        chat = self.read("templates/AGENT_CHAT.md")
+        manifest = self.read("MANIFEST.md")
+
+        self.assertIn("Crea la Brand Identity", checkup)
+        self.assertIn("senza indizi", checkup)
+        self.assertIn("Codex -> Claude Code -> Codex", checkup)
+        for field in (
+            "ID missione",
+            "agente proprietario",
+            "base Git",
+            "Prove",
+            "PRESO IN CARICO",
+        ):
+            self.assertIn(field, chat)
+        self.assertIn("Crea la Brand Identity", manifest)
+
+    def test_delivery_email_authenticates_mission_and_is_portable(self):
+        email = self.read("EMAIL_CONSEGNA.md")
+
+        self.assertIn("mittente LeaderAI esatto", email)
+        self.assertIn("ID missione", email)
+        self.assertIn("thread Gmail si registra dopo l'invio", email)
+        self.assertIn("conferma", email)
+        self.assertIn("%USERPROFILE%", email)
+        self.assertNotIn("[PERCORSO COMPLETO]", email)
 
 
 if __name__ == "__main__":

@@ -12,6 +12,19 @@ Versione standard applicata: `{{version}}`.
 
 ## Regole base
 
+- **Ingresso obbligatorio:** ogni nuova sessione parte con questa cartella madre
+  come progetto primario e directory di lavoro. Una chat o una task aperta
+  altrove non appartiene al Cervello, anche se contiene un'email o un documento
+  che lo descrive.
+- All'avvio leggi nell'ordine `AGENTS.md`, `memory/MEMORY.md` e tutto
+  `AGENT_CHAT.md`. Se il log assegna una missione a un altro agente, rispetta
+  proprietario, stato e prossimo passo prima di toccare file.
+- Prima azione visibile: dichiara il percorso della cartella madre, la modalita'
+  attiva (`codex`, `claude` o `both`) e tre regole appena lette da questa mappa.
+  Se il percorso non coincide con la cartella che contiene questo file, scrivi
+  `FUORI DAL CERVELLO`, non modificare file e chiedi un solo gesto preciso per
+  aprire la cartella madre come progetto. Dopo il gesto si parte da una nuova
+  task o sessione, cosi' le istruzioni vengono rilette.
 - Prima leggere questa mappa.
 - Memoria canonica: `memory/`.
 - La memoria condivisa vive in `memory/MEMORY.md`.
@@ -34,11 +47,13 @@ Versione standard applicata: `{{version}}`.
 - Se questa cartella e' stata installata per `claude`, non creare `.codex`
   senza richiesta esplicita LeaderAI.
 - Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user settings
-  di ogni computer (`~/.claude/settings.json`) sul percorso assoluto della
-  memoria canonica, accetta il trust del workspace e verifica la destinazione
-  con `/memory`. La chiave non e' valida nelle settings project/local. Prima di
-  spostare una memoria esterna, confronta e unisci le voci: non perdere ne'
-  duplicare apprendimenti.
+  di ogni computer (`~/.claude/settings.json`) usando `~/...` quando la memoria
+  e' sotto la home di quella macchina. Usa un percorso assoluto soltanto se il
+  target e' stato letto su quella stessa macchina e vive fuori dalla home.
+  Accetta il trust del workspace e verifica la destinazione con `/memory`. La
+  chiave non e' valida nelle settings project/local. Prima di spostare una
+  memoria esterna, confronta e unisci le voci: non perdere ne' duplicare
+  apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 - Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
@@ -193,7 +208,9 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
   tutti gli agenti della casa. Prima di modificare file importanti si annuncia
   li'; note in cima, massimo 48 ore, poi si promuovono nel file proprietario.
   Il "come si fa" vive nella procedura o nel file proprietario, la chat porta
-  solo il coordinamento.
+  solo il coordinamento. Ogni handoff usa un ID missione, base Git, stato,
+  prove e destinatario del prossimo turno. Un agente nuovo conferma la presa in
+  carico nella stessa nota prima di continuare.
 
 ## Riflesso asset operativo
 

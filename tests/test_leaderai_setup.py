@@ -8,6 +8,19 @@ import leaderai_setup
 
 
 class LeaderAISetupTest(unittest.TestCase):
+    def run_setup(self, target: Path, agent: str, **kwargs):
+        if agent in {"claude", "both"}:
+            kwargs.setdefault(
+                "claude_user_settings_path",
+                target.parent / f"{target.name}-claude-user-settings.json",
+            )
+        return leaderai_setup.run_setup(
+            target,
+            "Cliente Test",
+            agent,
+            **kwargs,
+        )
+
     def test_fresh_install_agent_matrix(self):
         cases = {
             "codex": (True, False, "`.codex/README.md`"),
@@ -21,7 +34,7 @@ class LeaderAISetupTest(unittest.TestCase):
         for agent, (has_codex, has_claude, active_config) in cases.items():
             with self.subTest(agent=agent), tempfile.TemporaryDirectory() as tmp:
                 target = Path(tmp) / "EcosistemaAI-Test"
-                leaderai_setup.run_setup(target, "Cliente Test", agent)
+                self.run_setup(target, agent)
 
                 self.assertTrue((target / "AGENTS.md").is_file())
                 self.assertTrue((target / "CLAUDE.md").is_file())
@@ -68,7 +81,7 @@ class LeaderAISetupTest(unittest.TestCase):
     def test_creates_cervello_and_ecosistema(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Test"
-            result = leaderai_setup.run_setup(target, "Cliente Test", "claude")
+            result = self.run_setup(target, "claude")
 
             self.assertIn("AGENTS.md", result.created)
             self.assertTrue((target / "AGENTS.md").exists())
@@ -129,7 +142,7 @@ class LeaderAISetupTest(unittest.TestCase):
         # senza primo commit il backup della Fase 7 parte da un repo vuoto.
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Test"
-            result = leaderai_setup.run_setup(target, "Cliente Test", "claude")
+            result = self.run_setup(target, "claude")
 
             log = subprocess.run(
                 ["git", "log", "--oneline"],
@@ -166,7 +179,7 @@ class LeaderAISetupTest(unittest.TestCase):
     def test_both_is_explicit_and_creates_both_agent_hooks(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Test"
-            leaderai_setup.run_setup(target, "Cliente Test", "both")
+            self.run_setup(target, "both")
 
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / ".claude" / "README.md").exists())
@@ -391,12 +404,7 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / "REPORT_FINALE.md").write_text(old_report, encoding="utf-8")
             (target / "CLAUDE.md").write_text("ponte errato\n", encoding="utf-8")
 
-            result = leaderai_setup.run_setup(
-                target,
-                "Cliente Test",
-                "both",
-                force=True,
-            )
+            result = self.run_setup(target, "both", force=True)
 
             self.assertEqual(
                 (target / "CLAUDE.md").read_text(encoding="utf-8"),
@@ -726,7 +734,7 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / "lavoro-reale.xlsx").write_text("dato", encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "CHECKUP.md"):
-                leaderai_setup.run_setup(target, "Cliente Test", "claude")
+                self.run_setup(target, "claude")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "supported_agents": [
+    "codex",
+    "claude",
+    "both"
+  ],
+  "common": {
+    "templates": [
+      {
+        "template": "GITIGNORE.txt",
+        "destination": ".gitignore",
+        "strategy": "merge_gitignore"
+      },
+      {
+        "template": "AGENTS.md",
+        "destination": "AGENTS.md",
+        "strategy": "create"
+      },
+      {
+        "template": "CLAUDE.md",
+        "destination": "CLAUDE.md",
+        "strategy": "claude_bridge"
+      },
+      {
+        "template": "MEMORY.md",
+        "destination": "memory/MEMORY.md",
+        "strategy": "create"
+      },
+      {
+        "template": "AGENT_CHAT.md",
+        "destination": "AGENT_CHAT.md",
+        "strategy": "create"
+      },
+      {
+        "template": "FONTI.md",
+        "destination": "ecosistema/FONTI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "ASSET.md",
+        "destination": "ecosistema/ASSET.md",
+        "strategy": "create"
+      },
+      {
+        "template": "PROCESSI.md",
+        "destination": "ecosistema/PROCESSI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "LIMITI.md",
+        "destination": "ecosistema/LIMITI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "STANZA_AGENTS.md",
+        "destination": "ecosistema/STANZA_AGENTS.md",
+        "strategy": "create"
+      },
+      {
+        "template": "INSTALL_LOG.md",
+        "destination": "logs/install-log.md",
+        "strategy": "event_log"
+      }
+    ],
+    "required": [
+      ".gitignore",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "AGENT_CHAT.md",
+      "logs/install-log.md",
+      "ecosistema/FONTI.md",
+      "ecosistema/ASSET.md",
+      "ecosistema/PROCESSI.md",
+      "ecosistema/LIMITI.md",
+      "ecosistema/STANZA_AGENTS.md"
+    ],
+    "forbidden": [],
+    "external_effects": [
+      "git_baseline",
+      "temporary_report"
+    ],
+    "semantic_requirements": [
+      "canonical_memory_index"
+    ],
+    "environment_checks": [
+      "default_browser",
+      "desktop_launcher",
+      "remote_backup"
+    ]
+  },
+  "agents": {
+    "codex": {
+      "templates": [
+        {
+          "template": "CODEX_README.md",
+          "destination": ".codex/README.md",
+          "strategy": "create"
+        },
+        {
+          "template": "ISPETTORE_SKILL.md",
+          "destination": ".agents/skills/ispettore-ecosistema/SKILL.md",
+          "strategy": "create"
+        }
+      ],
+      "required": [
+        ".codex/README.md",
+        ".agents/skills/ispettore-ecosistema/SKILL.md"
+      ],
+      "forbidden": [
+        ".claude/README.md",
+        ".claude/skills/ispettore-ecosistema/SKILL.md"
+      ],
+      "external_effects": []
+    },
+    "claude": {
+      "templates": [
+        {
+          "template": "CLAUDE_README.md",
+          "destination": ".claude/README.md",
+          "strategy": "create"
+        },
+        {
+          "template": "ISPETTORE_SKILL.md",
+          "destination": ".claude/skills/ispettore-ecosistema/SKILL.md",
+          "strategy": "create"
+        }
+      ],
+      "required": [
+        ".claude/README.md",
+        ".claude/skills/ispettore-ecosistema/SKILL.md"
+      ],
+      "forbidden": [
+        ".codex/README.md",
+        ".agents/skills/ispettore-ecosistema/SKILL.md"
+      ],
+      "external_effects": [
+        "claude_user_settings"
+      ]
+    },
+    "both": {
+      "includes": [
+        "codex",
+        "claude"
+      ],
+      "templates": [],
+      "required": [],
+      "forbidden": [],
+      "external_effects": [
+        "claude_user_settings"
+      ]
+    }
+  },
+  "external_effects": {
+    "git_baseline": {
+      "scope": "target",
+      "description": "Inizializza Git e crea il primo commit solo per una casa nuova."
+    },
+    "temporary_report": {
+      "scope": "target",
+      "path": "REPORT_FINALE.md",
+      "description": "Crea o aggiorna il report temporaneo, escluso da Git."
+    },
+    "claude_user_settings": {
+      "scope": "user",
+      "default_path": "~/.claude/settings.json",
+      "key": "autoMemoryDirectory",
+      "description": "Preserva le altre chiavi e collega Claude alla memoria canonica della casa."
+    }
+  },
+  "environment_checks": {
+    "default_browser": {
+      "scope": "machine",
+      "description": "Sulla macchina cliente verifica che i link di login si aprano nel browser realmente usato."
+    },
+    "desktop_launcher": {
+      "scope": "machine",
+      "description": "Sulla macchina cliente prova l'ingresso reale: cartella madre come progetto primario/CWD, nuova task/sessione, AGENTS.md caricato e tre regole mostrate. Crea un launcher soltanto se serve davvero."
+    },
+    "remote_backup": {
+      "scope": "account",
+      "description": "Dopo la scelta del proprietario collega il backup remoto; ogni push resta un comando esplicito."
+    }
+  },
+  "semantic_requirements": {
+    "canonical_memory_index": {
+      "default_path": "memory/MEMORY.md",
+      "description": "Una nuova casa usa memory/MEMORY.md; una casa consolidata puo' dichiarare un percorso canonico diverso e deve contenere MEMORY.md."
+    }
+  }
+}

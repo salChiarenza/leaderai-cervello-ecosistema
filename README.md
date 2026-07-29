@@ -12,6 +12,12 @@ caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 riparabili, prova e prepara il report finale. L'invio avviene solo dopo
 autorizzazione esplicita del proprietario.
 
+`install_contract.json` e' il contratto macchina unico del nucleo
+d'installazione: procedura manuale, setup tecnico, Ispettore e collaudo leggono
+la stessa lista di file obbligatori e rami agente. Browser, launcher e backup
+remoto sono controlli della macchina cliente dichiarati nello stesso contratto
+e restano `DA COLLAUDARE` nel gate anonimo.
+
 La repo fornisce un telaio minimo e un metodo adattivo. Il telaio rende stabile
 il Cervello; il metodo censisce il lavoro reale, riconosce le stanze gia' vive e
 le collega alla mappa madre. La cartella madre e ogni vera stanza hanno sempre
@@ -81,7 +87,11 @@ Valori per `--agent`:
 
 In tutti e tre i casi il telaio comune resta identico: `AGENTS.md` +
 `CLAUDE.md`. La modalita' seleziona le configurazioni dell'agente, non i file
-del contratto comune.
+del contratto comune. Un cambio tra Codex e Claude viene fermato: si usa
+`--agent both` per mantenere entrambi oppure `--migrate-agent` per una
+migrazione esplicita e conservativa. Per Claude, il setup preserva le altre
+user settings e blocca il lavoro se `autoMemoryDirectory` punta gia' a una
+seconda casa.
 
 ## Cosa crea
 
@@ -157,9 +167,23 @@ sono registrate in `CHANGELOG.md`.
 
 ## Collaudo
 
+Gate deterministico obbligatorio:
+
 ```bash
-python3 -m unittest discover -s tests
+python3 -m tests.gate --quick
 ```
+
+Gate completo di rilascio, su macchina con entrambi gli agenti autenticati:
+
+```bash
+python3 -m tests.gate --release --agents codex,claude
+```
+
+Il gate completo avvia sessioni nuove reali. Prova due richieste business senza
+percorsi suggeriti e ripete l'installazione manuale partendo dalla sola
+procedura. Conserva prompt, trascrizioni, manifest prima/dopo, diff e verdetti.
+Zero test, test saltati, CLI assente, autenticazione mancante, timeout o
+oracolo fallito bloccano il rilascio.
 
 Preflight strutturale opzionale e in sola lettura, quando la repo e' locale e
 l'esecuzione e' stata autorizzata:
@@ -173,3 +197,7 @@ python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
 Versione applicabile via lettura della repo ufficiale. Prima di usarla con un
 cliente, leggere `AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita'
 Claude/Codex e verificare `VERSION` e stato GitHub.
+La cartella madre deve essere anche il punto di ingresso reale dell'agente:
+progetto locale primario in Codex Desktop, `-C`/directory corrente in Codex
+CLI, directory corrente in Claude Code. Dopo un cambio di cartella si apre una
+nuova task/sessione e si prova `AGENTS.md` prima del lavoro.

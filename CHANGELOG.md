@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.5.0 - 29/07/2026
+
+- L'ingresso nel Cervello e' ora un gate: ogni nuova task/sessione nasce dalla
+  cartella madre come progetto primario/CWD, dichiara il percorso e mostra tre
+  regole lette da `AGENTS.md`. Una task aperta altrove resta
+  `FUORI DAL CERVELLO`.
+- Aggiunta la prova esatta `Crea la Brand Identity` senza percorsi, file,
+  stanze, fonti o output suggeriti. Il gate osserva instradamento autonomo,
+  fonte brand reale e output nella responsabilita' proprietaria.
+- La chat di gruppo porta ID missione, agente proprietario, base Git, prove e
+  prossimo agente; in modalita' `both` il collaudo richiede il passaggio
+  Codex -> Claude Code -> Codex su tre sessioni distinte.
+- L'email operativa distingue `INSTALLA` e `CONTINUA`, usa link di release
+  immutabili e verifica mittente, thread e autorizzazione del proprietario.
+- `INSTALLA_CON_AI.md` espone un nucleo deterministico delimitato: il gate
+  manuale prova il telaio senza consumare l'intera procedura di
+  personalizzazione, che resta nello stesso file ufficiale.
+- Aggiunto `install_contract.json`, fonte macchina unica per installazione
+  manuale, setup tecnico, Ispettore e collaudo.
+- Il setup Claude configura davvero `autoMemoryDirectory` nelle user settings,
+  preserva le altre chiavi e blocca una seconda casa gia' configurata invece di
+  sovrascriverla.
+- Il verdetto del setup deriva dall'Ispettore: versione vecchia, memoria non
+  collegata, ramo agente incoerente o baseline Git assente non possono piu'
+  produrre `PASSA`.
+- I cambi Codex/Claude sono espliciti: `both` mantiene i due rami;
+  `--migrate-agent` rimuove soltanto file standard riconosciuti e si ferma
+  davanti a contenuti del cliente.
+- Aggiunto il gate deterministico `python3 -m tests.gate --quick`: zero test,
+  test saltati, errori o fallimenti bloccano il rilascio.
+- Aggiunti due harness con prove conservate. Il primo avvia agenti reali su una
+  casa anonima e verifica instradamento, fonte corretta, output e isolamento tra
+  stanze. Il secondo ripete l'installazione manuale dalla sola procedura, senza
+  clone, Python o setup tecnico.
+- Il gate completo `python3 -m tests.gate --release --agents codex,claude`
+  richiede entrambi gli agenti reali e tratta CLI assente, login mancante,
+  timeout o oracolo fallito come blocchi.
+- Aggiunta CI deterministica su macOS e Windows con percorsi contenenti spazi,
+  accenti e apostrofi; il live resta su runner autenticato dedicato.
+
 ## 0.4.5 - 29/07/2026
 
 - **MUST percorsi d'ambiente in forma portabile.** `autoMemoryDirectory` si
