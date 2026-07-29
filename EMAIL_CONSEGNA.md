@@ -62,7 +62,7 @@ Cartella madre: [PERCORSO COMPLETO]<br>
 Backup: [SCELTA VERIFICATA]<br>
 Seconda postazione: [SI / NO]</p>
 
-<p>Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre
+<p>Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre
 <code>AGENTS.md</code> e <code>CLAUDE.md</code> con
 <code>@AGENTS.md</code>. Configura <code>.codex/</code> soltanto per Codex,
 <code>.claude/</code> soltanto per Claude Code, entrambe soltanto se LeaderAI
@@ -101,7 +101,7 @@ Cartella madre: [PERCORSO COMPLETO]
 Backup: [SCELTA VERIFICATA]
 Seconda postazione: [SI / NO]
 
-Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre AGENTS.md e
+Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre AGENTS.md e
 CLAUDE.md con @AGENTS.md. Configura .codex/ soltanto per Codex, .claude/
 soltanto per Claude Code, entrambe soltanto su richiesta esplicita LeaderAI.
 
