@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.5 - 29/07/2026
+
+- **MUST percorsi d'ambiente in forma portabile.** `autoMemoryDirectory` si
+  scrive nella forma `~/`, non piu' come percorso assoluto: una sola stringa
+  vale su tutte le postazioni del cliente e si risolve sull'utente del computer
+  corrente. La 0.4.3 prescriveva il percorso assoluto locale.
+- Nuova sezione del Manifest: percorsi, nomi utente, lettere di disco e valori
+  d'ambiente destinati a un'altra macchina si scrivono in forma portabile
+  oppure si leggono dalla fonte di quella macchina. Vietato riproporre altrove
+  un percorso letto su un computer diverso.
+- L'Ispettore segnala `CLAUDE_MEMORY_NOT_PORTABLE` quando `autoMemoryDirectory`
+  usa un percorso assoluto dentro la home dell'utente corrente. E' un avviso,
+  non un blocco: il verdetto diventa `PASSA CON ATTENZIONE`.
+- Due regressioni coprono il caso: percorso assoluto sotto la home segnalato,
+  forma `~/` pulita.
+- Origine: ambiente Marco De Nicolo', 28-29/07/2026. Utente `user` sul PC
+  fisso, `marcd` sul portatile. Il percorso assoluto replicato sul portatile
+  avrebbe rotto la memoria senza alcun errore visibile.
+
 ## 0.4.4 - 28/07/2026
 
 - L'email operativa dichiara un solo lettore reale. Il modello corrente usa

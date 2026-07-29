@@ -315,6 +315,40 @@ class EcosistemaInspectorTest(unittest.TestCase):
             }
             self.assertTrue(expected.issubset(codes), expected - codes)
 
+    def test_absolute_home_memory_path_is_flagged_as_not_portable(self):
+        """Caso Marco De Nicolo' 28/07/2026: percorso corretto sul PC fisso,
+        rotto in silenzio sul portatile perche' inchioda il nome utente."""
+        with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
+            target = self.make_target(tmp)
+            self.claude_user_settings.write_text(
+                json.dumps(
+                    {"autoMemoryDirectory": str((target / "memory").resolve())}
+                ),
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+            codes = self.codes(inspection)
+
+            self.assertIn("CLAUDE_MEMORY_NOT_PORTABLE", codes)
+            # E' un avviso, non un blocco: il percorso funziona su questa macchina,
+            # ma va reso portabile prima di replicarlo sulla seconda postazione.
+            self.assertEqual(inspection.verdict, "PASSA CON ATTENZIONE")
+
+    def test_portable_memory_path_passes_clean(self):
+        with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
+            target = self.make_target(tmp)
+            relative = (target / "memory").resolve().relative_to(Path.home().resolve())
+            self.claude_user_settings.write_text(
+                json.dumps({"autoMemoryDirectory": f"~/{relative.as_posix()}"}),
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertNotIn("CLAUDE_MEMORY_NOT_PORTABLE", self.codes(inspection))
+            self.assertEqual(inspection.verdict, "PASSA")
+
     def test_credential_path_in_git_history_requires_rotation(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp, "claude")

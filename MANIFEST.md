@@ -54,11 +54,36 @@ verdetto se non puo' confrontare i due valori o se non coincidono.
 Per Claude Code esiste una sola memoria. `autoMemoryDirectory` viene impostato
 nelle **user settings** di ciascun computer (`~/.claude/settings.json`), oppure
 da policy o `--settings`: la documentazione ufficiale non accetta questa chiave
-nelle settings project/local. Il valore e' assoluto o inizia con `~/`, quindi
-su due PC puo' essere diverso pur puntando alla stessa cartella OneDrive.
-`/memory` deve confermare la destinazione su ogni postazione. Se esiste una
-memoria auto esterna, le voci si confrontano e si uniscono prima di cambiare il
-percorso.
+nelle settings project/local. La documentazione ammette due forme, "an absolute
+path or start with `~/`": **lo standard LeaderAI prescrive la forma `~/`**, per
+esempio `~/OneDrive/Desktop/<Cartella madre>/_claude-memory`. Una sola stringa
+vale su tutte le postazioni del cliente e si risolve sull'utente del computer
+corrente. `/memory` deve confermare la destinazione su ogni postazione. Se
+esiste una memoria auto esterna, le voci si confrontano e si uniscono prima di
+cambiare il percorso.
+
+### Percorsi d'ambiente: forma portabile, mai copiati da un'altra macchina
+
+Vale per ogni percorso, nome utente, lettera di disco o valore di ambiente che
+finisce in un'istruzione, una missione, un'email o una configurazione destinata
+al computer del cliente.
+
+- Si usa la forma che si risolve sull'ambiente corrente: `~/` nelle settings
+  degli agenti, `%USERPROFILE%` su Windows, `$HOME` su Unix.
+- Un percorso assoluto si scrive solo dopo averlo letto sulla macchina di
+  destinazione, dichiarando a quale macchina appartiene.
+- **Divieto:** riproporre su una macchina un percorso letto su un'altra. Il
+  segmento utente, la lettera di disco e la radice del cloud cambiano per
+  computer, e installazioni su cloud sincronizzato con utenti diversi sono la
+  norma.
+- Prima di dettare un percorso, l'agente apre i file dell'ambiente che gia'
+  contengono la risposta: `.claude/settings.local.json`, `ecosistema/FONTI.md`,
+  i log di installazione.
+
+Motivo: un percorso sbagliato non produce alcun errore visibile. La memoria
+punta a una cartella inesistente, l'agente riparte vuoto e il cliente scopre il
+guasto da una risposta sbagliata. Caso di origine: ambiente Marco De Nicolo',
+28-29/07/2026, utente `user` sul fisso e `marcd` sul portatile.
 
 ### Forma adattiva
 
@@ -199,8 +224,8 @@ Per Claude Code:
 - `.claude/README.md`
 - `.claude/skills/ispettore-ecosistema/SKILL.md`
 - `autoMemoryDirectory` nelle user settings di ogni computer
-  (`~/.claude/settings.json`), con percorso assoluto verso la memoria canonica
-  dichiarata nella mappa madre e prova `/memory`
+  (`~/.claude/settings.json`), **in forma portabile `~/`** verso la memoria
+  canonica dichiarata nella mappa madre, con prova `/memory` su ogni postazione
 
 Per Codex:
 

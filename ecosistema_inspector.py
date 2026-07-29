@@ -298,6 +298,24 @@ def _extract_installed_version(target: Path) -> str | None:
     return None
 
 
+def _is_inside_home(path: Path) -> bool:
+    """Il percorso sta dentro la home dell'utente corrente?
+
+    Serve a riconoscere i percorsi che inchiodano il segmento utente: sono
+    quelli che, replicati su un'altra postazione del cliente, puntano a una
+    cartella inesistente e rompono la memoria in silenzio.
+    """
+    try:
+        home = Path.home().resolve()
+    except (OSError, RuntimeError):
+        return False
+    try:
+        resolved = path.expanduser().resolve()
+    except (OSError, RuntimeError):
+        return False
+    return resolved == home or home in resolved.parents
+
+
 def _git_path_state(target: Path, rel: str) -> tuple[bool, bool]:
     if not (target / ".git").is_dir():
         return False, False
@@ -896,6 +914,21 @@ def inspect_ecosystem(
                             settings_label,
                             "Auto memory punta fuori dalla memoria canonica della casa: "
                             "confrontare e unire le due memorie prima di cambiare il percorso.",
+                        )
+                    )
+                elif not raw_memory.startswith("~/") and _is_inside_home(configured):
+                    # Forma non portabile: il percorso e' corretto su QUESTO computer,
+                    # ma inchioda il segmento utente della home locale. Su un'altra
+                    # postazione dello stesso cliente punterebbe a una cartella
+                    # inesistente e la memoria si romperebbe senza errori visibili.
+                    findings.append(
+                        Finding(
+                            "CLAUDE_MEMORY_NOT_PORTABLE",
+                            "ATTENZIONE",
+                            settings_label,
+                            "autoMemoryDirectory inchioda il nome utente di questo "
+                            "computer: riscriverlo nella forma portabile ~/ prima di "
+                            "replicarlo su un'altra postazione del cliente.",
                         )
                     )
 
