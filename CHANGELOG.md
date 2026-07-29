@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.1 - 29/07/2026
+
+- Corretto il gate Windows: i finti agenti Python vengono avviati tramite il
+  runtime Python invece di essere trattati come eseguibili Win32.
+- I test della memoria Claude ora rispettano la stessa regola del prodotto:
+  quando la memoria vive sotto la home, `autoMemoryDirectory` usa la forma
+  portabile `~/...` anche su Windows.
+- La regressione sul repository Git mancante non tenta piu' di cancellare
+  oggetti Git protetti in sola lettura su Windows; sposta la cartella `.git`
+  fuori dal target e verifica lo stesso blocco dell'Ispettore.
+
 ## 0.5.0 - 29/07/2026
 
 - L'ingresso nel Cervello e' ora un gate: ogni nuova task/sessione nasce dalla

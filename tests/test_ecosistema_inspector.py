@@ -1,5 +1,4 @@
 import json
-import shutil
 import subprocess
 import tempfile
 import unittest
@@ -88,7 +87,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             settings = json.loads(self.claude_user_settings.read_text(encoding="utf-8"))
             self.assertEqual(
                 settings["autoMemoryDirectory"],
-                str((target / "memory").resolve()),
+                leaderai_setup._portable_machine_path(target / "memory"),
             )
             tracked = subprocess.run(
                 ["git", "ls-files"],
@@ -184,7 +183,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
     def test_missing_git_repository_is_blocker(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
-            shutil.rmtree(target / ".git")
+            (target / ".git").rename(Path(tmp) / "git-backup")
 
             inspection = self.inspect(target)
 
@@ -264,7 +263,13 @@ class EcosistemaInspectorTest(unittest.TestCase):
             )
             agents.write_text(text.replace(placeholder, row), encoding="utf-8")
             self.claude_user_settings.write_text(
-                json.dumps({"autoMemoryDirectory": str(canonical.resolve())}),
+                json.dumps(
+                    {
+                        "autoMemoryDirectory": (
+                            leaderai_setup._portable_machine_path(canonical)
+                        )
+                    }
+                ),
                 encoding="utf-8",
             )
             memory = target / "memory"

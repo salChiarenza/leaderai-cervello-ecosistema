@@ -13,18 +13,11 @@ lettore. Il proprietario interviene nei gesti umani che l'agente gli presenta.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 29/07/2026`
+`PROVA_DESTINATARIO_DA_RIFARE — 29/07/2026`
 
-Verifica completata partendo dal solo archivio pubblico immutabile del tag
-`v0.5.0`, commit
-`946542e66cbc70681ea5a7aa9bfb4a71c90b65c9`.
-La prova riguarda la versione `0.5.0`.
-L'archivio misura `195576` byte e ha SHA-256
-`df530411719d23d5e49b55f73d4782f39e30e43cbbfb3abbff807d03f9c1f598`.
-La versione letta dalla copia estratta e' `0.5.0`; i `150` test deterministici
-sono passati dalla sola copia scaricata. Prima della pubblicazione sono passati
-anche tre scenari business e l'installazione manuale con sessioni reali sia
-Codex sia Claude Code.
+La prova pubblica della `0.5.0` resta valida per quella release, ma la `0.5.1`
+non e' inviabile finche' il tag immutabile, l'archivio pubblico, lo SHA-256, il
+gate deterministico scaricato e la CI macOS/Windows non sono stati verificati.
 
 ## Controlli prima dell'invio
 

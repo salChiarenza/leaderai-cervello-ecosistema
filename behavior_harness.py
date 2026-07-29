@@ -355,6 +355,14 @@ def _resolve_executable(executable: str) -> str | None:
     return shutil.which(executable)
 
 
+def _executable_prefix(executable: str) -> list[str]:
+    """Avvia i finti agenti Python in modo portabile anche su Windows."""
+
+    if Path(executable).suffix.casefold() == ".py":
+        return [sys.executable, executable]
+    return [executable]
+
+
 def build_command(
     agent: str,
     executable: str,
@@ -363,9 +371,10 @@ def build_command(
 ) -> list[str]:
     """Costruisce una sessione nuova senza riprese o directory aggiuntive."""
 
+    prefix = _executable_prefix(executable)
     if agent == "codex":
         return [
-            executable,
+            *prefix,
             "exec",
             "--ephemeral",
             "--ignore-user-config",
@@ -380,7 +389,7 @@ def build_command(
     if agent == "claude":
         output_format = "stream-json" if transcript_format == "jsonl" else "json"
         command = [
-            executable,
+            *prefix,
             "--print",
             "--no-session-persistence",
             "--no-chrome",

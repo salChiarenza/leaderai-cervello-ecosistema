@@ -100,7 +100,7 @@ print(json.dumps({"type": "result", "result": "fatto"}))
 
 class BehaviorHarnessTest(unittest.TestCase):
     def make_executable(self, root: Path, name: str, source: str) -> Path:
-        executable = root / name
+        executable = root / f"{name}.py"
         executable.write_text(textwrap.dedent(source), encoding="utf-8")
         executable.chmod(executable.stat().st_mode | stat.S_IXUSR)
         return executable

@@ -124,7 +124,7 @@ class InstallContractTest(unittest.TestCase):
             self.assertEqual(payload["permissions"], {"allow": ["Read"]})
             self.assertEqual(
                 payload["autoMemoryDirectory"],
-                str((target / "memory").resolve()),
+                leaderai_setup._portable_machine_path(target / "memory"),
             )
             self.assertEqual(result.target_verdict, "PASSA")
 
