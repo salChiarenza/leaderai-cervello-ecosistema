@@ -117,6 +117,10 @@ print(json.dumps({"type": "result", "result": "installazione completata"}))
 
 
 class InstallationHarnessTest(unittest.TestCase):
+    def test_report_mode_accepts_human_readable_installed_label(self):
+        report = "## Modalita'\n\n- Modalita' installata: `claude`.\n"
+        self.assertEqual(installation_harness._report_mode(report), "claude")
+
     def test_manual_harness_uses_bounded_official_installation_core(self):
         install = (
             installation_harness.REPO_ROOT / "INSTALLA_CON_AI.md"

@@ -47,8 +47,10 @@ La fonte unica della procedura e' `CHECKUP.md` nella repo ufficiale
 11. Esegui in una nuova task/sessione la richiesta esatta
     `Crea la Brand Identity`, senza percorsi, file, stanze, fonti, skill o
     output suggeriti. Registra il percorso autonomo e l'output osservato.
-12. Completa il resoconto locale. Ogni invio esterno richiede autorizzazione
-   esplicita del proprietario.
+12. Completa il resoconto locale. Aprilo con `STATO PER LE PERSONE`: `Fatto`,
+    `Manca`, `Prossimo passo`, `Intervento umano`; poi inserisci dettagli e
+    prove tecniche. Ogni invio esterno richiede autorizzazione esplicita del
+    proprietario.
 
 ## Uscita obbligatoria
 

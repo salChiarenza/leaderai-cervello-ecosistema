@@ -121,6 +121,11 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("AGENT_CHAT.md", agents)
             self.assertTrue((target / "AGENT_CHAT.md").exists())
             self.assertIn("Asset operativi", asset)
+            self.assertIn("STATO PER LE PERSONE", report)
+            self.assertIn("Fatto:", report)
+            self.assertIn("Manca:", report)
+            self.assertIn("Prossimo passo:", report)
+            self.assertIn("Intervento umano:", report)
             self.assertIn("FASE 1 - CERVELLO", report)
             self.assertIn("STANDARD APPLICATO", report)
             self.assertIn(

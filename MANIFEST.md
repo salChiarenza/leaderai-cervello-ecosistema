@@ -195,6 +195,9 @@ standard statico.
 Il report di missione viene prima creato e collaudato localmente, con data/ora e
 stato. L'invio email a LeaderAI avviene dopo autorizzazione esplicita del
 proprietario; dopo `CHIUDI` il report temporaneo viene eliminato.
+Ogni email operativa agente-agente e ogni report aprono con `STATO PER LE
+PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Le
+istruzioni e le prove tecniche vengono dopo.
 
 Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
 README e Manifest lo richiamano senza duplicarne il corpo.

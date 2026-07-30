@@ -731,10 +731,27 @@ def build_report(result: InstallResult, agent: str, stamp: str) -> str:
     if present(".claude/skills/ispettore-ecosistema/SKILL.md"):
         inspector_skills.append("Claude Code")
     inspector_text = ", ".join(inspector_skills) if inspector_skills else "mancante"
+    if verdict == "PASSA":
+        human_missing = "nessun blocco tecnico; resta la verifica del proprietario."
+        human_next = "il proprietario legge il report e decide se autorizzarne l'invio."
+    elif verdict == "PASSA CON ATTENZIONE":
+        human_missing = "chiudere gli avvisi elencati nel report."
+        human_next = "l'agente chiarisce gli avvisi; il proprietario decide gli interventi umani."
+    else:
+        human_missing = "risolvere i blocchi elencati nel report."
+        human_next = "l'agente ripara cio' che puo' e ripete le prove."
 
     return "\n".join(
         [
             "# Report missione LeaderAI",
+            "",
+            "STATO PER LE PERSONE",
+            "Fatto: il Cervello e' stato creato o verificato e i controlli disponibili sono conclusi.",
+            f"Manca: {human_missing}",
+            f"Prossimo passo: {human_next}",
+            "Intervento umano: autorizzare solo permessi, accessi, scelte e l'eventuale invio.",
+            "",
+            "DETTAGLI TECNICI",
             "",
             f"VALIDO AL: {stamp}",
             "STATO MISSIONE: APERTA",

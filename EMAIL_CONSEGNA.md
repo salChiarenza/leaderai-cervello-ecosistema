@@ -8,17 +8,19 @@ procedura.
 Modo corrente: `AGENTE_CON_POSTA`.
 
 Il corpo viene letto ed eseguito direttamente dall'agente collegato alla
-casella del cliente. Dalla prima riga tutti i verbi parlano allo stesso
-lettore. Il proprietario interviene nei gesti umani che l'agente gli presenta.
+casella del cliente. Il blocco iniziale `STATO PER LE PERSONE` non contiene
+istruzioni esecutive; dalla sezione `ISTRUZIONI PER L'AGENTE` tutti i verbi
+parlano allo stesso lettore. Il proprietario interviene nei gesti umani che
+l'agente gli presenta.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 29/07/2026`
+`PROVA_DESTINATARIO_DA_RIPETERE — 30/07/2026`
 
-Verifica completata partendo dal solo archivio pubblico immutabile del tag
-`v0.5.1`, commit
-`dd059af61069dc7f5df6b9f4e03c6ffe3b313a11`.
-La prova riguarda la versione `0.5.1`.
+L'ultima verifica completa riguarda il tag `v0.5.1`, commit
+`dd059af61069dc7f5df6b9f4e03c6ffe3b313a11`, ed e' superata dal modello
+email 0.5.2. Prima della pubblicazione va ripetuta partendo dal solo archivio
+pubblico immutabile del nuovo tag.
 L'archivio misura `195828` byte e ha SHA-256
 `6fbb5ece01942e135453a50c78c734edf846db5fad86d4620067d1fc4213d798`.
 La versione letta dalla copia estratta e' `0.5.1`; i `150` test deterministici
@@ -47,6 +49,8 @@ manuale con sessioni reali sia Codex sia Claude Code.
 7. L'autorizzazione esplicita del proprietario attiva questo invio.
 8. Il report viene creato, collaudato e mostrato localmente; l'autorizzazione
    successiva del proprietario attiva l'eventuale invio del report.
+9. Verifica che missione e report inizino con `STATO PER LE PERSONE`: `Fatto`,
+   `Manca`, `Prossimo passo`, `Intervento umano`.
 
 ## Modello corrente
 
@@ -55,6 +59,13 @@ Oggetto: `[INSTALLA / CONTINUA] - Cervello + Ecosistema - [AZIENDA]`
 ### Corpo HTML
 
 ```html
+<h2>Stato per le persone</h2>
+<p><strong>Fatto:</strong> [COSA E' GIA' CONCLUSO E PROVATO]</p>
+<p><strong>Manca:</strong> [COSA IMPEDISCE LA CHIUSURA OPPURE NIENTE]</p>
+<p><strong>Prossimo passo:</strong> [UNA SOLA AZIONE E CHI LA ESEGUE]</p>
+<p><strong>Intervento umano:</strong> [GESTO RICHIESTO A SAL/NOME OPPURE NESSUNO]</p>
+
+<h2>Istruzioni per l'agente</h2>
 <p><strong>Questa missione operativa e' per l'agente AI che gestisce
 l'ambiente di [NOME].</strong></p>
 
@@ -119,9 +130,12 @@ mappa alla fonte brand e all'output. In modalita' <code>both</code> prova anche
 l'handoff Codex -&gt; Claude Code -&gt; Codex in <code>AGENT_CHAT.md</code>, con un
 solo ID missione e tre sessioni distinte.</p>
 
-<p>Completa il <code>REPORT_FINALE.md</code> temporaneo con data e stato e
-mostralo localmente a [NOME]. Il suo comando <code>manda</code> autorizza
-l'eventuale invio del report.</p>
+<p>Completa il <code>REPORT_FINALE.md</code> temporaneo con data e stato.
+Aprilo con <code>STATO PER LE PERSONE</code> e le quattro righe
+<code>Fatto</code>, <code>Manca</code>, <code>Prossimo passo</code> e
+<code>Intervento umano</code>, prima dei dettagli tecnici. Mostralo localmente
+a [NOME]. Il suo comando <code>manda</code> autorizza l'eventuale invio del
+report.</p>
 
 <p>[FIRMA AGENTE: Sal &amp; Codex / Sal &amp; Claude Code]</p>
 ```
@@ -129,6 +143,13 @@ l'eventuale invio del report.</p>
 ### Fallback text/plain
 
 ```text
+STATO PER LE PERSONE
+Fatto: [COSA E' GIA' CONCLUSO E PROVATO]
+Manca: [COSA IMPEDISCE LA CHIUSURA OPPURE NIENTE]
+Prossimo passo: [UNA SOLA AZIONE E CHI LA ESEGUE]
+Intervento umano: [GESTO RICHIESTO A SAL/NOME OPPURE NESSUNO]
+
+ISTRUZIONI PER L'AGENTE
 Questa missione operativa e' per l'agente AI che gestisce l'ambiente di [NOME].
 
 Tipo missione: [INSTALLA / CONTINUA].
@@ -189,8 +210,10 @@ Registra il percorso autonomo dalla mappa alla fonte brand e all'output. In
 modalita' both prova anche l'handoff Codex -> Claude Code -> Codex in
 AGENT_CHAT.md, con un solo ID missione e tre sessioni distinte.
 
-Completa il REPORT_FINALE.md temporaneo con data e stato e mostralo localmente
-a [NOME]. Il suo comando manda autorizza l'eventuale invio del report.
+Completa il REPORT_FINALE.md temporaneo con data e stato. Aprilo con STATO PER
+LE PERSONE e le quattro righe Fatto, Manca, Prossimo passo e Intervento umano,
+prima dei dettagli tecnici. Mostralo localmente a [NOME]. Il suo comando manda
+autorizza l'eventuale invio del report.
 
 [FIRMA AGENTE: Sal & Codex / Sal & Claude Code]
 ```

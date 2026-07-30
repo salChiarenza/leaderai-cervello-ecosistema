@@ -51,7 +51,9 @@ personalizzazione, fonti reali e prove macchina.
    `STATO MISSIONE: APERTA`, standard/versione, modalita', prove, limiti e una
    sezione `## Verdetto`. Nel collaudo anonimo usa `PASSA CON ATTENZIONE`
    quando il telaio e' completo e restano soltanto prove macchina differite;
-   usa `NON PASSA` per ogni difetto del telaio.
+   usa `NON PASSA` per ogni difetto del telaio. Il report apre con `STATO PER
+   LE PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`; solo
+   dopo vengono i dettagli tecnici.
 8. Registra `default_browser`, `desktop_launcher` e `remote_backup` come
    `DA COLLAUDARE` o `DA COLLEGARE` nel collaudo anonimo. Sulla macchina
    cliente diventano `OK` soltanto dopo prova reale.
@@ -548,6 +550,8 @@ blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
 senza conferma esplicita.
 
 Report temporaneo obbligatorio per la missione:
+- `STATO PER LE PERSONE` in apertura, con `Fatto`, `Manca`, `Prossimo passo`
+  e `Intervento umano` in parole semplici;
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
 - standard applicato: repo ufficiale + versione letta;
 - versione metodo registrata e versione precedente trovata, se esiste;
@@ -587,7 +591,7 @@ Report temporaneo obbligatorio per la missione:
 
 Consegna del report e ciclo tra agenti:
 1. Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre, con
-   data/ora e stato missione.
+   `STATO PER LE PERSONE` prima dei dettagli tecnici, data/ora e stato missione.
 2. Mostra al proprietario verdetto, prove e blocchi reali.
 3. Mostra destinatario, oggetto, versione del report e azione esterna esatta.
    Chiedi: `Autorizzi l'invio del report in risposta allo stesso mittente
@@ -615,4 +619,6 @@ aggiorni il report e chiedi una nuova autorizzazione prima di inviarlo. Se
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
 cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un
 resoconto finale, poi si aspetta `CONTINUA` o `CHIUDI`.
+Missione e risposta iniziano entrambe con `STATO PER LE PERSONE`; istruzioni e
+dettagli tecnici vengono dopo.
 ```

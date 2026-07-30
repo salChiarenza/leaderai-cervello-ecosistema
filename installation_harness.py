@@ -541,7 +541,8 @@ def _read_text(target: Path, relative: str) -> str:
 
 def _report_mode(report: str) -> str | None:
     match = re.search(
-        r"(?im)^\s*(?:[-*]\s*)?modalit(?:a'?|à)(?:\s+scelta)?\s*:\s*"
+        r"(?im)^\s*(?:[-*]\s*)?modalit(?:a'?|à)"
+        r"(?:\s+(?:scelta|installata|attiva))?\s*:\s*"
         r"`?(codex|claude|both)`?(?=\s|[.;,(]|$)",
         report,
     )

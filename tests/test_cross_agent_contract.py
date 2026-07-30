@@ -139,6 +139,10 @@ class CrossAgentContractTest(unittest.TestCase):
             " ".join(email.split()),
         )
         self.assertIn("PROVA_DESTINATARIO", email)
+        self.assertGreaterEqual(email.count("STATO PER LE PERSONE"), 2)
+        for field in ["Fatto:", "Manca:", "Prossimo passo:", "Intervento umano:"]:
+            with self.subTest(human_field=field):
+                self.assertIn(field, email)
         if "PROVA_DESTINATARIO_OK" in email:
             version = self.read("VERSION").strip()
             self.assertIn(f"versione `{version}`", email)
@@ -191,6 +195,23 @@ class CrossAgentContractTest(unittest.TestCase):
         ]:
             with self.subTest(phrase=mixed_reader_phrase):
                 self.assertNotIn(mixed_reader_phrase, email)
+
+    def test_agent_emails_have_human_readable_progress_first(self):
+        email = self.read("EMAIL_CONSEGNA.md")
+        checkup = self.read("CHECKUP.md")
+        processes = self.read("templates/PROCESSI.md")
+
+        for relative, text in [
+            ("EMAIL_CONSEGNA.md", email),
+            ("CHECKUP.md", checkup),
+            ("templates/PROCESSI.md", processes),
+        ]:
+            with self.subTest(relative=relative):
+                self.assertIn("STATO PER LE PERSONE", text)
+                self.assertIn("Fatto:", text)
+                self.assertIn("Manca:", text)
+                self.assertIn("Prossimo passo:", text)
+                self.assertIn("Intervento umano:", text)
 
     def test_every_continue_requires_a_new_send_authorization(self):
         checkup = self.read("CHECKUP.md")

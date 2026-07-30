@@ -63,6 +63,9 @@ Ogni missione segue un ciclo chiuso: `MISSIONE` -> `ESECUZIONE` ->
 `AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
 L'agente del cliente non decide da solo che e' finita dopo il primo report:
 aspetta la verifica LeaderAI.
+Le email operative tra agenti e il report aprono sempre con `STATO PER LE
+PERSONE`: fatto, manca, prossimo passo e intervento umano. I dettagli tecnici
+vengono dopo.
 
 Dove mettere la cartella madre si decide caso per caso con domande guidate
 (disco locale oppure cartella sincronizzata OneDrive / Google Drive). Avviso da

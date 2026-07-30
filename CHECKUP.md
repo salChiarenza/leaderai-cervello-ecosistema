@@ -42,6 +42,13 @@ LeaderAI, salvo blocchi umani veri.
 Oggetto: `Checkup Ecosistema`
 
 ```text
+STATO PER LE PERSONE
+Fatto: il checkup e' pronto per essere eseguito sull'ambiente reale.
+Manca: diagnosi, riparazioni e prove finali.
+Prossimo passo: l'agente esegue CHECKUP.md fino al rapporto conclusivo.
+Intervento umano: solo permessi, accessi o decisioni che l'agente non puo' dare.
+
+ISTRUZIONI PER L'AGENTE
 Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
 
 Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
@@ -575,6 +582,13 @@ tecnico minimo, mai il funzionamento reale dell'Ecosistema.
 ## Output (dopo le riparazioni, non prima)
 
 ```text
+STATO PER LE PERSONE
+Fatto: [cosa e' stato concluso e provato]
+Manca: [blocco residuo oppure niente]
+Prossimo passo: [una sola azione concreta e chi la esegue]
+Intervento umano: [gesto richiesto oppure nessuno]
+
+DETTAGLI TECNICI
 CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
 STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
@@ -650,6 +664,8 @@ Stati della missione:
 4. `REPORT` - crea o sostituisci il report locale temporaneo con `VALIDO AL`,
    `STATO MISSIONE`, azioni fatte, prove, cosa hai riparato, cosa resta solo
    per umano vero e stato di chiusura ambiente.
+   Il report apre con `STATO PER LE PERSONE`: `Fatto`, `Manca`,
+   `Prossimo passo`, `Intervento umano`, prima dei dettagli tecnici.
    Mostralo al proprietario e chiedi autorizzazione esplicita.
    Nessuna email parte automaticamente: l'invio e' un gesto separato, eseguito
    solo dopo un "manda" o autorizzazione equivalente riferita a quel testo.
@@ -678,7 +694,8 @@ Regola breve: Non chiudere la missione dopo il primo report.
    e chiedi l'autorizzazione esplicita all'invio. L'invio non e' parte
    automatica del checkup: dopo il si' esplicito, invialo davvero allo stesso
    mittente LeaderAI verificato nello stesso thread; se serve una nuova email usa
-   l'oggetto concreto `Resoconto checkup Ecosistema`.
+   l'oggetto concreto `Resoconto checkup Ecosistema`. L'email e il report
+   iniziano con `STATO PER LE PERSONE`, prima dei dettagli tecnici.
 2. Dopo l'invio archivia la missione: Inbox pulita, stato business nella fonte
    proprietaria, storia tecnica nel solo install-log. Il report resta soltanto
    finche' la missione non riceve `CHIUDI`.

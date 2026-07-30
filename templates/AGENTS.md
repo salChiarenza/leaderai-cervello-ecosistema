@@ -184,6 +184,9 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il report locale.
+- Ogni email agente-agente e ogni `REPORT_FINALE.md` aprono con `STATO PER LE
+  PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Solo dopo
+  vengono istruzioni e dettagli tecnici.
 - Mostra il report al proprietario; invialo a LeaderAI solo dopo
   autorizzazione esplicita per quello specifico invio.
   Fino ad allora lo stato e' `PRONTO DA INVIARE`.

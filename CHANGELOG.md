@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.2 - 30/07/2026
+
+- Ogni email operativa agente-agente apre con `STATO PER LE PERSONE`: fatto,
+  manca, prossimo passo e intervento umano, in parole semplici.
+- Il formato vale in entrambe le direzioni: missione LeaderAI al cliente e
+  rapporto dell'agente del cliente verso LeaderAI.
+- `REPORT_FINALE.md`, modello di consegna, checkup e processi installati portano
+  lo stesso riepilogo prima dei dettagli tecnici.
+
 ## 0.5.1 - 29/07/2026
 
 - Corretto il gate Windows: i finti agenti Python vengono avviati tramite il

@@ -22,6 +22,20 @@ l'autorizzazione esplicita del proprietario. Le email lavorate si archiviano
 nello stesso giro; decisioni e stato restano nel file proprietario della
 stanza, il log registra soltanto cambi tecnici o strutturali.
 
+Ogni email operativa agente-agente, in entrambe le direzioni, apre con:
+
+```text
+STATO PER LE PERSONE
+Fatto: ...
+Manca: ...
+Prossimo passo: ...
+Intervento umano: ...
+```
+
+Solo dopo vengono `ISTRUZIONI PER L'AGENTE` o i dettagli tecnici. Anche
+`REPORT_FINALE.md` usa lo stesso blocco per mostrare a Sal e al proprietario
+l'avanzamento senza gergo.
+
 ## Chiusura ambiente
 
 - Email: archivia nello stesso giro i messaggi lavorati.
