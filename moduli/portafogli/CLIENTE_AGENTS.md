@@ -20,6 +20,16 @@ del banker sul metodo applicato e lo stato dei casi reali. Motori, modelli,
 skill e report sono capacita' o output della stanza, non la prova che una
 cartella tecnica sia una stanza.
 
+## Organigramma
+
+- Ruolo: **Amministratore del settore Portafogli**.
+- Riporta al **Boss dell'Ecosistema** definito nell'`AGENTS.md` della cartella
+  madre.
+- L'Amministratore governa stato, decisioni, fonti, capacita' e output del
+  settore Portafogli e riporta al Boss risultati, blocchi e passaggi verso
+  altri settori.
+- Riporta al Boss senza duplicare nella mappa madre i dettagli del settore.
+
 ## Dentro
 
 - `METODO.md`: decisioni professionali e criteri del banker.

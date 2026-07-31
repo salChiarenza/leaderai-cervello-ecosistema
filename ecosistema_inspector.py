@@ -17,6 +17,8 @@ CLAUDE_BRIDGE = "@AGENTS.md\n"
 ROOT = Path(__file__).resolve().parent
 STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 CONTRACT = install_contract.CONTRACT
+ORGANIZATION = install_contract.organization_policy(CONTRACT)
+MARKDOWN_HYGIENE = install_contract.markdown_hygiene_policy(CONTRACT)
 GITIGNORE_REQUIRED_RULES = tuple(
     line.strip()
     for line in (ROOT / "templates" / "GITIGNORE.txt")
@@ -65,6 +67,9 @@ GENERIC_NAMES = {
 }
 
 ROOM_REQUIRED_TERMS = (
+    "amministratore del settore",
+    "boss dell'ecosistema",
+    "riporta al boss",
     "stato corrente e prossimo passo",
     "scopo",
     "responsabilita business",
@@ -128,6 +133,8 @@ class Room:
     name: str
     path: str
     purpose: str
+    administrator: str
+    reports_to: str
 
 
 @dataclass(frozen=True)
@@ -176,7 +183,12 @@ def _table_cells(line: str) -> list[str]:
     return [cell.strip() for cell in line.strip().strip("|").split("|")]
 
 
-def _room_from_cell(cell: str, purpose: str) -> Room | None:
+def _room_from_cell(
+    cell: str,
+    purpose: str,
+    administrator: str,
+    reports_to: str,
+) -> Room | None:
     link = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", cell)
     if link:
         name, path = link.groups()
@@ -189,8 +201,20 @@ def _room_from_cell(cell: str, purpose: str) -> Room | None:
     path = path.replace("\\", "/").strip("/")
     candidate = Path(path)
     if candidate.is_absolute() or ".." in candidate.parts:
-        return Room(name=name, path="", purpose=purpose)
-    return Room(name=name, path=path, purpose=purpose)
+        return Room(
+            name=name,
+            path="",
+            purpose=purpose,
+            administrator=administrator,
+            reports_to=reports_to,
+        )
+    return Room(
+        name=name,
+        path=path,
+        purpose=purpose,
+        administrator=administrator,
+        reports_to=reports_to,
+    )
 
 
 def parse_room_registry(agents_text: str) -> list[Room]:
@@ -206,7 +230,9 @@ def parse_room_registry(agents_text: str) -> list[Room]:
             continue
         if all(set(cell) <= {"-", ":", " "} for cell in cells):
             continue
-        room = _room_from_cell(cells[0], cells[1])
+        administrator = cells[8].strip("`").strip() if len(cells) > 8 else ""
+        reports_to = cells[9].strip("`").strip() if len(cells) > 9 else ""
+        room = _room_from_cell(cells[0], cells[1], administrator, reports_to)
         if room is not None:
             rooms.append(room)
     return rooms
@@ -379,6 +405,57 @@ def _iter_files(target: Path, *, include_protected: bool = False):
         if path.is_symlink() or not path.is_file():
             continue
         yield rel, path
+
+
+def _markdown_hygiene_findings(target: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    for rel, path in _iter_files(target):
+        if rel.suffix.casefold() != ".md":
+            continue
+        try:
+            size = path.stat().st_size
+            lines = len(path.read_text(encoding="utf-8", errors="replace").splitlines())
+        except OSError:
+            continue
+
+        is_router = rel.name.casefold() in MARKDOWN_HYGIENE.router_names
+        max_lines = (
+            MARKDOWN_HYGIENE.router_max_lines
+            if is_router
+            else MARKDOWN_HYGIENE.document_review_lines
+        )
+        max_bytes = (
+            MARKDOWN_HYGIENE.router_max_bytes
+            if is_router
+            else MARKDOWN_HYGIENE.document_review_bytes
+        )
+        if lines <= max_lines and size <= max_bytes:
+            continue
+
+        if is_router:
+            findings.append(
+                Finding(
+                    "MARKDOWN_ROUTER_TOO_LARGE",
+                    "BLOCKER",
+                    rel.as_posix(),
+                    f"Mappa o indice troppo grande ({lines} righe, {size} byte; "
+                    f"limite {max_lines} righe/{max_bytes} byte): spostare i "
+                    "dettagli nelle fonti proprietarie gia' esistenti e lasciare "
+                    "qui soltanto indice, regole di ingresso e collegamenti.",
+                )
+            )
+        else:
+            findings.append(
+                Finding(
+                    "MARKDOWN_DOCUMENT_REVIEW",
+                    "ATTENZIONE",
+                    rel.as_posix(),
+                    f"Documento esteso ({lines} righe, {size} byte; soglia di "
+                    f"revisione {max_lines} righe/{max_bytes} byte): verificare "
+                    "che risponda a una sola domanda e non duplichi una fonte viva.",
+                )
+            )
+    return findings
 
 
 def _is_credential_candidate(rel: Path) -> bool:
@@ -579,6 +656,20 @@ def inspect_ecosystem(
         if agents_path.is_file() and not agents_path.is_symlink()
         else ""
     )
+    normalized_agents = _normalized(agents_text)
+    if (
+        _normalized(ORGANIZATION.root_role) not in normalized_agents
+        or "governa l'organigramma" not in normalized_agents
+    ):
+        findings.append(
+            Finding(
+                "ECOSYSTEM_BOSS_MISSING",
+                "BLOCKER",
+                "AGENTS.md",
+                "La mappa madre non dichiara il Boss dell'Ecosistema che "
+                "governa l'organigramma e coordina gli amministratori di settore.",
+            )
+        )
     declared_mode = install_contract.declared_agent(agents_text)
     detected_agents = install_contract.detected_agents(CONTRACT, target)
     detected_mode = (
@@ -858,6 +949,33 @@ def inspect_ecosystem(
                 )
             )
         seen_paths.add(room.path)
+
+        administrator_key = _normalized(room.administrator).strip()
+        if (
+            not administrator_key
+            or "da assegnare" in administrator_key
+            or _normalized(ORGANIZATION.sector_role) not in administrator_key
+        ):
+            findings.append(
+                Finding(
+                    "ROOM_ADMINISTRATOR_MISSING",
+                    "BLOCKER",
+                    room.path,
+                    "Il ramo non dichiara il proprio Amministratore di settore.",
+                )
+            )
+        if _normalized(room.reports_to).strip() != _normalized(
+            ORGANIZATION.default_reports_to
+        ):
+            findings.append(
+                Finding(
+                    "ROOM_BOSS_ROUTE_MISSING",
+                    "BLOCKER",
+                    room.path,
+                    "L'amministratore del ramo non riporta al Boss "
+                    "dell'Ecosistema nella mappa madre.",
+                )
+            )
 
         purpose_key = _normalized(room.purpose).strip()
         if purpose_key and purpose_key not in {"-", "da definire dal lavoro reale"}:
@@ -1255,6 +1373,8 @@ def inspect_ecosystem(
                     issue,
                 )
             )
+
+    findings.extend(_markdown_hygiene_findings(target))
 
     return Inspection(
         target=str(target),

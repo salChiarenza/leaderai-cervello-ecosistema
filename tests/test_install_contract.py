@@ -20,6 +20,40 @@ class InstallContractTest(unittest.TestCase):
             set(contract["supported_agents"]),
             {"codex", "claude", "both"},
         )
+        sources = install_contract.official_sources(contract)
+        self.assertEqual(
+            [source.url for source in sources],
+            [
+                "https://code.claude.com/docs/en/overview",
+                "https://learn.chatgpt.com/docs",
+                "https://openai.com/it-IT/academy/codex-for-work/",
+            ],
+        )
+        self.assertEqual(
+            [source.role for source in sources],
+            [
+                "technical_entrypoint",
+                "technical_entrypoint",
+                "operational_training",
+            ],
+        )
+        markdown_policy = install_contract.markdown_hygiene_policy(contract)
+        self.assertEqual(
+            set(markdown_policy.router_names),
+            {"agents.md", "memory.md", "agent_chat.md"},
+        )
+        self.assertLess(
+            markdown_policy.router_max_lines,
+            markdown_policy.document_review_lines,
+        )
+        self.assertLess(
+            markdown_policy.router_max_bytes,
+            markdown_policy.document_review_bytes,
+        )
+        organization = install_contract.organization_policy(contract)
+        self.assertEqual(organization.root_role, "Boss dell'Ecosistema")
+        self.assertEqual(organization.sector_role, "Amministratore di settore")
+        self.assertEqual(organization.default_reports_to, organization.root_role)
         both_destinations = {
             rule.destination
             for rule in install_contract.template_rules(contract, "both")

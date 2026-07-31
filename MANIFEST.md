@@ -108,16 +108,26 @@ l'ambiente e classifica ogni elemento rilevante come:
 - `ARCHIVIO`: materiale storico non operativo;
 - `SOSPETTA`: elemento ancora da chiarire.
 
+L'insieme forma un organigramma. La cartella madre e' governata dal **Boss
+dell'Ecosistema**, che instrada richieste, coordina i passaggi tra settori e
+verifica il risultato. Ogni `STANZA` e' un ramo organizzativo governato dal
+proprio **Amministratore di settore** e riporta al Boss. La regola vale sia per
+i rami nuovi sia per quelli gia' esistenti scoperti dall'Ispettore. Cartelle di
+supporto, skill, fonti e output restano subordinate al settore proprietario e
+non ricevono un amministratore artificiale.
+
 Una vera stanza passa il contratto quando:
 
 1. dichiara quale responsabilita' business possiede, quali decisioni mantiene
    e quale stato operativo governa;
-2. e' raggiungibile dalla mappa madre;
-3. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
+2. dichiara il proprio Amministratore di settore e il collegamento gerarchico
+   al Boss dell'Ecosistema;
+3. e' raggiungibile dalla mappa madre;
+4. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
    come ponte `@AGENTS.md`, con scopo, fonti, output e modo di muoversi;
-4. dichiara collegamenti a monte e a valle solo per processi reali;
-5. usa una sola fonte di verita' per ogni dato o stato;
-6. registra le capacita' che la servono e la prova che funzionano.
+5. dichiara collegamenti a monte e a valle solo per processi reali;
+6. usa una sola fonte di verita' per ogni dato o stato;
+7. registra le capacita' che la servono e la prova che funzionano.
 
 Script, skill, modelli, fonti e output possono formare una pipeline completa
 senza costituire una stanza. Descrivono **come** si esegue un lavoro; la stanza
@@ -161,6 +171,13 @@ da approvare.
 - `REPORT_FINALE.md` esiste soltanto durante una missione, con data/ora e stato.
   E' ignorato da Git, non e' una fonte di stato e viene eliminato dopo `CHIUDI`
   quando i fatti stabili sono stati promossi nelle fonti proprietarie.
+- Tutti i Markdown vengono misurati con le soglie uniche di
+  `install_contract.json`. Mappe e indici (`AGENTS.md`, `MEMORY.md`,
+  `AGENT_CHAT.md`) restano router corti: oltre 350 righe o 24 KiB il gate e'
+  `NON PASSA`. Gli altri documenti entrano in revisione oltre 800 righe o
+  80 KiB: se restano una fonte unica e coerente possono essere mantenuti con
+  un indice; se mescolano responsabilita' o duplicano stato vengono ricondotti
+  alle fonti proprietarie.
 - Il contenuto business modificabile vive in una fonte esterna al codice,
   dichiarata nella stanza. App e script generano PDF/Word come derivati e
   falliscono visibilmente se la fonte manca; nessuna copia hardcoded silenziosa.
@@ -174,10 +191,12 @@ da approvare.
 ### Ciclo di apprendimento
 
 Ogni installazione e checkup registra la versione letta da `VERSION`. Un errore
-osservato sul cliente diventa una `LEZIONE CANDIDATA` nel report: caso, causa,
-regola generale e prova che avrebbe intercettato l'errore. LeaderAI valida la
-lezione, aggiorna questa repo con regola e test e la rende disponibile ai
-checkup successivi.
+osservato sul cliente viene riparato nello stesso turno quando e' sicuro e
+diventa una `LEZIONE CANDIDATA` nel report: caso, causa, riparazione, regola
+generale e prova che avrebbe intercettato l'errore. LeaderAI valida la lezione,
+aggiorna questa repo con regola e test e la rende disponibile ai checkup
+successivi. In questo modo i problemi quotidiani gia' incontrati entrano nel
+metro; un problema nuovo non viene finto come noto in anticipo.
 
 ## Contratto di consegna sicura
 
@@ -308,8 +327,18 @@ Il modulo passa quando:
 
 ## Fonti ufficiali da tenere vive
 
+Le tre fonti principali sono dichiarate anche in
+`install_contract.json -> official_sources`: fanno parte del metro macchina
+dell'Ispettore. A ogni checkup l'agente le apre, raggiunge le pagine tecniche
+pertinenti e registra regola, stato osservato, scostamento, riparazione e prova.
 Queste fonti vanno riverificate quando si aggiorna lo standard:
 
+- Claude Code, panoramica ufficiale:
+  [https://code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview)
+- ChatGPT, documentazione ufficiale:
+  [https://learn.chatgpt.com/docs](https://learn.chatgpt.com/docs)
+- OpenAI Academy, Codex per il lavoro:
+  [https://openai.com/it-IT/academy/codex-for-work/](https://openai.com/it-IT/academy/codex-for-work/)
 - Claude Code, indice completo per agenti: `https://code.claude.com/docs/llms.txt`
   (ogni pagina in markdown puro col suffisso `.md` — e' il meccanismo usato da
   `CHECKUP.md` per confrontare il setup con la doc viva)
@@ -331,6 +360,8 @@ Il pacchetto e' pronto quando:
 - una nuova chat dell'agente sa leggere la mappa e dove salvare memoria/report.
 - la mappa madre raggiunge ogni stanza operativa e nessuna capacita' resta
   isolata o promossa a stanza per abitudine.
+- il Boss dell'Ecosistema e' dichiarato alla radice e ogni ramo organizzativo,
+  nuovo o vecchio, ha un Amministratore di settore che riporta al Boss;
 - l'Ispettore ha censito ogni cartella e file visibile nella home e non restano
   percorsi senza classe e proprietario, cartelle generiche o vuote, doppioni,
   stanze senza mappa o file sciolti senza casa;
@@ -338,6 +369,8 @@ Il pacchetto e' pronto quando:
   memoria, nessun report temporaneo e' trattato come stato stabile;
 - contenuti business modificabili, credenziali, firma/timbro e file progetto
   rispettano il contratto di unicita', protezione e ordine;
+- mappe e indici Markdown rispettano le soglie macchina; ogni documento esteso
+  e' stato ricondotto a una sola responsabilita' e fonte viva;
 - almeno due prove di instradamento partono dalla radice e arrivano alla
   madre/stanza, alla fonte e all'output corretti senza suggerire il percorso
   all'agente.

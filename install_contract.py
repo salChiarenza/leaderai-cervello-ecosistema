@@ -24,6 +24,30 @@ class TemplateRule:
     strategy: str
 
 
+@dataclass(frozen=True)
+class OfficialSource:
+    id: str
+    url: str
+    role: str
+    comparison: str
+
+
+@dataclass(frozen=True)
+class MarkdownHygienePolicy:
+    router_names: tuple[str, ...]
+    router_max_lines: int
+    router_max_bytes: int
+    document_review_lines: int
+    document_review_bytes: int
+
+
+@dataclass(frozen=True)
+class OrganizationPolicy:
+    root_role: str
+    sector_role: str
+    default_reports_to: str
+
+
 def _safe_relative(raw: str, label: str) -> str:
     path = Path(raw)
     if not raw or path.is_absolute() or ".." in path.parts:
@@ -45,6 +69,9 @@ def load_contract(path: Path = CONTRACT_PATH) -> dict[str, Any]:
         data.get("agents"), dict
     ):
         raise ValueError("Contratto privo delle sezioni common/agents.")
+    official_sources(data)
+    organization_policy(data)
+    markdown_hygiene_policy(data)
     for agent in supported:
         if not isinstance(data["agents"].get(agent), dict):
             raise ValueError(f"Contratto agente mancante: {agent}.")
@@ -163,6 +190,96 @@ def semantic_requirements(contract: dict[str, Any]) -> set[str]:
             + ", ".join(sorted(unknown))
         )
     return requirements
+
+
+def official_sources(contract: dict[str, Any]) -> list[OfficialSource]:
+    raw_sources = contract.get("official_sources")
+    if not isinstance(raw_sources, list) or not raw_sources:
+        raise ValueError("Contratto privo delle fonti ufficiali vive.")
+
+    sources: list[OfficialSource] = []
+    seen_ids: set[str] = set()
+    seen_urls: set[str] = set()
+    for raw in raw_sources:
+        if not isinstance(raw, dict):
+            raise ValueError("Fonte ufficiale non valida nel contratto.")
+        source = OfficialSource(
+            id=str(raw.get("id", "")).strip(),
+            url=str(raw.get("url", "")).strip(),
+            role=str(raw.get("role", "")).strip(),
+            comparison=str(raw.get("comparison", "")).strip(),
+        )
+        if not all((source.id, source.url, source.role, source.comparison)):
+            raise ValueError("Fonte ufficiale incompleta nel contratto.")
+        if not source.url.startswith("https://"):
+            raise ValueError(f"URL ufficiale non HTTPS: {source.url!r}.")
+        if source.id in seen_ids or source.url in seen_urls:
+            raise ValueError(f"Fonte ufficiale duplicata: {source.id!r}.")
+        sources.append(source)
+        seen_ids.add(source.id)
+        seen_urls.add(source.url)
+    return sources
+
+
+def markdown_hygiene_policy(contract: dict[str, Any]) -> MarkdownHygienePolicy:
+    policies = contract.get("inspection_policies")
+    if not isinstance(policies, dict):
+        raise ValueError("Contratto privo delle policy di ispezione.")
+    raw = policies.get("markdown_hygiene")
+    if not isinstance(raw, dict):
+        raise ValueError("Contratto privo della policy igiene Markdown.")
+
+    names = raw.get("router_names")
+    if (
+        not isinstance(names, list)
+        or not names
+        or any(not isinstance(name, str) or not name.endswith(".md") for name in names)
+    ):
+        raise ValueError("router_names deve contenere nomi Markdown validi.")
+    normalized_names = tuple(name.casefold() for name in names)
+    if len(set(normalized_names)) != len(normalized_names):
+        raise ValueError("router_names contiene duplicati.")
+
+    limit_names = (
+        "router_max_lines",
+        "router_max_bytes",
+        "document_review_lines",
+        "document_review_bytes",
+    )
+    limits = {name: raw.get(name) for name in limit_names}
+    if any(not isinstance(value, int) or value <= 0 for value in limits.values()):
+        raise ValueError("Le soglie Markdown devono essere interi positivi.")
+    if limits["router_max_lines"] >= limits["document_review_lines"]:
+        raise ValueError("La soglia righe dei router deve essere piu' stretta.")
+    if limits["router_max_bytes"] >= limits["document_review_bytes"]:
+        raise ValueError("La soglia byte dei router deve essere piu' stretta.")
+
+    return MarkdownHygienePolicy(
+        router_names=normalized_names,
+        router_max_lines=limits["router_max_lines"],
+        router_max_bytes=limits["router_max_bytes"],
+        document_review_lines=limits["document_review_lines"],
+        document_review_bytes=limits["document_review_bytes"],
+    )
+
+
+def organization_policy(contract: dict[str, Any]) -> OrganizationPolicy:
+    policies = contract.get("inspection_policies")
+    if not isinstance(policies, dict):
+        raise ValueError("Contratto privo delle policy di ispezione.")
+    raw = policies.get("organization_chart")
+    if not isinstance(raw, dict):
+        raise ValueError("Contratto privo della policy organigramma.")
+    policy = OrganizationPolicy(
+        root_role=str(raw.get("root_role", "")).strip(),
+        sector_role=str(raw.get("sector_role", "")).strip(),
+        default_reports_to=str(raw.get("default_reports_to", "")).strip(),
+    )
+    if not all((policy.root_role, policy.sector_role, policy.default_reports_to)):
+        raise ValueError("Policy organigramma incompleta.")
+    if policy.default_reports_to != policy.root_role:
+        raise ValueError("Ogni settore deve riportare al ruolo radice.")
+    return policy
 
 
 def declared_agent(agents_text: str) -> str | None:

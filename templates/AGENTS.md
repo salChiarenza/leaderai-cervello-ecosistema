@@ -63,6 +63,20 @@ Versione standard applicata: `{{version}}`.
 Questo `AGENTS.md` e' il router della cartella madre. Il telaio comune resta
 stabile; le stanze operative dipendono dal lavoro reale del proprietario.
 
+### Boss dell'Ecosistema
+
+L'agente che opera dalla cartella madre assume il ruolo di **Boss
+dell'Ecosistema**. Governa l'organigramma: riceve la richiesta, individua il
+ramo competente, consegna il lavoro al suo Amministratore di settore, controlla
+i passaggi tra settori e verifica il risultato finale. Non assorbe nel file
+radice i dettagli dei settori: li raggiunge tramite le mappe locali.
+
+Ogni ramo organizzativo, nuovo o gia' esistente, e' una `STANZA` e ha un
+**Amministratore di settore**. L'amministratore governa fonti, stato, decisioni,
+capacita' e output del proprio settore e riporta al Boss dell'Ecosistema. Skill,
+script, fonti, output e sottocartelle di supporto non sono rami autonomi: restano
+posseduti dall'amministratore del settore che li usa.
+
 ### Ciclo obbligatorio delle cartelle
 
 Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
@@ -70,10 +84,12 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
 1. censisci cio' che esiste;
 2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
-3. assegna un proprietario: la cartella madre oppure una stanza;
+3. assegna un proprietario: il Boss dell'Ecosistema oppure un Amministratore di
+   settore;
 4. se e' una vera stanza, creala o integrala dal calco locale
    `ecosistema/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
-   `@AGENTS.md` e collegala nel registro qui sotto;
+   `@AGENTS.md`, assegna l'Amministratore di settore e collegala al Boss nel
+   registro qui sotto;
 5. se e' una sottocartella ordinaria, dichiarala nella mappa della stanza
    proprietaria senza trasformarla in una nuova stanza;
 6. applica subito le riparazioni meccaniche e reversibili;
@@ -96,13 +112,15 @@ con stato e decisioni propri, riconosciuta dal proprietario.
 
 ### Registro delle stanze
 
-| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale |
-|---|---|---|---|---|---|---|---|
-| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |
+| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale | Amministratore | Riporta al |
+|---|---|---|---|---|---|---|---|---|---|
+| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | Da assegnare | Boss dell'Ecosistema |
 
 La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.
 Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si
 collegano direttamente solo quando un processo reale passa dall'una all'altra.
+Ogni riga dichiara l'Amministratore di settore e il collegamento gerarchico al
+Boss dell'Ecosistema.
 
 ### Elementi posseduti direttamente dalla cartella madre
 
@@ -119,7 +137,9 @@ indicato.
 Se il proprietario dice `lancia l'Ispettore`, `controlla l'Ecosistema`,
 `verifica le strade`, `cerca doppioni` o formule equivalenti, usa la skill
 `ispettore-ecosistema` dell'agente attivo e applica il `CHECKUP.md` ufficiale.
-La capacita' e' registrata in `ecosistema/ASSET.md`.
+Il comando e' gia' autorizzazione ad avviare il checkup: non chiedere una
+seconda volta se partire. La capacita' e' registrata in
+`ecosistema/ASSET.md`.
 
 L'Ispettore e' obbligatorio anche dopo un cambiamento strutturale. Prima di
 salvare verifica almeno:
@@ -129,6 +149,9 @@ salvare verifica almeno:
 - nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
 - nessun file sciolto nella home senza proprietario dichiarato;
 - nessuna memoria parallela o report temporaneo presentato come stato vivo;
+- nessuna mappa o indice Markdown oltre le soglie del contratto macchina;
+- nessun documento Markdown esteso che mescoli responsabilita' o duplichi una
+  fonte viva;
 - due percorsi reali `richiesta -> madre/stanza -> fonte -> processo -> output`.
 
 Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene
@@ -167,7 +190,8 @@ per ogni compito, insieme all'Autoprova.
 - **Supera i blocchi tecnici:** indaga; dichiara dati parziali prima del giudizio.
 - **Materie esperte:** verifica e cita la fonte ufficiale.
 - **Lezioni in file:** promuovi la correzione in una fonte stabile e segnala nel
-  report la `LEZIONE CANDIDATA` con caso, causa, regola e prova.
+  report la `LEZIONE CANDIDATA` con caso, causa, riparazione, regola e prova;
+  ogni problema ripetibile torna a LeaderAI e diventa controllo della repo.
 - **Solo bisogno vero:** nuovi pezzi con problema osservato, collaudo e, per
   costruzioni grandi, approvazione del proprietario.
 - **Occhio laterale:** segnala doppioni, dati sensibili e file fuori posto;

@@ -6,6 +6,17 @@ Non e' un audit a domande. E' una repo operativa: installa quando manca tutto,
 fa checkup e riparazione quando l'ambiente esiste gia', scrive log e lascia un
 report finale.
 
+## Fonti ufficiali vive del checkup
+
+- [Claude Code - panoramica ufficiale](https://code.claude.com/docs/en/overview)
+- [ChatGPT - documentazione ufficiale](https://learn.chatgpt.com/docs)
+- [OpenAI Academy - Codex per il lavoro](https://openai.com/it-IT/academy/codex-for-work/)
+
+L'Ispettore apre queste fonti a ogni checkup e collega le regole pertinenti
+allo stato osservato, alle riparazioni e alle prove. Le pagine tecniche
+stabiliscono la conformita'; `Codex per il lavoro` orienta la pratica operativa
+e non sostituisce le specifiche tecniche.
+
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
 caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md` e `templates/STANZA_AGENTS.md`, ripara gli scostamenti
@@ -127,11 +138,25 @@ elemento sospetto. Ogni vera stanza deve essere raggiungibile dalla radice e
 avere `AGENTS.md` + `CLAUDE.md`, con mappa corta, fonti, output e collegamenti
 reali.
 
+La struttura e' un organigramma: l'agente nella cartella madre e' il **Boss
+dell'Ecosistema**; ogni ramo organizzativo, nuovo o gia' esistente, e' affidato
+a un **Amministratore di settore** che governa quella stanza e riporta al Boss.
+Le normali sottocartelle restano strumenti del settore e non diventano falsi
+rami.
+
 Ogni nuova stanza usa il calco installato `ecosistema/STANZA_AGENTS.md`,
 generato dalla fonte repo `templates/STANZA_AGENTS.md`. Prima del salvataggio
 l'Ispettore controlla che ogni percorso visibile nella home abbia classe e
 proprietario, che le stanze siano collegate alla radice e che non restino
 cartelle generiche, vuote, doppie, tecniche o file sciolti senza casa.
+
+Controlla anche la salute dei Markdown: misura tutti i file, blocca mappe e
+indici cresciuti oltre le soglie del contratto macchina e revisiona i documenti
+estesi per scoprire responsabilita' mescolate o fonti duplicate. Alleggerisce i
+router portando i dettagli nelle fonti proprietarie e lasciando collegamenti,
+senza tagliare contenuti alla cieca. Ogni nuovo problema ripetibile entra nel
+report come lezione candidata e, dopo la validazione LeaderAI, diventa regola e
+test dei checkup successivi.
 
 Il report temporaneo include anche la **mappa moduli**: PEC/email certificata,
 email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,

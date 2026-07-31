@@ -23,6 +23,12 @@ sia raggiungibile dalla mappa madre. Un modulo si integra nella cartella madre
 o nella stanza proprietaria; una nuova stanza richiede una responsabilita'
 business autonoma e l'approvazione del proprietario.
 
+Il modello organizzativo e' un organigramma: la cartella madre e' governata dal
+Boss dell'Ecosistema; ogni vera stanza, nuova o preesistente, e' un ramo con un
+proprio Amministratore di settore che riporta al Boss. Cartelle di supporto,
+skill, fonti e output restano subordinati al settore proprietario e non sono
+rami autonomi.
+
 ## Cosa fa
 
 Monta in una cartella cliente lo standard minimo LeaderAI:

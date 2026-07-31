@@ -16,9 +16,10 @@ SOURCE = Path(__file__).resolve().parent
 REPO_ROOT = SOURCE.parents[1]
 TEMPLATES = REPO_ROOT / "templates"
 ROOM_TABLE_HEADER = (
-    "| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale |"
+    "| Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | "
+    "Mappa locale | Amministratore | Riporta al |"
 )
-ROOM_TABLE_SEPARATOR = "|---|---|---|---|---|---|---|---|"
+ROOM_TABLE_SEPARATOR = "|---|---|---|---|---|---|---|---|---|---|"
 CLAUDE_BRIDGE = "@AGENTS.md\n"
 
 
@@ -132,7 +133,8 @@ def _register_room(path: Path, room_rel: str, result: InstallResult) -> None:
     row = (
         f"| `{room_rel}/` | Sistema Portafogli Core-Satellite | Da compilare | "
         f"Da compilare | `{room_rel}/FONTI.md` | Analisi, dossier e report | "
-        f"Sistema Portafogli | {map_pointer} |"
+        f"Sistema Portafogli | {map_pointer} | Amministratore di settore "
+        f"{room_rel} | Boss dell'Ecosistema |"
     )
     section = "### Registro delle stanze"
     if section not in content:

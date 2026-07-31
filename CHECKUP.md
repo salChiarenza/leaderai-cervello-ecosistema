@@ -132,7 +132,7 @@ cartelle tecniche.
 
 Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 
-- `install_contract.json`;
+- `install_contract.json`, inclusa la lista macchina `official_sources`;
 - `MANIFEST.md`;
 - `templates/AGENTS.md`;
 - `templates/STANZA_AGENTS.md`;
@@ -260,7 +260,29 @@ dell'altro agente per prudenza.
 ### Fonti ufficiali verificate nel checkup
 
 Le docs cambiano: apri oggi le fonti del ramo attivo, registra URL e data nel
-report e non rispondere a memoria.
+report e non rispondere a memoria. Le tre fonti dichiarate in
+`install_contract.json -> official_sources` sono obbligatorie in ogni checkup:
+
+- Claude Code, panoramica ufficiale:
+  <https://code.claude.com/docs/en/overview>
+- ChatGPT, documentazione ufficiale:
+  <https://learn.chatgpt.com/docs>
+- OpenAI Academy, Codex per il lavoro:
+  <https://openai.com/it-IT/academy/codex-for-work/>
+
+Non sono link informativi. Usale come fonti vive di confronto:
+
+1. apri oggi ciascuna fonte e, dagli indici ufficiali, raggiungi le pagine
+   tecniche pertinenti al ramo attivo;
+2. estrai soltanto regole e capacita' applicabili all'ambiente osservato;
+3. registra `fonte -> regola ufficiale -> stato osservato -> scostamento ->
+   riparazione -> prova`;
+4. applica le riparazioni tecniche sicure e ripeti la prova;
+5. usa `Codex per il lavoro` come fonte di pratica operativa: non puo'
+   sostituire una specifica tecnica per decidere file, percorsi o settings.
+
+Se una delle tre fonti non e' leggibile o il confronto non arriva a una prova,
+il ramo interessato e' `NON PASSA`; non inventare il contenuto mancante.
 
 Fonti comuni minime:
 
@@ -394,6 +416,11 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 
 Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 
+- `install_contract.json -> official_sources` non e' stato letto, una delle tre
+  fonti ufficiali obbligatorie non e' stata aperta oggi, oppure il report non
+  collega la regola ufficiale allo stato osservato e alla prova;
+- una guida operativa e' stata usata come specifica tecnica per creare o
+  modificare file senza una pagina tecnica ufficiale che sostenga la modifica;
 - il `VERSION` corrente della repo ufficiale non e' stato letto, la versione
   installata non e' determinabile o le due versioni non coincidono;
 - manca `AGENTS.md`;
@@ -426,6 +453,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - una vera stanza non e' collegata alla mappa madre, non ha `AGENTS.md` e
   `CLAUDE.md`, oppure la sua mappa locale non dichiara scopo, fonti, output,
   capacita', monte, valle e dove scrivere;
+- la mappa madre non dichiara il Boss dell'Ecosistema, oppure un ramo
+  organizzativo nuovo o preesistente non ha un Amministratore di settore e una
+  catena esplicita che riporta al Boss;
 - una cartella e' stata dichiarata stanza soltanto perche' contiene skill,
   script, modelli, fonti o output, senza una responsabilita' business
   riconosciuta, stato operativo e decisioni proprie;
@@ -433,6 +463,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   lavoro vivo;
 - due stanze rispondono alla stessa funzione;
 - un file sciolto nella home non ha un proprietario dichiarato;
+- una mappa o un indice Markdown (`AGENTS.md`, `MEMORY.md`, `AGENT_CHAT.md`)
+  supera i limiti macchina di righe o byte senza essere stato alleggerito e
+  ricondotto alle fonti proprietarie;
 - `REPORT_FINALE.md` e' stantio, senza data/stato, versionato in Git o usato
   come fonte corrente insieme al log;
 - un contenuto business modificabile ha due padroni, e' hardcoded nel codice o
@@ -463,9 +496,11 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    skill, uno script, un agente, un connettore, un modulo, un modello o una
    procedura e' una capacita' della cartella madre o della stanza che lo usa.
    Una cartella piena di fonti e output puo' essere una pipeline tecnica, non una stanza.
-   Prima di scrivere `STANZA`, rispondi con prove a quattro domande:
+   Prima di scrivere `STANZA`, rispondi con prove a cinque domande:
    - quale responsabilita' business possiede;
    - quale stato e quali decisioni mantiene;
+   - quale Amministratore di settore la governa e come riporta al Boss
+     dell'Ecosistema;
    - quale lavoro riceve a monte e quale risultato consegna a valle;
    - se il proprietario usa davvero quel nome per la funzione, oppure e' solo
      il nome di un prodotto, progetto, modello, script o output.
@@ -477,32 +512,39 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    `Portafoglio Modello` con motori, skill, fonti e documenti non e' di per se'
    una stanza; e' una capacita' posseduta dalla madre finche' la
    responsabilita' business non viene dimostrata.
-3. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
+3. Tratta la cartella madre come vertice dell'organigramma: l'agente che vi
+   opera e' il `Boss dell'Ecosistema`, instrada il lavoro e coordina tutti gli
+   Amministratori di settore. Ogni ramo organizzativo, vecchio o nuovo, e' una
+   vera stanza: deve avere un Amministratore di settore esplicito e riportare al
+   Boss. Una sottocartella di supporto non e' un ramo e resta subordinata al
+   proprio amministratore.
+4. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia una mappa locale costruita o integrata da
    `ecosistema/STANZA_AGENTS.md` (calco locale installato dalla fonte repo
    `templates/STANZA_AGENTS.md`): scopo, contenuto, fonti, output, capacita',
    collegamenti a monte e collegamenti a valle e dove scrivere. Ogni vera
    stanza mantiene il telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md`
    verso quella mappa.
-4. Verifica che ogni collegamento corrisponda a un processo reale, che ogni
+5. Verifica che ogni collegamento corrisponda a un processo reale, che ogni
    capacita' abbia come proprietario la madre o una stanza e che due stanze non
    rispondano alla stessa funzione.
-5. Ripara e prova i difetti meccanici: mappe locali mancanti per stanze gia'
-   riconosciute, ponti, link, puntatori e registri rotti. Elimina i residui
+6. Ripara e prova i difetti meccanici: mappe locali, Amministratori di settore
+   o collegamenti al Boss mancanti per stanze gia' riconosciute, ponti, link,
+   puntatori e registri rotti. Elimina i residui
    vuoti o inutili creati dall'agente nella missione corrente. Per fusioni,
    spostamenti, eliminazioni, nuove stanze o cambi di proprieta' che toccano
    contenuti preesistenti scrivi una `PROPOSTA STRUTTURALE` con causa, impatto
    e collaudo; decide il proprietario.
-6. Tratta nomi generici come `documenti`, `output`, `exports`, `varie`, `misc`,
+7. Tratta nomi generici come `documenti`, `output`, `exports`, `varie`, `misc`,
    `temp` o `nuova cartella` come `SOSPETTA` finche' contenuti e proprietario
    non sono chiari. Una cartella generica non passa perche' contiene file.
-7. Confronta le nuove cartelle col salvataggio precedente: nessun percorso
+8. Confronta le nuove cartelle col salvataggio precedente: nessun percorso
    creato nel lavoro corrente entra nel commit senza classe, proprietario e
    prova.
 
 Tabella obbligatoria del censimento:
 
-`percorso | classe | responsabilita business | proprietario | mappa locale | collegamento radice | azione | prova`
+`percorso | classe | responsabilita business | amministratore | riporta al | mappa locale | collegamento radice | azione | prova`
 
 Se la repo ufficiale e' gia' presente localmente e il proprietario autorizza
 l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target
@@ -525,18 +567,30 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
    promuovi i soli fatti ancora veri nelle fonti proprietarie, rimuovilo
    dall'indice Git se necessario e crea il report corrente con `VALIDO AL` e
    `STATO MISSIONE`. Dopo `CHIUDI` viene eliminato.
-3. **Contenuto business.** Cerca testi o regole editabili duplicati tra Word,
+3. **Igiene Markdown.** Misura righe e byte di tutti i file `.md`, esclusi Git
+   e case protette. Le soglie sono una sola fonte macchina in
+   `install_contract.json -> inspection_policies -> markdown_hygiene`:
+   `AGENTS.md`, `MEMORY.md` e `AGENT_CHAT.md` bloccano il verdetto oltre 350
+   righe o 24 KiB; gli altri documenti entrano in revisione oltre 800 righe o
+   80 KiB. La soglia non ordina tagli ciechi: verifica prima se il file risponde
+   a una sola domanda. Se una mappa o un indice e' cresciuto troppo, promuovi i
+   dettagli nelle fonti proprietarie gia' esistenti e lascia soltanto ingresso,
+   indice e collegamenti. Se un documento esteso e' coerente e unico, mantienilo
+   con indice leggibile; se mescola responsabilita' o duplica stato, separa il
+   contenuto nelle case proprietarie senza creare copie parallele. Ripara nello
+   stesso turno tutto cio' che e' sicuro e reversibile, poi ripeti la misura.
+4. **Contenuto business.** Cerca testi o regole editabili duplicati tra Word,
    Markdown, database e codice. La fonte modificabile vive fuori dal codice,
    e' registrata nella stanza e viene letta dall'app; PDF e Word generati sono
    derivati. Se la fonte manca o non e' valida, l'app fallisce in modo visibile
    e non usa una copia hardcoded.
-4. **Credenziali per percorso, non per contenuto.** Individua dai soli nomi e
+5. **Credenziali per percorso, non per contenuto.** Individua dai soli nomi e
    metadati configurazioni di posta, PEC, SMTP, OAuth, token e app password
    fuori `.secrets/`; non aprirle. Controlla `git ls-files` e la history del
    solo percorso. Se l'esposizione non puo' essere esclusa, blocca l'uso e
    proponi rotazione; altrimenti sposta la configurazione, aggiorna il puntatore
    dell'app e riprova.
-5. **Asset ad alto rischio.** Firma, timbro e sigillo vivono in `.secrets/` o
+6. **Asset ad alto rischio.** Firma, timbro e sigillo vivono in `.secrets/` o
    altra casa protetta fuori Git. In `ecosistema/ASSET.md` registra soltanto
    metadati, casa protetta, uso e limite; ogni applicazione o invio richiede
    conferma umana sul documento preciso.
@@ -591,6 +645,8 @@ Intervento umano: [gesto richiesto oppure nessuno]
 DETTAGLI TECNICI
 CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
+FONTI UFFICIALI CONFRONTATE
+fonte | ruolo | regola/capacita' confrontata | stato osservato | scostamento/riparazione | prova | data
 STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
 MANIFEST.md; templates/AGENTS.md; templates/STANZA_AGENTS.md;
 templates/ISPETTORE_SKILL.md; docs ufficiali vive per la parte tecnica.
@@ -617,6 +673,7 @@ Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
 Percorsi censiti        OK / RIPARATO / NON PASSA - nessun percorso escluso...
 Classificazione         OK / RIPARATO / NON PASSA - ...
 Mappa stanze            OK / RIPARATO / PROPOSTA STRUTTURALE - ...
+Organigramma            OK / RIPARATO / NON PASSA - Boss + amministratori + catena gerarchica...
 Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
 Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
 Cartelle generiche/vuote OK / RIPARATO / NON PASSA - ...
@@ -626,6 +683,7 @@ Fonti business/codice   OK / RIPARATO / NON PASSA - fonte + derivati...
 Credenziali/history     OK / RIPARATO / NON PASSA - soli percorsi/metadati...
 Firma/timbro            OK / RIPARATO / NON PASSA - ASSET + casa + limite...
 File progetto           OK / RIPARATO / NON PASSA - stato/prossimo/scadenze...
+Igiene Markdown         OK / RIPARATO / ATTENZIONE / NON PASSA - file, righe, byte, fonte proprietaria...
 Skill Ispettore         OK / RIPARATO / NON PASSA - agente attivo...
 Prove di instradamento  OK / RIPARATO / NON PASSA - ...
 GATE ANTI-CIRCOLARE     PASSA / NON PASSA - ...
@@ -636,8 +694,10 @@ PROVENIENZA PROVE:
 
 RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.
 RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.
-LEZIONE CANDIDATA: nessuna oppure caso -> causa -> regola generale -> prova che
-avrebbe intercettato l'errore.
+LEZIONE CANDIDATA: nessuna oppure caso -> causa -> riparazione -> regola
+generale -> prova che avrebbe intercettato l'errore. Ogni problema ripetibile
+va restituito a LeaderAI: dopo validazione entra nella repo con regola e test e
+diventa un controllo dei checkup successivi.
 ```
 
 Se l'ambiente e' quasi vuoto, non dare una pagella piena di rossi: proponi di

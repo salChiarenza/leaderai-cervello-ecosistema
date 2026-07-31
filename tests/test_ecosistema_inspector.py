@@ -10,7 +10,8 @@ import leaderai_setup
 
 ROOM_ROW = (
     "| [Iscrizioni](app-iscrizioni) | Gestire iscrizioni | Radice | "
-    "Documenti | Gestionale | Pratiche | App | `app-iscrizioni/AGENTS.md` |"
+    "Documenti | Gestionale | Pratiche | App | `app-iscrizioni/AGENTS.md` | "
+    "Amministratore di settore Iscrizioni | Boss dell'Ecosistema |"
 )
 
 
@@ -42,7 +43,8 @@ class EcosistemaInspectorTest(unittest.TestCase):
         agents = target / "AGENTS.md"
         text = agents.read_text(encoding="utf-8")
         placeholder = (
-            "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |"
+            "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | "
+            "Da assegnare | Boss dell'Ecosistema |"
         )
         agents.write_text(text.replace(placeholder, row), encoding="utf-8")
 
@@ -99,6 +101,37 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertFalse((target / ".claude" / "settings.local.json").exists())
             self.assertNotIn("REPORT_FINALE.md", tracked)
 
+    def test_oversized_markdown_router_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            agents = target / "AGENTS.md"
+            policy = ecosistema_inspector.MARKDOWN_HYGIENE
+            agents.write_text(
+                agents.read_text(encoding="utf-8")
+                + ("dettaglio da promuovere\n" * (policy.router_max_lines + 1)),
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("MARKDOWN_ROUTER_TOO_LARGE", self.codes(inspection))
+
+    def test_extended_markdown_document_requires_review(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            policy = ecosistema_inspector.MARKDOWN_HYGIENE
+            manual = target / "ecosistema" / "manuale-esteso.md"
+            manual.write_text(
+                "# Manuale\n" + ("contenuto coerente\n" * policy.document_review_lines),
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "PASSA CON ATTENZIONE")
+            self.assertIn("MARKDOWN_DOCUMENT_REVIEW", self.codes(inspection))
+
     def test_unclassified_generic_and_empty_folders_block_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
@@ -134,6 +167,40 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
+
+    def test_root_without_ecosystem_boss_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "Boss dell'Ecosistema",
+                    "Coordinatore centrale",
+                ),
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("ECOSYSTEM_BOSS_MISSING", self.codes(inspection))
+
+    def test_existing_room_without_sector_administrator_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            old_row = (
+                "| [Iscrizioni](app-iscrizioni) | Gestire iscrizioni | Radice | "
+                "Documenti | Gestionale | Pratiche | App | "
+                "`app-iscrizioni/AGENTS.md` |"
+            )
+            self.add_room_to_registry(target, old_row)
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("ROOM_ADMINISTRATOR_MISSING", self.codes(inspection))
+            self.assertIn("ROOM_BOSS_ROUTE_MISSING", self.codes(inspection))
 
     def test_declared_room_symlink_outside_house_blocks_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -288,13 +355,15 @@ class EcosistemaInspectorTest(unittest.TestCase):
             agents = target / "AGENTS.md"
             text = agents.read_text(encoding="utf-8")
             placeholder = (
-                "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |"
+                "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | "
+                "Da assegnare | Boss dell'Ecosistema |"
             )
             rows = (
                 ROOM_ROW
                 + "\n"
                 + "| [Segreteria](segreteria) | Gestire iscrizioni | Radice | "
-                "Documenti | Gestionale | Pratiche | App | `segreteria/AGENTS.md` |"
+                "Documenti | Gestionale | Pratiche | App | `segreteria/AGENTS.md` | "
+                "Amministratore di settore Segreteria | Boss dell'Ecosistema |"
             )
             agents.write_text(text.replace(placeholder, rows), encoding="utf-8")
             (target / "VERSION").write_text("0.3.8\n", encoding="utf-8")

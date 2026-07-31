@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.5.3 - 31/07/2026
+
+- La pagina iniziale della repo espone i riferimenti ufficiali per Claude Code,
+  ChatGPT e Codex per il lavoro.
+- Le stesse guide entrano in `ecosistema/FONTI.md`, quindi restano disponibili
+  anche nella casa installata del cliente.
+- `install_contract.json` le rende parte del metro macchina: l'Ispettore deve
+  aprirle, confrontare regola e stato reale, riparare e mostrare la prova.
+- Il comando `lancia l'Ispettore` avvia il checkup senza una seconda domanda.
+- Il Cervello e' ora verificato come organigramma: Boss dell'Ecosistema alla
+  radice e un Amministratore di settore per ogni ramo organizzativo, nuovo o
+  preesistente. L'Ispettore blocca mappe prive della catena verso il Boss.
+- L'Ispettore misura tutti i Markdown: mappe e indici oltre le soglie macchina
+  bloccano il verdetto; i documenti estesi vengono controllati per fonti
+  duplicate o responsabilita' mescolate e poi alleggeriti senza perdere dati.
+- Ogni problema ripetibile porta nel report causa, riparazione, prova e lezione
+  candidata, cosi' puo' diventare regola e test dei checkup successivi.
+- I test impediscono a una versione futura di consegnare il pacchetto senza i
+  collegamenti o senza il contratto di confronto.
+
 ## 0.5.2 - 30/07/2026
 
 - Ogni email operativa agente-agente apre con `STATO PER LE PERSONE`: fatto,

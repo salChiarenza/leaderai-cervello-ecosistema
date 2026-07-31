@@ -15,18 +15,12 @@ l'agente gli presenta.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 30/07/2026`
+`PROVA_DESTINATARIO_DA_RIPETERE — 31/07/2026`
 
-Verifica completata partendo dal solo archivio pubblico immutabile del tag
-`v0.5.2`, commit
-`dc4eb5047fb61073e8fd1c5641b5a3d8c6693782`.
-L'archivio misura `150441` byte e ha SHA-256
-`58ca79d24c28225181602bf0f882dd0d7bb5bda7905721f7f63d892a757ecd63`.
-La versione `0.5.2` letta dalla copia estratta e' corretta; i `152` test deterministici
-sono passati dalla sola copia scaricata. Le CI pubbliche `30529752673` e
-`30529750967` hanno superato la suite sia su macOS sia su Windows. Prima della
-pubblicazione sono passati anche tre scenari business e l'installazione
-manuale con sessioni reali sia Codex sia Claude Code.
+L'ultima verifica completa riguarda il tag `v0.5.2`, commit
+`dc4eb5047fb61073e8fd1c5641b5a3d8c6693782`, ed e' superata dalla versione
+0.5.3. Prima della consegna va ripetuta partendo dal solo archivio pubblico
+immutabile del nuovo tag.
 
 ## Controlli prima dell'invio
 

@@ -5,6 +5,44 @@
     "claude",
     "both"
   ],
+  "official_sources": [
+    {
+      "id": "anthropic_claude_code_overview",
+      "url": "https://code.claude.com/docs/en/overview",
+      "role": "technical_entrypoint",
+      "comparison": "Superficie Claude Code, ingresso nel workspace, capacita e navigazione della documentazione tecnica viva."
+    },
+    {
+      "id": "openai_chatgpt_docs",
+      "url": "https://learn.chatgpt.com/docs",
+      "role": "technical_entrypoint",
+      "comparison": "Documentazione viva OpenAI da cui raggiungere le regole tecniche pertinenti a Codex, istruzioni di progetto, skill e configurazione."
+    },
+    {
+      "id": "openai_codex_for_work",
+      "url": "https://openai.com/it-IT/academy/codex-for-work/",
+      "role": "operational_training",
+      "comparison": "Pratiche operative di Codex nel lavoro; orienta le prove d'uso e non sostituisce le specifiche tecniche."
+    }
+  ],
+  "inspection_policies": {
+    "organization_chart": {
+      "root_role": "Boss dell'Ecosistema",
+      "sector_role": "Amministratore di settore",
+      "default_reports_to": "Boss dell'Ecosistema"
+    },
+    "markdown_hygiene": {
+      "router_names": [
+        "AGENTS.md",
+        "MEMORY.md",
+        "AGENT_CHAT.md"
+      ],
+      "router_max_lines": 350,
+      "router_max_bytes": 24576,
+      "document_review_lines": 800,
+      "document_review_bytes": 81920
+    }
+  },
   "common": {
     "templates": [
       {

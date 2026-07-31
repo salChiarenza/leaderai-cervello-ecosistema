@@ -242,7 +242,9 @@ Dopo l'installazione, apri i file creati nella cartella madre e aggiorna solo i
 punti necessari, senza cancellare il resto.
 
 Prima di aggiungere una struttura business, costruisci la mappa dell'ambiente
-reale:
+reale come organigramma. L'agente nella cartella madre e' il Boss
+dell'Ecosistema; ogni ramo organizzativo e' una stanza con il proprio
+Amministratore di settore, subordinato al Boss:
 
 1. censisci le cartelle, le fonti, gli output, le skill, gli script, gli agenti,
    i connettori, le procedure e gli archivi gia' presenti;
@@ -250,12 +252,13 @@ reale:
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
 3. riconosci come stanza solo una funzione operativa stabile con fonti,
    processi o output propri;
-4. aggiorna il registro delle stanze in `AGENTS.md` e collega ogni stanza alla
-   mappa madre;
+4. aggiorna il registro delle stanze in `AGENTS.md`, assegna a ogni ramo il suo
+   Amministratore di settore e collegalo al Boss dell'Ecosistema;
 5. per ogni vera stanza crea o integra `AGENTS.md` da
    `ecosistema/STANZA_AGENTS.md` e `CLAUDE.md` come ponte di una riga
    (`@AGENTS.md`), con scopo, contenuto, fonti, output, capacita',
-   collegamenti a monte e collegamenti a valle e dove scrivere;
+   collegamenti a monte e collegamenti a valle, dove scrivere, amministratore e
+   relazione gerarchica con il Boss;
 6. collega direttamente due stanze solo quando un processo reale passa tra le
    due;
 7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
@@ -411,7 +414,9 @@ Fase 6 - collaudo
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
    ecosistema/LIMITI.md, logs/install-log.md.
    Verifica anche che ogni vera stanza abbia `AGENTS.md` + `CLAUDE.md` e che
-   ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`.
+   ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`. Verifica che la mappa madre
+   dichiari il Boss dell'Ecosistema e che ogni ramo, nuovo o preesistente,
+   dichiari il proprio Amministratore di settore subordinato al Boss.
    `.claude/README.md` esiste solo in modalita' Claude o both;
    `.codex/README.md` esiste solo in modalita' Codex o both.
    Verifica anche la skill `ispettore-ecosistema` nel percorso dell'agente
@@ -451,13 +456,14 @@ Fase 6 - collaudo
    richiesta -> madre/stanza -> fonte -> capacita'/processo -> output. Se l'agente non
    trova il percorso, correggi mappa o collegamenti e riprova.
 8. Verifica che ogni stanza sia raggiungibile dalla mappa madre, che nessuna
-   capacita' sia isolata e che non esistano due stanze per la stessa funzione.
+   capacita' sia isolata, che ogni amministratore riporti al Boss e che non
+   esistano due stanze per la stessa funzione.
 9. Lancia l'Ispettore sul risultato: censisci ogni cartella e file visibile
    nella home, classifica i percorsi, ripara i buchi sicuri e blocca il
    verdetto se restano cartelle generiche, vuote, doppie, tecniche, senza
    proprietario o stanze senza mappa. Registra la tabella
-   `percorso | classe | proprietario | mappa locale | collegamento radice |
-   azione | prova`.
+   `percorso | classe | amministratore | riporta al | mappa locale |
+   collegamento radice | azione | prova`.
 10. Confronta la versione in `AGENTS.md` con il `VERSION` appena letto: senza
     confronto o con valori diversi il verdetto e' `NON PASSA`.
 11. Verifica: memoria unica; report temporaneo non versionato; contenuti

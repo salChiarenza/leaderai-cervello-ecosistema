@@ -20,6 +20,17 @@ Descrivere la funzione aziendale riconosciuta dal proprietario, lo stato che
 mantiene e le decisioni che governa. Elencare script, skill, modelli o output
 non dimostra una stanza.
 
+## Organigramma
+
+- Ruolo: **Amministratore del settore `{{room_name}}`**.
+- Riporta al **Boss dell'Ecosistema** definito nell'`AGENTS.md` della cartella
+  madre.
+- L'Amministratore governa stato, decisioni, fonti, capacita' e output del
+  settore; coordina i suoi elementi subordinati e riporta al Boss risultati,
+  blocchi e passaggi verso altri settori.
+- Riporta al Boss senza duplicare nella mappa madre i dettagli operativi del
+  settore.
+
 ## Dentro
 
 - {{room_contents}}

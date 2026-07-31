@@ -6,6 +6,26 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class StandardContractGuidanceTest(unittest.TestCase):
+    def test_client_package_exposes_official_learning_links(self):
+        expected = [
+            "https://code.claude.com/docs/en/overview",
+            "https://learn.chatgpt.com/docs",
+            "https://openai.com/it-IT/academy/codex-for-work/",
+        ]
+        surfaces = [
+            ROOT / "README.md",
+            ROOT / "MANIFEST.md",
+            ROOT / "CHECKUP.md",
+            ROOT / "templates" / "FONTI.md",
+            ROOT / "templates" / "ISPETTORE_SKILL.md",
+        ]
+
+        for surface in surfaces:
+            text = surface.read_text(encoding="utf-8")
+            for url in expected:
+                with self.subTest(surface=surface.name, url=url):
+                    self.assertIn(url, text)
+
     def test_manifest_declares_the_repo_standard(self):
         text = (ROOT / "MANIFEST.md").read_text(encoding="utf-8")
 

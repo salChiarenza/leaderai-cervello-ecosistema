@@ -107,7 +107,8 @@ class PortfolioInstallerTest(unittest.TestCase):
             self.assertIn("`Consulenza Clienti/AGENTS.md`", root_map)
             self.assertNotIn("## Stanza collegata:", root_map)
             self.assertNotIn(
-                "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - |",
+                "| Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | "
+                "Da assegnare | Boss dell'Ecosistema |",
                 root_map,
             )
 
