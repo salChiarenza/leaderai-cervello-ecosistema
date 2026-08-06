@@ -3,7 +3,6 @@
 # Su ogni PC i connettori si ri-autorizzano con login.
 .secrets/
 .claude/settings.local.json
-REPORT_FINALE.md
 *.env
 .env
 *.key

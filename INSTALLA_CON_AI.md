@@ -11,9 +11,10 @@ autorizzazione esplicita del proprietario.
 Il percorso standard non richiede clone della repo.
 
 REGOLA PER CHI CONSEGNA (LeaderAI): l'email di consegna e' corta e punta a
-questa procedura. L'installazione produce prima un report locale verificato;
-l'invio del report a LeaderAI avviene poi con autorizzazione esplicita del
-proprietario.
+questa procedura. L'agente crea e prova tutto nella casa del cliente, promuove
+stato e prove nelle fonti proprietarie e chiude localmente. Il ciclo ordinario
+produce zero aggiornamenti intermedi. Quando la missione richiede una conferma
+finale, ne parte una sola dopo il collaudo completo.
 
 Il modello unico, versionato e collaudabile e'
 [`EMAIL_CONSEGNA.md`](EMAIL_CONSEGNA.md). Questa procedura non mantiene una
@@ -47,18 +48,14 @@ personalizzazione, fonti reali e prove macchina.
 6. Inizializza Git locale. Prima del commit usa la allowlist dei file standard
    del contratto, rileggi lo staging e controlla nomi e contenuti per segreti.
    Il primo messaggio contiene la frase `installazione iniziale`.
-7. Crea `REPORT_FINALE.md` temporaneo e ignorato da Git con `VALIDO AL`,
-   `STATO MISSIONE: APERTA`, standard/versione, modalita', prove, limiti e una
-   sezione `## Verdetto`. Nel collaudo anonimo usa `PASSA CON ATTENZIONE`
-   quando il telaio e' completo e restano soltanto prove macchina differite;
-   usa `NON PASSA` per ogni difetto del telaio. Il report apre con `STATO PER
-   LE PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`; solo
-   dopo vengono i dettagli tecnici.
+7. Registra in `logs/install-log.md` standard/versione, modalita', prove
+   strutturali e limiti. Le prove macchina differite restano nelle fonti
+   proprietarie con il prossimo passo preciso.
 8. Registra `default_browser`, `desktop_launcher` e `remote_backup` come
    `DA COLLAUDARE` o `DA COLLEGARE` nel collaudo anonimo. Sulla macchina
    cliente diventano `OK` soltanto dopo prova reale.
 9. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
-   report fuori Git, commit iniziale e fotografia standard intatta.
+   log tecnico, commit iniziale e fotografia standard intatta.
 10. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
    copiato nella casa.
 
@@ -102,11 +99,11 @@ Agisci tu, senza chiedermi istruzioni tecniche. Chiedimi solo scelte umane vere
 o permessi che non puoi concedere al posto mio.
 
 Regola sulle domande guidate (Domanda 1, 2 e 3): se l'email di consegna
-contiene gia' le "scelte fatte con Sal", NON rifare quelle domande: applica
-le scelte e dichiarale nel report. Se una scelta manca, usa il default
+contiene gia' le "scelte fatte con Sal", applica direttamente le scelte e
+registrale nelle fonti proprietarie. Se una scelta manca, usa il default
 sicuro senza fermarti (cartella madre su disco locale; backup = repository
 git locale, quello remoto si aggiunge dopo; niente seconda postazione) e
-segnala nel report che il default e' modificabile. Le domande si fanno solo
+registra nello stato che il default e' modificabile. Le domande si fanno solo
 se il cliente stesso chiede di decidere.
 
 Fase 1 - autodiagnosi
@@ -177,7 +174,7 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/LIMITI.md`
    - `templates/INSTALL_LOG.md`
    - `templates/AGENT_CHAT.md`
-2. Registra nel report la versione letta. Se un file non e' leggibile, chiedi
+2. Registra nel log tecnico la versione letta. Se un file non e' leggibile, chiedi
    soltanto l'autorizzazione per l'accesso web di sola lettura e riprova.
 3. Il percorso predefinito termina qui per la repo: niente clone e niente
    esecuzione di codice scaricato.
@@ -221,14 +218,12 @@ Fase 4 - monta localmente il Cervello
    workspace e verifica ogni postazione con `/memory`. Se trovi una memoria
    auto esterna gia' piena, confronta e unisci le voci prima di cambiare il
    percorso.
-5. Crea `REPORT_FINALE.md` come output temporaneo della missione con
-   `VALIDO AL` e `STATO MISSIONE: APERTA`; `.gitignore` lo esclude. Non e' una
-   fonte di stato e viene eliminato dopo `CHIUDI`.
-6. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
-   cosa era gia' presente, cosa hai creato e cosa hai aggiornato.
+5. Aggiorna direttamente le fonti proprietarie: stato operativo, memoria,
+   asset, processi, limiti e storia tecnica restano nei rispettivi file.
+6. Integra le sezioni mancanti dei file vivi e registra nel log tecnico cosa
+   era gia' presente, cosa hai creato e cosa hai aggiornato.
 7. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
-   password, credenziali e
-   `REPORT_FINALE.md` prima del primo commit.
+   password e credenziali prima del primo commit.
 
 Percorso tecnico opzionale:
 `leaderai_setup.py` resta un attrezzo LeaderAI per collaudi o installazioni
@@ -300,9 +295,8 @@ In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole re
 - NIENTE MANI DENTRO LA CASA: dentro la cartella madre non si cancella e non
   si sposta nulla a mano da Esplora file/Finder. Si chiede all'agente, cosi'
   il salvataggio git resta coerente e nulla si perde;
-- OUTPUT NELLA CASA PROPRIETARIA: ogni resoconto o report vive nella stanza
-  responsabile del processo. Prima usa la casa esistente; non creare una
-  cartella `resoconti/` per abitudine;
+- OUTPUT NELLA CASA PROPRIETARIA: ogni analisi o documento finale vive nella
+  stanza responsabile del processo e usa la casa esistente;
 - CONTENUTI BUSINESS FUORI DAL CODICE: testi e regole che devo poter correggere
   vivono in una fonte esterna al codice; app e script la leggono e generano
   PDF/Word come derivati. Se la fonte manca, falliscono in modo visibile.
@@ -312,7 +306,6 @@ Mantieni anche la sezione "Comunicazione e fonti di verita'":
 - stato corrente, prossimo passo e scadenze: in testa al file proprietario
   della stanza; diario sotto, dal piu' recente;
 - storia tecnica/strutturale: soltanto `logs/install-log.md`;
-- `REPORT_FINALE.md`: output temporaneo e datato della missione aperta;
 - procedure e "come si fa": file dell'area che le usa, non chat;
 - asset/capacita' nuove: `ecosistema/ASSET.md`;
 - coordinamento temporaneo sullo stesso file: chat solo se serve evitare
@@ -425,8 +418,7 @@ Fase 6 - collaudo
    Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
    del workspace e `/memory` sulla memoria canonica.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
-   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi, credenziali,
-   `REPORT_FINALE.md`, e che
+   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
    lo crea da solo a fine corsa: se manca, usa la allowlist del contratto,
    rileggi lo staging, esegui il controllo segreti e poi `git commit`.
@@ -466,7 +458,7 @@ Fase 6 - collaudo
    collegamento radice | azione | prova`.
 10. Confronta la versione in `AGENTS.md` con il `VERSION` appena letto: senza
     confronto o con valori diversi il verdetto e' `NON PASSA`.
-11. Verifica: memoria unica; report temporaneo non versionato; contenuti
+11. Verifica: memoria unica; contenuti
     business con una fonte esterna al codice; configurazioni credenziali in
     `.secrets/` e history controllata per percorso; firma/timbro registrati e
     protetti; file progetto con stato, prossimo passo e scadenze in testa.
@@ -518,7 +510,7 @@ Dimmi in modo operativo:
 - Ecosistema: quali fonti reali hai trovato e con quale prova;
 - Asset: quali risorse operative hai registrato in `ecosistema/ASSET.md`;
 - Da collegare: dove vanno collegate le mie fonti che oggi mancano (cartelle,
-  report, CRM/gestionale);
+  documenti, CRM/gestionale);
 - Blocchi: cosa manca perche' non esiste ancora o richiede me/Sal.
 
 Fase 9 - mappa moduli da installare o lasciare fuori
@@ -541,6 +533,15 @@ Moduli da valutare:
 - voce/dettatura;
 - compliance/privacy/AI Act.
 
+Per `compliance/privacy/AI Act`, censisci un sistema alla volta. Per ciascuno
+registra nome, fornitore, uso previsto, ruolo dell'azienda e di LeaderAI,
+persone coinvolte, preparazione di chi lo opera, eventuale decisione supportata, classe di rischio e obblighi
+di trasparenza. Apri il Controllo di conformita' della Commissione e conserva
+in `ecosistema/LIMITI.md` data, esito e presidio applicato. Un esito di pratica vietata, alto
+rischio o dubbio sostanziale resta `NON PASSA` e blocca la consegna fino
+all'approfondimento competente. `AI_ACT_CHECK_OK` vale soltanto per il sistema
+e l'uso realmente esaminati.
+
 Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
 `DA SCOPRIRE` o `DA COLLEGARE` nel dettaglio. Se il modulo non serve al lavoro
 del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
@@ -555,7 +556,7 @@ Se il cliente usa l'agenda soprattutto tramite colori, leggi
 blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
 senza conferma esplicita.
 
-Report temporaneo obbligatorio per la missione:
+Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - `STATO PER LE PERSONE` in apertura, con `Fatto`, `Manca`, `Prossimo passo`
   e `Intervento umano` in parole semplici;
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
@@ -588,6 +589,10 @@ Report temporaneo obbligatorio per la missione:
 - firma/timbro protetti, registrati e limitati;
 - file progetto con stato/prossimo/scadenze in testa e diario ordinato;
 - Mappa moduli con stato per ogni modulo;
+- per ogni sistema AI consegnato: controllo separato, ruolo, uso, persone
+  coinvolte, preparazione di chi lo opera, classe di rischio, trasparenza,
+  data, esito e presidio; il gate
+  `AI_ACT_CHECK_OK` non viene riusato su sistemi o usi diversi;
 - codice esterno eseguito: no / si con autorizzazione esplicita e prova;
 - chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
 - cosa resta da collegare e dove;
@@ -595,36 +600,42 @@ Report temporaneo obbligatorio per la missione:
   avrebbe intercettato l'errore;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
-Consegna del report e ciclo tra agenti:
-1. Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre, con
-   `STATO PER LE PERSONE` prima dei dettagli tecnici, data/ora e stato missione.
-2. Mostra al proprietario verdetto, prove e blocchi reali.
-3. Mostra destinatario, oggetto, versione del report e azione esterna esatta.
-   Chiedi: `Autorizzi l'invio del report in risposta allo stesso mittente
-   LeaderAI verificato?`
-   L'autorizzazione vale soltanto per questo specifico
-   invio; parole come "manda avanti il lavoro" non autorizzano la posta.
-4. Solo dopo un si' esplicito, invia davvero il report in risposta alla
-   missione verificata. Una bozza non conta come consegna. Se Gmail non e'
-   collegata, conserva il report locale come
-   `PRONTO DA INVIARE` e dichiara il blocco senza simulare l'invio.
+Chiusura locale della missione:
+1. Verifica il risultato che il proprietario vedra' e le prove salvate nelle
+   fonti proprietarie.
+2. Mostra al proprietario la conferma finale con esito e prove essenziali.
+3. Salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
+   Registra i gesti umani come `DA DECIDERE IN CALL`.
+4. Archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
+   aperti per il lavoro.
 
-Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
+Prima della chiusura fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
 file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,
-form, preview, login, app temporanee). Il report locale resta
-`PRONTO DA INVIARE` finche' il proprietario non autorizza l'invio. Dopo il suo
-si', invia davvero, archivia l'email della missione nello stesso giro e passa a
-   `SAL_VERIFICA`; lo stato resta nel report temporaneo, non nella Inbox. Se LeaderAI
-risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo,
-aggiorni il report e chiedi una nuova autorizzazione prima di inviarlo. Se
-   risponde `CHIUDI` o conferma che va bene, promuovi i fatti nel file
-   proprietario della stanza, registra nel log solo gli eventuali cambi
-   tecnici/strutturali, elimina `REPORT_FINALE.md` e chiudi le pagine/app aperte
-   da te.
+form, preview, login, app temporanee). L'email della missione avvia un ciclo
+che si chiude localmente; una conferma esterna parte soltanto quando Sal la
+richiede nella missione.
+
+La missione deve darti istruzioni precise, fonti, risultato atteso, azioni
+autorizzate e criteri di riuscita. Esegui, diagnostica, ripara, riprova e
+completa in autonomia. Non inviare aggiornamenti di avanzamento e non chiedere
+istruzioni a puntate. Fermati una sola volta soltanto davanti a un
+`BLOCCO REALE`: un ostacolo non risolvibile dalle fonti e dai tentativi sicuri gia'
+fatti. Nello stesso canale scrivi cosa hai gia' provato, cosa manca e una
+domanda unica: `Come proseguo su questo punto?`. Dopo la risposta riprendi la
+stessa missione e completala.
+
+Quando Sal richiede espressamente una conferma finale, inviala una volta sola e
+soltanto con esito `PASSA`: tutti i criteri della missione, compreso il processo
+reale e la riapertura del contesto, sono completati e provati. Apri con
+`Perfetto, l'ho fatto. Tutto completato e funzionante.` e aggiungi le prove
+essenziali. Ogni stato intermedio resta nella casa e alimenta
+l'auto-riparazione della stessa missione.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
-cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un
-resoconto finale, poi si aspetta `CONTINUA` o `CHIUDI`.
-Missione e risposta iniziano entrambe con `STATO PER LE PERSONE`; istruzioni e
-dettagli tecnici vengono dopo.
+cio' che si puo' riparare, si prova, si fa autocontrollo, si salva nella casa e
+si chiude localmente.
+`PASSA CON ATTENZIONE` contiene soltanto decisioni o gesti umani veri: ogni
+azione eseguibile dall'agente viene completata e provata prima della chiusura.
+La missione inizia con `STATO PER LE PERSONE`; istruzioni e dettagli tecnici
+vengono dopo.
 ```

@@ -39,7 +39,7 @@ class CheckupGuidanceTest(unittest.TestCase):
             "segnali di vita",
             "memory/MEMORY.md compilata",
             "logs/ con attivita'",
-            "REPORT_FINALE.md compilato",
+            "logs/ con attivita'",
             "ecosistema/ASSET.md",
             "commit git",
             "file di lavoro recenti",
@@ -94,7 +94,7 @@ class CheckupGuidanceTest(unittest.TestCase):
             "il gate e' `NON PASSA`",
             "autoMemoryDirectory",
             "due memorie divergenti",
-            "REPORT_FINALE.md` e' stantio",
+            "REPORT_FINALE.md` e' un residuo legacy",
             "fonte modificabile vive fuori dal codice",
             "non aprirle",
             "indice/history Git",
@@ -173,6 +173,59 @@ class CheckupGuidanceTest(unittest.TestCase):
         for phrase in required:
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase.lower(), text.lower())
+
+    def test_instruction_audit_uses_clean_pairwise_sessions_and_safe_classification(self):
+        checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+        skill = (ROOT / "templates" / "ISPETTORE_SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        combined = " ".join((checkup + skill).split())
+        required = [
+            "Audit delle istruzioni che stringono troppo",
+            "una istruzione o un gruppo coerente",
+            "due task/sessioni nuove",
+            "senza suggerire cartella, fonte, procedura o risultato atteso",
+            "esito osservabile",
+            "fonti corrette",
+            "instradamento",
+            "richieste/correzioni umane",
+            "consumo quando esposto",
+            "behavior_harness.py compare-context",
+            "MANTIENI",
+            "ACCORPA",
+            "SPOSTA NELLA PROCEDURA/SKILL GIUSTA",
+            "RISCRIVI",
+            "CANDIDATA ALLA RIMOZIONE",
+            "Sicurezza, privacy, autorizzazione e integrita'",
+            "nessuna modifica distruttiva",
+            "Un solo caso non puo'",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(" ".join(phrase.split()), combined)
+
+    def test_instruction_audit_contract_contains_the_anonymous_regressions(self):
+        import json
+
+        contract = json.loads((ROOT / "install_contract.json").read_text(encoding="utf-8"))
+        policy = contract["inspection_policies"]["instruction_audit"]
+        self.assertEqual(len(policy["classifications"]), 5)
+        self.assertEqual(
+            set(policy["protected_semantics"]),
+            {"safety", "privacy", "authorization", "integrity"},
+        )
+        self.assertEqual(
+            set(policy["initial_cases"]),
+            {
+                "unverified_source",
+                "wrong_owner_route",
+                "duplicate_or_stale_source",
+                "excess_rules_or_files",
+                "conflicting_instructions",
+                "missing_final_verification",
+                "unnecessary_human_request",
+            },
+        )
 
 
 if __name__ == "__main__":

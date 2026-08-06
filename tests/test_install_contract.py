@@ -71,11 +71,11 @@ class InstallContractTest(unittest.TestCase):
         )
         self.assertEqual(
             install_contract.external_effects(contract, "codex"),
-            {"git_baseline", "temporary_report"},
+            {"git_baseline"},
         )
         self.assertEqual(
             install_contract.external_effects(contract, "claude"),
-            {"git_baseline", "temporary_report", "claude_user_settings"},
+            {"git_baseline", "claude_user_settings"},
         )
         self.assertEqual(
             install_contract.environment_checks(contract),
@@ -299,7 +299,7 @@ class InstallContractTest(unittest.TestCase):
                 result.inspection_codes,
             )
 
-    def test_setup_report_and_inspector_share_the_same_target_verdict(self):
+    def test_setup_and_inspector_share_the_same_target_verdict(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "Casa"
@@ -315,10 +315,12 @@ class InstallContractTest(unittest.TestCase):
                 agent="claude",
                 claude_user_settings_path=settings,
             )
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-
             self.assertEqual(result.target_verdict, inspection.verdict)
-            self.assertIn(f"VERDETTO\n- {inspection.verdict}", report)
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
+            self.assertIn(
+                leaderai_setup.STANDARD_VERSION,
+                (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
+            )
 
     def test_identical_rerun_is_idempotent_and_leaves_clean_worktree(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -331,7 +333,7 @@ class InstallContractTest(unittest.TestCase):
                 "claude",
                 claude_user_settings_path=settings,
             )
-            report_before = (target / "REPORT_FINALE.md").read_text(
+            log_before = (target / "logs" / "install-log.md").read_text(
                 encoding="utf-8"
             )
 
@@ -353,9 +355,10 @@ class InstallContractTest(unittest.TestCase):
             self.assertEqual(result.updated, [])
             self.assertEqual(result.removed, [])
             self.assertEqual(status, "")
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
             self.assertEqual(
-                (target / "REPORT_FINALE.md").read_text(encoding="utf-8"),
-                report_before,
+                (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
+                log_before,
             )
 
 

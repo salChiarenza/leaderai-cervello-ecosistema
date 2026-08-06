@@ -14,8 +14,8 @@ Questo file e' lo standard di conformita' della repo `salChiarenza/leaderai-cerv
 La cartella viva del cliente e' il caso reale. Il checkup non giudica a
 sensazione: confronta il caso reale con questo Manifest, con
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e con le istruzioni
-operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara
-se puo', lo prova e lo dichiara nel report.
+operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara,
+lo prova e aggiorna la fonte proprietaria.
 
 `install_contract.json` traduce questo standard nel contratto macchina del
 nucleo d'installazione. La procedura manuale, `leaderai_setup.py`, l'Ispettore
@@ -33,7 +33,7 @@ Deve:
 2. montare i pezzi standard mancanti;
 3. non sovrascrivere cio' che esiste;
 4. collaudare;
-5. produrre un report di missione datato e temporaneo.
+5. salvare i fatti nelle fonti proprietarie e chiudere con una conferma unica.
 
 ## Contratto architetturale adattivo
 
@@ -51,6 +51,8 @@ Restano stabili in ogni installazione:
 - calco locale `ecosistema/STANZA_AGENTS.md` per creare mappe senza dipendere
   da un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
+- audit comportamentale delle istruzioni con una sola variazione per volta,
+  due sessioni nuove e classificazione non distruttiva del blocco;
 - ingresso verificato: cartella madre come progetto primario/CWD e nuova
   task/sessione che legge la mappa prima del lavoro;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
@@ -91,8 +93,8 @@ al computer del cliente.
 
 Motivo: un percorso sbagliato non produce alcun errore visibile. La memoria
 punta a una cartella inesistente, l'agente riparte vuoto e il cliente scopre il
-guasto da una risposta sbagliata. Caso di origine: ambiente Marco De Nicolo',
-28-29/07/2026, utente `user` sul fisso e `marcd` sul portatile.
+guasto da una risposta sbagliata. Caso di origine anonimizzato: due postazioni
+con nomi utente diversi e percorso assoluto replicato sul portatile.
 
 ### Forma adattiva
 
@@ -168,9 +170,8 @@ da approvare.
   proprietario della stanza; il diario viene dopo, dal piu' recente.
 - `logs/install-log.md` registra soltanto installazione, versione e cambi
   strutturali. Non e' il diario della produzione business.
-- `REPORT_FINALE.md` esiste soltanto durante una missione, con data/ora e stato.
-  E' ignorato da Git, non e' una fonte di stato e viene eliminato dopo `CHIUDI`
-  quando i fatti stabili sono stati promossi nelle fonti proprietarie.
+- Ogni missione aggiorna direttamente le fonti proprietarie: stato operativo,
+  memoria stabile, asset, processi, limiti e storia tecnica restano separati.
 - Tutti i Markdown vengono misurati con le soglie uniche di
   `install_contract.json`. Mappe e indici (`AGENTS.md`, `MEMORY.md`,
   `AGENT_CHAT.md`) restano router corti: oltre 350 righe o 24 KiB il gate e'
@@ -192,7 +193,7 @@ da approvare.
 
 Ogni installazione e checkup registra la versione letta da `VERSION`. Un errore
 osservato sul cliente viene riparato nello stesso turno quando e' sicuro e
-diventa una `LEZIONE CANDIDATA` nel report: caso, causa, riparazione, regola
+diventa una `LEZIONE CANDIDATA` in `ecosistema/PROCESSI.md`: caso, causa, riparazione, regola
 generale e prova che avrebbe intercettato l'errore. LeaderAI valida la lezione,
 aggiorna questa repo con regola e test e la rende disponibile ai checkup
 successivi. In questo modo i problemi quotidiani gia' incontrati entrano nel
@@ -211,12 +212,28 @@ stessa modalita'. Il rilascio lo prova in una cartella vuota con percorso
 difficile, usando una sessione reale che riceve soltanto la procedura e lo
 standard statico.
 
-Il report di missione viene prima creato e collaudato localmente, con data/ora e
-stato. L'invio email a LeaderAI avviene dopo autorizzazione esplicita del
-proprietario; dopo `CHIUDI` il report temporaneo viene eliminato.
-Ogni email operativa agente-agente e ogni report aprono con `STATO PER LE
-PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Le
-istruzioni e le prove tecniche vengono dopo.
+Ogni email operativa agente-agente apre con `STATO PER LE PERSONE`: `Fatto`,
+`Manca`, `Prossimo passo`, `Intervento umano`. Le istruzioni e le prove
+tecniche vengono dopo. La conferma finale vive nel messaggio conclusivo e i
+fatti restano nelle fonti proprietarie.
+
+L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
+e prova tutto nella casa del cliente, salva stato e prove nelle fonti
+proprietarie e chiude localmente. Decisioni e gesti umani veri restano come
+`DA DECIDERE IN CALL`; una conferma esterna parte soltanto quando Sal la
+richiede nella missione.
+
+Legge dell'unico blocco reale: l'agente esegue istruzioni precise, diagnostica,
+ripara, riprova e completa in autonomia. Si ferma una sola volta soltanto
+davanti a un `BLOCCO REALE` non risolvibile dalle fonti e dai tentativi sicuri.
+Nello stesso canale dichiara cosa ha gia' provato, cosa manca e pone una domanda
+unica: `Come proseguo su questo punto?`. Dopo la risposta riprende la stessa
+missione. Aggiornamenti di avanzamento e domande a puntate sono vietati.
+
+Se Sal richiede espressamente una conferma finale, parte una volta sola e
+soltanto con esito `PASSA`: tutti i criteri sono completati e provati. La
+conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.`; ogni
+stato intermedio resta nella casa del cliente.
 
 Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
 README e Manifest lo richiamano senza duplicarne il corpo.
@@ -353,11 +370,11 @@ Il pacchetto e' pronto quando:
 
 - crea una cartella target da zero;
 - puo' essere rilanciato senza duplicare file;
-- produce log e report;
+- produce il log tecnico e aggiorna le fonti proprietarie;
 - i test automatici passano;
 - la cartella madre e ogni vera stanza hanno `AGENTS.md` + `CLAUDE.md`, con
   `CLAUDE.md` ridotto al solo ponte `@AGENTS.md`;
-- una nuova chat dell'agente sa leggere la mappa e dove salvare memoria/report.
+- una nuova chat dell'agente sa leggere la mappa e dove salvare memoria, stato e prove.
 - la mappa madre raggiunge ogni stanza operativa e nessuna capacita' resta
   isolata o promossa a stanza per abitudine.
 - il Boss dell'Ecosistema e' dichiarato alla radice e ogni ramo organizzativo,
@@ -365,8 +382,8 @@ Il pacchetto e' pronto quando:
 - l'Ispettore ha censito ogni cartella e file visibile nella home e non restano
   percorsi senza classe e proprietario, cartelle generiche o vuote, doppioni,
   stanze senza mappa o file sciolti senza casa;
-- la versione installata coincide con il `VERSION` vivo, Claude usa una sola
-  memoria, nessun report temporaneo e' trattato come stato stabile;
+- la versione installata coincide con il `VERSION` vivo e Claude usa una sola
+  memoria;
 - contenuti business modificabili, credenziali, firma/timbro e file progetto
   rispettano il contratto di unicita', protezione e ordine;
 - mappe e indici Markdown rispettano le soglie macchina; ogni documento esteso
@@ -374,17 +391,21 @@ Il pacchetto e' pronto quando:
 - almeno due prove di instradamento partono dalla radice e arrivano alla
   madre/stanza, alla fonte e all'output corretti senza suggerire il percorso
   all'agente.
-- il report registra versione del metodo, classificazione delle stanze,
-  collegamenti e possibili lezioni candidate.
-- il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema
-  da collegare con fonti reali.
+- ogni blocco di istruzioni sospetto e' confrontato, uno alla volta, tra
+  contesto completo e alleggerito; il log tecnico misura gli effetti e li classifica
+  senza rimuovere automaticamente sicurezza, privacy, autorizzazione o
+  integrita';
+- le fonti proprietarie registrano versione del metodo, classificazione delle
+  stanze, collegamenti e possibili lezioni candidate;
+- lo stato distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema da
+  collegare con fonti reali;
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
   e solo i processi/limiti necessari aggiornati.
-- `AGENTS.md` e il report temporaneo includono la mappa comunicazione:
+- `AGENTS.md` include la mappa comunicazione:
   procedure e stato business nei file proprietari, storia tecnica nel log,
   asset in `ecosistema/ASSET.md`, chat solo temporanea e sync dedicato solo se
   esistono due agenti.
-- il report produce una mappa moduli con stato per PEC/email certificata,
+- `ecosistema/ASSET.md` mantiene una mappa moduli con stato per PEC/email certificata,
   email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale,
   plugin, skill, agenti, guardiani/hook, ronde, voce/dettatura e
   compliance/privacy/AI Act.

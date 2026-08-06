@@ -47,7 +47,6 @@ ALLOWED_ROOT_FILES = {
     "AGENTS.md",
     "CLAUDE.md",
     "AGENT_CHAT.md",
-    "REPORT_FINALE.md",
 }
 
 GENERIC_NAMES = {
@@ -309,13 +308,6 @@ def _extract_installed_version(target: Path) -> str | None:
         (
             target / "logs" / "install-log.md",
             (r"Standard version:\s*(\d+\.\d+\.\d+)",),
-        ),
-        (
-            target / "REPORT_FINALE.md",
-            (
-                r"Versione:\s*(\d+\.\d+\.\d+)",
-                r"standard\s+(\d+\.\d+\.\d+)",
-            ),
         ),
     )
     for path, patterns in candidates:
@@ -831,7 +823,6 @@ def inspect_ecosystem(
                 )
 
             safety_paths = (
-                "REPORT_FINALE.md",
                 ".secrets/prova.txt",
                 "prova.env",
                 "api-token-prova.txt",
@@ -879,40 +870,17 @@ def inspect_ecosystem(
             )
         )
 
-    report_path = target / "REPORT_FINALE.md"
-    if report_path.is_symlink():
+    legacy_mission_file = target / "REPORT_FINALE.md"
+    if legacy_mission_file.exists() or legacy_mission_file.is_symlink():
         findings.append(
             Finding(
-                "TEMP_REPORT_SYMLINK",
+                "LEGACY_MISSION_FILE",
                 "BLOCKER",
                 "REPORT_FINALE.md",
-                "Il report temporaneo deve essere un file locale.",
+                "Promuovere i fatti correnti nelle fonti proprietarie e spostare "
+                "il file superato nel Cestino.",
             )
         )
-    elif report_path.is_file():
-        report = report_path.read_text(encoding="utf-8")
-        normalized_report = _normalized(report)
-        if "valido al:" not in normalized_report or "stato missione:" not in normalized_report:
-            findings.append(
-                Finding(
-                    "STALE_REPORT",
-                    "BLOCKER",
-                    "REPORT_FINALE.md",
-                    "Report senza data di validita' o stato missione: non puo' "
-                    "essere usato come stato corrente.",
-                )
-            )
-        tracked, _history = _git_path_state(target, "REPORT_FINALE.md")
-        if tracked:
-            findings.append(
-                Finding(
-                    "TEMP_REPORT_IN_GIT",
-                    "BLOCKER",
-                    "REPORT_FINALE.md",
-                    "L'output temporaneo e' ancora tracciato in Git: promuovere "
-                    "i fatti nelle fonti proprietarie e rimuoverlo dall'indice.",
-                )
-            )
 
     canonical_memory = _canonical_memory_path(target, agents_text)
     if not (canonical_memory / "MEMORY.md").is_file():

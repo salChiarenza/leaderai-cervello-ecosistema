@@ -33,8 +33,7 @@ rami autonomi.
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali e
-  `REPORT_FINALE.md`
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
@@ -51,7 +50,6 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md`
-- `REPORT_FINALE.md` solo come output temporaneo e datato della missione aperta
 
 Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
 sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
@@ -64,9 +62,10 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
-Il report temporaneo della missione deve includere la mappa moduli con stato per PEC/email
-certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,
-agenti/ruoli, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
+La mappa moduli vive nelle fonti proprietarie della casa e mantiene lo stato per
+PEC/email certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin,
+skill, agenti/ruoli, guardiani/hook, ronde, voce/dettatura e
+compliance/privacy/AI Act.
 
 ## Regola madre
 
@@ -98,7 +97,6 @@ condivisi.
 |---|---|---|
 | Stato business corrente, prossimo passo, scadenze | file proprietario della stanza | finche' cambia |
 | Storia tecnica/strutturale | `logs/install-log.md` | stabile |
-| Output della missione aperta | `REPORT_FINALE.md`, datato e fuori Git | fino a `CHIUDI` |
 | Procedura / come si fa una cosa | file del reparto o dell'area che la usa, es. `ecosistema/PROCESSI.md` o una procedura dedicata | stabile |
 | Problema di allineamento tra Claude e Codex | un sync dedicato solo se il cliente usa entrambi gli agenti | finche' il sync si chiude |
 | Coordinamento immediato sullo stesso file | una chat temporanea solo se serve evitare collisioni | massimo 48 ore |
@@ -109,28 +107,48 @@ procedura o nel file proprietario. La chat e' solo coordinamento temporaneo.
 
 ## Protocollo missioni LeaderAI
 
-Il ciclo e' chiuso e semplice:
+Il ciclo ordinario e' locale:
 
-`MISSIONE` -> `ESECUZIONE` -> `AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
+`MISSIONE` -> `ESECUZIONE` -> `AUTOCONTROLLO` -> `SALVATAGGIO NELLA CASA` -> `CHIUSURA LOCALE`.
 
 - `MISSIONE`: l'agente del cliente legge l'email con oggetto concreto, apre link/file e
   segue lo schema indicato.
 - `ESECUZIONE`: fa le azioni, ripara cio' che puo', prova cio' che dichiara.
-- `AUTOCONTROLLO`: prima di scrivere a Sal rilegge missione, azioni, prove,
+- `AUTOCONTROLLO`: rilegge missione, azioni, prove,
   file toccati, blocchi umani veri e superfici aperte da lui.
-- `REPORT`: completa e collauda il report locale, lo mostra al proprietario e
-  lo lascia `PRONTO DA INVIARE`; l'invio a `sal@salchiarenza.ai` avviene solo
-  dopo autorizzazione esplicita del proprietario per quello specifico invio.
-- `SAL_VERIFICA`: aspetta risposta LeaderAI; lo stato resta nel report
-  temporaneo.
-- `CONTINUA`: lavora ancora sulla stessa missione, aggiorna il report e chiede
-  una nuova autorizzazione prima dell'eventuale nuovo invio.
-- `CHIUDI`: promuove i fatti nelle fonti proprietarie, usa il log solo per
-  cambi strutturali, elimina il report e chiude pagine/app aperte da lui.
+- `SALVATAGGIO NELLA CASA`: aggiorna le fonti proprietarie con stato, prove,
+  prossimo passo e scadenze. Il log accoglie soltanto cambi tecnici o
+  strutturali.
+- `CHIUSURA LOCALE`: verifica le fonti aggiornate, archivia l'email e chiude
+  pagine, tab, finestre e strumenti aperti da lui.
+
+L'email della missione avvia un ciclo che si chiude localmente. Decisioni e
+gesti umani veri vengono salvati come `DA DECIDERE IN CALL` con il gesto
+preciso. Un invio successivo esiste soltanto su richiesta esplicita di Sal per
+quella singola email.
+
+### Legge dell'unico blocco reale
+
+La missione contiene istruzioni precise, fonti, risultato atteso, azioni
+autorizzate e criteri di riuscita. L'agente esegue, diagnostica, ripara, riprova
+e completa in autonomia, senza aggiornamenti di avanzamento o domande a
+puntate. Si ferma una sola volta soltanto davanti a un `BLOCCO REALE`: una
+istruzione ambigua e non decidibile dalle fonti, un accesso o permesso
+mancante, una scelta del proprietario, hardware assente, un rischio
+irreversibile oppure un servizio esterno indisponibile dopo tentativi
+ragionevoli. Nello stesso canale scrive cosa ha gia' provato, cosa manca e una
+domanda unica: `Come proseguo su questo punto?`. Ricevuta la risposta, riprende
+la stessa missione e arriva alla fine.
+
+Quando Sal richiede una conferma finale, parte una volta sola e soltanto con
+esito `PASSA`: tutti i criteri della missione sono completati e provati. La
+conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.` e
+riporta le prove essenziali. Ogni stato intermedio resta nella casa e alimenta
+la stessa missione.
 
 Regola posta: dopo aver letto e gestito una email o notifica, archiviala nello
 stesso giro. La Inbox contiene solo blocchi o decisioni immediate ancora attivi;
-`SAL_VERIFICA` resta tracciato nei log/report, non nella Inbox.
+lo stato resta nella fonte proprietaria, non nella Inbox.
 
 Non creare automatismi permanenti tra agenti: ogni giro nasce da missione umana
 o risposta esplicita LeaderAI.
@@ -165,8 +183,9 @@ Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
 agente `lancia l'Ispettore` oppure `esegui il checkup LeaderAI`; la skill
 `ispettore-ecosistema` apre la fonte unica e l'agente confronta il setup con la doc
 ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
-da solo il tecnico e prepara il resoconto per Sal. Lo invia solo dopo
-autorizzazione esplicita del proprietario. Prima di giudicare censisce le
+da solo il tecnico e, quando Sal la richiede, prepara la conferma finale con le
+prove essenziali. La invia solo dopo autorizzazione esplicita del proprietario.
+Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
 si riconosce dai segnali di vita (memoria compilata, log, asset,
 commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca

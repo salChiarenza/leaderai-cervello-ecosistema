@@ -34,6 +34,16 @@ Versione standard applicata: `{{version}}`.
 - La mappa dell'azienda vive in `ecosistema/`.
 - Il registro asset operativi vive in `ecosistema/ASSET.md`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
+- **Chi apre chiude (vale SEMPRE, non solo nelle missioni):** ogni pagina web,
+  scheda del browser, modulo, anteprima, accesso, app o finestra che apri per
+  lavorare la chiudi tu quando il lavoro e' finito, nello stesso giro. Chiudi
+  solo cio' che hai aperto tu: quello che il proprietario aveva gia' aperto
+  resta dov'e'. Un lavoro non e' finito finche' lo schermo non torna com'era.
+- **Email lavorata = email archiviata (vale SEMPRE, non solo nelle missioni):**
+  quando hai letto e gestito un messaggio o una notifica, archivialo nello
+  stesso giro. La Posta in arrivo tiene solo cio' che e' ancora aperto o in
+  attesa di una decisione; stato, prove e prossimo passo vivono nel file
+  proprietario, non nella Posta in arrivo.
 - Non salvare segreti, password, token o dati bancari in memoria.
 - **Se l'azienda del cliente ha disattivato servizi cloud** (es. Google Docs/Drive spenti dall'IT, add-in Office non autorizzati), genera i documenti come **file locali** (`.docx`/`.md`) nella cartella di lavoro e aprili con l'app installata. Non tentare l'export su Drive/Docs: dà "non hai accesso" e blocca. Se un pulsante propone il cloud aziendale, ignoralo e proponi il file locale.
 - La posizione di questa cartella (locale o cloud) e il backup (GitHub privato a
@@ -56,7 +66,7 @@ Versione standard applicata: `{{version}}`.
   apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
-- Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
+- Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
 
 ## Architettura adattiva: mappa madre e stanze
 
@@ -148,7 +158,7 @@ salvare verifica almeno:
 - nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
 - nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
 - nessun file sciolto nella home senza proprietario dichiarato;
-- nessuna memoria parallela o report temporaneo presentato come stato vivo;
+- nessuna memoria parallela o file legacy presentato come stato vivo;
 - nessuna mappa o indice Markdown oltre le soglie del contratto macchina;
 - nessun documento Markdown esteso che mescoli responsabilita' o duplichi una
   fonte viva;
@@ -201,33 +211,37 @@ per ogni compito, insieme all'Autoprova.
 
 Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 
-`MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> REPORT -> SAL_VERIFICA -> CONTINUA/CHIUDI`.
+`MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
 
 - Leggi l'email nella posta del proprietario; il copia-incolla vale solo al
   primo contatto quando la posta non e' ancora collegata.
 - Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
   questa cartella come caso reale.
-- Diagnostica, ripara il riparabile, prova e completa il report locale.
-- Ogni email agente-agente e ogni `REPORT_FINALE.md` aprono con `STATO PER LE
-  PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Solo dopo
-  vengono istruzioni e dettagli tecnici.
-- Mostra il report al proprietario; invialo a LeaderAI solo dopo
-  autorizzazione esplicita per quello specifico invio.
-  Fino ad allora lo stato e' `PRONTO DA INVIARE`.
+- Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
+- L'email della missione apre con `STATO PER LE PERSONE`: `Fatto`, `Manca`,
+  `Prossimo passo`, `Intervento umano`. Solo dopo vengono istruzioni e dettagli
+  tecnici.
+- Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
+  proprietarie.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
-  per la missione; registra nei log gli handoff che devono restare aperti.
-- Aspetta `CONTINUA` o `CHIUDI`: con `CONTINUA` aggiorna il report e chiede una
-  nuova autorizzazione prima dell'eventuale nuovo invio; l'agente non decide da solo
-  che il lavoro e' concluso e non crea automatismi permanenti tra agenti.
+  per la missione; registra i gesti umani come `DA DECIDERE IN CALL`.
+- L'email della missione chiude localmente. Un invio successivo esiste soltanto
+  su richiesta esplicita di Sal per quella singola email.
+- L'unica interruzione ammessa e' un `BLOCCO REALE` non risolvibile dalle fonti
+  o con tentativi sicuri. Nello stesso canale l'agente dichiara cosa ha gia'
+  provato, cosa manca e pone una domanda unica: `Come proseguo su questo
+  punto?`. Dopo la risposta riprende la stessa missione. Sono vietati
+  aggiornamenti di avanzamento e domande a puntate.
+- Se Sal richiede una conferma finale, inviala una volta sola e soltanto con
+  esito `PASSA`: apri con `Perfetto, l'ho fatto. Tutto completato e
+  funzionante.` e riporta le prove essenziali di tutti i criteri della
+  missione.
 
 ## Comunicazione e fonti di verita'
 
 - Stato business corrente: file proprietario della stanza, con stato, prossimo
   passo e scadenze in testa; diario sotto, dal piu' recente.
 - Storia tecnica/strutturale: soltanto `logs/install-log.md`.
-- `REPORT_FINALE.md`: output temporaneo e datato della missione aperta, mai
-  fonte di stato. Dopo `CHIUDI` si promuovono i fatti nelle fonti proprietarie
-  e il report si elimina.
 - Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
 - Asset/capacita': `ecosistema/ASSET.md`.
 - Sync Claude/Codex: file dedicato solo se si usano entrambi.
@@ -311,11 +325,10 @@ App e script leggono quella fonte e generano PDF, Word o altri derivati. Se la
 fonte manca o non e' valida, l'elaborazione fallisce in modo visibile: vietato
 usare una seconda copia hardcoded che diverge in silenzio.
 
-## Report
+## Chiusura
 
-Durante una missione si usa un solo `REPORT_FINALE.md`, con data/ora e stato
-`APERTA` o `PRONTO DA INVIARE`. E' un output temporaneo ignorato da Git. Dopo
-`CHIUDI`, i fatti stabili vengono promossi nel file proprietario o nel log
-tecnico se riguardano la struttura, poi il report viene eliminato.
+Ogni missione aggiorna direttamente le fonti proprietarie. La conferma finale
+esiste soltanto quando la missione la richiede e apre con `Perfetto, l'ho
+fatto. Tutto completato e funzionante.`
 
 Creato da LeaderAI Cervello + Ecosistema il {{date}}.

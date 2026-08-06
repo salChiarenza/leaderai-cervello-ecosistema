@@ -80,7 +80,7 @@ Schema consigliato per atelier/negozi:
 - `ecosistema/ASSET.md`: calendari operativi, colori, proprietario, stato.
 - `ecosistema/PROCESSI.md`: regole di naming e creazione eventi.
 - `ecosistema/LIMITI.md`: cosa richiede conferma umana.
-- `REPORT_FINALE.md`: tabella di prova e verdetto.
+- `ecosistema/PROCESSI.md`: tabella di prova e stato del calendario.
 
 ## Tabella di collaudo
 

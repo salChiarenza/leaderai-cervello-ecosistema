@@ -2,9 +2,9 @@
 
 Repo operativa per montare un ambiente AI cliente secondo lo standard LeaderAI.
 
-Non e' un audit a domande. E' una repo operativa: installa quando manca tutto,
-fa checkup e riparazione quando l'ambiente esiste gia', scrive log e lascia un
-report finale.
+E' una repo operativa: installa quando manca tutto, fa checkup e riparazione
+quando l'ambiente esiste gia', aggiorna le fonti della casa e chiude con una
+conferma unica.
 
 ## Fonti ufficiali vive del checkup
 
@@ -20,8 +20,9 @@ e non sostituisce le specifiche tecniche.
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
 caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md` e `templates/STANZA_AGENTS.md`, ripara gli scostamenti
-riparabili, prova e prepara il report finale. L'invio avviene solo dopo
-autorizzazione esplicita del proprietario.
+riparabili, prova, salva i fatti nelle fonti proprietarie e chiude localmente.
+Il ciclo ordinario produce zero aggiornamenti intermedi. Quando la missione
+richiede una conferma finale, ne parte una sola dopo il collaudo completo.
 
 `install_contract.json` e' il contratto macchina unico del nucleo
 d'installazione: procedura manuale, setup tecnico, Ispettore e collaudo leggono
@@ -62,21 +63,31 @@ Il proprietario dice al suo agente `lancia l'Ispettore` oppure
 unica `CHECKUP.md` e l'agente confronta il setup con la documentazione
 ufficiale viva (indice
 `code.claude.com/docs/llms.txt`, pagine `.md`), ripara da solo il tecnico e
-prepara il resoconto per Sal. Lo invia soltanto dopo autorizzazione esplicita
-del proprietario. Prima di giudicare censisce le cartelle candidate:
+prepara la conferma finale per Sal quando la missione la richiede. La invia
+soltanto dopo autorizzazione esplicita del proprietario. Prima di giudicare
+censisce le cartelle candidate:
 la cartella viva puo' chiamarsi in qualunque modo, quindi si riconosce dai
-segnali di vita (memoria compilata, log, report, asset, commit, file di lavoro
+segnali di vita (memoria compilata, log, asset, commit, file di lavoro
 recenti, connettori provati), non dal nome. La ricerca include anche nomi
 brandizzati o sbagliati come `LeaderAI`, `Leader AI`, `leader ai`, `leder ai`,
 `cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo` e `clone`.
 
-Ogni missione segue un ciclo chiuso: `MISSIONE` -> `ESECUZIONE` ->
-`AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
-L'agente del cliente non decide da solo che e' finita dopo il primo report:
-aspetta la verifica LeaderAI.
-Le email operative tra agenti e il report aprono sempre con `STATO PER LE
-PERSONE`: fatto, manca, prossimo passo e intervento umano. I dettagli tecnici
-vengono dopo.
+Ogni missione segue un ciclo locale: `MISSIONE` -> `ESECUZIONE` ->
+`AUTOCONTROLLO` -> `SALVATAGGIO NELLA CASA` -> `CHIUSURA LOCALE`.
+L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
+e prova tutto nella casa del cliente, promuove stato e prove nelle fonti
+proprietarie, archivia l'email e chiude le
+superfici aperte. Il ciclo produce zero aggiornamenti intermedi; decisioni e
+gesti umani veri restano come `DA DECIDERE IN CALL`.
+L'unica interruzione ammessa e' un `BLOCCO REALE` che l'agente non puo'
+risolvere dalle fonti o con tentativi sicuri: dichiara cosa ha provato, cosa
+manca e pone una domanda unica. Dopo la risposta riprende la stessa missione;
+nessun aggiornamento a puntate.
+Quando Sal richiede espressamente una conferma finale, parte una volta sola e
+soltanto con esito `PASSA`: apre con `Perfetto, l'ho fatto. Tutto completato e
+funzionante.` e riporta le prove essenziali di tutti i criteri della missione.
+Le email operative tra agenti aprono sempre con `STATO PER LE PERSONE`: fatto,
+manca, prossimo passo e intervento umano. I dettagli tecnici vengono dopo.
 
 Dove mettere la cartella madre si decide caso per caso con domande guidate
 (disco locale oppure cartella sincronizzata OneDrive / Google Drive). Avviso da
@@ -111,8 +122,7 @@ seconda casa.
 
 Nel target scelto crea solo i pezzi standard mancanti:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali e
-  `REPORT_FINALE.md`
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
@@ -130,7 +140,6 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
-- `REPORT_FINALE.md` come output temporaneo e datato della missione aperta
 
 Questi pezzi sono infrastruttura comune. Le cartelle business vengono prima
 classificate come stanza, fonte, output, capacita', infrastruttura, archivio o
@@ -154,11 +163,11 @@ Controlla anche la salute dei Markdown: misura tutti i file, blocca mappe e
 indici cresciuti oltre le soglie del contratto macchina e revisiona i documenti
 estesi per scoprire responsabilita' mescolate o fonti duplicate. Alleggerisce i
 router portando i dettagli nelle fonti proprietarie e lasciando collegamenti,
-senza tagliare contenuti alla cieca. Ogni nuovo problema ripetibile entra nel
-report come lezione candidata e, dopo la validazione LeaderAI, diventa regola e
-test dei checkup successivi.
+senza tagliare contenuti alla cieca. Ogni nuovo problema ripetibile entra in
+`ecosistema/PROCESSI.md` come lezione candidata e, dopo la validazione
+LeaderAI, diventa regola e test dei checkup successivi.
 
-Il report temporaneo include anche la **mappa moduli**: PEC/email certificata,
+`ecosistema/ASSET.md` include anche la **mappa moduli**: PEC/email certificata,
 email/calendario, calendario operativo, Drive/OneDrive, CRM/gestionale, plugin,
 skill, agenti, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI
 Act. Ogni modulo deve avere uno stato, cosi' il prossimo passo non dipende
@@ -177,15 +186,23 @@ Modulo specifico gia' disponibile:
   una stanza concorrente.
 
 Il Cervello include anche la **mappa comunicazione**: stato business nel file
-proprietario della stanza, storia tecnica nel solo `logs/install-log.md`,
-report datato solo durante la missione, asset in `ecosistema/ASSET.md`, chat
-solo per coordinamento temporaneo e sync dedicato solo se il cliente usa sia
-Claude sia Codex.
+proprietario della stanza, storia tecnica nel solo `logs/install-log.md`, asset
+in `ecosistema/ASSET.md`, chat solo per coordinamento temporaneo e sync dedicato
+solo se il cliente usa sia Claude sia Codex.
 
 L'Ispettore confronta sempre la versione installata con il `VERSION` vivo,
 verifica che Claude usi una sola memoria, individua configurazioni credenziali
 fuori `.secrets/` senza aprirle, controlla firma/timbro e impedisce copie
 hardcoded di contenuti business modificabili.
+
+Controlla anche se istruzioni, skill, rule o hook stanno stringendo troppo
+l'agente. Il confronto cambia un solo blocco per volta e usa due sessioni
+nuove sulla stessa missione: contesto completo contro alleggerito. Il rapporto
+misura risultato, fonti, percorso, completamento, intervento umano, tempo,
+consumo quando disponibile e sicurezza; propone soltanto una classificazione,
+senza modifiche distruttive automatiche. La missione non contiene indizi su
+cartella, fonte o risultato atteso; un solo caso non puo' candidare la rimozione
+di una istruzione.
 
 I file vivi del cliente restano intatti. `--force` serve soltanto a riparare il
 ponte canonico `CLAUDE.md` quando e' mancante o errato.
@@ -212,6 +229,13 @@ percorsi suggeriti e ripete l'installazione manuale partendo dalla sola
 procedura. Conserva prompt, trascrizioni, manifest prima/dopo, diff e verdetti.
 Zero test, test saltati, CLI assente, autenticazione mancante, timeout o
 oracolo fallito bloccano il rilascio.
+
+Confronto mirato di un blocco di istruzioni, su fixture anonima e due sessioni
+pulite:
+
+```bash
+python3 behavior_harness.py compare-context --help
+```
 
 Preflight strutturale opzionale e in sola lettura, quando la repo e' locale e
 l'esecuzione e' stata autorizzata:

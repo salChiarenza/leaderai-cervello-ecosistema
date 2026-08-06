@@ -133,12 +133,10 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertIn("SHA256 verificato", email)
         self.assertNotIn("/blob/main/", email)
         self.assertIn("autorizzazione esplicita", email)
-        self.assertIn(
-            "l'autorizzazione successiva del proprietario attiva "
-            "l'eventuale invio del report",
-            " ".join(email.split()),
-        )
+        self.assertIn("zero aggiornamenti intermedi", email)
+        self.assertNotIn("eventuale invio del report", email)
         self.assertIn("PROVA_DESTINATARIO", email)
+        self.assertIn("AI_ACT_CHECK_OK", email)
         self.assertGreaterEqual(email.count("STATO PER LE PERSONE"), 2)
         for field in ["Fatto:", "Manca:", "Prossimo passo:", "Intervento umano:"]:
             with self.subTest(human_field=field):
@@ -159,6 +157,22 @@ class CrossAgentContractTest(unittest.TestCase):
         ]:
             with self.subTest(pointer=relative_path):
                 self.assertIn("EMAIL_CONSEGNA.md", self.read(relative_path))
+
+    def test_ai_act_gate_is_installed_and_blocks_unclear_delivery(self):
+        email = self.read("EMAIL_CONSEGNA.md")
+        install = self.read("INSTALLA_CON_AI.md")
+        processes = self.read("templates/PROCESSI.md")
+        limits = self.read("templates/LIMITI.md")
+
+        for surface in (email, install, processes):
+            self.assertIn("AI_ACT_CHECK_OK", surface)
+            self.assertIn("sistema", surface.lower())
+            self.assertIn("ruolo", surface.lower())
+            self.assertIn("rischio", surface.lower())
+
+        self.assertIn("NON PASSA", install)
+        self.assertIn("NON PASSA", processes)
+        self.assertIn("NON PASSA", limits)
 
     def test_checkup_and_inspector_skill_read_machine_contract(self):
         self.assertIn("install_contract.json", self.read("CHECKUP.md"))
@@ -213,12 +227,34 @@ class CrossAgentContractTest(unittest.TestCase):
                 self.assertIn("Prossimo passo:", text)
                 self.assertIn("Intervento umano:", text)
 
-    def test_every_continue_requires_a_new_send_authorization(self):
+    def test_mission_closes_locally_without_return_email(self):
         checkup = self.read("CHECKUP.md")
 
         self.assertNotIn("fai un nuovo autocontrollo e mandi un nuovo", checkup)
-        self.assertIn("nuova autorizzazione prima di ogni nuovo invio", checkup)
+        self.assertNotIn("nuova autorizzazione prima dell'invio finale", checkup)
+        self.assertIn("zero aggiornamenti intermedi", checkup)
+        self.assertIn("SALVATAGGIO NELLA CASA", checkup)
         self.assertIn("manca `AGENT_CHAT.md`", checkup)
+
+    def test_mission_email_cycle_closes_in_the_client_house(self):
+        for relative in (
+            "AGENTS.md",
+            "CHECKUP.md",
+            "INSTALLA_CON_AI.md",
+            "EMAIL_CONSEGNA.md",
+            "MANIFEST.md",
+            "README.md",
+            "templates/PROCESSI.md",
+        ):
+            text = " ".join(self.read(relative).split())
+            with self.subTest(relative=relative):
+                self.assertIn("una volta sola", text)
+                self.assertTrue(
+                    "chiusura locale" in text.lower()
+                    or "chiude localmente" in text.lower()
+                )
+                self.assertIn("DA DECIDERE IN CALL", text)
+                self.assertNotIn("CONTINUA TERMINALE", text)
 
     def test_entrypoint_gate_is_in_installation_and_agent_boot_files(self):
         install = self.read("INSTALLA_CON_AI.md")

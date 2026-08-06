@@ -33,10 +33,10 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
         )
 
         for phrase in [
-            "stato di chiusura ambiente",
             "pagine web",
             "tab browser",
-            "handoff nel report",
+            "Archivia l'email della missione",
+            "DA DECIDERE IN CALL",
         ]:
             with self.subTest(file="CHECKUP.md", phrase=phrase):
                 self.assertIn(phrase, checkup)
@@ -45,10 +45,11 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
             "chiusura ambiente",
             "email/browser/tab/app",
             "superfici aperte da te",
-            "chiudi le pagine/app aperte da te",
+            "archivia l'email della missione",
+            "chiudi pagine, tab, finestre e strumenti",
         ]:
             with self.subTest(file="INSTALLA_CON_AI.md", phrase=phrase):
-                self.assertIn(phrase, install)
+                self.assertIn(phrase.lower(), install.lower())
 
     def test_manifest_includes_operational_cleanup_as_standard(self):
         text = (ROOT / "MANIFEST.md").read_text(encoding="utf-8")

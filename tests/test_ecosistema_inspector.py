@@ -383,7 +383,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             self.assertIn("INSPECTOR_SKILL_MISSING", self.codes(inspection))
 
-    def test_santa_brigida_regression_is_non_passa(self):
+    def test_anonymous_school_regression_is_non_passa(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp, "claude")
             agents = target / "AGENTS.md"
@@ -442,7 +442,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "UNCLASSIFIED_DIR",
                 "GENERIC_DIR",
                 "CLAUDE_MEMORY_DIVERGED",
-                "STALE_REPORT",
+                "LEGACY_MISSION_FILE",
                 "CREDENTIAL_FILE_OUTSIDE_SECRETS",
                 "BUSINESS_SOURCE_UNDECLARED",
                 "BUSINESS_CONTENT_HARDCODED_RISK",
@@ -453,8 +453,8 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertTrue(expected.issubset(codes), expected - codes)
 
     def test_absolute_home_memory_path_is_flagged_as_not_portable(self):
-        """Caso Marco De Nicolo' 28/07/2026: percorso corretto sul PC fisso,
-        rotto in silenzio sul portatile perche' inchioda il nome utente."""
+        """Caso anonimo multipostazione: il percorso del PC fisso si rompe
+        in silenzio sul portatile quando inchioda il nome utente."""
         with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
             target = self.make_target(tmp)
             self.claude_user_settings.write_text(
