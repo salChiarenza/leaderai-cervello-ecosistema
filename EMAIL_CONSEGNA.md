@@ -18,23 +18,20 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIFARE — 06/08/2026`
+`PROVA_DESTINATARIO_OK — 06/08/2026`
 
-Ultima verifica completata partendo dal solo archivio pubblico immutabile del tag
-`v0.5.3`, commit
-`4b01f8a6e8d6cb6fb9bdab56fb521758e6f51cb5`.
-L'archivio misura `159136` byte e ha SHA-256
-`853874b49812e2cd73a732ced2fac047123a2e6922256edf539383e53b125bd2`.
-La versione `0.5.3` letta dalla copia estratta e' corretta; i `160` test
-deterministici sono passati dalla sola copia scaricata. La CI pubblica
-`30628424137` ha superato la suite sia su macOS sia su Windows. Prima della
+Verifica completata partendo dal solo archivio pubblico immutabile del commit
+`a7c7ab85c5096fe1018a8f94239742220dac90fd`.
+L'archivio ha SHA-256
+`d986da33045d68d68bc530462d400efcafb35e1c21a5ba97c075a5894f60ac23`.
+La versione `0.5.4` letta dalla copia estratta e' corretta; i `170` test
+deterministici sono passati dalla sola copia pubblica. Prima della
 pubblicazione sono passati anche tre scenari business e l'installazione
-manuale con sessioni reali sia Codex sia Claude Code.
-La prova della 0.5.4 viene registrata dopo pubblicazione del nuovo tag.
+manuale completa con sessioni reali sia Codex sia Claude Code.
 
 ## Controlli prima dell'invio
 
-1. Verifica dal livello di accesso del destinatario che tag, archivio e
+1. Verifica dal livello di accesso del destinatario che riferimento immutabile, archivio e
    procedura immutabili siano pubblici e leggibili; confronta lo SHA256.
 2. Conferma che il lettore operativo sia l'agente collegato alla posta.
 3. Autentica la missione: mittente LeaderAI esatto, oggetto esatto, ID missione
@@ -126,11 +123,11 @@ percorso deve essere creato, chiedi a [NOME] di autorizzare la cartella padre
 concordata e di confermare l'eventuale richiesta nativa di accesso.</p>
 
 <p>Apri in sola lettura la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/v[VERSIONE VERIFICATA]/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI [VERSIONE VERIFICATA]</a>
+<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI [VERSIONE VERIFICATA]</a>
 e usa la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/v[VERSIONE VERIFICATA]">release ufficiale immutabile</a>
+<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/[RIFERIMENTO IMMUTABILE]">release ufficiale immutabile</a>
 come standard. Archivio:
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/refs/tags/v[VERSIONE VERIFICATA].zip">v[VERSIONE VERIFICATA].zip</a>.
+<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/[RIFERIMENTO IMMUTABILE].tar.gz">archivio [VERSIONE VERIFICATA]</a>.
 SHA256 verificato: <code>[SHA256 ARCHIVIO]</code>.</p>
 
 <p>Cliente: [NOME]<br>
@@ -239,13 +236,13 @@ creato, chiedi a [NOME] di autorizzare la cartella padre concordata e di
 confermare l'eventuale richiesta nativa di accesso.
 
 Procedura ufficiale:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/v[VERSIONE VERIFICATA]/INSTALLA_CON_AI.md
+https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md
 
 Release ufficiale:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/v[VERSIONE VERIFICATA]
+https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/[RIFERIMENTO IMMUTABILE]
 
 Archivio:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/refs/tags/v[VERSIONE VERIFICATA].zip
+https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/[RIFERIMENTO IMMUTABILE].tar.gz
 
 SHA256 verificato: [SHA256 ARCHIVIO]
 

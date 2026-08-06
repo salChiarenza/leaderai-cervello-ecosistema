@@ -127,7 +127,11 @@ class CrossAgentContractTest(unittest.TestCase):
         )
         self.assertIn(
             "https://github.com/salChiarenza/leaderai-cervello-ecosistema/"
-            "blob/v[VERSIONE VERIFICATA]/INSTALLA_CON_AI.md",
+            "blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md",
+            email,
+        )
+        self.assertIn(
+            "archive/[RIFERIMENTO IMMUTABILE].tar.gz",
             email,
         )
         self.assertIn("SHA256 verificato", email)
