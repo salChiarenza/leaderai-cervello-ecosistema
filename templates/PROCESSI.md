@@ -5,7 +5,7 @@ Processi osservati o candidati.
 ## Fase 1 - Cervello
 
 - Verifica lettura istruzioni e memoria
-- Verifica report temporaneo della missione
+- Verifica salvataggio nelle fonti proprietarie e chiusura unica
 
 ## Fase 2 - Ecosistema
 
@@ -27,17 +27,15 @@ richiedono approfondimento competente prima della consegna.
 
 `MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
 
-Il report nasce e viene collaudato localmente, poi i fatti stabili passano
-nella fonte proprietaria e il report temporaneo viene eliminato. Le email
-lavorate si archiviano nello stesso giro; decisioni e stato restano nel file
-proprietario della stanza, il log registra soltanto cambi tecnici o
-strutturali.
+I fatti passano direttamente nelle fonti proprietarie. Le email lavorate si
+archiviano nello stesso giro; decisioni e stato restano nel file proprietario
+della stanza, il log registra soltanto cambi tecnici o strutturali.
 
 L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
 e prova tutto nella casa del cliente, salva stato e prove nelle fonti
-proprietarie, elimina il report temporaneo e chiude localmente. Il ciclo
-produce zero email di ritorno; decisioni e gesti umani veri restano come
-`DA DECIDERE IN CALL`.
+proprietarie e chiude localmente. Una conferma esterna parte soltanto quando
+Sal la richiede; decisioni e gesti umani veri restano come `DA DECIDERE IN
+CALL`.
 
 L'unica interruzione ammessa e' un `BLOCCO REALE` non risolvibile dalle fonti
 o con tentativi sicuri. Nello stesso canale l'agente scrive cosa ha gia'
@@ -60,9 +58,7 @@ Prossimo passo: ...
 Intervento umano: ...
 ```
 
-Solo dopo vengono `ISTRUZIONI PER L'AGENTE` o i dettagli tecnici. Anche
-`REPORT_FINALE.md` usa lo stesso blocco per mostrare a Sal e al proprietario
-l'avanzamento senza gergo.
+Solo dopo vengono `ISTRUZIONI PER L'AGENTE` o i dettagli tecnici.
 
 ## Chiusura ambiente
 
@@ -73,6 +69,6 @@ stesso giro in cui il lavoro finisce.
 - Browser: chiudi pagine, tab, form, preview e login che hai aperto tu; quelli
   gia' aperti dal proprietario restano dove sono.
 - App: chiudi app e finestre temporanee aperte per il lavoro.
-- Handoff: registra nel report cio' che deve restare aperto e la decisione
-  richiesta al proprietario.
+- Handoff: registra nel file proprietario cio' che deve restare aperto e la
+  decisione richiesta al proprietario.
 - Non chiudere pagine personali o lavoro estraneo alla missione.

@@ -66,7 +66,7 @@ Versione standard applicata: `{{version}}`.
   apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
-- Se serve una decisione umana vera, scriverla nel report finale come `DECISIONE`.
+- Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
 
 ## Architettura adattiva: mappa madre e stanze
 
@@ -158,7 +158,7 @@ salvare verifica almeno:
 - nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
 - nessuna cartella generica, vuota, doppia o tecnica rimasta come lavoro;
 - nessun file sciolto nella home senza proprietario dichiarato;
-- nessuna memoria parallela o report temporaneo presentato come stato vivo;
+- nessuna memoria parallela o file legacy presentato come stato vivo;
 - nessuna mappa o indice Markdown oltre le soglie del contratto macchina;
 - nessun documento Markdown esteso che mescoli responsabilita' o duplichi una
   fonte viva;
@@ -218,16 +218,15 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
-- L'email della missione e ogni `REPORT_FINALE.md` aprono con `STATO PER LE
-  PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Solo dopo
-  vengono istruzioni e dettagli tecnici.
-- Promuovi stato, prove, prossimo passo e scadenze nelle fonti proprietarie;
-  elimina il report temporaneo nello stesso giro.
+- L'email della missione apre con `STATO PER LE PERSONE`: `Fatto`, `Manca`,
+  `Prossimo passo`, `Intervento umano`. Solo dopo vengono istruzioni e dettagli
+  tecnici.
+- Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
+  proprietarie.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
   per la missione; registra i gesti umani come `DA DECIDERE IN CALL`.
-- L'email della missione e' l'unico messaggio del ciclo ordinario: zero email
-  di ritorno. Un invio successivo esiste soltanto su richiesta esplicita di
-  Sal per quella singola email.
+- L'email della missione chiude localmente. Un invio successivo esiste soltanto
+  su richiesta esplicita di Sal per quella singola email.
 - L'unica interruzione ammessa e' un `BLOCCO REALE` non risolvibile dalle fonti
   o con tentativi sicuri. Nello stesso canale l'agente dichiara cosa ha gia'
   provato, cosa manca e pone una domanda unica: `Come proseguo su questo
@@ -243,9 +242,6 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Stato business corrente: file proprietario della stanza, con stato, prossimo
   passo e scadenze in testa; diario sotto, dal piu' recente.
 - Storia tecnica/strutturale: soltanto `logs/install-log.md`.
-- `REPORT_FINALE.md`: output temporaneo e datato della missione aperta, mai
-  fonte di stato. Durante la chiusura locale si promuovono i fatti nelle fonti
-  proprietarie e il report si elimina.
 - Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
 - Asset/capacita': `ecosistema/ASSET.md`.
 - Sync Claude/Codex: file dedicato solo se si usano entrambi.
@@ -329,11 +325,10 @@ App e script leggono quella fonte e generano PDF, Word o altri derivati. Se la
 fonte manca o non e' valida, l'elaborazione fallisce in modo visibile: vietato
 usare una seconda copia hardcoded che diverge in silenzio.
 
-## Report
+## Chiusura
 
-Durante una missione si usa un solo `REPORT_FINALE.md`, con data/ora e stato
-`APERTA` o `PRONTO PER CHIUSURA LOCALE`. E' un output temporaneo ignorato da
-Git. I fatti stabili vengono promossi nel file proprietario o nel log tecnico
-se riguardano la struttura, poi il report viene eliminato nello stesso giro.
+Ogni missione aggiorna direttamente le fonti proprietarie. La conferma finale
+esiste soltanto quando la missione la richiede e apre con `Perfetto, l'ho
+fatto. Tutto completato e funzionante.`
 
 Creato da LeaderAI Cervello + Ecosistema il {{date}}.

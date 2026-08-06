@@ -21,14 +21,11 @@ CONTRACT = install_contract.CONTRACT
 GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="utf-8")
 SUPPORTED_AGENTS = set(CONTRACT["supported_agents"])
 CLAUDE_BRIDGE = "@AGENTS.md\n"
-LOCAL_ONLY_FILES = {
-    "REPORT_FINALE.md",
-}
 _ALL_STANDARD_FILES = {
     rule.destination
     for agent_name in SUPPORTED_AGENTS
     for rule in install_contract.template_rules(CONTRACT, agent_name)
-} | {"REPORT_FINALE.md"}
+}
 STANDARD_FILES = tuple(sorted(_ALL_STANDARD_FILES))
 STANDARD_DIRS = tuple(
     sorted(
@@ -618,26 +615,21 @@ def ensure_first_commit(
         return
     candidates: list[str] = []
     for rel in dict.fromkeys(result.created + result.updated):
-        if rel in LOCAL_ONLY_FILES:
-            continue
         path = target / rel
         if path.is_file() and not path.is_symlink() and not rel.startswith(".git/"):
             candidates.append(rel)
     if not candidates:
         result.git_outcome = "Git: nessun file LeaderAI da fotografare."
         return
-    rendered_report_paths = [
-        target / "REPORT_FINALE.md",
-        target / "logs" / "install-log.md",
-    ]
-    committed_report_paths = [target / "logs" / "install-log.md"]
+    rendered_log_paths = [target / "logs" / "install-log.md"]
+    committed_log_paths = [target / "logs" / "install-log.md"]
     rendered_outcome = result.git_outcome
 
     def refresh_outcome(after: str) -> None:
         nonlocal rendered_outcome
         before_text = rendered_outcome.removeprefix("Git: ")
         after_text = after.removeprefix("Git: ")
-        for path in rendered_report_paths:
+        for path in rendered_log_paths:
             if not path.is_file() or path.is_symlink():
                 continue
             current = path.read_text(encoding="utf-8")
@@ -669,14 +661,14 @@ def ensure_first_commit(
             "Git: repository inizializzato e primo commit creato con soli file LeaderAI."
         )
         refresh_outcome(result.git_outcome)
-        final_report_paths = [
+        final_log_paths = [
             path.relative_to(target).as_posix()
-            for path in committed_report_paths
+            for path in committed_log_paths
             if path.is_file() and not path.is_symlink()
         ]
-        if final_report_paths:
+        if final_log_paths:
             subprocess.run(
-                ["git", "add", "--", *final_report_paths],
+                ["git", "add", "--", *final_log_paths],
                 cwd=str(target),
                 check=True,
                 capture_output=True,
@@ -704,129 +696,6 @@ def ensure_first_commit(
         refresh_outcome(result.git_outcome)
 
 
-def build_report(result: InstallResult, agent: str, stamp: str) -> str:
-    def section(title: str, items: list[str]) -> str:
-        if not items:
-            return f"{title}\n- Nessuno\n"
-        return title + "\n" + "\n".join(f"- {item}" for item in items) + "\n"
-
-    verdict = result.target_verdict or (
-        "NON PASSA"
-        if result.blockers
-        else ("PASSA CON ATTENZIONE" if result.warnings else "PASSA")
-    )
-
-    def present(rel: str) -> bool:
-        return (result.target / rel).exists() or rel in result.created
-
-    actual_configs: list[str] = []
-    if present(".codex/README.md"):
-        actual_configs.append("`.codex/README.md` (Codex)")
-    if present(".claude/README.md"):
-        actual_configs.append("`.claude/README.md` (Claude Code)")
-    configs_text = ", ".join(actual_configs) if actual_configs else "nessuna"
-    inspector_skills: list[str] = []
-    if present(".agents/skills/ispettore-ecosistema/SKILL.md"):
-        inspector_skills.append("Codex")
-    if present(".claude/skills/ispettore-ecosistema/SKILL.md"):
-        inspector_skills.append("Claude Code")
-    inspector_text = ", ".join(inspector_skills) if inspector_skills else "mancante"
-    if verdict == "PASSA":
-        human_missing = "nessun blocco tecnico; resta la verifica del proprietario."
-        human_next = "il proprietario legge il report e decide se autorizzarne l'invio."
-    elif verdict == "PASSA CON ATTENZIONE":
-        human_missing = "chiudere gli avvisi elencati nel report."
-        human_next = "l'agente chiarisce gli avvisi; il proprietario decide gli interventi umani."
-    else:
-        human_missing = "risolvere i blocchi elencati nel report."
-        human_next = "l'agente ripara cio' che puo' e ripete le prove."
-
-    return "\n".join(
-        [
-            "# Report missione LeaderAI",
-            "",
-            "STATO PER LE PERSONE",
-            "Fatto: il Cervello e' stato creato o verificato e i controlli disponibili sono conclusi.",
-            f"Manca: {human_missing}",
-            f"Prossimo passo: {human_next}",
-            "Intervento umano: autorizzare solo permessi, accessi, scelte e l'eventuale invio.",
-            "",
-            "DETTAGLI TECNICI",
-            "",
-            f"VALIDO AL: {stamp}",
-            "STATO MISSIONE: APERTA",
-            "Output temporaneo: non e' una fonte di stato e viene eliminato "
-            "dopo CHIUDI.",
-            "",
-            "STANDARD APPLICATO",
-            "- Repo: salChiarenza/leaderai-cervello-ecosistema",
-            f"- Versione: {STANDARD_VERSION}",
-            "- Accesso: percorso tecnico autorizzato",
-            "",
-            "FASE 1 - CERVELLO",
-            "- File comuni sempre presenti: `AGENTS.md`, `CLAUDE.md` (ponte `@AGENTS.md`).",
-            f"- Agente richiesto: {agent}",
-            f"- Configurazioni realmente presenti: {configs_text}",
-            f"- Ispettore Ecosistema richiamabile da: {inspector_text}",
-            section("- Creato:", result.created).rstrip(),
-            section("- Gia' presente:", result.existing).rstrip(),
-            section("- Aggiornato:", result.updated).rstrip(),
-            section("- Rimosso con migrazione esplicita:", result.removed).rstrip(),
-            section("- Effetti esterni verificati:", result.external_effects).rstrip(),
-            section("- Avvisi:", result.warnings).rstrip(),
-            section("- Blocchi:", result.blockers).rstrip(),
-            "",
-            "GIT",
-            f"- {result.git_outcome.removeprefix('Git: ')}",
-            "",
-            "FASE 2 - ECOSISTEMA",
-            "- Stato: predisposto, da collegare alle fonti reali del cliente",
-            "- Fonti trovate: da compilare dopo discovery reale in `ecosistema/FONTI.md`",
-            "- Asset operativi: da registrare in `ecosistema/ASSET.md` quando nasce una risorsa da usare o rispettare",
-            "- Fonti da collegare: cartelle/report clienti, cataloghi, Drive/OneDrive, CRM/gestionale solo se esistono",
-            "- Dove scrivere i collegamenti: `ecosistema/FONTI.md` per fonti, `ecosistema/ASSET.md` per asset, `ecosistema/PROCESSI.md` per processi, `ecosistema/LIMITI.md` per vincoli",
-            "",
-            "ARCHITETTURA ADATTIVA",
-            "- Classificazione: da eseguire sul caso reale (`STANZA`, `FONTE`, `OUTPUT`, `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO`, `SOSPETTA`).",
-            "- Mappa stanze: da compilare nel router `AGENTS.md`; nessun nome business viene imposto dal setup.",
-            "- Collegamenti monte/valle: da derivare dai processi reali e collaudare dalla radice.",
-            "- Prove di instradamento: due richieste realistiche da eseguire dopo la discovery.",
-            "- LEZIONE CANDIDATA: nessuna in questa installazione tecnica; compilare se emerge un errore generalizzabile.",
-            "",
-            "MAPPA COMUNICAZIONE",
-            "- Regola: gli agenti non si parlano direttamente; leggono e scrivono file condivisi.",
-            "- Stato business: file proprietario della stanza, con stato e prossimo passo in testa.",
-            "- Storia tecnica/strutturale: `logs/install-log.md`.",
-            "- Output della missione aperta: `REPORT_FINALE.md`, temporaneo e ignorato da Git.",
-            "- Procedure e 'come si fa': file dell'area che le usa, non chat.",
-            "- Asset/capacita' nuove: `ecosistema/ASSET.md`.",
-            "- Coordinamento temporaneo sullo stesso file: chat solo se serve evitare collisioni, massimo 48 ore.",
-            "- Allineamento Claude/Codex: sync dedicato solo se il cliente usa entrambi gli agenti.",
-            "",
-            "MAPPA MODULI",
-            "- Regola: ogni modulo va classificato `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE` oppure `ATTIVO`.",
-            "- PEC/email certificata: DA SCOPRIRE",
-            "- Email e calendario (accesso e prova fonte): DA SCOPRIRE",
-            "- Calendario operativo (colori/categorie/eventi test): DA SCOPRIRE",
-            "- Drive/OneDrive/cartelle operative: DA SCOPRIRE",
-            "- CRM/gestionale/export: DA SCOPRIRE",
-            "- Plugin/connettori: DA SCOPRIRE",
-            "- Skill per lavori ripetuti: Ispettore Ecosistema ATTIVO; altre DA SCOPRIRE",
-            "- Agenti/ruoli dedicati: DA SCOPRIRE",
-            "- Guardiani/hook: DA SCOPRIRE",
-            "- Ronde/monitoraggi: DA SCOPRIRE",
-            "- Voce/dettatura: DA SCOPRIRE",
-            "- Compliance/privacy/AI Act: DA SCOPRIRE",
-            "",
-            "DECISIONI UMANE",
-            *(f"- {item}" for item in (result.decisions or ["Nessuna in questa installazione"])),
-            "",
-            "VERDETTO",
-            f"- {verdict}",
-        ]
-    )
-
-
 def _event_key(result: InstallResult, agent: str) -> str:
     payload = {
         "version": STANDARD_VERSION,
@@ -841,37 +710,6 @@ def _event_key(result: InstallResult, agent: str) -> str:
     }
     raw = json.dumps(payload, ensure_ascii=True, sort_keys=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()[:16]
-
-
-def ensure_report(
-    path: Path,
-    result: InstallResult,
-    agent: str,
-    event_key: str,
-    stamp: str,
-    dry_run: bool,
-) -> None:
-    marker = f"<!-- LEADERAI-SETUP-EVENT:{event_key} -->"
-    report = build_report(result, agent, stamp).rstrip() + "\n"
-    if not path.exists():
-        if not dry_run:
-            path.write_text(marker + "\n" + report, encoding="utf-8")
-        result.record("created", path)
-        return
-    current = path.read_text(encoding="utf-8")
-    if marker in current:
-        result.record("existing", path)
-        return
-    if "<!-- LEADERAI-SETUP-EVENT:" not in current:
-        result.record("existing", path)
-        result.blockers.append(
-            "REPORT_FINALE.md esiste ma non e' riconoscibile come output "
-            "temporaneo LeaderAI: non viene sovrascritto."
-        )
-        return
-    if not dry_run:
-        path.write_text(marker + "\n" + report, encoding="utf-8")
-    result.record("updated", path)
 
 
 def ensure_event_log(
@@ -973,7 +811,7 @@ def _finalize_blocked_target(
             new_install=False,
             dry_run=dry_run,
         )
-    inspection = _inspect_and_align(
+    _inspect_and_align(
         result,
         agent,
         claude_user_settings_path,
@@ -988,15 +826,6 @@ def _finalize_blocked_target(
         stamp,
         dry_run,
     )
-    if "temporary_report" in effects:
-        ensure_report(
-            result.target / "REPORT_FINALE.md",
-            result,
-            agent,
-            _inspection_event_key(agent, inspection),
-            stamp,
-            dry_run,
-        )
     return result
 
 
@@ -1162,9 +991,9 @@ def run_setup(
             dry_run,
         )
 
-    changed_before_report = bool(result.created or result.updated or result.removed)
+    changes_detected = bool(result.created or result.updated or result.removed)
     external_changed = any("aggiornate" in item for item in result.external_effects)
-    event_needed = new_install or changed_before_report or bool(
+    event_needed = new_install or changes_detected or bool(
         result.warnings or result.blockers
     ) or external_changed
     if event_needed:
@@ -1195,33 +1024,11 @@ def run_setup(
         result.target_verdict = "DA COLLAUDARE"
         return result
 
-    inspection = _inspect_and_align(
+    _inspect_and_align(
         result,
         agent,
         settings_path,
     )
-    report_path = target / "REPORT_FINALE.md"
-    report_needs_alignment = False
-    if report_path.is_file():
-        match = re.search(
-            r"(?m)^VERDETTO\s*\n-\s*(PASSA CON ATTENZIONE|NON PASSA|PASSA)\s*$",
-            report_path.read_text(encoding="utf-8"),
-        )
-        report_needs_alignment = not match or match.group(1) != inspection.verdict
-    if "temporary_report" in effects and (event_needed or report_needs_alignment):
-        report_key = (
-            _event_key(result, agent)
-            if event_needed
-            else _inspection_event_key(agent, inspection)
-        )
-        ensure_report(
-            report_path,
-            result,
-            agent,
-            report_key,
-            stamp,
-            dry_run,
-        )
 
     return result
 

@@ -33,8 +33,7 @@ rami autonomi.
 
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi, credenziali e
-  `REPORT_FINALE.md`
+- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
 - inizializza la cartella madre come repository git (se non lo e' gia')
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
@@ -51,7 +50,6 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md`
-- `REPORT_FINALE.md` solo come output temporaneo e datato della missione aperta
 
 Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
 sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
@@ -64,9 +62,10 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
-Il report temporaneo della missione deve includere la mappa moduli con stato per PEC/email
-certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin, skill,
-agenti/ruoli, guardiani/hook, ronde, voce/dettatura e compliance/privacy/AI Act.
+La mappa moduli vive nelle fonti proprietarie della casa e mantiene lo stato per
+PEC/email certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin,
+skill, agenti/ruoli, guardiani/hook, ronde, voce/dettatura e
+compliance/privacy/AI Act.
 
 ## Regola madre
 
@@ -98,7 +97,6 @@ condivisi.
 |---|---|---|
 | Stato business corrente, prossimo passo, scadenze | file proprietario della stanza | finche' cambia |
 | Storia tecnica/strutturale | `logs/install-log.md` | stabile |
-| Output della missione aperta | `REPORT_FINALE.md`, datato e fuori Git | fino alla chiusura locale |
 | Procedura / come si fa una cosa | file del reparto o dell'area che la usa, es. `ecosistema/PROCESSI.md` o una procedura dedicata | stabile |
 | Problema di allineamento tra Claude e Codex | un sync dedicato solo se il cliente usa entrambi gli agenti | finche' il sync si chiude |
 | Coordinamento immediato sullo stesso file | una chat temporanea solo se serve evitare collisioni | massimo 48 ore |
@@ -121,13 +119,13 @@ Il ciclo ordinario e' locale:
 - `SALVATAGGIO NELLA CASA`: aggiorna le fonti proprietarie con stato, prove,
   prossimo passo e scadenze. Il log accoglie soltanto cambi tecnici o
   strutturali.
-- `CHIUSURA LOCALE`: promuove i fatti stabili, elimina il report temporaneo,
-  archivia l'email e chiude pagine, tab, finestre e strumenti aperti da lui.
+- `CHIUSURA LOCALE`: verifica le fonti aggiornate, archivia l'email e chiude
+  pagine, tab, finestre e strumenti aperti da lui.
 
-L'email della missione e' l'unico messaggio del ciclo ordinario: zero email di
-ritorno, zero `CONTINUA`, zero `CHIUDI`. Decisioni e gesti umani veri vengono
-salvati come `DA DECIDERE IN CALL` con il gesto preciso. Un invio successivo
-esiste soltanto su richiesta esplicita di Sal per quella singola email.
+L'email della missione avvia un ciclo che si chiude localmente. Decisioni e
+gesti umani veri vengono salvati come `DA DECIDERE IN CALL` con il gesto
+preciso. Un invio successivo esiste soltanto su richiesta esplicita di Sal per
+quella singola email.
 
 ### Legge dell'unico blocco reale
 
@@ -185,8 +183,9 @@ Per un ambiente gia' installato c'e' `CHECKUP.md`: il proprietario dice al suo
 agente `lancia l'Ispettore` oppure `esegui il checkup LeaderAI`; la skill
 `ispettore-ecosistema` apre la fonte unica e l'agente confronta il setup con la doc
 ufficiale viva (indice `code.claude.com/docs/llms.txt`, pagine `.md`), ripara
-da solo il tecnico e prepara il resoconto per Sal. Lo invia solo dopo
-autorizzazione esplicita del proprietario. Prima di giudicare censisce le
+da solo il tecnico e, quando Sal la richiede, prepara la conferma finale con le
+prove essenziali. La invia solo dopo autorizzazione esplicita del proprietario.
+Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
 si riconosce dai segnali di vita (memoria compilata, log, asset,
 commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca

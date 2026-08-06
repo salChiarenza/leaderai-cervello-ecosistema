@@ -59,8 +59,11 @@ write(".gitignore", render("GITIGNORE.txt"))
 write(
     "logs/install-log.md",
     "# Install log\n\n"
-    "Installazione manuale dello standard " + version + " in modalita' "
-    + mode + ".\n",
+    "Versione: " + version + "\n"
+    "Modalita': " + mode + "\n"
+    "default_browser: DA COLLAUDARE\n"
+    "desktop_launcher: DA COLLAUDARE\n"
+    "remote_backup: DA COLLEGARE\n",
 )
 
 if mode in ("codex", "both"):
@@ -75,25 +78,6 @@ if mode in ("claude", "both"):
         ".claude/skills/ispettore-ecosistema/SKILL.md",
         render("ISPETTORE_SKILL.md"),
     )
-
-write(
-    "REPORT_FINALE.md",
-    "# Report missione LeaderAI\n\n"
-    "VALIDO AL: 29/07/2026 12:00 UTC\n"
-    "STATO MISSIONE: APERTA\n\n"
-    "## Standard\n\n"
-    "- Repo ufficiale letta dalla fotografia immutabile.\n"
-    "- Versione: " + version + "\n"
-    "- Modalita: " + mode + "\n"
-    "- Codice esterno eseguito: no\n"
-    "- Fonti reali: DA COLLEGARE\n"
-    "- Browser e impostazioni utente: DA COLLAUDARE\n\n"
-    "- default_browser: DA COLLAUDARE\n"
-    "- desktop_launcher: DA COLLAUDARE\n"
-    "- remote_backup: DA COLLEGARE\n\n"
-    "## Verdetto\n\n"
-    "PASSA CON ATTENZIONE\n",
-)
 
 subprocess.run(["git", "init"], cwd=target, check=True, capture_output=True)
 subprocess.run(["git", "add", "-A"], cwd=target, check=True, capture_output=True)
@@ -117,9 +101,9 @@ print(json.dumps({"type": "result", "result": "installazione completata"}))
 
 
 class InstallationHarnessTest(unittest.TestCase):
-    def test_report_mode_accepts_human_readable_installed_label(self):
-        report = "## Modalita'\n\n- Modalita' installata: `claude`.\n"
-        self.assertEqual(installation_harness._report_mode(report), "claude")
+    def test_log_mode_accepts_human_readable_installed_label(self):
+        log = "## Modalita'\n\n- Modalita' installata: `claude`.\n"
+        self.assertEqual(installation_harness._log_mode(log), "claude")
 
     def test_manual_harness_uses_bounded_official_installation_core(self):
         install = (
@@ -132,10 +116,7 @@ class InstallationHarnessTest(unittest.TestCase):
         self.assertIn("START_NUCLEO_INSTALLAZIONE", prompt)
         self.assertIn("END_NUCLEO_INSTALLAZIONE", prompt)
         self.assertIn("esattamente `installazione iniziale`", prompt)
-        self.assertIn(
-            "`## Verdetto` uguale a `PASSA CON ATTENZIONE`",
-            prompt,
-        )
+        self.assertIn("la conferma finale resta nel messaggio conclusivo", prompt)
         self.assertNotIn("Leggi integralmente", prompt)
 
     def make_fake(self, root: Path, source: str = FAKE_INSTALLER) -> Path:
@@ -187,19 +168,19 @@ class InstallationHarnessTest(unittest.TestCase):
             "bypassPermissions",
         )
 
-    def test_report_mode_accepts_exact_value_before_explanatory_text(self):
+    def test_log_mode_accepts_exact_value_before_explanatory_text(self):
         self.assertEqual(
-            installation_harness._report_mode(
+            installation_harness._log_mode(
                 "- Modalita': `claude` (governa il ramo Claude)\n"
             ),
             "claude",
         )
         self.assertEqual(
-            installation_harness._report_mode("- Modalità scelta: codex.\n"),
+            installation_harness._log_mode("- Modalità scelta: codex.\n"),
             "codex",
         )
         self.assertIsNone(
-            installation_harness._report_mode(
+            installation_harness._log_mode(
                 "- Nota: la modalita' consigliata potrebbe essere both.\n"
             )
         )
@@ -233,16 +214,18 @@ class InstallationHarnessTest(unittest.TestCase):
                     self.assertTrue((evidence / "target-manifest-pre.json").is_file())
                     self.assertTrue((evidence / "target-manifest-post.json").is_file())
                     self.assertTrue((evidence / "git.json").is_file())
-                    self.assertTrue((evidence / "observed-report.md").is_file())
+                    self.assertTrue(
+                        (evidence / "observed-install-log.md").is_file()
+                    )
                     self.assertNotIn(
                         str(root / ("workspace-" + mode)),
                         (evidence / "command.json").read_text(encoding="utf-8"),
                     )
 
-    def test_oracle_rejects_non_passa_even_if_future_goal_mentions_passa(self):
+    def test_oracle_rejects_wrong_version_in_install_log(self):
         source = FAKE_INSTALLER.replace(
-            '"PASSA CON ATTENZIONE\\n",',
-            '"NON PASSA. Obiettivo futuro: PASSA CON ATTENZIONE\\n",',
+            '"Versione: " + version + "\\n"',
+            '"Versione: 0.0.0\\n"',
         )
         with tempfile.TemporaryDirectory() as tmp:
             result = self.run_fake(Path(tmp), mode="codex", source=source)
@@ -253,12 +236,12 @@ class InstallationHarnessTest(unittest.TestCase):
                     encoding="utf-8"
                 )
             )
-            report_check = next(
+            log_check = next(
                 check
                 for check in oracle["checks"]
-                if check["name"] == "versione_e_report_coerenti"
+                if check["name"] == "versione_e_log_coerenti"
             )
-            self.assertIn("verdetto=NON PASSA", report_check["detail"])
+            self.assertFalse(log_check["passed"])
 
     def test_oracle_rejects_wrong_mode_declared_in_agents(self):
         source = FAKE_INSTALLER.replace(
@@ -275,12 +258,12 @@ class InstallationHarnessTest(unittest.TestCase):
                     encoding="utf-8"
                 )
             )
-            report_check = next(
+            log_check = next(
                 check
                 for check in oracle["checks"]
-                if check["name"] == "versione_e_report_coerenti"
+                if check["name"] == "versione_e_log_coerenti"
             )
-            self.assertIn("modalita_mappa=codex", report_check["detail"])
+            self.assertIn("modalita_mappa=codex", log_check["detail"])
 
     def test_paths_with_spaces_accents_and_apostrophe_are_supported(self):
         with tempfile.TemporaryDirectory(prefix="percorso città d'Artù - ") as tmp:

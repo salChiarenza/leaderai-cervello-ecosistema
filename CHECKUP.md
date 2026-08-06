@@ -45,7 +45,7 @@ Oggetto: `Checkup Ecosistema`
 STATO PER LE PERSONE
 Fatto: il checkup e' pronto per essere eseguito sull'ambiente reale.
 Manca: diagnosi, riparazioni e prove finali.
-Prossimo passo: l'agente esegue CHECKUP.md fino al rapporto conclusivo.
+Prossimo passo: l'agente esegue CHECKUP.md fino alla conferma finale.
 Intervento umano: solo permessi, accessi o decisioni che l'agente non puo' dare.
 
 ISTRUZIONI PER L'AGENTE
@@ -70,19 +70,19 @@ brandizzati e typo come `LeaderAI`, `Leader AI`, `leaderai`, `leader ai`,
 
 Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari e
 salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie della
-casa. Se usi `REPORT_FINALE.md` come appoggio temporaneo, promuovi i fatti e
-eliminalo nello stesso giro. Archivia l'email della missione e chiudi
-localmente: zero email di ritorno.
+casa. Se trovi il residuo legacy `REPORT_FINALE.md`, promuovi i fatti ancora
+correnti e spostalo nel Cestino nello stesso giro. Archivia l'email della
+missione e chiudi localmente.
 ```
 
 Sei l'agente AI sul computer del proprietario. Fai la diagnosi della
 configurazione, la confronti con la documentazione UFFICIALE VIVA e **ripari
 da solo quello che trovi rotto o mancante, nello stesso turno**. Regola
-LeaderAI (autodiagnosi + auto-riparazione): niente botta-risposta col
-proprietario, niente referto con domande. Il proprietario riceve il resoconto
-di quello che HAI GIA' sistemato, con la prova.
+LeaderAI (autodiagnosi + auto-riparazione): il proprietario interviene soltanto
+su login, permessi, hardware e scelte vere. La conferma finale mostra quello
+che HAI GIA' sistemato, con la prova.
 
-Il ciclo ordinario produce zero email di report. L'ordine obbligatorio e':
+L'ordine obbligatorio e':
 diagnosi -> riparazione -> prova -> salvataggio nella casa -> chiusura locale.
 Permessi, login, hardware o scelte di business vengono registrati come
 `DA DECIDERE IN CALL`, con il gesto preciso.
@@ -108,8 +108,9 @@ Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
 star leggendo una versione superata.
 
 Leggi davvero `VERSION` e `CHANGELOG.md`. La versione installata si legge prima
-dall'`AGENTS.md` della cartella viva e poi dal solo `logs/install-log.md`;
-un vecchio `REPORT_FINALE.md` puo' essere un indizio, mai la fonte corrente.
+dall'`AGENTS.md` della cartella viva e poi dal solo `logs/install-log.md`.
+`REPORT_FINALE.md` e' un residuo legacy da migrare nelle fonti proprietarie e
+spostare nel Cestino.
 Registra il confronto `installata -> standard vivo`, applica tutte le lezioni
 compatibili emerse dopo la versione installata e aggiorna `AGENTS.md` soltanto
 dopo aver ripetuto i collaudi.
@@ -172,7 +173,7 @@ brandizzati, abbreviati o scritti male.
   `_leaderai`, `_leaderai_install` (legacy), `install`, `setup`, `standard`, `repo`, `clone`,
   `leaderai-cervello-ecosistema`;
 - cartelle con `AGENTS.md`, `CLAUDE.md`, `memory/MEMORY.md`, `ecosistema/`,
-  `logs/`, `REPORT_FINALE.md` o `.git`.
+  `logs/` o `.git`; la presenza di `REPORT_FINALE.md` segnala un residuo legacy.
 
 Su Windows, se puoi usare PowerShell, una ricerca minima accettabile e':
 
@@ -190,8 +191,7 @@ strumenti del sistema. Se non fai questa ricerca, non puoi scrivere "nessuna car
 Segnali di vita da pesare piu' del nome:
 
 - `memory/MEMORY.md compilata`, non solo file vuoto o template;
-- `logs/ con attivita'` o resoconti gia' scritti;
-- `REPORT_FINALE.md compilato`;
+- `logs/ con attivita'`;
 - `ecosistema/ASSET.md`, `FONTI.md`, `PROCESSI.md` o `LIMITI.md` con contenuto
   del proprietario;
 - `commit git` oltre al primo commit tecnico;
@@ -260,7 +260,7 @@ dell'altro agente per prudenza.
 ### Fonti ufficiali verificate nel checkup
 
 Le docs cambiano: apri oggi le fonti del ramo attivo, registra URL e data nel
-report e non rispondere a memoria. Le tre fonti dichiarate in
+log tecnico e usa le fonti correnti. Le tre fonti dichiarate in
 `install_contract.json -> official_sources` sono obbligatorie in ogni checkup:
 
 - Claude Code, panoramica ufficiale:
@@ -336,7 +336,7 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
 3. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
-   dove stanno memoria, log, Ecosistema e report.
+   dove stanno memoria, log ed Ecosistema.
 4. **Ponte Claude universale** — `CLAUDE.md` esiste alla radice come file
    regolare e contiene esattamente `@AGENTS.md` seguito da una nuova riga.
    Converti i symlink legacy; una copia indipendente non e' conforme.
@@ -353,8 +353,7 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    un'altra directory. Due memorie divergenti bloccano il verdetto finche' non
    vengono riconciliate.
 7. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
-   password, credenziali e
-   `REPORT_FINALE.md` prima di qualunque commit.
+   password e credenziali prima di qualunque commit.
 
 ### B. Ramo Codex — solo se Codex e' attivo
 
@@ -421,8 +420,8 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 
 - `install_contract.json -> official_sources` non e' stato letto, una delle tre
-  fonti ufficiali obbligatorie non e' stata aperta oggi, oppure il report non
-  collega la regola ufficiale allo stato osservato e alla prova;
+  fonti ufficiali obbligatorie non e' stata aperta oggi, oppure il log tecnico
+  non collega la regola ufficiale allo stato osservato e alla prova;
 - una guida operativa e' stata usata come specifica tecnica per creare o
   modificare file senza una pagina tecnica ufficiale che sostenga la modifica;
 - il `VERSION` corrente della repo ufficiale non e' stato letto, la versione
@@ -470,8 +469,8 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - una mappa o un indice Markdown (`AGENTS.md`, `MEMORY.md`, `AGENT_CHAT.md`)
   supera i limiti macchina di righe o byte senza essere stato alleggerito e
   ricondotto alle fonti proprietarie;
-- `REPORT_FINALE.md` e' stantio, senza data/stato, versionato in Git o usato
-  come fonte corrente insieme al log;
+- `REPORT_FINALE.md` e' ancora presente invece di essere stato migrato nelle
+  fonti proprietarie e spostato nel Cestino;
 - un contenuto business modificabile ha due padroni, e' hardcoded nel codice o
   produce derivati senza fallire visibilmente quando la fonte manca;
 - una configurazione credenziali vive fuori `.secrets/`, oppure la sua presenza
@@ -567,11 +566,9 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
    sotto, dal piu' recente. `logs/install-log.md` registra soltanto
    installazione, aggiornamenti versione e cambi di struttura; non tutta la
    produzione business.
-2. **Report temporaneo.** Se `REPORT_FINALE.md` fotografa una missione vecchia,
-   promuovi i soli fatti ancora veri nelle fonti proprietarie, rimuovilo
-   dall'indice Git se necessario e crea il report corrente con `VALIDO AL` e
-   `STATO MISSIONE`. Prima della chiusura locale promuovi i fatti e
-   eliminalo.
+2. **Residuo legacy.** Se esiste `REPORT_FINALE.md`, promuovi i soli fatti
+   ancora veri nelle fonti proprietarie, rimuovilo dall'indice Git se
+   necessario e spostalo nel Cestino.
 3. **Igiene Markdown.** Misura righe e byte di tutti i file `.md`, esclusi Git
    e case protette. Le soglie sono una sola fonte macchina in
    `install_contract.json -> inspection_policies -> markdown_hygiene`:
@@ -623,7 +620,7 @@ missione che lo avvia.
 
 Non contano come prova operativa:
 
-- l'email della missione, del checkup o del report usata per dimostrare che la
+- l'email della missione o del checkup usata per dimostrare che la
   casella di lavoro del cliente e' collegata;
 - una richiesta inventata dall'agente durante il checkup e poi presentata come
   richiesta reale del cliente;
@@ -750,7 +747,7 @@ Collegamenti monte/valle OK / RIPARATO / PROPOSTA - ...
 Capacita' isolate       OK / RIPARATO / PROPOSTA - ...
 Cartelle generiche/vuote OK / RIPARATO / NON PASSA - ...
 File sciolti in home    OK / RIPARATO / NON PASSA - ...
-Stato/report/log        OK / RIPARATO / NON PASSA - una domanda, una fonte...
+Stato/memoria/log       OK / RIPARATO / NON PASSA - una domanda, una fonte...
 Fonti business/codice   OK / RIPARATO / NON PASSA - fonte + derivati...
 Credenziali/history     OK / RIPARATO / NON PASSA - soli percorsi/metadati...
 Firma/timbro            OK / RIPARATO / NON PASSA - ASSET + casa + limite...
@@ -780,7 +777,8 @@ partire dall'installazione (`INSTALLA_CON_AI.md`).
 Una missione LeaderAI finisce sulla macchina del cliente quando il lavoro
 eseguibile e' completo, provato, salvato nelle fonti proprietarie e l'ambiente
 e' stato chiuso. L'email della missione e' l'unico messaggio del ciclo
-ordinario: zero email di ritorno.
+ordinario: zero aggiornamenti intermedi. Quando la missione richiede una
+conferma finale, ne parte una sola dopo il collaudo completo.
 
 Stati della missione:
 
@@ -795,8 +793,7 @@ Stati della missione:
    umano vero e superfici aperte da te (email, browser, tab, form, preview, app
    temporanee).
 4. `SALVATAGGIO NELLA CASA` - aggiorna i file proprietari con stato, prove,
-   prossimo passo e scadenze. Se usi `REPORT_FINALE.md`, resta un appoggio
-   temporaneo; promuovi i fatti stabili prima di eliminarlo.
+   prossimo passo e scadenze.
 5. `CHIUSURA LOCALE` - usa
    `logs/install-log.md` soltanto se e' cambiata la struttura/installazione,
    archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
@@ -830,8 +827,7 @@ missione.
 ## Chiusura locale
 
 1. Promuovi stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
-2. Elimina `REPORT_FINALE.md` dopo la promozione e archivia l'email della
-   missione. Il ciclo ordinario produce zero email di ritorno.
+2. Archivia l'email della missione.
 3. Chiudi l'ambiente operativo usato per la missione: pagine web, tab browser,
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
    personali del proprietario o superfici che deve decidere lui: dichiarale come

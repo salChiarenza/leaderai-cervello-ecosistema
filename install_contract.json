@@ -149,8 +149,7 @@
     ],
     "forbidden": [],
     "external_effects": [
-      "git_baseline",
-      "temporary_report"
+      "git_baseline"
     ],
     "semantic_requirements": [
       "canonical_memory_index"
@@ -227,11 +226,6 @@
     "git_baseline": {
       "scope": "target",
       "description": "Inizializza Git e crea il primo commit solo per una casa nuova."
-    },
-    "temporary_report": {
-      "scope": "target",
-      "path": "REPORT_FINALE.md",
-      "description": "Crea o aggiorna il report temporaneo, escluso da Git."
     },
     "claude_user_settings": {
       "scope": "user",

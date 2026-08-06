@@ -81,10 +81,9 @@ gesto umano vero previsto dal `CHECKUP.md`.
 14. Per ogni problema incontrato registra causa, riparazione, prova e
     `LEZIONE CANDIDATA`. Se e' ripetibile, la lezione va restituita a LeaderAI
     per diventare regola e test della release successiva.
-15. Completa il resoconto locale. Aprilo con `STATO PER LE PERSONE`: `Fatto`,
-    `Manca`, `Prossimo passo`, `Intervento umano`; poi inserisci dettagli e
-    prove tecniche. Ogni invio esterno richiede autorizzazione esplicita del
-    proprietario.
+15. Salva i fatti nelle fonti proprietarie e completa la conferma finale con
+    esito e prove essenziali. Ogni invio esterno richiede autorizzazione
+    esplicita del proprietario.
 
 ## Uscita obbligatoria
 

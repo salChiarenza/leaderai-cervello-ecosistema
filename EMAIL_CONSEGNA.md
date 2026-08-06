@@ -13,6 +13,9 @@ istruzioni esecutive; dalla sezione `ISTRUZIONI PER L'AGENTE` tutti i verbi
 parlano allo stesso lettore. Il proprietario interviene nei gesti umani che
 l'agente gli presenta.
 
+Il ciclo produce zero aggiornamenti intermedi. Quando Sal richiede la conferma
+finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
+
 ## Stato prova destinatario
 
 `PROVA_DESTINATARIO_DA_RIFARE — 06/08/2026`
@@ -53,13 +56,13 @@ La prova della 0.5.4 viene registrata dopo pubblicazione del nuovo tag.
    bloccano la consegna e richiedono approfondimento competente.
 7. Mostra al proprietario oggetto, corpo HTML e fallback testuale completi.
 8. L'autorizzazione esplicita del proprietario attiva questo invio.
-9. Il report temporaneo viene creato, collaudato e mostrato localmente; i fatti
-   stabili passano nelle fonti proprietarie e il report viene eliminato.
-10. Verifica che missione e report inizino con `STATO PER LE PERSONE`: `Fatto`,
-   `Manca`, `Prossimo passo`, `Intervento umano`.
-11. Compila il blocco `CHIUSURA LOCALE`: email missione unico messaggio, zero
-    email di ritorno, salva tutto nella casa del cliente, chiudi localmente e
-    usa `DA DECIDERE IN CALL` per i gesti umani.
+9. Stato, prove, memoria, asset, processi e limiti vengono salvati direttamente
+   nelle rispettive fonti proprietarie.
+10. Verifica che la missione inizi con `STATO PER LE PERSONE`: `Fatto`,
+    `Manca`, `Prossimo passo`, `Intervento umano`.
+11. Compila il blocco `CHIUSURA LOCALE`: salva tutto nella casa del cliente,
+    chiudi localmente e usa `DA DECIDERE IN CALL` per i gesti umani. Una
+    conferma esterna parte soltanto quando Sal la richiede nella missione.
 12. Inserisci la legge dell'unico `BLOCCO REALE`: una sola domanda nello stesso
     canale soltanto dopo i tentativi sicuri, poi ripresa della stessa missione.
 13. Se Sal richiede una conferma finale, autorizza una sola risposta e soltanto
@@ -94,8 +97,8 @@ l'ambiente di [NOME].</strong></p>
 ordinario.</li>
 <li>Completa e prova il lavoro, poi <strong>salva tutto nella casa del
 cliente</strong>.</li>
-<li>Produci <strong>zero email di ritorno</strong> e <strong>chiudi
-localmente</strong> la missione.</li>
+<li><strong>Chiudi localmente</strong> la missione. Una conferma esterna parte
+soltanto quando Sal la richiede.</li>
 <li>Registra decisioni e gesti umani come <strong>DA DECIDERE IN
 CALL</strong>.</li>
 </ul>
@@ -143,7 +146,7 @@ Uso e persone coinvolte: [USO / PERSONE]<br>
 Preparazione di chi opera il sistema: [PROVA ARTICOLO 4]<br>
 Esito e presidio: [CLASSE DI RISCHIO / TRASPARENZA O ALTRO PRESIDIO]</p>
 
-<p>Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre
+<p>Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Registra nelle fonti proprietarie se stai operando come Claude Code o Codex. Il telaio comune comprende sempre
 <code>AGENTS.md</code> e <code>CLAUDE.md</code> con
 <code>@AGENTS.md</code>. Configura <code>.codex/</code> soltanto per Codex,
 <code>.claude/</code> soltanto per Claude Code, entrambe soltanto se LeaderAI
@@ -175,13 +178,10 @@ mappa alla fonte brand e all'output. In modalita' <code>both</code> prova anche
 l'handoff Codex -&gt; Claude Code -&gt; Codex in <code>AGENT_CHAT.md</code>, con un
 solo ID missione e tre sessioni distinte.</p>
 
-<p>Completa il <code>REPORT_FINALE.md</code> temporaneo con data e stato.
-Aprilo con <code>STATO PER LE PERSONE</code> e le quattro righe
-<code>Fatto</code>, <code>Manca</code>, <code>Prossimo passo</code> e
-<code>Intervento umano</code>, prima dei dettagli tecnici. Mostralo localmente
-a [NOME], promuovi i fatti nelle fonti proprietarie e poi eliminalo. Archivia
-l'email della missione e chiudi pagine, tab, finestre e strumenti aperti per il
-lavoro.</p>
+<p>Salva direttamente stato, prove, memoria, asset, processi e limiti nelle
+rispettive fonti proprietarie. Verifica il risultato che [NOME] vedra',
+archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
+aperti per il lavoro.</p>
 
 <p>Ogni stato intermedio resta nella casa. Se Sal richiede espressamente una
 conferma finale, inviala una volta sola e soltanto con esito
@@ -211,7 +211,8 @@ ID missione: [ID MISSIONE].
 CHIUSURA LOCALE
 - L'email della missione e' l'unico messaggio del ciclo ordinario.
 - Completa e prova il lavoro, poi salva tutto nella casa del cliente.
-- Produci zero email di ritorno e chiudi localmente la missione.
+- Chiudi localmente la missione. Una conferma esterna parte soltanto quando Sal
+  la richiede.
 - Registra decisioni e gesti umani come DA DECIDERE IN CALL.
 
 UNICO BLOCCO REALE
@@ -261,7 +262,7 @@ Uso e persone coinvolte: [USO / PERSONE]
 Preparazione di chi opera il sistema: [PROVA ARTICOLO 4]
 Esito e presidio: [CLASSE DI RISCHIO / TRASPARENZA O ALTRO PRESIDIO]
 
-Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Dichiara nel report se stai operando come Claude Code o Codex. Il telaio comune comprende sempre AGENTS.md e
+Rileva l'agente attivo (Claude Code o Codex) e il sistema operativo come primo passo dell'autodiagnosi. Registra nelle fonti proprietarie se stai operando come Claude Code o Codex. Il telaio comune comprende sempre AGENTS.md e
 CLAUDE.md con @AGENTS.md. Configura .codex/ soltanto per Codex, .claude/
 soltanto per Claude Code, entrambe soltanto su richiesta esplicita LeaderAI.
 
@@ -288,11 +289,10 @@ Registra il percorso autonomo dalla mappa alla fonte brand e all'output. In
 modalita' both prova anche l'handoff Codex -> Claude Code -> Codex in
 AGENT_CHAT.md, con un solo ID missione e tre sessioni distinte.
 
-Completa il REPORT_FINALE.md temporaneo con data e stato. Aprilo con STATO PER
-LE PERSONE e le quattro righe Fatto, Manca, Prossimo passo e Intervento umano,
-prima dei dettagli tecnici. Mostralo localmente a [NOME], promuovi i fatti
-nelle fonti proprietarie e poi eliminalo. Archivia l'email della missione e
-chiudi pagine, tab, finestre e strumenti aperti per il lavoro.
+Salva direttamente stato, prove, memoria, asset, processi e limiti nelle
+rispettive fonti proprietarie. Verifica il risultato che [NOME] vedra',
+archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
+aperti per il lavoro.
 
 Ogni stato intermedio resta nella casa. Se Sal richiede espressamente una
 conferma finale, inviala una volta sola e soltanto con esito PASSA. Apri con

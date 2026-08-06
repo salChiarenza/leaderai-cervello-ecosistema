@@ -442,7 +442,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "UNCLASSIFIED_DIR",
                 "GENERIC_DIR",
                 "CLAUDE_MEMORY_DIVERGED",
-                "STALE_REPORT",
+                "LEGACY_MISSION_FILE",
                 "CREDENTIAL_FILE_OUTSIDE_SECRETS",
                 "BUSINESS_SOURCE_UNDECLARED",
                 "BUSINESS_CONTENT_HARDCODED_RISK",

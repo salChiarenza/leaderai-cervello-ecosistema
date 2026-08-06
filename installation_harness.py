@@ -66,7 +66,7 @@ def _contract_required(mode: str) -> tuple[str, ...]:
         for rule in install_contract.template_rules(INSTALL_CONTRACT, mode)
     ]
     required = install_contract.required_paths(INSTALL_CONTRACT, mode)
-    return tuple(dict.fromkeys((*destinations, *required, "REPORT_FINALE.md")))
+    return tuple(dict.fromkeys((*destinations, *required)))
 
 
 MODE_REQUIRED_FILES = {
@@ -129,13 +129,11 @@ Esegui il nucleo deterministico della procedura manuale:
 - non inventare stanze, fonti, asset, connettori o percorsi business;
 - lascia le prove che richiedono account, browser, impostazioni utente o dati
   reali come `DA COLLAUDARE` o `DA COLLEGARE`, senza fermare il telaio;
-- registra nel report, con queste chiavi esatte, `default_browser`,
+- registra in `logs/install-log.md`, con queste chiavi esatte, `default_browser`,
   `desktop_launcher` e `remote_backup`, ciascuna con stato `DA COLLAUDARE` o
   `DA COLLEGARE`;
-- completa `REPORT_FINALE.md` con `VALIDO AL`, `STATO MISSIONE: APERTA`,
-  standard e versione letti, modalita', prove svolte, limiti e una sezione
-  `## Verdetto` uguale a `PASSA CON ATTENZIONE` quando restano soltanto i tre
-  controlli macchina differiti;
+- registra nello stesso evento del log standard, versione, modalita', prove
+  svolte e limiti; la conferma finale resta nel messaggio conclusivo;
 - il messaggio del primo commit contiene esattamente `installazione iniziale`.
 
 La fotografia `standard-snapshot/` e' intoccabile. Non copiare dentro il target
@@ -477,7 +475,6 @@ def inspect_git(target: Path) -> dict[str, Any]:
         "log": "",
         "status": "",
         "remotes": "",
-        "tracked_report": False,
         "ignored_safety_paths": [],
         "error": None,
     }
@@ -507,11 +504,7 @@ def inspect_git(target: Path) -> dict[str, Any]:
     evidence["status"] = status_result.stdout
     remotes = _run_git(target, ["remote", "-v"])
     evidence["remotes"] = remotes.stdout
-    tracked = _run_git(target, ["ls-files", "--error-unmatch", "REPORT_FINALE.md"])
-    evidence["tracked_report"] = tracked.returncode == 0
-
     safety_paths = (
-        "REPORT_FINALE.md",
         ".secrets/prova.txt",
         "prova.env",
         "api-token-prova.txt",
@@ -539,31 +532,14 @@ def _read_text(target: Path, relative: str) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def _report_mode(report: str) -> str | None:
+def _log_mode(install_log: str) -> str | None:
     match = re.search(
-        r"(?im)^\s*(?:[-*]\s*)?modalit(?:a'?|à)"
+        r"(?im)^\s*(?:[-*]\s*)?(?:agent|modalit(?:a'?|à))"
         r"(?:\s+(?:scelta|installata|attiva))?\s*:\s*"
         r"`?(codex|claude|both)`?(?=\s|[.;,(]|$)",
-        report,
+        install_log,
     )
     return match.group(1).casefold() if match else None
-
-
-def _report_verdict(report: str) -> str | None:
-    match = re.search(
-        r"(?ims)^##\s+verdetto\s*$\s*(.*?)(?=^##\s|\Z)",
-        report,
-    )
-    if not match:
-        return None
-    section = re.sub(r"[*_`]", "", match.group(1)).casefold()
-    if re.search(r"\bnon\s+passa\b", section):
-        return "NON PASSA"
-    if re.search(r"\bpassa\s+con\s+attenzione\b", section):
-        return "PASSA CON ATTENZIONE"
-    if re.search(r"(?m)^\s*passa\s*[.!;:]?\s*$", section):
-        return "PASSA"
-    return None
 
 
 def evaluate_oracle(
@@ -577,7 +553,7 @@ def evaluate_oracle(
     target_after: dict[str, Any],
     git_evidence: dict[str, Any],
 ) -> dict[str, Any]:
-    """Verifica parita' manuale, modalita', Git, versione e report."""
+    """Verifica parita' manuale, modalita', Git, versione e log tecnico."""
 
     version = (snapshot / "VERSION").read_text(encoding="utf-8").strip()
     present_files = set(target_after["files"])
@@ -594,42 +570,27 @@ def evaluate_oracle(
     )
 
     agents = _read_text(target, "AGENTS.md")
-    report = _read_text(target, "REPORT_FINALE.md")
     install_log = _read_text(target, "logs/install-log.md")
     bridge = _read_text(target, "CLAUDE.md")
     gitignore = _read_text(target, ".gitignore")
 
-    report_folded = report.casefold()
+    install_log_folded = install_log.casefold()
     declared_mode = install_contract.declared_agent(agents)
-    reported_mode = _report_mode(report)
+    logged_mode = _log_mode(install_log)
     version_ok = (
         version in agents
-        and version in report
+        and version in install_log
         and declared_mode == mode
-        and reported_mode == mode
-    )
-    report_markers = (
-        "valido al",
-        "stato missione: aperta",
-        "standard",
-        "versione",
-        "modalita",
-        "verdetto",
-    )
-    verdict = _report_verdict(report)
-    report_ok = (
-        bool(report)
-        and all(marker in report_folded for marker in report_markers)
-        and verdict in {"PASSA", "PASSA CON ATTENZIONE"}
+        and logged_mode == mode
     )
     deferred_checks_recorded = (
-        "da collaudare" in report_folded
-        or "da collegare" in report_folded
+        "da collaudare" in install_log_folded
+        or "da collegare" in install_log_folded
     )
     environment_checks_recorded = all(
         re.search(
             rf"{re.escape(check)}.{{0,120}}\bda\s+(?:collaudare|collegare)\b",
-            report_folded,
+            install_log_folded,
             flags=re.DOTALL,
         )
         for check in install_contract.environment_checks(INSTALL_CONTRACT)
@@ -646,7 +607,6 @@ def evaluate_oracle(
         rule for rule in required_ignore_rules if rule not in gitignore.splitlines()
     )
     expected_ignored = {
-        "REPORT_FINALE.md",
         ".secrets/prova.txt",
         "prova.env",
         "api-token-prova.txt",
@@ -661,7 +621,6 @@ def evaluate_oracle(
         and git_evidence["commit_count"] >= 1
         and "installazione iniziale" in git_evidence["log"].casefold()
         and not git_evidence["status"].strip()
-        and not git_evidence["tracked_report"]
         and not git_evidence["remotes"].strip()
         and expected_ignored <= ignored_observed
     )
@@ -723,15 +682,13 @@ def evaluate_oracle(
             repr(bridge),
         ),
         _check(
-            "versione_e_report_coerenti",
+            "versione_e_log_coerenti",
             version_ok
-            and report_ok
             and deferred_checks_recorded
             and environment_checks_recorded,
             (
                 f"versione={version}; modalita_mappa={declared_mode}; "
-                f"modalita_report={reported_mode}; verdetto={verdict}; "
-                f"marker_report={report_ok}; "
+                f"modalita_log={logged_mode}; "
                 f"prove_differite={deferred_checks_recorded}; "
                 f"controlli_ambiente={environment_checks_recorded}"
             ),
@@ -744,7 +701,6 @@ def evaluate_oracle(
                 f"commit={git_evidence['commit_count']}; "
                 f"pulito={not bool(git_evidence['status'].strip())}; "
                 f"remoti={bool(git_evidence['remotes'].strip())}; "
-                f"report_tracciato={git_evidence['tracked_report']}; "
                 f"regole_mancanti={ignore_missing}"
             ),
         ),
@@ -774,7 +730,7 @@ def evaluate_oracle(
             "target_partito_vuoto_ed_evidenze_osservabili",
             not target_before["files"]
             and bool(target_diff["added_files"])
-            and "REPORT_FINALE.md" in target_diff["added_files"],
+            and "logs/install-log.md" in target_diff["added_files"],
             json.dumps(target_diff, ensure_ascii=False, sort_keys=True),
         ),
     ]
@@ -899,7 +855,6 @@ def run_installation(
         _write_json(evidence_dir / "oracle.json", oracle)
 
         for relative, evidence_name in (
-            ("REPORT_FINALE.md", "observed-report.md"),
             ("logs/install-log.md", "observed-install-log.md"),
             ("AGENTS.md", "observed-agents.md"),
         ):

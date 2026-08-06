@@ -50,20 +50,19 @@ la cartella viva come caso reale.
 11. Dalla radice prova una richiesta per ciascuna variante reale: l'agente deve
     trovare stanza, fonte, capacita' e output senza che gli venga suggerito il
     percorso.
-12. Registra esito, file creati, prove, fonti e decisioni aperte in
-   `logs/install-log.md` e nel report finale della missione.
+12. Registra esito, file creati, prove, fonti e decisioni aperte nelle fonti
+   proprietarie; usa `logs/install-log.md` soltanto per i cambi tecnici.
 13. Commit della cartella viva se il repository Git è già configurato. Mantieni
    dati personali e segreti fuori dal commit.
-14. Completa il resoconto locale, mostralo al proprietario e chiedi
-    autorizzazione esplicita all'invio. Fino al suo si' lo stato e'
-    `PRONTO DA INVIARE`.
-15. Solo dopo il si', invia davvero il resoconto a `sal@salchiarenza.ai`,
-    archivia l'email della missione nello stesso giro e passa a `SAL_VERIFICA`.
-16. Attendi `CONTINUA` oppure `CHIUDI`.
+14. Verifica il risultato finale, mostralo al proprietario e chiedi
+    autorizzazione esplicita all'invio quando la missione richiede una
+    conferma esterna.
+15. Dopo il si', invia la conferma a `sal@salchiarenza.ai`, archivia l'email
+    della missione nello stesso giro e chiudi localmente.
 
 ## Esito richiesto
 
-Il resoconto include:
+La chiusura verifica:
 
 - cartella viva scelta e segnali usati;
 - stanza proprietaria scelta, classificazione e collegamenti monte/valle;

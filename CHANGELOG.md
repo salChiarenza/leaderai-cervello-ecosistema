@@ -13,6 +13,11 @@
   missione. Vietati avanzamenti e istruzioni a puntate.
 - Rimossi dal contratto operativo i cicli di rapporti intermedi,
   `SAL_VERIFICA`, `CONTINUA` e `CHIUDI`.
+- Il setup e il collaudo non creano piu' `REPORT_FINALE.md`: stato e prove
+  vengono salvati direttamente nelle fonti proprietarie. L'Ispettore riconosce
+  il vecchio file come residuo da migrare e spostare nel Cestino.
+- Il ciclo produce zero aggiornamenti intermedi; quando la missione richiede
+  una conferma finale, ne parte una sola dopo il collaudo completo.
 
 ## Non pubblicato - 05/08/2026
 

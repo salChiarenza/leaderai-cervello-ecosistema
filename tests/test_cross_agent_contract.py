@@ -133,7 +133,7 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertIn("SHA256 verificato", email)
         self.assertNotIn("/blob/main/", email)
         self.assertIn("autorizzazione esplicita", email)
-        self.assertIn("zero email di ritorno", email)
+        self.assertIn("zero aggiornamenti intermedi", email)
         self.assertNotIn("eventuale invio del report", email)
         self.assertIn("PROVA_DESTINATARIO", email)
         self.assertIn("AI_ACT_CHECK_OK", email)
@@ -232,7 +232,7 @@ class CrossAgentContractTest(unittest.TestCase):
 
         self.assertNotIn("fai un nuovo autocontrollo e mandi un nuovo", checkup)
         self.assertNotIn("nuova autorizzazione prima dell'invio finale", checkup)
-        self.assertIn("zero email di ritorno", checkup)
+        self.assertIn("zero aggiornamenti intermedi", checkup)
         self.assertIn("SALVATAGGIO NELLA CASA", checkup)
         self.assertIn("manca `AGENT_CHAT.md`", checkup)
 
@@ -248,8 +248,11 @@ class CrossAgentContractTest(unittest.TestCase):
         ):
             text = " ".join(self.read(relative).split())
             with self.subTest(relative=relative):
-                self.assertIn("zero email di ritorno", text)
-                self.assertIn("chiusura locale", text.lower())
+                self.assertIn("una volta sola", text)
+                self.assertTrue(
+                    "chiusura locale" in text.lower()
+                    or "chiude localmente" in text.lower()
+                )
                 self.assertIn("DA DECIDERE IN CALL", text)
                 self.assertNotIn("CONTINUA TERMINALE", text)
 

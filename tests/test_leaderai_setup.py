@@ -70,13 +70,13 @@ class LeaderAISetupTest(unittest.TestCase):
                     has_claude,
                 )
 
-                report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-                self.assertIn(
-                    "File comuni sempre presenti: `AGENTS.md`, `CLAUDE.md`",
-                    report,
+                self.assertFalse((target / "REPORT_FINALE.md").exists())
+                log = (target / "logs" / "install-log.md").read_text(
+                    encoding="utf-8"
                 )
+                self.assertIn(f"- Agent: {agent}", log)
                 for config in active_config.split(", "):
-                    self.assertIn(config, report)
+                    self.assertTrue((target / config.strip("`")).exists())
 
     def test_creates_cervello_and_ecosistema(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -110,35 +110,21 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertTrue((target / "memory" / "MEMORY.md").exists())
             self.assertTrue((target / "ecosistema" / "FONTI.md").exists())
             self.assertTrue((target / "ecosistema" / "ASSET.md").exists())
-            self.assertTrue((target / "REPORT_FINALE.md").exists())
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
 
             agents = (target / "AGENTS.md").read_text(encoding="utf-8")
             asset = (target / "ecosistema" / "ASSET.md").read_text(encoding="utf-8")
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
+            log = (target / "logs" / "install-log.md").read_text(encoding="utf-8")
             self.assertIn("Cliente Test", agents)
             self.assertIn("Modalita' installata: `claude`.", agents)
             self.assertIn("Comunicazione e fonti di verita'", agents)
             self.assertIn("AGENT_CHAT.md", agents)
             self.assertTrue((target / "AGENT_CHAT.md").exists())
             self.assertIn("Asset operativi", asset)
-            self.assertIn("STATO PER LE PERSONE", report)
-            self.assertIn("Fatto:", report)
-            self.assertIn("Manca:", report)
-            self.assertIn("Prossimo passo:", report)
-            self.assertIn("Intervento umano:", report)
-            self.assertIn("FASE 1 - CERVELLO", report)
-            self.assertIn("STANDARD APPLICATO", report)
             self.assertIn(
-                f"Versione: {leaderai_setup.STANDARD_VERSION}",
-                report,
+                f"- Standard version: {leaderai_setup.STANDARD_VERSION}", log
             )
-            self.assertIn("FASE 2 - ECOSISTEMA", report)
-            self.assertIn("MAPPA COMUNICAZIONE", report)
-            self.assertIn("Procedure e 'come si fa'", report)
-            self.assertIn("MAPPA MODULI", report)
-            self.assertIn("PEC/email certificata", report)
-            self.assertIn("Calendario operativo", report)
-            self.assertIn("Skill per lavori ripetuti", report)
+            self.assertIn("- Agent: claude", log)
             self.assertIn("Architettura adattiva", agents)
             self.assertFalse((target / "resoconti").exists())
 
@@ -310,9 +296,9 @@ class LeaderAISetupTest(unittest.TestCase):
             blocked = leaderai_setup.run_setup(target, "Cliente Test", "codex")
 
             self.assertTrue(blocked.blockers)
+            self.assertEqual(blocked.target_verdict, "NON PASSA")
             self.assertTrue((target / "CLAUDE.md").is_symlink())
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-            self.assertIn("NON PASSA", report)
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
 
             result = leaderai_setup.run_setup(
                 target, "Cliente Test", "codex", force=True
@@ -345,8 +331,8 @@ class LeaderAISetupTest(unittest.TestCase):
                 wrong_bridge,
             )
             self.assertTrue(preserved.blockers)
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-            self.assertIn("NON PASSA", report)
+            self.assertEqual(preserved.target_verdict, "NON PASSA")
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
 
             repaired = leaderai_setup.run_setup(
                 target,
@@ -418,11 +404,8 @@ class LeaderAISetupTest(unittest.TestCase):
             for rel, content in protected.items():
                 self.assertEqual((target / rel).read_text(encoding="utf-8"), content)
             report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-            self.assertTrue(report.startswith(old_report))
-            self.assertIn(
-                "REPORT_FINALE.md esiste ma non e' riconoscibile",
-                " | ".join(result.blockers),
-            )
+            self.assertEqual(report, old_report)
+            self.assertEqual(result.target_verdict, "NON PASSA")
             self.assertIn("CLAUDE.md", result.updated)
 
     def test_gitignore_adds_every_missing_required_rule_once(self):
@@ -556,12 +539,10 @@ class LeaderAISetupTest(unittest.TestCase):
             ):
                 result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
 
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
             log = (target / "logs" / "install-log.md").read_text(encoding="utf-8")
             self.assertIn("primo commit fallito", result.git_outcome)
-            self.assertIn("primo commit fallito", report)
             self.assertIn("primo commit fallito", log)
-            self.assertNotIn("primo commit creato", report)
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
             head = real_run(
                 ["git", "rev-parse", "--verify", "HEAD"],
                 cwd=str(target),
@@ -595,8 +576,8 @@ class LeaderAISetupTest(unittest.TestCase):
 
             self.assertEqual(completed.returncode, 2)
             self.assertIn("created=", completed.stdout)
-            report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
-            self.assertIn("NON PASSA", report)
+            self.assertIn("verdict=NON PASSA", completed.stdout)
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
 
     def test_identical_rerun_does_not_append_log_or_create_commit(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -688,7 +669,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertEqual(staged, "")
             self.assertIn("cliente-non-toccare.txt", untracked)
 
-    def test_unknown_report_is_preserved_and_blocks_overwrite(self):
+    def test_legacy_report_is_preserved_and_blocks_completion(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Migrazione"
             target.mkdir()
@@ -700,28 +681,22 @@ class LeaderAISetupTest(unittest.TestCase):
 
             report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
             self.assertEqual(report, old)
-            self.assertIn(
-                "REPORT_FINALE.md esiste ma non e' riconoscibile",
-                " | ".join(result.blockers),
-            )
+            self.assertEqual(result.target_verdict, "NON PASSA")
 
-    def test_managed_report_is_replaced_not_appended(self):
+    def test_legacy_report_is_never_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Migrazione"
             leaderai_setup.run_setup(target, "Cliente Test", "codex")
             report_path = target / "REPORT_FINALE.md"
-            old = report_path.read_text(encoding="utf-8")
+            old = "# Residuo storico\n\nFatto del cliente\n"
+            report_path.write_text(old, encoding="utf-8")
             (target / ".codex" / "README.md").unlink()
 
             result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
 
             report = report_path.read_text(encoding="utf-8")
-            self.assertNotEqual(report, old)
-            self.assertEqual(report.count("STATO MISSIONE:"), 1)
-            self.assertEqual(report.count("VERDETTO"), 1)
-            self.assertIn("VALIDO AL:", report)
-            self.assertNotIn("supera il verdetto precedente", report)
-            self.assertFalse(result.blockers)
+            self.assertEqual(report, old)
+            self.assertEqual(result.target_verdict, "NON PASSA")
 
     def test_run_setup_rejects_invalid_agent_before_writing(self):
         with tempfile.TemporaryDirectory() as tmp:

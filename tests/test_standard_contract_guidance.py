@@ -49,7 +49,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "fonte di sola lettura",
             "autorizzazione esplicita e separata",
             "non sono il percorso predefinito",
-            "report di missione viene prima creato e collaudato localmente",
+            "La conferma finale vive nel messaggio conclusivo",
         ]
 
         for phrase in required:
@@ -93,8 +93,8 @@ class StandardContractGuidanceTest(unittest.TestCase):
         )
 
         self.assertIn("autorizzazione esplicita all'invio", text)
-        self.assertIn("PRONTO DA INVIARE", text)
-        self.assertIn("Solo dopo il si'", text)
+        self.assertIn("Dopo il si'", text)
+        self.assertIn("chiudi localmente", text)
 
     def test_checkup_requires_a_bridge_instead_of_an_independent_copy(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
@@ -114,8 +114,8 @@ class StandardContractGuidanceTest(unittest.TestCase):
     def test_installation_email_states_match_the_checkup(self):
         text = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
 
-        self.assertIn("zero email di ritorno", text)
-        self.assertIn("archivia l'email della missione", text)
+        self.assertIn("zero aggiornamenti intermedi", text)
+        self.assertIn("archivia l'email della missione", text.lower())
         self.assertIn("DA DECIDERE IN CALL", text)
         self.assertNotIn("PRONTO DA INVIARE", text)
 
