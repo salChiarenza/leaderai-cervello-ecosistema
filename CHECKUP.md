@@ -69,10 +69,10 @@ brandizzati e typo come `LeaderAI`, `Leader AI`, `leaderai`, `leader ai`,
 `clone`. Ogni risultato va classificato e spiegato.
 
 Fai diagnosi, ripara gli scostamenti riparabili, prova quello che dichiari e
-completa il report finale locale. Mostralo al proprietario e chiedi la sua
-autorizzazione esplicita prima di inviarlo a LeaderAI.
-
-Dopo il report aspetta risposta LeaderAI: `CONTINUA` o `CHIUDI`.
+salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie della
+casa. Se usi `REPORT_FINALE.md` come appoggio temporaneo, promuovi i fatti e
+eliminalo nello stesso giro. Archivia l'email della missione e chiudi
+localmente: zero email di ritorno.
 ```
 
 Sei l'agente AI sul computer del proprietario. Fai la diagnosi della
@@ -82,10 +82,10 @@ LeaderAI (autodiagnosi + auto-riparazione): niente botta-risposta col
 proprietario, niente referto con domande. Il proprietario riceve il resoconto
 di quello che HAI GIA' sistemato, con la prova.
 
-Non inviare report intermedi del tipo "dimmi cosa faccio / manca questo / cosa
-non va". L'ordine obbligatorio e': diagnosi -> riparazione -> prova ->
-resoconto finale. Restano fuori solo permessi, login, hardware o scelte di
-business che non puoi decidere da solo.
+Il ciclo ordinario produce zero email di report. L'ordine obbligatorio e':
+diagnosi -> riparazione -> prova -> salvataggio nella casa -> chiusura locale.
+Permessi, login, hardware o scelte di business vengono registrati come
+`DA DECIDERE IN CALL`, con il gesto preciso.
 
 Ripari da solo: file standard mancanti, frontmatter sbagliati, symlink/copie
 disallineate, configurazioni errate, memoria non agganciata, permessi con
@@ -290,21 +290,25 @@ Fonti comuni minime:
   <https://code.claude.com/docs/en/memory>
 - Claude Code, auto memory, `autoMemoryDirectory`, scope e trust del workspace:
   <https://code.claude.com/docs/en/memory#storage-location>
-- OpenAI Codex, caricamento gerarchico di `AGENTS.md`:
-  <https://developers.openai.com/codex/guides/agents-md>
+- OpenAI Codex, caricamento gerarchico di `AGENTS.md`, override vicini al
+  lavoro e tetto `project_doc_max_bytes` (32 KiB di default):
+  <https://learn.chatgpt.com/docs/agent-configuration/agents-md>
 - OpenAI Codex, skill condivise di progetto in `.agents/skills/`:
   <https://learn.chatgpt.com/docs/build-skills>
 - Claude Code, skill di progetto in `.claude/skills/`:
   <https://code.claude.com/docs/en/slash-commands>
+- Anthropic, criteri di scrittura delle istruzioni per i modelli di
+  generazione 5 (metro del Passo 2-ter):
+  <https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models>
 
 Se e' attivo **Codex**, apri inoltre:
 
 - configurazione di base e `.codex/config.toml`:
-  <https://developers.openai.com/codex/config-basic>
+  <https://learn.chatgpt.com/docs/config-file/config-basic>
 - riferimento di configurazione:
-  <https://developers.openai.com/codex/config-reference>
+  <https://learn.chatgpt.com/docs/config-file/config-reference>
 - hook, solo se presenti:
-  <https://developers.openai.com/codex/hooks>
+  <https://learn.chatgpt.com/docs/hooks>
 
 Se e' attivo **Claude Code**, apri inoltre:
 
@@ -566,7 +570,8 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
 2. **Report temporaneo.** Se `REPORT_FINALE.md` fotografa una missione vecchia,
    promuovi i soli fatti ancora veri nelle fonti proprietarie, rimuovilo
    dall'indice Git se necessario e crea il report corrente con `VALIDO AL` e
-   `STATO MISSIONE`. Dopo `CHIUDI` viene eliminato.
+   `STATO MISSIONE`. Prima della chiusura locale promuovi i fatti e
+   eliminalo.
 3. **Igiene Markdown.** Misura righe e byte di tutti i file `.md`, esclusi Git
    e case protette. Le soglie sono una sola fonte macchina in
    `install_contract.json -> inspection_policies -> markdown_hygiene`:
@@ -633,6 +638,72 @@ disponibile, scrivi `DA COLLAUDARE`: il processo operativo e il gate
 anti-circolare sono `NON PASSA`. Un test sintetico puo' dimostrare accesso
 tecnico minimo, mai il funzionamento reale dell'Ecosistema.
 
+## Passo 2-ter — Audit delle istruzioni che stringono troppo
+
+Controlla anche se `AGENTS.md`, il ponte/import `CLAUDE.md`, skill, rule o hook
+stanno riducendo qualita' o autonomia. Lunghezza e ripetizione sono indizi; la
+prova e' il comportamento. I casi anonimi iniziali sono in
+`install_contract.json -> inspection_policies -> instruction_audit`: fonte non
+verificata, casa sbagliata, doppione, eccesso di regole/file, conflitto,
+verifica finale mancante e dati disponibili richiesti inutilmente all'utente.
+
+### Lettura veloce prima della prova
+
+La prova comportamentale costa due sessioni per blocco: si spende soltanto sui
+casi che restano dubbi dopo la lettura. Apri prima i criteri ufficiali del ramo
+attivo (articolo Anthropic sui modelli di generazione 5 per Claude Code, pagina
+`agents-md` per Codex) e passa il file cercando questi segnali:
+
+1. **Ordine stretto al posto del criterio.** Una regola che vieta o impone una
+   forma esatta dove basterebbe il criterio di scelta. Segnala `RISCRIVI` con
+   la riformulazione proposta.
+2. **Ovvieta'.** Istruzioni che descrivono comportamenti che il modello attivo
+   tiene gia' da solo. Restano dentro le eccezioni, le trappole e le
+   convenzioni proprie di quella casa. Segnala `CANDIDATA ALLA RIMOZIONE` e
+   manda alla prova solo se il blocco tocca una semantica protetta.
+3. **Procedura lunga nel file sempre letto.** Una sequenza di passi dentro
+   `AGENTS.md` o `CLAUDE.md` va in una skill, che si carica alla chiamata
+   invece di pesare a ogni messaggio. Segnala `SPOSTA NELLA PROCEDURA/SKILL
+   GIUSTA` con la destinazione.
+4. **Doppione tra livelli.** Stessa istruzione in file globale, file di
+   progetto, skill o hook. Segnala `ACCORPA` indicando quale copia resta.
+5. **Memoria scritta a mano.** Righe che duplicano cio' che l'agente salva gia'
+   da solo nella sua memoria.
+6. **Peso misurato.** Per Codex confronta la dimensione di `AGENTS.md` con il
+   tetto `project_doc_max_bytes` (32 KiB di default) e riporta il valore. Per
+   Claude Code riporta l'esito di `/doctor` sul costo della configurazione.
+
+La lettura veloce produce segnalazioni, mai rimozioni. I blocchi che restano
+dubbi, e tutti quelli su semantica protetta, passano alla prova sotto.
+
+Per ogni blocco sospetto:
+
+1. assegna ID, file, scopo, agente, rischio e semantica protetta;
+2. cambia una istruzione o un gruppo coerente: contesto completo contro
+   alleggerito, nessun'altra differenza e nessuna modifica alla casa viva;
+3. esegui la stessa missione in due task/sessioni nuove su copie usa-e-getta e
+   passa soltanto il compito aziendale, senza suggerire cartella, fonte,
+   procedura o risultato atteso;
+4. misura esito osservabile, fonti corrette, instradamento, completamento,
+   richieste/correzioni umane, tempo, consumo quando esposto e sicurezza.
+   Conserva transcript/output/diff senza correzioni nel mezzo; se il risultato
+   non distingue i contesti, ripeti un secondo caso. Un solo caso non puo'
+   produrre `CANDIDATA ALLA RIMOZIONE`.
+
+Il collaudo ripetibile vive in `behavior_harness.py compare-context`: crea due
+target distinti, avvia sessioni effimere e salva `full/`, `lighter/` e
+`comparison.json`. I blocchi sono input temporanei locali; il consumo assente
+resta `N/D`.
+
+Classifica ogni blocco: `MANTIENI` se peggiora una metrica; `ACCORPA` se la
+forma breve assorbe ripetizioni; `SPOSTA NELLA PROCEDURA/SKILL GIUSTA` se il
+dettaglio serve solo all'attivazione; `RISCRIVI` se il testo crea un blocco;
+`CANDIDATA ALLA RIMOZIONE` se casi sufficienti non mostrano rischi.
+
+Sicurezza, privacy, autorizzazione e integrita' sono semantiche protette: non
+si eliminano automaticamente. L'Ispettore propone diff e prova; nessuna
+modifica distruttiva ai file vivi avviene senza approvazione del proprietario.
+
 ## Output (dopo le riparazioni, non prima)
 
 ```text
@@ -667,6 +738,7 @@ Chat di gruppo          OK / RIPARATO / DA FARE - AGENT_CHAT.md presente e disci
 Memoria                 OK / RIPARATO / DA FARE - ...
 Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
+Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
 Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
@@ -705,9 +777,10 @@ partire dall'installazione (`INSTALLA_CON_AI.md`).
 
 ## Protocollo missione chiusa
 
-Una missione LeaderAI non finisce quando mandi il primo report. Finisce solo
-quando arriva la risposta di verifica da LeaderAI oppure quando LeaderAI dice
-esplicitamente di chiudere.
+Una missione LeaderAI finisce sulla macchina del cliente quando il lavoro
+eseguibile e' completo, provato, salvato nelle fonti proprietarie e l'ambiente
+e' stato chiuso. L'email della missione e' l'unico messaggio del ciclo
+ordinario: zero email di ritorno.
 
 Stati della missione:
 
@@ -716,50 +789,50 @@ Stati della missione:
    schema da seguire.
 2. `ESECUZIONE` - fai le azioni richieste: diagnosi, correzione, riparazione,
    prove. Non chiedere "cosa faccio?" se puoi agire.
-3. `AUTOCONTROLLO` - prima di scrivere a Sal, attiva un autocontrollo interno:
+3. `AUTOCONTROLLO` - attiva un autocontrollo interno:
    rileggi la missione, confronta cosa chiedeva con cosa hai fatto, verifica
    prove, file modificati, cartella usata, errori rimasti, punti che richiedono
    umano vero e superfici aperte da te (email, browser, tab, form, preview, app
    temporanee).
-4. `REPORT` - crea o sostituisci il report locale temporaneo con `VALIDO AL`,
-   `STATO MISSIONE`, azioni fatte, prove, cosa hai riparato, cosa resta solo
-   per umano vero e stato di chiusura ambiente.
-   Il report apre con `STATO PER LE PERSONE`: `Fatto`, `Manca`,
-   `Prossimo passo`, `Intervento umano`, prima dei dettagli tecnici.
-   Mostralo al proprietario e chiedi autorizzazione esplicita.
-   Nessuna email parte automaticamente: l'invio e' un gesto separato, eseguito
-   solo dopo un "manda" o autorizzazione equivalente riferita a quel testo.
-5. `SAL_VERIFICA` - dopo l'invio resta in attesa della risposta LeaderAI; la
-   email lavorata è già archiviata e lo stato resta nel report temporaneo. Se l'invio
-   non e' ancora autorizzato, lo stato e' `PRONTO DA INVIARE`, non
-   `SAL_VERIFICA`.
-6. `CONTINUA` - se LeaderAI risponde con nuove azioni o correzioni, lavori
-   ancora sulla stessa missione, fai un nuovo autocontrollo, aggiorni il report
-   locale e lo lasci `PRONTO DA INVIARE`. Mostralo al proprietario e chiedi una
-   nuova autorizzazione prima di ogni nuovo invio.
-7. `CHIUDI` - se LeaderAI conferma che va bene o dice di chiudere, promuovi i
-   fatti stabili nel file proprietario della stanza, usa
+4. `SALVATAGGIO NELLA CASA` - aggiorna i file proprietari con stato, prove,
+   prossimo passo e scadenze. Se usi `REPORT_FINALE.md`, resta un appoggio
+   temporaneo; promuovi i fatti stabili prima di eliminarlo.
+5. `CHIUSURA LOCALE` - usa
    `logs/install-log.md` soltanto se e' cambiata la struttura/installazione,
-   elimina `REPORT_FINALE.md` e chiudi pagine/app aperte da te.
+   archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
+   aperti da te.
 
-Questo autocontrollo e' temporaneo e legato alla missione. Non creare un
-automatismo permanente tra agenti: ogni giro parte da una missione umana o da
-una risposta esplicita di LeaderAI.
+`PASSA CON ATTENZIONE` contiene soltanto permessi, accessi, hardware,
+decisioni o gesti realmente umani. Completa e prova ogni azione eseguibile
+dall'agente prima della chiusura. Registra ogni blocco umano come
+`DA DECIDERE IN CALL`, con il gesto preciso.
 
-Regola breve: Non chiudere la missione dopo il primo report.
+### Legge dell'unico blocco reale
 
-## Chiusura (ciclo resoconti)
+La missione deve indicare istruzioni precise, fonti, risultato atteso, azioni
+autorizzate e criteri di riuscita. Esegui, diagnostica, ripara, riprova e
+completa in autonomia. Non inviare aggiornamenti di avanzamento e non chiedere
+istruzioni a puntate. Fermati una sola volta soltanto davanti a un
+`BLOCCO REALE`: istruzione non decidibile dalle fonti, accesso o permesso mancante,
+scelta del proprietario, hardware assente, rischio irreversibile oppure
+servizio esterno indisponibile dopo tentativi ragionevoli. Nello stesso canale
+scrivi cosa hai gia' provato, cosa manca e una domanda unica: `Come proseguo su
+questo punto?`. Ricevuta la risposta, riprendi la stessa missione e arriva alla
+fine.
 
-1. Completa il resoconto locale solo a lavoro finito, mostralo al proprietario
-   e chiedi l'autorizzazione esplicita all'invio. L'invio non e' parte
-   automatica del checkup: dopo il si' esplicito, invialo davvero allo stesso
-   mittente LeaderAI verificato nello stesso thread; se serve una nuova email usa
-   l'oggetto concreto `Resoconto checkup Ecosistema`. L'email e il report
-   iniziano con `STATO PER LE PERSONE`, prima dei dettagli tecnici.
-2. Dopo l'invio archivia la missione: Inbox pulita, stato business nella fonte
-   proprietaria, storia tecnica nel solo install-log. Il report resta soltanto
-   finche' la missione non riceve `CHIUDI`.
+Quando Sal richiede espressamente una conferma finale, inviala una volta sola e
+soltanto con esito `PASSA`: tutti i criteri della missione sono completati e
+provati, compreso il processo reale e la riapertura del contesto. Apri con
+`Perfetto, l'ho fatto. Tutto completato e funzionante.` e riporta le prove
+essenziali. Gli esiti intermedi restano nella casa e alimentano la stessa
+missione.
+
+## Chiusura locale
+
+1. Promuovi stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
+2. Elimina `REPORT_FINALE.md` dopo la promozione e archivia l'email della
+   missione. Il ciclo ordinario produce zero email di ritorno.
 3. Chiudi l'ambiente operativo usato per la missione: pagine web, tab browser,
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
    personali del proprietario o superfici che deve decidere lui: dichiarale come
-   handoff nel report.
+   `DA DECIDERE IN CALL` nella fonte proprietaria.

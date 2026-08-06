@@ -1,0 +1,2 @@
+- Prima di lavorare, apri la mappa della stanza proprietaria.
+- Leggi i fatti dalla fonte canonica indicata nella mappa locale.

@@ -1,0 +1,1 @@
+- Instrada dalla mappa madre, poi apri la mappa locale e la sua fonte canonica.

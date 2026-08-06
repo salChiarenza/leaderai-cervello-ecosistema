@@ -114,9 +114,10 @@ class StandardContractGuidanceTest(unittest.TestCase):
     def test_installation_email_states_match_the_checkup(self):
         text = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
 
-        self.assertIn("PRONTO DA INVIARE", text)
-        self.assertIn("archivia l'email della missione nello stesso giro", text)
-        self.assertNotIn("Dopo il report vai in `SAL_VERIFICA`", text)
+        self.assertIn("zero email di ritorno", text)
+        self.assertIn("archivia l'email della missione", text)
+        self.assertIn("DA DECIDERE IN CALL", text)
+        self.assertNotIn("PRONTO DA INVIARE", text)
 
     def test_checkup_forces_comparison_against_manifest_and_template(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")

@@ -157,6 +157,17 @@ class BehaviorHarnessTest(unittest.TestCase):
                 "@AGENTS.md\n",
             )
 
+        blocks = fixture.parent / "context_blocks"
+        current = (blocks / "routing-source-current.md").read_text(
+            encoding="utf-8"
+        )
+        lighter = (blocks / "routing-source-lighter.md").read_text(
+            encoding="utf-8"
+        )
+        root_map = (fixture / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertEqual(root_map.count(current), 1)
+        self.assertNotEqual(current, lighter)
+
     def test_business_prompts_contain_no_filesystem_paths(self):
         for scenario in behavior_harness.SCENARIOS.values():
             with self.subTest(scenario=scenario.name):
@@ -371,6 +382,173 @@ class BehaviorHarnessTest(unittest.TestCase):
             self.assertFalse(checks["output_nel_percorso_proprietario"])
             self.assertFalse(checks["nessun_output_in_root_o_cartelle_generiche"])
             self.assertFalse(checks["fonti_standard_inalterate"])
+
+    def test_context_comparison_uses_two_clean_sessions_and_classifies_one_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            executable = self.make_executable(root, "fake-agent", FAKE_SUCCESS)
+            current = (
+                "- Prima di lavorare, apri la mappa della stanza proprietaria.\n"
+                "- Leggi i fatti dalla fonte canonica indicata nella mappa locale.\n"
+            )
+            lighter = (
+                "- Instrada dalla tabella, poi apri mappa locale e fonte canonica.\n"
+            )
+            variant = behavior_harness.InstructionVariant(
+                block_id="routing-and-source",
+                instruction_path="AGENTS.md",
+                current_text=current,
+                lighter_text=lighter,
+                candidate_action="compact",
+            )
+
+            result = behavior_harness.run_context_comparison(
+                scenario=behavior_harness.SCENARIOS["relazioni_scheda"],
+                variant=variant,
+                agent="codex",
+                executable=str(executable),
+                fixture=behavior_harness.DEFAULT_FIXTURE,
+                evidence_dir=root / "comparison",
+                timeout_seconds=2.0,
+                transcript_format="jsonl",
+            )
+
+            self.assertEqual(result.classification, "ACCORPA")
+            self.assertTrue(result.full.outcome_observed)
+            self.assertTrue(result.lighter.outcome_observed)
+            self.assertTrue(result.full.correct_sources)
+            self.assertTrue(result.lighter.correct_routing)
+            self.assertTrue(result.lighter.safety_preserved)
+            self.assertEqual(result.full.run_status, "PASS")
+            self.assertEqual(result.lighter.run_status, "PASS")
+            self.assertTrue((root / "comparison" / "full" / "result.json").is_file())
+            self.assertTrue((root / "comparison" / "lighter" / "result.json").is_file())
+            self.assertTrue((root / "comparison" / "comparison.json").is_file())
+            for variant_name in ("full", "lighter"):
+                prompt = (
+                    root / "comparison" / variant_name / "prompt.txt"
+                ).read_text(encoding="utf-8")
+                self.assertEqual(
+                    prompt,
+                    behavior_harness.SCENARIOS["relazioni_scheda"].business_prompt
+                    + "\n",
+                )
+                self.assertNotIn("Orientati leggendo la mappa madre", prompt)
+
+    def test_protected_instruction_is_never_removal_candidate_automatically(self):
+        metrics = behavior_harness.ContextMetrics(
+            run_status="PASS",
+            outcome_observed=True,
+            correct_sources=True,
+            correct_routing=True,
+            completed=True,
+            human_correction_requests=0,
+            duration_seconds=1.0,
+            input_tokens=None,
+            output_tokens=None,
+            safety_preserved=True,
+        )
+        variant = behavior_harness.InstructionVariant(
+            block_id="privacy",
+            instruction_path="AGENTS.md",
+            current_text="privacy",
+            lighter_text="",
+            candidate_action="remove",
+            protected=True,
+        )
+
+        classification, reason = behavior_harness.classify_instruction_variant(
+            variant,
+            metrics,
+            metrics,
+        )
+
+        self.assertEqual(classification, "MANTIENI")
+        self.assertIn("non si eliminano automaticamente", reason)
+
+    def test_single_case_cannot_candidate_an_instruction_for_removal(self):
+        metrics = behavior_harness.ContextMetrics(
+            run_status="PASS",
+            outcome_observed=True,
+            correct_sources=True,
+            correct_routing=True,
+            completed=True,
+            human_correction_requests=0,
+            duration_seconds=1.0,
+            input_tokens=None,
+            output_tokens=None,
+            safety_preserved=True,
+        )
+        variant = behavior_harness.InstructionVariant(
+            block_id="legacy-rule",
+            instruction_path="AGENTS.md",
+            current_text="regola storica",
+            lighter_text="",
+            candidate_action="remove",
+        )
+
+        classification, reason = behavior_harness.classify_instruction_variant(
+            variant,
+            metrics,
+            metrics,
+        )
+
+        self.assertEqual(classification, "MANTIENI")
+        self.assertIn("Un solo caso non basta", reason)
+
+    def test_technical_failure_does_not_become_an_instruction_verdict(self):
+        baseline = behavior_harness.ContextMetrics(
+            run_status="PASS",
+            outcome_observed=True,
+            correct_sources=True,
+            correct_routing=True,
+            completed=True,
+            human_correction_requests=0,
+            duration_seconds=1.0,
+            input_tokens=None,
+            output_tokens=None,
+            safety_preserved=True,
+        )
+        failed = behavior_harness.ContextMetrics(
+            run_status="AUTH_FAILURE",
+            outcome_observed=False,
+            correct_sources=False,
+            correct_routing=False,
+            completed=False,
+            human_correction_requests=0,
+            duration_seconds=1.0,
+            input_tokens=None,
+            output_tokens=None,
+            safety_preserved=True,
+        )
+        variant = behavior_harness.InstructionVariant(
+            block_id="routing",
+            instruction_path="AGENTS.md",
+            current_text="regola",
+            lighter_text="",
+            candidate_action="compact",
+        )
+
+        classification, reason = behavior_harness.classify_instruction_variant(
+            variant,
+            baseline,
+            failed,
+        )
+
+        self.assertEqual(classification, "DA COLLAUDARE")
+        self.assertIn("errore tecnico", reason)
+
+    def test_usage_is_reported_only_when_available(self):
+        self.assertEqual(
+            behavior_harness._usage_from_transcript(
+                '{"type":"result","usage":{"input_tokens":41,"output_tokens":7}}\n'
+            ),
+            (41, 7),
+        )
+        self.assertEqual(
+            behavior_harness._usage_from_transcript('{"type":"result"}\n'),
+            (None, None),
+        )
 
 
 if __name__ == "__main__":

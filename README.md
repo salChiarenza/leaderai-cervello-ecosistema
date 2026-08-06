@@ -20,8 +20,8 @@ e non sostituisce le specifiche tecniche.
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
 caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md` e `templates/STANZA_AGENTS.md`, ripara gli scostamenti
-riparabili, prova e prepara il report finale. L'invio avviene solo dopo
-autorizzazione esplicita del proprietario.
+riparabili, prova, salva i fatti nelle fonti proprietarie e chiude localmente.
+Il ciclo ordinario produce zero email di ritorno.
 
 `install_contract.json` e' il contratto macchina unico del nucleo
 d'installazione: procedura manuale, setup tecnico, Ispettore e collaudo leggono
@@ -70,10 +70,20 @@ recenti, connettori provati), non dal nome. La ricerca include anche nomi
 brandizzati o sbagliati come `LeaderAI`, `Leader AI`, `leader ai`, `leder ai`,
 `cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo` e `clone`.
 
-Ogni missione segue un ciclo chiuso: `MISSIONE` -> `ESECUZIONE` ->
-`AUTOCONTROLLO` -> `REPORT` -> `SAL_VERIFICA` -> `CONTINUA` oppure `CHIUDI`.
-L'agente del cliente non decide da solo che e' finita dopo il primo report:
-aspetta la verifica LeaderAI.
+Ogni missione segue un ciclo locale: `MISSIONE` -> `ESECUZIONE` ->
+`AUTOCONTROLLO` -> `SALVATAGGIO NELLA CASA` -> `CHIUSURA LOCALE`.
+L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
+e prova tutto nella casa del cliente, promuove stato e prove nelle fonti
+proprietarie, elimina il report temporaneo, archivia l'email e chiude le
+superfici aperte. Il ciclo produce zero email di ritorno; decisioni e gesti
+umani veri restano come `DA DECIDERE IN CALL`.
+L'unica interruzione ammessa e' un `BLOCCO REALE` che l'agente non puo'
+risolvere dalle fonti o con tentativi sicuri: dichiara cosa ha provato, cosa
+manca e pone una domanda unica. Dopo la risposta riprende la stessa missione;
+nessun aggiornamento a puntate.
+Quando Sal richiede espressamente una conferma finale, parte una volta sola e
+soltanto con esito `PASSA`: apre con `Perfetto, l'ho fatto. Tutto completato e
+funzionante.` e riporta le prove essenziali di tutti i criteri della missione.
 Le email operative tra agenti e il report aprono sempre con `STATO PER LE
 PERSONE`: fatto, manca, prossimo passo e intervento umano. I dettagli tecnici
 vengono dopo.
@@ -187,6 +197,15 @@ verifica che Claude usi una sola memoria, individua configurazioni credenziali
 fuori `.secrets/` senza aprirle, controlla firma/timbro e impedisce copie
 hardcoded di contenuti business modificabili.
 
+Controlla anche se istruzioni, skill, rule o hook stanno stringendo troppo
+l'agente. Il confronto cambia un solo blocco per volta e usa due sessioni
+nuove sulla stessa missione: contesto completo contro alleggerito. Il rapporto
+misura risultato, fonti, percorso, completamento, intervento umano, tempo,
+consumo quando disponibile e sicurezza; propone soltanto una classificazione,
+senza modifiche distruttive automatiche. La missione non contiene indizi su
+cartella, fonte o risultato atteso; un solo caso non puo' candidare la rimozione
+di una istruzione.
+
 I file vivi del cliente restano intatti. `--force` serve soltanto a riparare il
 ponte canonico `CLAUDE.md` quando e' mancante o errato.
 
@@ -212,6 +231,13 @@ percorsi suggeriti e ripete l'installazione manuale partendo dalla sola
 procedura. Conserva prompt, trascrizioni, manifest prima/dopo, diff e verdetti.
 Zero test, test saltati, CLI assente, autenticazione mancante, timeout o
 oracolo fallito bloccano il rilascio.
+
+Confronto mirato di un blocco di istruzioni, su fixture anonima e due sessioni
+pulite:
+
+```bash
+python3 behavior_harness.py compare-context --help
+```
 
 Preflight strutturale opzionale e in sola lettura, quando la repo e' locale e
 l'esecuzione e' stata autorizzata:

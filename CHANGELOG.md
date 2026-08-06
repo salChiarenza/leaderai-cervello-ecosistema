@@ -1,5 +1,69 @@
 # Changelog
 
+## 0.5.4 - 06/08/2026
+
+- Le missioni cliente continuano nella stessa casa fino a completamento e
+  prova di tutti i criteri, compreso il processo reale e la continuita' dopo la
+  riapertura.
+- Gli stati intermedi restano locali. Quando Sal richiede una conferma finale,
+  parte una volta sola, soltanto con esito `PASSA`, e apre con `Perfetto, l'ho
+  fatto. Tutto completato e funzionante.`.
+- Scritta la legge dell'unico `BLOCCO REALE`: una domanda unica soltanto dopo
+  tentativi sicuri falliti; ricevuta la risposta, l'agente riprende la stessa
+  missione. Vietati avanzamenti e istruzioni a puntate.
+- Rimossi dal contratto operativo i cicli di rapporti intermedi,
+  `SAL_VERIFICA`, `CONTINUA` e `CHIUDI`.
+
+## Non pubblicato - 05/08/2026
+
+- Il Passo 2-ter guadagna una lettura veloce prima della prova comportamentale:
+  sei segnali letti sul file (ordine stretto al posto del criterio, ovvieta',
+  procedura lunga dentro il file sempre letto, doppione tra livelli, memoria
+  scritta a mano, peso misurato) filtrano i blocchi prima di spendere due
+  sessioni ciascuno. La lettura produce segnalazioni; le rimozioni restano
+  legate alla prova e all'approvazione del proprietario.
+- Il metro ufficiale del Passo 2-ter entra tra le fonti comuni: articolo
+  Anthropic "The new rules of context engineering for Claude 5 generation
+  models" (24/07/2026) per il ramo Claude Code, pagina `agents-md` di OpenAI
+  per il ramo Codex, con il tetto `project_doc_max_bytes` a 32 KiB citato come
+  misura.
+- Aggiornati i quattro indirizzi della documentazione Codex citati nel
+  checkup: `developers.openai.com/codex/...` rimanda oggi a
+  `learn.chatgpt.com`. Verificato il 05/08/2026 su tutti e quattro; il
+  redirect risponde, quindi il checkup non falliva, e ora i link puntano
+  diretti alla casa attuale.
+
+## Non pubblicato - 02/08/2026
+
+- "Chi apre chiude" ed "email lavorata = email archiviata" salgono nelle Regole
+  base delle istruzioni installate al cliente: prima vivevano solo nel capitolo
+  delle missioni LeaderAI, quindi l'agente del cliente le applicava alle
+  missioni e le ignorava nel lavoro quotidiano (caso reale rilevato il
+  04/08/2026 sull'installazione di Massimiliano Caporali). La chiusura
+  ambiente in `PROCESSI.md` vale ora per ogni lavoro e precisa che si chiude
+  solo cio' che ha aperto l'agente.
+
+- Il ciclo ordinario di una missione ora si chiude nella casa del cliente:
+  esecuzione, prova, salvataggio nelle fonti proprietarie e chiusura ambiente.
+- L'email della missione e' l'unico messaggio: zero report di ritorno;
+  decisioni e gesti umani restano come `DA DECIDERE IN CALL`.
+
+- Ogni consegna richiede ora `AI_ACT_CHECK_OK` per il sistema e l'uso concreti:
+  ruolo, persone coinvolte, rischio, trasparenza, data, esito e presidio.
+- Pratiche vietate, alto rischio e dubbi sostanziali bloccano la consegna; il
+  controllo di un sistema non viene riusato automaticamente per un altro.
+
+- L'Ispettore confronta un blocco di istruzioni alla volta tra contesto attuale
+  e alleggerito, in due sessioni pulite e su copie temporanee.
+- Le prove ricevono soltanto il compito aziendale: nessun indizio su cartella,
+  fonte, procedura o risultato atteso puo' mascherare l'effetto del contesto.
+- Il rapporto misura esito, fonti, instradamento, completamento, richieste
+  umane, tempo, consumo quando disponibile e sicurezza; errori tecnici restano
+  `DA COLLAUDARE`.
+- Un solo caso non puo' candidare una rimozione. Sicurezza, privacy,
+  autorizzazione e integrita' non vengono eliminate automaticamente.
+- I casi di prova e i riferimenti storici pubblici sono anonimizzati.
+
 ## 0.5.3 - 31/07/2026
 
 - La pagina iniziale della repo espone i riferimenti ufficiali per Claude Code,
@@ -95,9 +159,9 @@
   non un blocco: il verdetto diventa `PASSA CON ATTENZIONE`.
 - Due regressioni coprono il caso: percorso assoluto sotto la home segnalato,
   forma `~/` pulita.
-- Origine: ambiente Marco De Nicolo', 28-29/07/2026. Utente `user` sul PC
-  fisso, `marcd` sul portatile. Il percorso assoluto replicato sul portatile
-  avrebbe rotto la memoria senza alcun errore visibile.
+- Origine anonimizzata: ambiente con due postazioni e nomi utente diversi. Il
+  percorso assoluto replicato sul portatile avrebbe rotto la memoria senza
+  alcun errore visibile.
 
 ## 0.4.4 - 28/07/2026
 

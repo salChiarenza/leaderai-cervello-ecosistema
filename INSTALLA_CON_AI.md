@@ -11,9 +11,9 @@ autorizzazione esplicita del proprietario.
 Il percorso standard non richiede clone della repo.
 
 REGOLA PER CHI CONSEGNA (LeaderAI): l'email di consegna e' corta e punta a
-questa procedura. L'installazione produce prima un report locale verificato;
-l'invio del report a LeaderAI avviene poi con autorizzazione esplicita del
-proprietario.
+questa procedura. L'agente crea e prova tutto nella casa del cliente, promuove
+stato e prove nelle fonti proprietarie e chiude localmente. Il ciclo ordinario
+produce zero email di ritorno.
 
 Il modello unico, versionato e collaudabile e'
 [`EMAIL_CONSEGNA.md`](EMAIL_CONSEGNA.md). Questa procedura non mantiene una
@@ -223,7 +223,7 @@ Fase 4 - monta localmente il Cervello
    percorso.
 5. Crea `REPORT_FINALE.md` come output temporaneo della missione con
    `VALIDO AL` e `STATO MISSIONE: APERTA`; `.gitignore` lo esclude. Non e' una
-   fonte di stato e viene eliminato dopo `CHIUDI`.
+   fonte di stato: prima della chiusura locale promuovi i fatti e eliminalo.
 6. Non sovrascrivere file vivi: integra le sezioni mancanti e registra nel report
    cosa era gia' presente, cosa hai creato e cosa hai aggiornato.
 7. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
@@ -541,6 +541,15 @@ Moduli da valutare:
 - voce/dettatura;
 - compliance/privacy/AI Act.
 
+Per `compliance/privacy/AI Act`, censisci un sistema alla volta. Per ciascuno
+registra nome, fornitore, uso previsto, ruolo dell'azienda e di LeaderAI,
+persone coinvolte, preparazione di chi lo opera, eventuale decisione supportata, classe di rischio e obblighi
+di trasparenza. Apri il Controllo di conformita' della Commissione e conserva
+nel report data, esito e presidio applicato. Un esito di pratica vietata, alto
+rischio o dubbio sostanziale resta `NON PASSA` e blocca la consegna fino
+all'approfondimento competente. `AI_ACT_CHECK_OK` vale soltanto per il sistema
+e l'uso realmente esaminati.
+
 Regola: se non hai una fonte reale o una prova, non scrivere `ATTIVO`. Scrivi
 `DA SCOPRIRE` o `DA COLLEGARE` nel dettaglio. Se il modulo non serve al lavoro
 del cliente, scrivi `NON SERVE`. Il prossimo passo deve nascere da questa mappa,
@@ -588,6 +597,10 @@ Report temporaneo obbligatorio per la missione:
 - firma/timbro protetti, registrati e limitati;
 - file progetto con stato/prossimo/scadenze in testa e diario ordinato;
 - Mappa moduli con stato per ogni modulo;
+- per ogni sistema AI consegnato: controllo separato, ruolo, uso, persone
+  coinvolte, preparazione di chi lo opera, classe di rischio, trasparenza,
+  data, esito e presidio; il gate
+  `AI_ACT_CHECK_OK` non viene riusato su sistemi o usi diversi;
 - codice esterno eseguito: no / si con autorizzazione esplicita e prova;
 - chiusura ambiente: email/browser/tab/app chiusi oppure handoff dichiarato;
 - cosa resta da collegare e dove;
@@ -595,36 +608,42 @@ Report temporaneo obbligatorio per la missione:
   avrebbe intercettato l'errore;
 - verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA.
 
-Consegna del report e ciclo tra agenti:
+Chiusura locale della missione:
 1. Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre, con
    `STATO PER LE PERSONE` prima dei dettagli tecnici, data/ora e stato missione.
 2. Mostra al proprietario verdetto, prove e blocchi reali.
-3. Mostra destinatario, oggetto, versione del report e azione esterna esatta.
-   Chiedi: `Autorizzi l'invio del report in risposta allo stesso mittente
-   LeaderAI verificato?`
-   L'autorizzazione vale soltanto per questo specifico
-   invio; parole come "manda avanti il lavoro" non autorizzano la posta.
-4. Solo dopo un si' esplicito, invia davvero il report in risposta alla
-   missione verificata. Una bozza non conta come consegna. Se Gmail non e'
-   collegata, conserva il report locale come
-   `PRONTO DA INVIARE` e dichiara il blocco senza simulare l'invio.
+3. Promuovi stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
+   Registra i gesti umani come `DA DECIDERE IN CALL`.
+4. Elimina il report temporaneo, archivia l'email della missione e chiudi
+   pagine, tab, finestre e strumenti aperti per il lavoro.
 
-Prima del report fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
+Prima della chiusura fai `AUTOCONTROLLO`: rileggi missione, azioni fatte, prove,
 file toccati, blocchi umani veri e superfici aperte da te (email, browser, tab,
-form, preview, login, app temporanee). Il report locale resta
-`PRONTO DA INVIARE` finche' il proprietario non autorizza l'invio. Dopo il suo
-si', invia davvero, archivia l'email della missione nello stesso giro e passa a
-   `SAL_VERIFICA`; lo stato resta nel report temporaneo, non nella Inbox. Se LeaderAI
-risponde `CONTINUA`, lavori ancora sulla stessa missione, rifai autocontrollo,
-aggiorni il report e chiedi una nuova autorizzazione prima di inviarlo. Se
-   risponde `CHIUDI` o conferma che va bene, promuovi i fatti nel file
-   proprietario della stanza, registra nel log solo gli eventuali cambi
-   tecnici/strutturali, elimina `REPORT_FINALE.md` e chiudi le pagine/app aperte
-   da te.
+form, preview, login, app temporanee). L'email della missione e' l'unico
+messaggio del ciclo ordinario: zero email di ritorno, zero `CONTINUA`, zero
+`CHIUDI`.
+
+La missione deve darti istruzioni precise, fonti, risultato atteso, azioni
+autorizzate e criteri di riuscita. Esegui, diagnostica, ripara, riprova e
+completa in autonomia. Non inviare aggiornamenti di avanzamento e non chiedere
+istruzioni a puntate. Fermati una sola volta soltanto davanti a un
+`BLOCCO REALE`: un ostacolo non risolvibile dalle fonti e dai tentativi sicuri gia'
+fatti. Nello stesso canale scrivi cosa hai gia' provato, cosa manca e una
+domanda unica: `Come proseguo su questo punto?`. Dopo la risposta riprendi la
+stessa missione e completala.
+
+Quando Sal richiede espressamente una conferma finale, inviala una volta sola e
+soltanto con esito `PASSA`: tutti i criteri della missione, compreso il processo
+reale e la riapertura del contesto, sono completati e provati. Apri con
+`Perfetto, l'ho fatto. Tutto completato e funzionante.` e aggiungi le prove
+essenziali. Ogni stato intermedio resta nella casa e alimenta
+l'auto-riparazione della stessa missione.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto
-cio' che si puo' riparare, si prova, si fa autocontrollo, si risponde con un
-resoconto finale, poi si aspetta `CONTINUA` o `CHIUDI`.
-Missione e risposta iniziano entrambe con `STATO PER LE PERSONE`; istruzioni e
-dettagli tecnici vengono dopo.
+cio' che si puo' riparare, si prova, si fa autocontrollo, si salva nella casa e
+si chiude localmente.
+`PASSA CON ATTENZIONE` contiene soltanto decisioni o gesti umani veri: ogni
+azione eseguibile dall'agente viene completata e provata prima della chiusura.
+La missione inizia con `STATO PER LE PERSONE`; istruzioni e dettagli tecnici
+vengono dopo.
 ```

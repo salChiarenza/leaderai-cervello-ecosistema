@@ -56,12 +56,13 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
                 self.assertTrue((ROOT / "templates" / name).is_file())
                 self.assertIn(f"templates/{name}", install)
 
-    def test_report_is_local_before_external_send(self):
+    def test_report_is_promoted_and_closed_locally(self):
         text = compact((ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8"))
         required = [
             "Completa e collauda `REPORT_FINALE.md` temporaneo nella cartella madre",
-            "Autorizzi l'invio del report in risposta allo stesso mittente LeaderAI verificato?",
-            "Solo dopo un si' esplicito, invia davvero il report in risposta alla missione verificata",
+            "Promuovi stato, prove, prossimo passo e scadenze nelle fonti proprietarie",
+            "Elimina il report temporaneo, archivia l'email della missione",
+            "zero email di ritorno",
         ]
 
         for phrase in required:

@@ -41,6 +41,40 @@
       "router_max_bytes": 24576,
       "document_review_lines": 800,
       "document_review_bytes": 81920
+    },
+    "instruction_audit": {
+      "classifications": [
+        "MANTIENI",
+        "ACCORPA",
+        "SPOSTA NELLA PROCEDURA/SKILL GIUSTA",
+        "RISCRIVI",
+        "CANDIDATA ALLA RIMOZIONE"
+      ],
+      "protected_semantics": [
+        "safety",
+        "privacy",
+        "authorization",
+        "integrity"
+      ],
+      "initial_cases": [
+        "unverified_source",
+        "wrong_owner_route",
+        "duplicate_or_stale_source",
+        "excess_rules_or_files",
+        "conflicting_instructions",
+        "missing_final_verification",
+        "unnecessary_human_request"
+      ],
+      "metrics": [
+        "observable_outcome",
+        "correct_sources",
+        "correct_routing",
+        "completion",
+        "human_correction_requests",
+        "duration_seconds",
+        "token_usage_when_available",
+        "safety_preserved"
+      ]
     }
   },
   "common": {

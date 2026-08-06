@@ -51,6 +51,8 @@ Restano stabili in ogni installazione:
 - calco locale `ecosistema/STANZA_AGENTS.md` per creare mappe senza dipendere
   da un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
+- audit comportamentale delle istruzioni con una sola variazione per volta,
+  due sessioni nuove e classificazione non distruttiva del blocco;
 - ingresso verificato: cartella madre come progetto primario/CWD e nuova
   task/sessione che legge la mappa prima del lavoro;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
@@ -91,8 +93,8 @@ al computer del cliente.
 
 Motivo: un percorso sbagliato non produce alcun errore visibile. La memoria
 punta a una cartella inesistente, l'agente riparte vuoto e il cliente scopre il
-guasto da una risposta sbagliata. Caso di origine: ambiente Marco De Nicolo',
-28-29/07/2026, utente `user` sul fisso e `marcd` sul portatile.
+guasto da una risposta sbagliata. Caso di origine anonimizzato: due postazioni
+con nomi utente diversi e percorso assoluto replicato sul portatile.
 
 ### Forma adattiva
 
@@ -169,8 +171,8 @@ da approvare.
 - `logs/install-log.md` registra soltanto installazione, versione e cambi
   strutturali. Non e' il diario della produzione business.
 - `REPORT_FINALE.md` esiste soltanto durante una missione, con data/ora e stato.
-  E' ignorato da Git, non e' una fonte di stato e viene eliminato dopo `CHIUDI`
-  quando i fatti stabili sono stati promossi nelle fonti proprietarie.
+  E' ignorato da Git, non e' una fonte di stato e viene eliminato durante la
+  chiusura locale, dopo la promozione dei fatti nelle fonti proprietarie.
 - Tutti i Markdown vengono misurati con le soglie uniche di
   `install_contract.json`. Mappe e indici (`AGENTS.md`, `MEMORY.md`,
   `AGENT_CHAT.md`) restano router corti: oltre 350 righe o 24 KiB il gate e'
@@ -212,11 +214,29 @@ difficile, usando una sessione reale che riceve soltanto la procedura e lo
 standard statico.
 
 Il report di missione viene prima creato e collaudato localmente, con data/ora e
-stato. L'invio email a LeaderAI avviene dopo autorizzazione esplicita del
-proprietario; dopo `CHIUDI` il report temporaneo viene eliminato.
+stato. I fatti stabili passano nelle fonti proprietarie; il report temporaneo
+viene poi eliminato.
 Ogni email operativa agente-agente e ogni report aprono con `STATO PER LE
 PERSONE`: `Fatto`, `Manca`, `Prossimo passo`, `Intervento umano`. Le
 istruzioni e le prove tecniche vengono dopo.
+
+L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
+e prova tutto nella casa del cliente, salva stato e prove nelle fonti
+proprietarie e chiude localmente: zero email di ritorno, zero `CONTINUA`,
+zero `CHIUDI`. Decisioni e gesti umani veri restano come
+`DA DECIDERE IN CALL`.
+
+Legge dell'unico blocco reale: l'agente esegue istruzioni precise, diagnostica,
+ripara, riprova e completa in autonomia. Si ferma una sola volta soltanto
+davanti a un `BLOCCO REALE` non risolvibile dalle fonti e dai tentativi sicuri.
+Nello stesso canale dichiara cosa ha gia' provato, cosa manca e pone una domanda
+unica: `Come proseguo su questo punto?`. Dopo la risposta riprende la stessa
+missione. Aggiornamenti di avanzamento e domande a puntate sono vietati.
+
+Se Sal richiede espressamente una conferma finale, parte una volta sola e
+soltanto con esito `PASSA`: tutti i criteri sono completati e provati. La
+conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.`; ogni
+stato intermedio resta nella casa del cliente.
 
 Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
 README e Manifest lo richiamano senza duplicarne il corpo.
@@ -374,6 +394,10 @@ Il pacchetto e' pronto quando:
 - almeno due prove di instradamento partono dalla radice e arrivano alla
   madre/stanza, alla fonte e all'output corretti senza suggerire il percorso
   all'agente.
+- ogni blocco di istruzioni sospetto e' confrontato, uno alla volta, tra
+  contesto completo e alleggerito; il report misura gli effetti e lo classifica
+  senza rimuovere automaticamente sicurezza, privacy, autorizzazione o
+  integrita';
 - il report registra versione del metodo, classificazione delle stanze,
   collegamenti e possibili lezioni candidate.
 - il report distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema

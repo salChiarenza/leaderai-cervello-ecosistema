@@ -17,7 +17,7 @@ import subprocess
 import sys
 import tempfile
 import uuid
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -175,6 +175,45 @@ class ScenarioResult:
     target_dir: str
     duration_seconds: float
     error: str | None = None
+
+
+@dataclass(frozen=True)
+class InstructionVariant:
+    """Una sola variazione controllata del contesto di progetto."""
+
+    block_id: str
+    instruction_path: str
+    current_text: str
+    lighter_text: str
+    candidate_action: str
+    protected: bool = False
+    supporting_cases: int = 1
+
+
+@dataclass
+class ContextMetrics:
+    run_status: str
+    outcome_observed: bool
+    correct_sources: bool
+    correct_routing: bool
+    completed: bool
+    human_correction_requests: int
+    duration_seconds: float
+    input_tokens: int | None
+    output_tokens: int | None
+    safety_preserved: bool
+
+
+@dataclass
+class ContextComparisonResult:
+    block_id: str
+    scenario: str
+    agent: str
+    classification: str
+    full: ContextMetrics
+    lighter: ContextMetrics
+    evidence_dir: str
+    reason: str
 
 
 def _utc_now() -> datetime:
@@ -552,6 +591,245 @@ def _write_json(path: Path, payload: Any) -> None:
     )
 
 
+def _oracle_checks(evidence_dir: Path) -> dict[str, bool]:
+    oracle = json.loads((evidence_dir / "oracle.json").read_text(encoding="utf-8"))
+    return {item["name"]: bool(item["passed"]) for item in oracle["checks"]}
+
+
+def _usage_from_transcript(raw: str) -> tuple[int | None, int | None]:
+    """Legge i contatori quando l'agente li espone; altrimenti restituisce N/D."""
+
+    values: dict[str, list[int]] = {"input": [], "output": []}
+
+    def visit(value: Any) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                folded = key.casefold()
+                if isinstance(item, int) and folded in {
+                    "input_tokens",
+                    "input_token_count",
+                }:
+                    values["input"].append(item)
+                elif isinstance(item, int) and folded in {
+                    "output_tokens",
+                    "output_token_count",
+                }:
+                    values["output"].append(item)
+                else:
+                    visit(item)
+        elif isinstance(value, list):
+            for item in value:
+                visit(item)
+
+    for record in _parse_json_lines(raw):
+        visit(record)
+    return (
+        max(values["input"]) if values["input"] else None,
+        max(values["output"]) if values["output"] else None,
+    )
+
+
+def _human_correction_requests(raw: str) -> int:
+    folded = raw.casefold()
+    markers = (
+        "mi serve",
+        "fornisci",
+        "dimmi",
+        "puoi indicare",
+        "devi indicare",
+        "ho bisogno che",
+        "chiedo conferma",
+    )
+    return sum(folded.count(marker) for marker in markers) + folded.count("?")
+
+
+def _context_metrics(evidence_dir: Path, result: ScenarioResult) -> ContextMetrics:
+    checks = _oracle_checks(evidence_dir)
+    raw = (evidence_dir / "stdout.raw").read_text(encoding="utf-8")
+    input_tokens, output_tokens = _usage_from_transcript(raw)
+    return ContextMetrics(
+        run_status=result.status,
+        outcome_observed=result.oracle_passed,
+        correct_sources=(
+            checks.get("contenuto_derivato_dalla_fonte_canonica", False)
+            and checks.get("doppione_storico_non_usato", False)
+        ),
+        correct_routing=(
+            checks.get("output_nel_percorso_proprietario", False)
+            and checks.get("nessun_output_in_root_o_cartelle_generiche", False)
+        ),
+        completed=(evidence_dir / "observed-output.md").is_file(),
+        human_correction_requests=_human_correction_requests(raw),
+        duration_seconds=result.duration_seconds,
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        safety_preserved=checks.get("fonti_standard_inalterate", False),
+    )
+
+
+CLASSIFICATIONS = {
+    "keep": "MANTIENI",
+    "compact": "ACCORPA",
+    "move": "SPOSTA NELLA PROCEDURA/SKILL GIUSTA",
+    "rewrite": "RISCRIVI",
+    "remove": "CANDIDATA ALLA RIMOZIONE",
+}
+
+
+def classify_instruction_variant(
+    variant: InstructionVariant,
+    full: ContextMetrics,
+    lighter: ContextMetrics,
+) -> tuple[str, str]:
+    """Classifica senza trasformare l'esperimento in una cancellazione."""
+
+    invalid_statuses = {
+        "EXECUTABLE_MISSING",
+        "AUTH_FAILURE",
+        "TIMEOUT",
+        "RETURN_CODE_ERROR",
+    }
+    if full.run_status != "PASS":
+        return (
+            "DA COLLAUDARE",
+            "Il contesto attuale non ha prodotto una base valida.",
+        )
+    if lighter.run_status in invalid_statuses:
+        return (
+            "DA COLLAUDARE",
+            "La sessione alleggerita ha avuto un errore tecnico e non misura l'istruzione.",
+        )
+
+    full_core = (
+        full.outcome_observed,
+        full.correct_sources,
+        full.correct_routing,
+        full.completed,
+        full.safety_preserved,
+    )
+    lighter_core = (
+        lighter.outcome_observed,
+        lighter.correct_sources,
+        lighter.correct_routing,
+        lighter.completed,
+        lighter.safety_preserved,
+    )
+    if variant.protected and variant.candidate_action == "remove":
+        return (
+            "MANTIENI",
+            "Blocco protetto: sicurezza, privacy, autorizzazione e integrita non si eliminano automaticamente.",
+        )
+    if variant.candidate_action == "remove" and variant.supporting_cases < 2:
+        return (
+            "MANTIENI",
+            "Un solo caso non basta: ripetere su almeno un secondo compito prima di candidare la rimozione.",
+        )
+    if any(before and not after for before, after in zip(full_core, lighter_core)):
+        return (
+            "MANTIENI",
+            "Il contesto alleggerito peggiora almeno un esito osservabile.",
+        )
+    if lighter.human_correction_requests > full.human_correction_requests:
+        return "MANTIENI", "Il contesto alleggerito richiede piu correzioni o dati umani."
+    if not lighter.outcome_observed:
+        return "MANTIENI", "La variante alleggerita non completa correttamente la missione."
+    classification = CLASSIFICATIONS[variant.candidate_action]
+    return classification, "La variante alleggerita mantiene gli esiti senza regressioni osservate."
+
+
+def _safe_instruction_path(root: Path, relative: str) -> Path:
+    candidate = Path(relative)
+    if candidate.is_absolute() or ".." in candidate.parts:
+        raise ValueError("Il file istruzioni deve essere relativo alla fixture")
+    unresolved = root / candidate
+    if unresolved.is_symlink():
+        raise ValueError(f"Il file istruzioni non puo essere un symlink: {relative}")
+    resolved = unresolved.resolve()
+    if root.resolve() not in resolved.parents:
+        raise ValueError("Il file istruzioni esce dalla fixture")
+    if not resolved.is_file():
+        raise ValueError(f"File istruzioni non valido: {relative}")
+    return resolved
+
+
+def run_context_comparison(
+    *,
+    scenario: Scenario,
+    variant: InstructionVariant,
+    agent: str,
+    executable: str,
+    fixture: Path,
+    evidence_dir: Path,
+    timeout_seconds: float,
+    transcript_format: str,
+) -> ContextComparisonResult:
+    """Confronta due sessioni pulite variando un solo blocco di istruzioni."""
+
+    if variant.candidate_action not in CLASSIFICATIONS:
+        raise ValueError(f"Azione candidata non supportata: {variant.candidate_action}")
+    if variant.supporting_cases < 1:
+        raise ValueError("I casi di supporto devono essere almeno uno")
+    evidence_dir.mkdir(parents=True, exist_ok=False)
+    evaluation_scenario = replace(scenario, include_harness_instruction=False)
+    with tempfile.TemporaryDirectory(prefix="leaderai-context-audit-") as tmp:
+        root = Path(tmp)
+        lighter_fixture = root / "fixture-lighter"
+        shutil.copytree(fixture, lighter_fixture)
+        instruction_file = _safe_instruction_path(
+            lighter_fixture,
+            variant.instruction_path,
+        )
+        current = instruction_file.read_text(encoding="utf-8")
+        occurrences = current.count(variant.current_text)
+        if occurrences != 1:
+            raise ValueError(
+                f"Il blocco {variant.block_id} deve comparire una sola volta; trovato {occurrences}"
+            )
+        instruction_file.write_text(
+            current.replace(variant.current_text, variant.lighter_text, 1),
+            encoding="utf-8",
+        )
+        full_result = run_scenario(
+            scenario=evaluation_scenario,
+            agent=agent,
+            executable=executable,
+            fixture=fixture,
+            evidence_dir=evidence_dir / "full",
+            timeout_seconds=timeout_seconds,
+            transcript_format=transcript_format,
+            target_dir=root / "target-full",
+        )
+        lighter_result = run_scenario(
+            scenario=evaluation_scenario,
+            agent=agent,
+            executable=executable,
+            fixture=lighter_fixture,
+            evidence_dir=evidence_dir / "lighter",
+            timeout_seconds=timeout_seconds,
+            transcript_format=transcript_format,
+            target_dir=root / "target-lighter",
+        )
+    full_metrics = _context_metrics(evidence_dir / "full", full_result)
+    lighter_metrics = _context_metrics(evidence_dir / "lighter", lighter_result)
+    classification, reason = classify_instruction_variant(
+        variant,
+        full_metrics,
+        lighter_metrics,
+    )
+    comparison = ContextComparisonResult(
+        block_id=variant.block_id,
+        scenario=scenario.name,
+        agent=agent,
+        classification=classification,
+        full=full_metrics,
+        lighter=lighter_metrics,
+        evidence_dir=str(evidence_dir.resolve()),
+        reason=reason,
+    )
+    _write_json(evidence_dir / "comparison.json", asdict(comparison))
+    return comparison
+
+
 def _validate_fixture(fixture: Path) -> None:
     if not fixture.is_dir():
         raise FileNotFoundError(f"Fixture non trovata: {fixture}")
@@ -781,6 +1059,34 @@ def build_parser() -> argparse.ArgumentParser:
         default="jsonl",
     )
     live.set_defaults(action="live")
+
+    compare = subparsers.add_parser(
+        "compare-context",
+        help="Confronta contesto completo e alleggerito in due sessioni nuove",
+    )
+    compare.add_argument("--agent", choices=("codex", "claude"), required=True)
+    compare.add_argument("--scenario", choices=tuple(SCENARIOS), required=True)
+    compare.add_argument("--block-id", required=True)
+    compare.add_argument("--instruction-file", required=True)
+    compare.add_argument("--current-block-file", type=Path, required=True)
+    compare.add_argument("--lighter-block-file", type=Path, required=True)
+    compare.add_argument(
+        "--candidate-action",
+        choices=tuple(CLASSIFICATIONS),
+        required=True,
+    )
+    compare.add_argument("--protected", action="store_true")
+    compare.add_argument("--supporting-cases", type=int, default=1)
+    compare.add_argument("--executable")
+    compare.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
+    compare.add_argument("--evidence-dir", type=Path, required=True)
+    compare.add_argument("--timeout", type=float, default=300.0)
+    compare.add_argument(
+        "--transcript-format",
+        choices=("json", "jsonl"),
+        default="jsonl",
+    )
+    compare.set_defaults(action="compare-context")
     return parser
 
 
@@ -798,6 +1104,35 @@ def main(argv: Sequence[str] | None = None) -> int:
         ]
         print(json.dumps(payload, ensure_ascii=False, indent=2))
         return 0
+
+    if args.action == "compare-context":
+        if args.timeout <= 0:
+            parser.error("--timeout deve essere maggiore di zero")
+        variant = InstructionVariant(
+            block_id=args.block_id,
+            instruction_path=args.instruction_file,
+            current_text=args.current_block_file.read_text(encoding="utf-8"),
+            lighter_text=args.lighter_block_file.read_text(encoding="utf-8"),
+            candidate_action=args.candidate_action,
+            protected=args.protected,
+            supporting_cases=args.supporting_cases,
+        )
+        result = run_context_comparison(
+            scenario=SCENARIOS[args.scenario],
+            variant=variant,
+            agent=args.agent,
+            executable=args.executable or args.agent,
+            fixture=args.fixture.expanduser().resolve(),
+            evidence_dir=args.evidence_dir.expanduser().resolve(),
+            timeout_seconds=args.timeout,
+            transcript_format=args.transcript_format,
+        )
+        print(json.dumps(asdict(result), ensure_ascii=False, indent=2))
+        valid_lighter_states = {"PASS", "ORACLE_FAIL"}
+        return 0 if (
+            result.full.run_status == "PASS"
+            and result.lighter.run_status in valid_lighter_states
+        ) else 1
 
     if args.timeout <= 0:
         parser.error("--timeout deve essere maggiore di zero")

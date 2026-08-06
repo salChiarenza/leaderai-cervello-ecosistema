@@ -64,16 +64,24 @@ gesto umano vero previsto dal `CHECKUP.md`.
    con le soglie di `install_contract.json`: mappe e indici troppo grandi
    bloccano il verdetto; documenti estesi vengono controllati per responsabilita'
    mescolate e fonti duplicate. Ripara alleggerendo router e indici, senza
-   perdere contenuto o creare copie parallele.
-11. Non fermarti al controllo dei file: prova almeno due percorsi reali
+    perdere contenuto o creare copie parallele.
+11. Per `AGENTS.md`, `CLAUDE.md`, skill, rule e hook applica l'audit istruzioni
+    del `CHECKUP.md`: una sola variazione alla volta, due sessioni pulite,
+    stessa missione senza indizi su percorso o risultato e metriche osservabili.
+    Un solo caso non puo' candidare una rimozione. Classifica ogni blocco come
+    `MANTIENI`, `ACCORPA`, `SPOSTA NELLA PROCEDURA/SKILL GIUSTA`, `RISCRIVI` o
+    `CANDIDATA ALLA RIMOZIONE`. Sicurezza, privacy, autorizzazione e integrita'
+    non si eliminano automaticamente; nessuna modifica distruttiva senza
+    approvazione.
+12. Non fermarti al controllo dei file: prova almeno due percorsi reali
    `richiesta -> stanza -> fonte -> capacita/processo -> output`.
-12. Esegui in una nuova task/sessione la richiesta esatta
+13. Esegui in una nuova task/sessione la richiesta esatta
     `Crea la Brand Identity`, senza percorsi, file, stanze, fonti, skill o
     output suggeriti. Registra il percorso autonomo e l'output osservato.
-13. Per ogni problema incontrato registra causa, riparazione, prova e
+14. Per ogni problema incontrato registra causa, riparazione, prova e
     `LEZIONE CANDIDATA`. Se e' ripetibile, la lezione va restituita a LeaderAI
     per diventare regola e test della release successiva.
-14. Completa il resoconto locale. Aprilo con `STATO PER LE PERSONE`: `Fatto`,
+15. Completa il resoconto locale. Aprilo con `STATO PER LE PERSONE`: `Fatto`,
     `Manca`, `Prossimo passo`, `Intervento umano`; poi inserisci dettagli e
     prove tecniche. Ogni invio esterno richiede autorizzazione esplicita del
     proprietario.
