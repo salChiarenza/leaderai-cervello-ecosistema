@@ -37,25 +37,26 @@ proprietarie e chiude localmente. Una conferma esterna parte soltanto quando
 Sal la richiede; decisioni e gesti umani veri restano come `DA DECIDERE IN
 CALL`.
 
-L'unica interruzione ammessa e' un `BLOCCO REALE` non risolvibile dalle fonti
-o con tentativi sicuri. Nello stesso canale l'agente scrive cosa ha gia'
-provato, cosa manca e pone una domanda unica: `Come proseguo su questo punto?`.
-Dopo la risposta riprende la stessa missione e la completa. Aggiornamenti di
-avanzamento e domande a puntate sono vietati.
+L'unica interruzione ammessa arriva quando serve un gesto che puo' compiere il
+proprietario. Nello stesso canale l'agente scrive `SERVE UN TUO PASSAGGIO`,
+cosa ha gia' sistemato, il solo gesto richiesto e `Appena lo fai: riprendo e
+completo il lavoro.` Dopo la risposta riprende la stessa missione e la
+completa. Le classificazioni tecniche restano nelle fonti della casa.
 
-Se Sal richiede espressamente una conferma finale, inviala una volta sola e
-soltanto con esito `PASSA`. Apri con `Perfetto, l'ho fatto. Tutto completato e
+Se Sal richiede espressamente una conferma finale, inviala una volta sola
+quando tutti i criteri sono completati e provati. Apri con `Perfetto, l'ho
+fatto. Tutto completato e
 funzionante.` e riporta le prove essenziali di tutti i criteri della missione.
 Ogni stato intermedio resta nella casa e alimenta la stessa missione.
 
 Ogni email operativa agente-agente, in entrambe le direzioni, apre con:
 
 ```text
-STATO PER LE PERSONE
-Fatto: ...
-Manca: ...
-Prossimo passo: ...
-Intervento umano: ...
+SITUAZIONE IN BREVE
+Cosa funziona: ...
+Cosa completiamo: ...
+Cosa serve da te: ...
+Quando si chiude: ...
 ```
 
 Solo dopo vengono `ISTRUZIONI PER L'AGENTE` o i dettagli tecnici.

@@ -79,15 +79,17 @@ e prova tutto nella casa del cliente, promuove stato e prove nelle fonti
 proprietarie, archivia l'email e chiude le
 superfici aperte. Il ciclo produce zero aggiornamenti intermedi; decisioni e
 gesti umani veri restano come `DA DECIDERE IN CALL`.
-L'unica interruzione ammessa e' un `BLOCCO REALE` che l'agente non puo'
-risolvere dalle fonti o con tentativi sicuri: dichiara cosa ha provato, cosa
-manca e pone una domanda unica. Dopo la risposta riprende la stessa missione;
-nessun aggiornamento a puntate.
-Quando Sal richiede espressamente una conferma finale, parte una volta sola e
-soltanto con esito `PASSA`: apre con `Perfetto, l'ho fatto. Tutto completato e
+L'unica interruzione ammessa arriva quando serve un gesto che puo' compiere il
+proprietario. Il messaggio visibile apre con `SERVE UN TUO PASSAGGIO`, indica
+cosa l'agente ha gia' sistemato e chiede un solo gesto. Dopo la risposta
+riprende la stessa missione; le classificazioni tecniche restano nella casa.
+Quando Sal richiede espressamente una conferma finale, parte una volta sola
+quando tutti i criteri sono completati e provati: apre con `Perfetto, l'ho
+fatto. Tutto completato e
 funzionante.` e riporta le prove essenziali di tutti i criteri della missione.
-Le email operative tra agenti aprono sempre con `STATO PER LE PERSONE`: fatto,
-manca, prossimo passo e intervento umano. I dettagli tecnici vengono dopo.
+Le email operative tra agenti aprono sempre con `SITUAZIONE IN BREVE`: cosa
+funziona, cosa completiamo, cosa serve da te e quando si chiude. I dettagli
+tecnici restano nelle fonti della casa.
 
 Dove mettere la cartella madre si decide caso per caso con domande guidate
 (disco locale oppure cartella sincronizzata OneDrive / Google Drive). Avviso da

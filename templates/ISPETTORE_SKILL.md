@@ -95,8 +95,12 @@ e la tabella delle fonti vive:
 
 `fonte | ruolo | regola/capacita' confrontata | stato osservato | scostamento/riparazione | prova | data`
 
-Poi indica soltanto:
+Salva il verdetto tecnico `PASSA`, `PASSA CON ATTENZIONE` o `NON PASSA` nella
+fonte proprietaria. Nel messaggio visibile alla persona indica soltanto:
 
-- cosa hai riparato;
-- cosa resta davvero da decidere;
-- verdetto `PASSA`, `PASSA CON ATTENZIONE` o `NON PASSA`.
+- `Cosa funziona`;
+- `Cosa completiamo`;
+- `Cosa serve da te`;
+- `Quando si chiude`.
+
+Se serve un gesto umano, usa `SERVE UN TUO PASSAGGIO` e chiedi una sola cosa.

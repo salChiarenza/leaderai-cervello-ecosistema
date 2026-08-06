@@ -20,12 +20,12 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "aggiornamenti di avanzamento",
             "archivia l'email della missione",
             "DA DECIDERE IN CALL",
-            "BLOCCO REALE",
-            "una domanda unica",
+            "SERVE UN TUO PASSAGGIO",
+            "Mi serve da te",
             "riprendi la stessa missione",
             "Perfetto, l'ho fatto. Tutto completato e funzionante.",
             "una volta sola",
-            "soltanto con esito `PASSA`",
+            "classificazioni tecniche restano nelle fonti",
         ]
 
         for phrase in required:
@@ -47,12 +47,12 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "aggiornamenti di avanzamento",
             "Archivia nello stesso giro",
             "DA DECIDERE IN CALL",
-            "BLOCCO REALE",
-            "una domanda unica",
+            "SERVE UN TUO PASSAGGIO",
+            "Mi serve da te",
             "riprende la stessa missione",
             "Perfetto, l'ho fatto. Tutto completato e funzionante.",
             "una volta sola",
-            "soltanto con esito `PASSA`",
+            "classificazioni tecniche restano nelle fonti",
         ]
 
         for phrase in required:
@@ -62,7 +62,7 @@ class MissionLoopGuidanceTest(unittest.TestCase):
         self.assertIn("Protocollo missioni LeaderAI", processes)
         self.assertIn("MISSIONE -> ESECUZIONE -> AUTOCONTROLLO", processes)
 
-    def test_delivery_contract_enforces_single_real_blocker(self):
+    def test_delivery_contract_enforces_one_plain_language_human_request(self):
         email = " ".join(
             (ROOT / "EMAIL_CONSEGNA.md").read_text(encoding="utf-8").split()
         )
@@ -71,10 +71,10 @@ class MissionLoopGuidanceTest(unittest.TestCase):
         )
 
         for phrase in [
-            "BLOCCO REALE",
-            "Ho gia' provato",
-            "Mi manca",
-            "Domanda unica: Come proseguo su questo punto?",
+            "SERVE UN TUO PASSAGGIO",
+            "Ho gia' sistemato",
+            "Mi serve da te",
+            "Appena lo fai: riprendo e completo il lavoro.",
             "Dopo la risposta riprendi la stessa missione",
             "Perfetto, l'ho fatto. Tutto completato e funzionante.",
         ]:
@@ -82,10 +82,10 @@ class MissionLoopGuidanceTest(unittest.TestCase):
                 self.assertIn(phrase, email)
 
         for phrase in [
-            "Legge dell'unico blocco reale",
-            "una domanda unica",
+            "Regola dell'unico passaggio umano",
+            "SERVE UN TUO PASSAGGIO",
             "riprende la stessa missione",
-            "Aggiornamenti di avanzamento e domande a puntate sono vietati",
+            "classificazioni tecniche restano nella casa",
             "Perfetto, l'ho fatto. Tutto completato e funzionante.",
         ]:
             with self.subTest(source="manifest", phrase=phrase):

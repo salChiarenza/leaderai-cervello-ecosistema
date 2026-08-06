@@ -42,11 +42,11 @@ LeaderAI, salvo blocchi umani veri.
 Oggetto: `Checkup Ecosistema`
 
 ```text
-STATO PER LE PERSONE
-Fatto: il checkup e' pronto per essere eseguito sull'ambiente reale.
-Manca: diagnosi, riparazioni e prove finali.
-Prossimo passo: l'agente esegue CHECKUP.md fino alla conferma finale.
-Intervento umano: solo permessi, accessi o decisioni che l'agente non puo' dare.
+SITUAZIONE IN BREVE
+Cosa funziona: il checkup e' pronto per essere eseguito sull'ambiente reale.
+Cosa completiamo: diagnosi, riparazioni e prove finali.
+Cosa serve da te: soltanto eventuali permessi, accessi o decisioni personali.
+Quando si chiude: dopo il collaudo completo dell'ambiente e del processo reale.
 
 ISTRUZIONI PER L'AGENTE
 Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
@@ -704,11 +704,11 @@ modifica distruttiva ai file vivi avviene senza approvazione del proprietario.
 ## Output (dopo le riparazioni, non prima)
 
 ```text
-STATO PER LE PERSONE
-Fatto: [cosa e' stato concluso e provato]
-Manca: [blocco residuo oppure niente]
-Prossimo passo: [una sola azione concreta e chi la esegue]
-Intervento umano: [gesto richiesto oppure nessuno]
+SITUAZIONE IN BREVE
+Cosa funziona: [cosa e' stato concluso e provato]
+Cosa completiamo: [lavoro che l'agente porta a termine]
+Cosa serve da te: [un solo gesto richiesto oppure tutto gestito dall'agente]
+Quando si chiude: [condizione concreta di chiusura]
 
 DETTAGLI TECNICI
 CHECKUP LEADERAI — [data]
@@ -804,22 +804,27 @@ decisioni o gesti realmente umani. Completa e prova ogni azione eseguibile
 dall'agente prima della chiusura. Registra ogni blocco umano come
 `DA DECIDERE IN CALL`, con il gesto preciso.
 
-### Legge dell'unico blocco reale
+### Un solo passaggio umano, scritto in parole comuni
 
 La missione deve indicare istruzioni precise, fonti, risultato atteso, azioni
 autorizzate e criteri di riuscita. Esegui, diagnostica, ripara, riprova e
-completa in autonomia. Non inviare aggiornamenti di avanzamento e non chiedere
-istruzioni a puntate. Fermati una sola volta soltanto davanti a un
-`BLOCCO REALE`: istruzione non decidibile dalle fonti, accesso o permesso mancante,
-scelta del proprietario, hardware assente, rischio irreversibile oppure
-servizio esterno indisponibile dopo tentativi ragionevoli. Nello stesso canale
-scrivi cosa hai gia' provato, cosa manca e una domanda unica: `Come proseguo su
-questo punto?`. Ricevuta la risposta, riprendi la stessa missione e arriva alla
-fine.
+completa in autonomia, evitando aggiornamenti di avanzamento e richieste a
+puntate. Fermati una sola volta soltanto quando serve un gesto che puo'
+compiere il proprietario. Nel messaggio visibile scrivi:
 
-Quando Sal richiede espressamente una conferma finale, inviala una volta sola e
-soltanto con esito `PASSA`: tutti i criteri della missione sono completati e
-provati, compreso il processo reale e la riapertura del contesto. Apri con
+```text
+SERVE UN TUO PASSAGGIO
+Ho gia' sistemato: [cosa e' stata completata]
+Mi serve da te: [un solo dato, accesso, permesso o decisione]
+Appena lo fai: riprendo e completo il lavoro.
+```
+
+Le classificazioni tecniche restano nelle fonti della casa. Ricevuta la
+risposta, riprendi la stessa missione e arriva alla fine.
+
+Quando Sal richiede espressamente una conferma finale, inviala una volta sola
+quando tutti i criteri della missione sono completati e provati, compreso il
+processo reale e la riapertura del contesto. Apri con
 `Perfetto, l'ho fatto. Tutto completato e funzionante.` e riporta le prove
 essenziali. Gli esiti intermedi restano nella casa e alimentano la stessa
 missione.

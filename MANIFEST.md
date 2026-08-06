@@ -212,10 +212,10 @@ stessa modalita'. Il rilascio lo prova in una cartella vuota con percorso
 difficile, usando una sessione reale che riceve soltanto la procedura e lo
 standard statico.
 
-Ogni email operativa agente-agente apre con `STATO PER LE PERSONE`: `Fatto`,
-`Manca`, `Prossimo passo`, `Intervento umano`. Le istruzioni e le prove
-tecniche vengono dopo. La conferma finale vive nel messaggio conclusivo e i
-fatti restano nelle fonti proprietarie.
+Ogni email operativa agente-agente apre con `SITUAZIONE IN BREVE`: `Cosa
+funziona`, `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`. Le
+classificazioni e le prove tecniche restano nelle fonti proprietarie. La
+conferma finale vive nel messaggio conclusivo.
 
 L'email della missione e' l'unico messaggio del ciclo ordinario. L'agente crea
 e prova tutto nella casa del cliente, salva stato e prove nelle fonti
@@ -223,15 +223,15 @@ proprietarie e chiude localmente. Decisioni e gesti umani veri restano come
 `DA DECIDERE IN CALL`; una conferma esterna parte soltanto quando Sal la
 richiede nella missione.
 
-Legge dell'unico blocco reale: l'agente esegue istruzioni precise, diagnostica,
-ripara, riprova e completa in autonomia. Si ferma una sola volta soltanto
-davanti a un `BLOCCO REALE` non risolvibile dalle fonti e dai tentativi sicuri.
-Nello stesso canale dichiara cosa ha gia' provato, cosa manca e pone una domanda
-unica: `Come proseguo su questo punto?`. Dopo la risposta riprende la stessa
-missione. Aggiornamenti di avanzamento e domande a puntate sono vietati.
+Regola dell'unico passaggio umano: l'agente esegue istruzioni precise,
+diagnostica, ripara, riprova e completa in autonomia. Si ferma una sola volta
+soltanto quando serve un gesto che puo' compiere il proprietario. Nello stesso
+canale scrive `SERVE UN TUO PASSAGGIO`, cosa ha gia' sistemato, il solo gesto
+richiesto e `Appena lo fai: riprendo e completo il lavoro.` Dopo la risposta
+riprende la stessa missione. Le classificazioni tecniche restano nella casa.
 
-Se Sal richiede espressamente una conferma finale, parte una volta sola e
-soltanto con esito `PASSA`: tutti i criteri sono completati e provati. La
+Se Sal richiede espressamente una conferma finale, parte una volta sola quando
+tutti i criteri sono completati e provati. La
 conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.`; ogni
 stato intermedio resta nella casa del cliente.
 

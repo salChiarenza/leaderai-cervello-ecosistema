@@ -218,22 +218,25 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Se la missione punta a `CHECKUP.md`, usa la repo ufficiale come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
-- L'email della missione apre con `STATO PER LE PERSONE`: `Fatto`, `Manca`,
-  `Prossimo passo`, `Intervento umano`. Solo dopo vengono istruzioni e dettagli
-  tecnici.
+- L'email della missione apre con `SITUAZIONE IN BREVE`: `Cosa funziona`,
+  `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`. Le
+  classificazioni e i dettagli tecnici restano nelle fonti della casa.
 - Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
   proprietarie.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
   per la missione; registra i gesti umani come `DA DECIDERE IN CALL`.
 - L'email della missione chiude localmente. Un invio successivo esiste soltanto
   su richiesta esplicita di Sal per quella singola email.
-- L'unica interruzione ammessa e' un `BLOCCO REALE` non risolvibile dalle fonti
-  o con tentativi sicuri. Nello stesso canale l'agente dichiara cosa ha gia'
-  provato, cosa manca e pone una domanda unica: `Come proseguo su questo
-  punto?`. Dopo la risposta riprende la stessa missione. Sono vietati
-  aggiornamenti di avanzamento e domande a puntate.
-- Se Sal richiede una conferma finale, inviala una volta sola e soltanto con
-  esito `PASSA`: apri con `Perfetto, l'ho fatto. Tutto completato e
+- L'unica interruzione ammessa arriva quando serve un gesto che puo' compiere
+  il proprietario. Nello stesso canale l'agente scrive `SERVE UN TUO
+  PASSAGGIO`, `Ho gia' sistemato: [...]`, `Mi serve da te: [...]` e `Appena lo
+  fai: riprendo e completo il lavoro.` Dopo la risposta riprende la stessa
+  missione. Le classificazioni tecniche restano nelle fonti della casa.
+- Evita aggiornamenti di avanzamento e richieste a puntate: ogni stato
+  intermedio resta nella fonte proprietaria.
+- Se Sal richiede una conferma finale, inviala una volta sola quando tutti i
+  criteri sono completati e provati: apri con `Perfetto, l'ho fatto. Tutto
+  completato e
   funzionante.` e riporta le prove essenziali di tutti i criteri della
   missione.
 

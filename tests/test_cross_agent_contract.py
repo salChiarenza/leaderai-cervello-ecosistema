@@ -141,10 +141,18 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertNotIn("eventuale invio del report", email)
         self.assertIn("PROVA_DESTINATARIO", email)
         self.assertIn("AI_ACT_CHECK_OK", email)
-        self.assertGreaterEqual(email.count("STATO PER LE PERSONE"), 2)
-        for field in ["Fatto:", "Manca:", "Prossimo passo:", "Intervento umano:"]:
+        self.assertGreaterEqual(email.count("SITUAZIONE IN BREVE"), 2)
+        for field in [
+            "Cosa funziona:",
+            "Cosa completiamo:",
+            "Cosa serve da te:",
+            "Quando si chiude:",
+        ]:
             with self.subTest(human_field=field):
                 self.assertIn(field, email)
+        self.assertNotIn("NON PASSA", email)
+        self.assertNotIn("BLOCCO REALE", email)
+        self.assertIn("SERVE UN TUO PASSAGGIO", email)
         if "PROVA_DESTINATARIO_OK" in email:
             version = self.read("VERSION").strip()
             self.assertIn(f"versione `{version}`", email)
@@ -225,11 +233,11 @@ class CrossAgentContractTest(unittest.TestCase):
             ("templates/PROCESSI.md", processes),
         ]:
             with self.subTest(relative=relative):
-                self.assertIn("STATO PER LE PERSONE", text)
-                self.assertIn("Fatto:", text)
-                self.assertIn("Manca:", text)
-                self.assertIn("Prossimo passo:", text)
-                self.assertIn("Intervento umano:", text)
+                self.assertIn("SITUAZIONE IN BREVE", text)
+                self.assertIn("Cosa funziona:", text)
+                self.assertIn("Cosa completiamo:", text)
+                self.assertIn("Cosa serve da te:", text)
+                self.assertIn("Quando si chiude:", text)
 
     def test_mission_closes_locally_without_return_email(self):
         checkup = self.read("CHECKUP.md")

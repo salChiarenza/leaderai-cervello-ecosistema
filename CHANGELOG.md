@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.5 - 06/08/2026
+
+- Le comunicazioni visibili a Sal e al cliente usano ora un riepilogo in
+  parole comuni: `Cosa funziona`, `Cosa completiamo`, `Cosa serve da te` e
+  `Quando si chiude`.
+- Le classificazioni tecniche restano nelle fonti della casa e non compaiono
+  nelle email. Quando serve davvero un gesto umano, il messaggio apre con
+  `SERVE UN TUO PASSAGGIO`, indica il solo gesto richiesto e promette la
+  ripresa immediata della stessa missione.
+- Il contratto di consegna rifiuta email che espongono a Sal o al cliente le
+  etichette tecniche `NON PASSA` e `BLOCCO REALE`.
+
 ## 0.5.4 - 06/08/2026
 
 - Le missioni cliente continuano nella stessa casa fino a completamento e

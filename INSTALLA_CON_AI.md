@@ -557,8 +557,8 @@ blocco crea solo eventi test o nuovi eventi approvati: non migrare eventi vecchi
 senza conferma esplicita.
 
 Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
-- `STATO PER LE PERSONE` in apertura, con `Fatto`, `Manca`, `Prossimo passo`
-  e `Intervento umano` in parole semplici;
+- `SITUAZIONE IN BREVE` in apertura, con `Cosa funziona`, `Cosa
+  completiamo`, `Cosa serve da te` e `Quando si chiude` in parole semplici;
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
 - standard applicato: repo ufficiale + versione letta;
 - versione metodo registrata e versione precedente trovata, se esiste;
@@ -603,7 +603,8 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 Chiusura locale della missione:
 1. Verifica il risultato che il proprietario vedra' e le prove salvate nelle
    fonti proprietarie.
-2. Mostra al proprietario la conferma finale con esito e prove essenziali.
+2. Mostra al proprietario la conferma finale in parole comuni; il verdetto
+   tecnico resta nelle fonti proprietarie.
 3. Salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
    Registra i gesti umani come `DA DECIDERE IN CALL`.
 4. Archivia l'email della missione e chiudi pagine, tab, finestre e strumenti
@@ -617,16 +618,24 @@ richiede nella missione.
 
 La missione deve darti istruzioni precise, fonti, risultato atteso, azioni
 autorizzate e criteri di riuscita. Esegui, diagnostica, ripara, riprova e
-completa in autonomia. Non inviare aggiornamenti di avanzamento e non chiedere
-istruzioni a puntate. Fermati una sola volta soltanto davanti a un
-`BLOCCO REALE`: un ostacolo non risolvibile dalle fonti e dai tentativi sicuri gia'
-fatti. Nello stesso canale scrivi cosa hai gia' provato, cosa manca e una
-domanda unica: `Come proseguo su questo punto?`. Dopo la risposta riprendi la
-stessa missione e completala.
+completa in autonomia, evitando aggiornamenti di avanzamento e richieste a
+puntate. Fermati una sola volta soltanto quando serve un gesto che puo'
+compiere il proprietario. Nel messaggio visibile scrivi:
 
-Quando Sal richiede espressamente una conferma finale, inviala una volta sola e
-soltanto con esito `PASSA`: tutti i criteri della missione, compreso il processo
-reale e la riapertura del contesto, sono completati e provati. Apri con
+`SERVE UN TUO PASSAGGIO`
+
+`Ho gia' sistemato: [cosa e' stata completata]`
+
+`Mi serve da te: [un solo dato, accesso, permesso o decisione]`
+
+`Appena lo fai: riprendo e completo il lavoro.`
+
+Dopo la risposta riprendi la stessa missione e completala. Le classificazioni
+tecniche restano nelle fonti della casa.
+
+Quando Sal richiede espressamente una conferma finale, inviala una volta sola
+quando tutti i criteri della missione, compreso il processo reale e la
+riapertura del contesto, sono completati e provati. Apri con
 `Perfetto, l'ho fatto. Tutto completato e funzionante.` e aggiungi le prove
 essenziali. Ogni stato intermedio resta nella casa e alimenta
 l'auto-riparazione della stessa missione.
@@ -636,6 +645,6 @@ cio' che si puo' riparare, si prova, si fa autocontrollo, si salva nella casa e
 si chiude localmente.
 `PASSA CON ATTENZIONE` contiene soltanto decisioni o gesti umani veri: ogni
 azione eseguibile dall'agente viene completata e provata prima della chiusura.
-La missione inizia con `STATO PER LE PERSONE`; istruzioni e dettagli tecnici
-vengono dopo.
+La missione inizia con `SITUAZIONE IN BREVE`; le classificazioni e i dettagli
+tecnici restano nelle fonti della casa.
 ```

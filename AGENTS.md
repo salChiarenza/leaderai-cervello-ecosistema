@@ -127,21 +127,21 @@ gesti umani veri vengono salvati come `DA DECIDERE IN CALL` con il gesto
 preciso. Un invio successivo esiste soltanto su richiesta esplicita di Sal per
 quella singola email.
 
-### Legge dell'unico blocco reale
+### Un solo passaggio umano, scritto in parole comuni
 
 La missione contiene istruzioni precise, fonti, risultato atteso, azioni
 autorizzate e criteri di riuscita. L'agente esegue, diagnostica, ripara, riprova
-e completa in autonomia, senza aggiornamenti di avanzamento o domande a
-puntate. Si ferma una sola volta soltanto davanti a un `BLOCCO REALE`: una
-istruzione ambigua e non decidibile dalle fonti, un accesso o permesso
-mancante, una scelta del proprietario, hardware assente, un rischio
-irreversibile oppure un servizio esterno indisponibile dopo tentativi
-ragionevoli. Nello stesso canale scrive cosa ha gia' provato, cosa manca e una
-domanda unica: `Come proseguo su questo punto?`. Ricevuta la risposta, riprende
-la stessa missione e arriva alla fine.
+e completa in autonomia, evitando aggiornamenti di avanzamento e domande a
+puntate. Si ferma una sola volta soltanto quando serve un gesto che puo'
+compiere il proprietario: un dato, un accesso, un permesso, una scelta,
+hardware presente sul posto oppure una verifica di sicurezza. Nel messaggio
+visibile alla persona scrive `SERVE UN TUO PASSAGGIO`, cosa ha gia' sistemato,
+il solo gesto richiesto e `Appena lo fai: riprendo e completo il lavoro.` Le
+classificazioni tecniche restano nelle fonti della casa. Ricevuta la risposta,
+riprende la stessa missione e arriva alla fine.
 
-Quando Sal richiede una conferma finale, parte una volta sola e soltanto con
-esito `PASSA`: tutti i criteri della missione sono completati e provati. La
+Quando Sal richiede una conferma finale, parte una volta sola quando tutti i
+criteri della missione sono completati e provati. La
 conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.` e
 riporta le prove essenziali. Ogni stato intermedio resta nella casa e alimenta
 la stessa missione.
