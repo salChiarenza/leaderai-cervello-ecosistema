@@ -633,10 +633,17 @@ macchina.
 
 **Un episodio conta uno.** Lo stesso gesto lascia spesso piu' tracce: un commit
 in Git, una nota in `AGENT_CHAT.md`, una riga di diario. Prima di contare,
-normalizza il gesto e deduplica: lo stesso episodio presente in Git, chat e
-diario vale uno, non tre. La regola deterministica e' `adoption_rule.py ->
-classify_adoption`, con verdetti in `install_contract.json ->
-inspection_policies -> adoption_observation`; il rapporto la rispetta a mano.
+deduplica per identita' di episodio: lo stesso episodio presente in Git, chat e
+diario vale uno, non tre. L'identita' e' l'episodio, non il testo del gesto: due
+episodi distinti contano due anche con lo stesso gesto e nello stesso giorno, e
+lo stesso gesto ripetuto in giorni diversi conta una volta per giorno. Le tracce
+ammesse sono quelle elencate qui sopra — registro sessioni, cronologia file,
+`logs/`, diario, `AGENT_CHAT.md`, `MEMORY.md`, storia Git — con vocabolario
+canonico nel contratto (`dedup_sources`). La regola deterministica e'
+`adoption_rule.py -> classify_adoption`, con verdetti e tracce ammesse in
+`install_contract.json -> inspection_policies -> adoption_observation`, unica
+fonte macchina: se il contratto manca, non e' valido o la policy e' incompleta,
+la regola fallisce in modo visibile. Il rapporto la rispetta a mano.
 
 1. **Strumenti vivi.** Elenca gli strumenti, i connettori e le capacita' che
    compaiono nelle giornate di lavoro. Per ognuno riporta la frequenza

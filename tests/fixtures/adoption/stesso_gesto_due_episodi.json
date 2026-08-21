@@ -1,0 +1,15 @@
+{
+  "descrizione": "Stesso gesto svolto in due episodi distinti nello stesso giorno: conta due. L'identita' esplicita tiene separati i due episodi che la sola normalizzazione del gesto avrebbe fuso.",
+  "traces_read": true,
+  "house_shared": false,
+  "machines_in_house": ["mac-studio"],
+  "episodes": [
+    {"episode": "fattura-rossi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
+    {"episode": "fattura-bianchi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"}
+  ],
+  "expected": {
+    "verdict": "ADOZIONE OSSERVATA",
+    "unique_count": 2,
+    "duplicates_collapsed": 0
+  }
+}

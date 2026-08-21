@@ -1,12 +1,12 @@
 {
-  "descrizione": "Stesso gesto in Git, chat e diario: conta uno.",
+  "descrizione": "Stesso episodio presente in Git, chat e diario: conta uno. L'identita' esplicita dell'episodio fonde le tre tracce anche se una riga di diario porta per errore una data diversa.",
   "traces_read": true,
   "house_shared": false,
   "machines_in_house": ["mac-studio"],
   "episodes": [
-    {"gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
-    {"gesture": "emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
-    {"gesture": "Emissione  fattura   elettronica", "source": "diario", "machine": "mac-studio", "date": "2026-08-11"}
+    {"episode": "fattura-elettronica-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
+    {"episode": "fattura-elettronica-2026-08-10", "gesture": "emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
+    {"episode": "fattura-elettronica-2026-08-10", "gesture": "Emissione  fattura   elettronica", "source": "diario", "machine": "mac-studio", "date": "2026-08-11"}
   ],
   "expected": {
     "verdict": "ADOZIONE OSSERVATA",

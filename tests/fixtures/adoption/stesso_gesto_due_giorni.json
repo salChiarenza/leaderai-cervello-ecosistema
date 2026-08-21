@@ -1,0 +1,15 @@
+{
+  "descrizione": "Stesso gesto ripetuto in due giorni diversi, senza identita' esplicita: conta due. La coppia (gesto, data) tiene distinti i due utilizzi reali che la deduplicazione per solo gesto avrebbe fuso in uno.",
+  "traces_read": true,
+  "house_shared": false,
+  "machines_in_house": ["mac-studio"],
+  "episodes": [
+    {"gesture": "Controllo posta clienti", "source": "sessioni", "machine": "mac-studio", "date": "2026-08-10"},
+    {"gesture": "Controllo posta clienti", "source": "sessioni", "machine": "mac-studio", "date": "2026-08-11"}
+  ],
+  "expected": {
+    "verdict": "ADOZIONE OSSERVATA",
+    "unique_count": 2,
+    "duplicates_collapsed": 0
+  }
+}

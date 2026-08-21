@@ -13,11 +13,20 @@
   NEL PERIODO OSSERVATO`, non come un mancato uso definitivo. Entra nel rapporto
   con la sua prova, vive accanto all'elenco bloccante del gate e lascia il
   verdetto deciso dalle sole condizioni tecniche.
-- Un episodio conta uno: lo stesso gesto presente in Git, chat e diario viene
-  deduplicato prima di contare, come chiede la regola deterministica
-  `adoption_rule.py -> classify_adoption`, con verdetti e tracce ammesse in
-  `install_contract.json -> inspection_policies -> adoption_observation` e
-  fixture di prova per doppione, tracce assenti e copertura parziale.
+- Un episodio conta uno: le tracce dello stesso episodio (Git, chat, diario)
+  vengono deduplicate per identita' di episodio, non per solo testo del gesto.
+  Due episodi distinti contano due anche con lo stesso gesto e nello stesso
+  giorno; lo stesso gesto ripetuto in giorni diversi conta una volta per giorno.
+  Regola deterministica `adoption_rule.py -> classify_adoption`, con verdetti e
+  tracce ammesse in `install_contract.json -> inspection_policies ->
+  adoption_observation`, fonte macchina obbligatoria: contratto mancante, JSON
+  non valido o policy incompleta fanno fallire la regola in modo visibile, senza
+  default locali. Le tracce ammesse coprono tutte quelle del Passo 1-quinquies
+  (sessioni, cronologia file, `logs/`, diario, chat, `MEMORY.md`, Git) con
+  vocabolario canonico nel contratto. Fixture di prova per: stesso episodio in
+  piu' sorgenti (uno), stesso gesto in due episodi distinti (due), stesso gesto
+  in due giorni (due), sorgenti sessioni/log/file ammesse, tracce assenti,
+  copertura parziale, contratto mancante/malformato/incompleto.
 - Osservazione parziale: le tracce vivono sulla macchina dell'agente mentre la
   casa puo' stare su Drive/OneDrive condivisa fra piu' PC. Se la casa e'
   condivisa e le tracce arrivano da una sola postazione, l'esito e'

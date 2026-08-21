@@ -3,15 +3,18 @@ import unittest
 from pathlib import Path
 
 from adoption_rule import (
+    REQUIRED_VERDICTS,
     VERDICT_OBSERVED,
     VERDICT_PARTIAL_ONE_STATION,
     VERDICT_TRACES_ABSENT,
     AdoptionOutcome,
+    ContractError,
     classify_adoption,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / "tests" / "fixtures" / "adoption"
+CONTRACT_PATH = ROOT / "install_contract.json"
 
 
 def _run_fixture(name: str) -> tuple[dict, AdoptionOutcome]:
@@ -26,13 +29,32 @@ def _run_fixture(name: str) -> tuple[dict, AdoptionOutcome]:
 
 
 class AdoptionRuleTest(unittest.TestCase):
-    def test_doppione_collassa_su_un_solo_gesto(self):
+    def test_stesso_episodio_in_piu_sorgenti_conta_uno(self):
         data, outcome = _run_fixture("doppione.json")
         self.assertEqual(outcome.verdict, VERDICT_OBSERVED)
         self.assertEqual(outcome.verdict, data["expected"]["verdict"])
-        self.assertEqual(outcome.unique_count, 1)
-        self.assertEqual(outcome.duplicates_collapsed, 2)
+        self.assertEqual(outcome.unique_count, data["expected"]["unique_count"])
+        self.assertEqual(
+            outcome.duplicates_collapsed, data["expected"]["duplicates_collapsed"]
+        )
         self.assertEqual(outcome.unique_gestures, ("Emissione fattura elettronica",))
+
+    def test_stesso_gesto_in_due_episodi_distinti_conta_due(self):
+        data, outcome = _run_fixture("stesso_gesto_due_episodi.json")
+        self.assertEqual(outcome.verdict, VERDICT_OBSERVED)
+        self.assertEqual(outcome.unique_count, 2)
+        self.assertEqual(outcome.duplicates_collapsed, 0)
+
+    def test_stesso_gesto_in_due_giorni_conta_due(self):
+        data, outcome = _run_fixture("stesso_gesto_due_giorni.json")
+        self.assertEqual(outcome.verdict, VERDICT_OBSERVED)
+        self.assertEqual(outcome.unique_count, 2)
+        self.assertEqual(outcome.duplicates_collapsed, 0)
+
+    def test_sorgenti_sessioni_log_file_ammesse(self):
+        data, outcome = _run_fixture("sorgenti_ammesse.json")
+        self.assertEqual(outcome.verdict, VERDICT_OBSERVED)
+        self.assertEqual(outcome.unique_count, 4)
 
     def test_tracce_assenti_non_giudica_l_uso(self):
         data, outcome = _run_fixture("tracce_assenti.json")
@@ -72,20 +94,92 @@ class AdoptionRuleTest(unittest.TestCase):
                 traces_read=True,
             )
 
-    def test_verdetti_vivono_nel_contratto_macchina(self):
-        contract = json.loads(
-            (ROOT / "install_contract.json").read_text(encoding="utf-8")
-        )
+    def test_verdetti_e_sorgenti_vivono_nel_contratto_macchina(self):
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
         policy = contract["inspection_policies"]["adoption_observation"]
-        self.assertEqual(
-            set(policy["verdicts"]),
-            {
-                VERDICT_TRACES_ABSENT,
-                VERDICT_PARTIAL_ONE_STATION,
-                VERDICT_OBSERVED,
-            },
+        self.assertEqual(set(policy["verdicts"]), set(REQUIRED_VERDICTS))
+        # Il contratto copre tutte le tracce del Passo 1-quinquies.
+        self.assertLessEqual(
+            {"git", "chat", "diario", "sessioni", "file", "log", "memory"},
+            set(policy["dedup_sources"]),
         )
-        self.assertEqual(set(policy["dedup_sources"]), {"git", "chat", "diario"})
+
+
+class ContractSourceTest(unittest.TestCase):
+    """Il contratto macchina e' la fonte obbligatoria: manca, malformato o
+    incompleto -> errore visibile, mai default locali."""
+
+    def test_contratto_mancante_fallisce(self):
+        missing = ROOT / "tests" / "fixtures" / "adoption" / "non_esiste.json"
+        with self.assertRaises(ContractError):
+            classify_adoption(
+                [{"gesture": "x", "source": "git"}],
+                traces_read=True,
+                contract_path=missing,
+            )
+
+    def test_contratto_json_malformato_fallisce(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = Path(tmp) / "install_contract.json"
+            bad.write_text("{ questo non e' json valido ", encoding="utf-8")
+            with self.assertRaises(ContractError):
+                classify_adoption(
+                    [{"gesture": "x", "source": "git"}],
+                    traces_read=True,
+                    contract_path=bad,
+                )
+
+    def test_policy_incompleta_verdetti_mancanti_fallisce(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            partial = Path(tmp) / "install_contract.json"
+            partial.write_text(
+                json.dumps(
+                    {
+                        "inspection_policies": {
+                            "adoption_observation": {
+                                "verdicts": ["ADOZIONE OSSERVATA"],
+                                "dedup_sources": ["git"],
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ContractError):
+                classify_adoption(
+                    [{"gesture": "x", "source": "git"}],
+                    traces_read=True,
+                    contract_path=partial,
+                )
+
+    def test_policy_incompleta_sorgenti_mancanti_fallisce(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            partial = Path(tmp) / "install_contract.json"
+            partial.write_text(
+                json.dumps(
+                    {
+                        "inspection_policies": {
+                            "adoption_observation": {
+                                "verdicts": sorted(REQUIRED_VERDICTS),
+                                "dedup_sources": [],
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ContractError):
+                classify_adoption(
+                    [{"gesture": "x", "source": "git"}],
+                    traces_read=True,
+                    contract_path=partial,
+                )
 
 
 if __name__ == "__main__":

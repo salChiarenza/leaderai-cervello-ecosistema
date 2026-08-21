@@ -1,0 +1,17 @@
+{
+  "descrizione": "Tracce dalle sorgenti del Passo 1-quinquies oltre a git/chat/diario: registro sessioni, cronologia file, logs/ e MEMORY.md. Tutte ammesse dal contratto macchina.",
+  "traces_read": true,
+  "house_shared": false,
+  "machines_in_house": ["mac-studio"],
+  "episodes": [
+    {"episode": "ep-sessione", "gesture": "Avvio sessione agente", "source": "sessioni", "machine": "mac-studio", "date": "2026-08-12"},
+    {"episode": "ep-file", "gesture": "Modifica cartella madre", "source": "file", "machine": "mac-studio", "date": "2026-08-12"},
+    {"episode": "ep-log", "gesture": "Esecuzione connettore", "source": "log", "machine": "mac-studio", "date": "2026-08-12"},
+    {"episode": "ep-memory", "gesture": "Aggiornamento memoria", "source": "memory", "machine": "mac-studio", "date": "2026-08-12"}
+  ],
+  "expected": {
+    "verdict": "ADOZIONE OSSERVATA",
+    "unique_count": 4,
+    "duplicates_collapsed": 0
+  }
+}

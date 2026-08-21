@@ -40,8 +40,22 @@
       "dedup_sources": [
         "git",
         "chat",
-        "diario"
+        "diario",
+        "sessioni",
+        "file",
+        "log",
+        "memory"
       ],
+      "dedup_sources_glossario": {
+        "git": "storia Git della casa",
+        "chat": "AGENT_CHAT.md",
+        "diario": "diario in coda ai file progetto",
+        "sessioni": "registro delle sessioni dell'agente attivo",
+        "file": "cronologia dei file toccati nella cartella madre",
+        "log": "cartella logs/",
+        "memory": "MEMORY.md"
+      },
+      "episode_identity": "campo episode esplicito; in mancanza, coppia (gesto normalizzato, data). Le tracce dello stesso episodio contano uno; due episodi distinti contano due anche con stesso gesto e stesso giorno.",
       "rule": "adoption_rule.py -> classify_adoption",
       "scope": "uso reale degli strumenti; spesa e consumo restano al prodotto Il Consigliere"
     },
