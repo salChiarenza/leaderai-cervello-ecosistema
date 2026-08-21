@@ -22,16 +22,19 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 `PROVA_DESTINATARIO_OK — 21/08/2026`
 
 Verifica completata partendo dal solo archivio pubblico immutabile del commit
-`69a0cc5681bb1963dcad0a28a6c2df8a466fb0ae`.
+`e11a72e2ca5d375376432122ff7798e0189496e4`.
 L'archivio pubblico letto dal livello di accesso del destinatario ha SHA-256
-`f0d11ae7b0bae2f409e7c70aa6fbbffd85c21faff1bb1578ee88236540aed51c`.
-La versione `0.5.6` letta dalla copia estratta e' corretta; i `185` test
+`834b442551243637017dbedf4bb06c5ce24f46a68e63688074bd713ef0a4c22a`.
+La versione `0.5.6` letta dalla copia estratta e' corretta; i `186` test
 deterministici sono passati dalla sola copia pubblica. La 0.5.6 aggiunge al
 checkup la misura dell'uso reale (Passo 1-quinquies) con etichetta legata al
 periodo osservato, deduplicazione per identita' di episodio, `OSSERVAZIONE
 PARZIALE - UNA POSTAZIONE`, `VERDETTO CONFORMITA'` separato da `ADOZIONE
 OSSERVATA` e regola deterministica `adoption_rule.py` sulla fonte macchina
-obbligatoria `install_contract.json`, coperta da test.
+obbligatoria `install_contract.json`. La validazione richiede l'intero set
+canonico delle sette tracce: una policy con `dedup_sources` parziale (es. il
+solo Git) viene fermata con l'elenco delle mancanti, misurato sul glossario del
+contratto stesso. Tutto coperto da test.
 
 ## Controlli prima dell'invio
 
