@@ -134,6 +134,23 @@ def _load_policy(contract_path: Path = CONTRACT_PATH) -> dict:
             "policy adoption_observation incompleta: dedup_sources assente o vuota"
         )
 
+    # Set canonico delle tracce (Passo 1-quinquies): NON e' una seconda lista
+    # Python, e' dichiarato dal contratto stesso nel glossario. Cosi' la fonte
+    # macchina resta unica e la corrispondenza si valida in modo esplicito.
+    glossario = policy.get("dedup_sources_glossario")
+    if not isinstance(glossario, dict) or not glossario:
+        raise ContractError(
+            "policy adoption_observation incompleta: dedup_sources_glossario "
+            "assente o vuoto (dichiara le tracce canoniche del Passo 1-quinquies)"
+        )
+
+    mancanti = set(glossario) - set(sources)
+    if mancanti:
+        raise ContractError(
+            "policy adoption_observation incompleta: dedup_sources non copre le "
+            f"tracce canoniche del Passo 1-quinquies, mancano {sorted(mancanti)}"
+        )
+
     return policy
 
 

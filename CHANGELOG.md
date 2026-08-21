@@ -23,10 +23,14 @@
   non valido o policy incompleta fanno fallire la regola in modo visibile, senza
   default locali. Le tracce ammesse coprono tutte quelle del Passo 1-quinquies
   (sessioni, cronologia file, `logs/`, diario, chat, `MEMORY.md`, Git) con
-  vocabolario canonico nel contratto. Fixture di prova per: stesso episodio in
-  piu' sorgenti (uno), stesso gesto in due episodi distinti (due), stesso gesto
-  in due giorni (due), sorgenti sessioni/log/file ammesse, tracce assenti,
-  copertura parziale, contratto mancante/malformato/incompleto.
+  vocabolario canonico nel contratto. La validazione richiede ora l'intero set
+  canonico: una policy che dichiara solo una parte delle tracce (es. il solo
+  Git) viene fermata con l'elenco delle mancanti, misurando la completezza sul
+  glossario del contratto stesso, senza una seconda lista divergente. Fixture di
+  prova per: stesso episodio in piu' sorgenti (uno), stesso gesto in due episodi
+  distinti (due), stesso gesto in due giorni (due), sorgenti sessioni/log/file
+  ammesse, tracce assenti, copertura parziale, contratto
+  mancante/malformato/incompleto, sorgenti parziali non canoniche.
 - Osservazione parziale: le tracce vivono sulla macchina dell'agente mentre la
   casa puo' stare su Drive/OneDrive condivisa fra piu' PC. Se la casa e'
   condivisa e le tracce arrivano da una sola postazione, l'esito e'

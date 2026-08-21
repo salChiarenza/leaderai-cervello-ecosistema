@@ -181,6 +181,41 @@ class ContractSourceTest(unittest.TestCase):
                     contract_path=partial,
                 )
 
+    def test_policy_sorgenti_parziali_non_coprono_le_canoniche_fallisce(self):
+        """Lista non vuota ma incompleta: dichiara le sette tracce canoniche nel
+        glossario e ne offre solo una in dedup_sources. Deve fermarsi con le
+        tracce mancanti elencate (buco trovato dalla prova di Codex)."""
+        import tempfile
+
+        canoniche = ["git", "chat", "diario", "sessioni", "file", "log", "memory"]
+        with tempfile.TemporaryDirectory() as tmp:
+            partial = Path(tmp) / "install_contract.json"
+            partial.write_text(
+                json.dumps(
+                    {
+                        "inspection_policies": {
+                            "adoption_observation": {
+                                "verdicts": sorted(REQUIRED_VERDICTS),
+                                "dedup_sources": ["git"],
+                                "dedup_sources_glossario": {
+                                    s: s for s in canoniche
+                                },
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ContractError) as ctx:
+                classify_adoption(
+                    [{"gesture": "x", "source": "git"}],
+                    traces_read=True,
+                    contract_path=partial,
+                )
+            messaggio = str(ctx.exception)
+            for mancante in ["chat", "diario", "sessioni", "file", "log", "memory"]:
+                self.assertIn(mancante, messaggio)
+
 
 if __name__ == "__main__":
     unittest.main()
