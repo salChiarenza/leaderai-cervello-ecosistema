@@ -19,11 +19,18 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIFARE — 21/08/2026`
+`PROVA_DESTINATARIO_OK — 21/08/2026`
 
-La versione `0.5.6` aggiunge al checkup la misura dell'uso reale degli
-strumenti nelle giornate di lavoro. La prova del destinatario verra' registrata
-qui dopo la pubblicazione e il collaudo della copia pubblica immutabile.
+Verifica completata partendo dal solo archivio pubblico immutabile del commit
+`b5b150cad449d5f53b1adee89e41114048caf48c`.
+L'archivio pubblico letto dal livello di accesso del destinatario ha SHA-256
+`4a53f28df0ba8a967f3e698e8e606c4bea51f55c4a3af60210ddceb8754951a2`.
+La versione `0.5.6` letta dalla copia estratta e' corretta; i `178` test
+deterministici sono passati dalla sola copia pubblica. La 0.5.6 aggiunge al
+checkup la misura dell'uso reale (Passo 1-quinquies) con etichetta legata al
+periodo osservato, deduplicazione per episodio, `OSSERVAZIONE PARZIALE - UNA
+POSTAZIONE`, `VERDETTO CONFORMITA'` separato da `ADOZIONE OSSERVATA` e regola
+deterministica `adoption_rule.py` coperta da test.
 
 ## Controlli prima dell'invio
 
