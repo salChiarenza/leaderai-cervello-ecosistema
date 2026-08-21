@@ -22,15 +22,16 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 `PROVA_DESTINATARIO_OK — 21/08/2026`
 
 Verifica completata partendo dal solo archivio pubblico immutabile del commit
-`b5b150cad449d5f53b1adee89e41114048caf48c`.
+`69a0cc5681bb1963dcad0a28a6c2df8a466fb0ae`.
 L'archivio pubblico letto dal livello di accesso del destinatario ha SHA-256
-`4a53f28df0ba8a967f3e698e8e606c4bea51f55c4a3af60210ddceb8754951a2`.
-La versione `0.5.6` letta dalla copia estratta e' corretta; i `178` test
+`f0d11ae7b0bae2f409e7c70aa6fbbffd85c21faff1bb1578ee88236540aed51c`.
+La versione `0.5.6` letta dalla copia estratta e' corretta; i `185` test
 deterministici sono passati dalla sola copia pubblica. La 0.5.6 aggiunge al
 checkup la misura dell'uso reale (Passo 1-quinquies) con etichetta legata al
-periodo osservato, deduplicazione per episodio, `OSSERVAZIONE PARZIALE - UNA
-POSTAZIONE`, `VERDETTO CONFORMITA'` separato da `ADOZIONE OSSERVATA` e regola
-deterministica `adoption_rule.py` coperta da test.
+periodo osservato, deduplicazione per identita' di episodio, `OSSERVAZIONE
+PARZIALE - UNA POSTAZIONE`, `VERDETTO CONFORMITA'` separato da `ADOZIONE
+OSSERVATA` e regola deterministica `adoption_rule.py` sulla fonte macchina
+obbligatoria `install_contract.json`, coperta da test.
 
 ## Controlli prima dell'invio
 
