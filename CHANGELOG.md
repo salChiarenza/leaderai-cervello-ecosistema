@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.5.6 - 21/08/2026
+
+- Il checkup guadagna il Passo 1-quinquies "Come si lavora davvero qui dentro":
+  dalle tracce gia' presenti sulla macchina (registro sessioni, cronologia dei
+  file toccati, `logs/`, diario dei file progetto, `AGENT_CHAT.md`, `MEMORY.md`
+  e storia Git) l'agente ricostruisce quali strumenti entrano davvero nelle
+  giornate di lavoro, con quale frequenza e su quali lavori.
+- Nasce la voce `COLLEGATO E MAI USATO`: uno strumento provato e funzionante
+  che resta assente dalle giornate osservate entra nel rapporto con la sua
+  prova, vive accanto all'elenco bloccante del gate e lascia il verdetto deciso
+  dalle sole condizioni tecniche.
+- Lo stesso passo elenca i lavori che il proprietario continua a svolgere a
+  mano mentre la casa tiene gia' pronto e provato il collegamento che li
+  coprirebbe. Ogni voce porta la sua prova: file letto, riga di log, data
+  osservata. Quando le tracce locali risultano povere, l'agente scrive
+  `TRACCE ASSENTI` e indica quale traccia servirebbe.
+- Il rapporto finale porta le tre righe nuove `Uso reale quotidiano`,
+  `Collegato e mai usato` e `Lavori ancora a mano`, piu' il blocco
+  `COME SI LAVORA QUI DENTRO` con tracce lette e periodo coperto.
+- Confine di prodotto scritto dentro il passo: il checkup dice cosa si usa; la
+  misura della spesa e del consumo appartiene al prodotto `Il Consigliere`
+  (repo `salChiarenza/il-consigliere`).
+
 ## 0.5.5 - 06/08/2026
 
 - Le comunicazioni visibili a Sal e al cliente usano ora un riepilogo in

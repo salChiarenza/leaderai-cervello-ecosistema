@@ -19,15 +19,11 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 06/08/2026`
+`PROVA_DESTINATARIO_DA_RIFARE — 21/08/2026`
 
-Verifica completata partendo dal solo archivio pubblico immutabile del commit
-`c90adc41b9e99977ecf8805cc794dafd49df9d55`.
-L'archivio ha SHA-256
-`b37bedb20df718b75ac1efe8f9027cb10ece58aeaf9033ae40c36d007562047d`.
-La versione `0.5.5` letta dalla copia estratta e' corretta; i `170` test
-deterministici sono passati dalla sola copia pubblica. Il modello email espone
-soltanto il riepilogo in parole comuni e la richiesta umana singola.
+La versione `0.5.6` aggiunge al checkup la misura dell'uso reale degli
+strumenti nelle giornate di lavoro. La prova del destinatario verra' registrata
+qui dopo la pubblicazione e il collaudo della copia pubblica immutabile.
 
 ## Controlli prima dell'invio
 

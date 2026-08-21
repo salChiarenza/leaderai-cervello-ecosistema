@@ -485,6 +485,16 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 gate. Un ramo inattivo puo' restare assente e va riportato come `NON ATTIVO`,
 mai come errore.
 
+### Voce che segnala e lascia passare il verdetto
+
+L'elenco qui sopra raccoglie le sole condizioni bloccanti. Accanto a quelle
+vive una voce di segnalazione: uno strumento risultato collegato e funzionante
+alle prove tecniche del Passo 1-bis, e assente da tutte le giornate di lavoro
+osservate al Passo 1-quinquies, si riporta come `COLLEGATO E MAI USATO`. E' un
+fatto su come si lavora: entra nel rapporto con la sua prova, resta fuori
+dall'elenco bloccante e lascia il verdetto deciso dalle sole condizioni
+tecniche qui sopra.
+
 ## Passo 1-ter — Censimento e rete delle stanze
 
 Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale.
@@ -596,6 +606,46 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
    altra casa protetta fuori Git. In `ecosistema/ASSET.md` registra soltanto
    metadati, casa protetta, uso e limite; ogni applicazione o invio richiede
    conferma umana sul documento preciso.
+
+## Passo 1-quinquies — Come si lavora davvero qui dentro
+
+I passi precedenti misurano com'e' fatta la casa: file, mappe, stanze,
+collegamenti. Questo passo misura come la casa viene usata nelle giornate di
+lavoro reali. Un Cervello puo' mostrare dieci collegamenti provati e attivi
+mentre il proprietario continua a fare a mano lo stesso lavoro: qui quel fatto
+diventa visibile e scritto.
+
+Lavora sulle tracce che la macchina conserva gia': registro delle sessioni
+dell'agente attivo, cronologia dei file toccati nella cartella madre, `logs/`,
+diario in coda ai file progetto, `AGENT_CHAT.md`, `MEMORY.md` e storia Git
+della casa. Apri la sezione dichiarando quali tracce hai letto e quale periodo
+coprono davvero.
+
+1. **Strumenti vivi.** Elenca gli strumenti, i connettori e le capacita' che
+   compaiono nelle giornate di lavoro. Per ognuno riporta la frequenza
+   approssimativa osservata (ricorrente, saltuario, una volta sola), i lavori
+   su cui compare e la prova: file letto, riga di log, data osservata.
+2. **`COLLEGATO E MAI USATO`.** Elenca cio' che risulta installato, collegato o
+   previsto dalla mappa della casa e resta assente da tutte le tracce del
+   periodo osservato. Per ognuno riporta lo stato tecnico gia' rilevato al
+   Passo 1-bis punto D.1, le tracce consultate e la prova che coprono il
+   periodo dichiarato.
+3. **Lavori ancora a mano.** Elenca i lavori che il proprietario continua a
+   svolgere a mano mentre la casa tiene gia' pronto e provato il collegamento
+   che li coprirebbe. Per ognuno riporta il lavoro, il collegamento
+   disponibile e la prova del gesto manuale: messaggio, file creato a mano,
+   riga di diario, data.
+
+Ogni voce vive di una prova concreta e citabile. Quando le tracce locali
+risultano assenti o troppo povere per rispondere, scrivi `TRACCE ASSENTI`,
+indica quale traccia servirebbe (registro sessioni attivo, diario aggiornato in
+testa ai file progetto, `logs/` alimentato dal lavoro quotidiano) e proponi il
+gesto che inizia a raccoglierla. Ogni numero che entra nel rapporto nasce da
+una riga letta e citata.
+
+Il perimetro di questo passo e' l'uso: quali strumenti entrano nelle giornate e
+quali restano fermi. La misura della spesa e del consumo appartiene al prodotto
+`Il Consigliere` (repo `salChiarenza/il-consigliere`).
 
 ## Passo 2 — Ecosistema (solo se il Passo 1 passa)
 
@@ -737,6 +787,9 @@ Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
+Uso reale quotidiano    OK / PARZIALE / TRACCE ASSENTI - tracce lette, periodo coperto...
+Collegato e mai usato   NESSUNO / [elenco] - segnala e lascia passare il verdetto...
+Lavori ancora a mano    NESSUNO / [elenco] - lavoro, collegamento pronto, prova...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
 Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
 Percorsi censiti        OK / RIPARATO / NON PASSA - nessun percorso escluso...
@@ -760,6 +813,15 @@ GATE ANTI-CIRCOLARE     PASSA / NON PASSA - ...
 PROVENIENZA PROVE:
 - prova [1]: esisteva prima del checkup [SI/NO] - fonte/account - data/contesto.
 - prova [2]: esisteva prima del checkup [SI/NO] - fonte/account - data/contesto.
+
+COME SI LAVORA QUI DENTRO:
+- tracce lette: [registro sessioni, cronologia file, logs/, diario,
+  AGENT_CHAT.md, storia Git] - periodo coperto [dal ... al ...].
+- usati davvero: strumento -> frequenza osservata -> lavoro -> prova.
+- COLLEGATO E MAI USATO: strumento -> stato tecnico -> tracce consultate ->
+  prova che coprono il periodo. Segnala e lascia passare il verdetto.
+- ancora a mano: lavoro -> collegamento gia' pronto -> prova del gesto manuale.
+- TRACCE ASSENTI: [voce] -> traccia che servirebbe -> gesto che la avvia.
 
 RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.
 RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.
