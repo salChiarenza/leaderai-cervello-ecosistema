@@ -24,7 +24,7 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 Verifica completata partendo dal solo archivio pubblico immutabile del commit
 `e11a72e2ca5d375376432122ff7798e0189496e4`.
 L'archivio pubblico letto dal livello di accesso del destinatario ha SHA-256
-`834b442551243637017dbedf4bb06c5ce24f46a68e63688074bd713ef0a4c22a`.
+`e21297a392cb0ea83078488b3ca9694f0ce89bd5ed5287fbb45d66fb1cf68bf6`.
 La versione `0.5.6` letta dalla copia estratta e' corretta; i `186` test
 deterministici sono passati dalla sola copia pubblica. La 0.5.6 aggiunge al
 checkup la misura dell'uso reale (Passo 1-quinquies) con etichetta legata al
