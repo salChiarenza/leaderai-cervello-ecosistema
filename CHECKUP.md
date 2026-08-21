@@ -490,10 +490,12 @@ mai come errore.
 L'elenco qui sopra raccoglie le sole condizioni bloccanti. Accanto a quelle
 vive una voce di segnalazione: uno strumento risultato collegato e funzionante
 alle prove tecniche del Passo 1-bis, e assente da tutte le giornate di lavoro
-osservate al Passo 1-quinquies, si riporta come `COLLEGATO E MAI USATO`. E' un
-fatto su come si lavora: entra nel rapporto con la sua prova, resta fuori
-dall'elenco bloccante e lascia il verdetto deciso dalle sole condizioni
-tecniche qui sopra.
+osservate al Passo 1-quinquies, si riporta come `NON USATO NEL PERIODO
+OSSERVATO`. L'etichetta e' legata alla finestra dichiarata, non a un giudizio
+definitivo: fuori da quel periodo lo strumento potrebbe essere usato. E' un
+fatto su come si lavora nel periodo coperto: entra nel rapporto con la sua
+prova, resta fuori dall'elenco bloccante e lascia il verdetto deciso dalle sole
+condizioni tecniche qui sopra.
 
 ## Passo 1-ter — Censimento e rete delle stanze
 
@@ -618,30 +620,50 @@ diventa visibile e scritto.
 Lavora sulle tracce che la macchina conserva gia': registro delle sessioni
 dell'agente attivo, cronologia dei file toccati nella cartella madre, `logs/`,
 diario in coda ai file progetto, `AGENT_CHAT.md`, `MEMORY.md` e storia Git
-della casa. Apri la sezione dichiarando quali tracce hai letto e quale periodo
-coprono davvero.
+della casa. Apri la sezione dichiarando quali tracce hai letto, da quale
+macchina arrivano e quale periodo coprono davvero.
+
+**Finestra e postazione.** Le tracce vivono sulla macchina dell'agente, mentre
+la casa puo' stare su Drive/OneDrive/SharePoint condivisa fra piu' computer.
+Dichiara sempre da quale macchina leggi. Se la casa risulta condivisa fra piu'
+postazioni e le tracce arrivano da una sola, l'osservazione copre una
+postazione sola: usa lo stato `OSSERVAZIONE PARZIALE - UNA POSTAZIONE` e non
+concludere che uno strumento non e' usato quando potrebbe esserlo sull'altra
+macchina.
+
+**Un episodio conta uno.** Lo stesso gesto lascia spesso piu' tracce: un commit
+in Git, una nota in `AGENT_CHAT.md`, una riga di diario. Prima di contare,
+normalizza il gesto e deduplica: lo stesso episodio presente in Git, chat e
+diario vale uno, non tre. La regola deterministica e' `adoption_rule.py ->
+classify_adoption`, con verdetti in `install_contract.json ->
+inspection_policies -> adoption_observation`; il rapporto la rispetta a mano.
 
 1. **Strumenti vivi.** Elenca gli strumenti, i connettori e le capacita' che
    compaiono nelle giornate di lavoro. Per ognuno riporta la frequenza
    approssimativa osservata (ricorrente, saltuario, una volta sola), i lavori
-   su cui compare e la prova: file letto, riga di log, data osservata.
-2. **`COLLEGATO E MAI USATO`.** Elenca cio' che risulta installato, collegato o
-   previsto dalla mappa della casa e resta assente da tutte le tracce del
-   periodo osservato. Per ognuno riporta lo stato tecnico gia' rilevato al
-   Passo 1-bis punto D.1, le tracce consultate e la prova che coprono il
-   periodo dichiarato.
+   su cui compare e la prova: file letto, riga di log, data osservata. Conta
+   gli episodi deduplicati, non le tracce.
+2. **`NON USATO NEL PERIODO OSSERVATO`.** Elenca cio' che risulta installato,
+   collegato o previsto dalla mappa della casa e resta assente da tutte le
+   tracce del periodo osservato. Per ognuno riporta lo stato tecnico gia'
+   rilevato al Passo 1-bis punto D.1, le tracce consultate, la macchina da cui
+   arrivano e la prova che coprono il periodo dichiarato. L'etichetta e' legata
+   a quella finestra e a quella postazione, non a un mancato uso definitivo.
 3. **Lavori ancora a mano.** Elenca i lavori che il proprietario continua a
    svolgere a mano mentre la casa tiene gia' pronto e provato il collegamento
-   che li coprirebbe. Per ognuno riporta il lavoro, il collegamento
-   disponibile e la prova del gesto manuale: messaggio, file creato a mano,
-   riga di diario, data.
+   che li coprirebbe. La sola presenza di un file non basta: e' un indizio. La
+   prova richiede il gesto manuale esplicito: il messaggio scritto a mano, il
+   file creato a mano al posto del connettore, la riga di diario che racconta il
+   gesto, con data. Per ognuno riporta il lavoro, il collegamento disponibile e
+   quella prova.
 
 Ogni voce vive di una prova concreta e citabile. Quando le tracce locali
 risultano assenti o troppo povere per rispondere, scrivi `TRACCE ASSENTI`,
 indica quale traccia servirebbe (registro sessioni attivo, diario aggiornato in
 testa ai file progetto, `logs/` alimentato dal lavoro quotidiano) e proponi il
-gesto che inizia a raccoglierla. Ogni numero che entra nel rapporto nasce da
-una riga letta e citata.
+gesto che inizia a raccoglierla. Con tracce insufficienti l'esito e' `TRACCE
+ASSENTI`, mai un giudizio di mancato uso. Ogni numero che entra nel rapporto
+nasce da una riga letta e citata.
 
 Il perimetro di questo passo e' l'uso: quali strumenti entrano nelle giornate e
 quali restano fermi. La misura della spesa e del consumo appartiene al prodotto
@@ -769,7 +791,12 @@ STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
 MANIFEST.md; templates/AGENTS.md; templates/STANZA_AGENTS.md;
 templates/ISPETTORE_SKILL.md; docs ufficiali vive per la parte tecnica.
 VERSIONE METODO: installata [x] -> verificata oggi [y].
-Verdetto: PASSA / PASSA CON ATTENZIONE / NON PASSA
+VERDETTO CONFORMITA': PASSA / PASSA CON ATTENZIONE / NON PASSA
+  (com'e' fatta la casa: telaio, stanze, collegamenti, condizioni bloccanti)
+ADOZIONE OSSERVATA: ADOZIONE OSSERVATA / OSSERVAZIONE PARZIALE - UNA POSTAZIONE
+  / TRACCE ASSENTI - (come si lavora davvero: uso reale nel periodo coperto)
+  I due esiti sono separati: la casa puo' passare mentre l'uso resta parziale o
+  non misurabile, e viceversa. Uno non decide l'altro.
 
 SCOSTAMENTI DALLO STANDARD:
 - [area] trovato nella cartella viva -> standard richiesto -> azione fatta /
@@ -787,9 +814,9 @@ Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
-Uso reale quotidiano    OK / PARZIALE / TRACCE ASSENTI - tracce lette, periodo coperto...
-Collegato e mai usato   NESSUNO / [elenco] - segnala e lascia passare il verdetto...
-Lavori ancora a mano    NESSUNO / [elenco] - lavoro, collegamento pronto, prova...
+Uso reale quotidiano    ADOZIONE OSSERVATA / OSSERVAZIONE PARZIALE - UNA POSTAZIONE / TRACCE ASSENTI - tracce lette, macchina, periodo coperto...
+Non usato nel periodo   NESSUNO / [elenco] - segnala e lascia passare il verdetto...
+Lavori ancora a mano    NESSUNO / [elenco] - lavoro, collegamento pronto, prova del gesto manuale...
 Loop di verifica        OK / RIPARATO / DA FARE - ...
 Pezzi inventati/doppi   OK / RIPARATO / PROPOSTA - ...
 Percorsi censiti        OK / RIPARATO / NON PASSA - nessun percorso escluso...
@@ -816,11 +843,15 @@ PROVENIENZA PROVE:
 
 COME SI LAVORA QUI DENTRO:
 - tracce lette: [registro sessioni, cronologia file, logs/, diario,
-  AGENT_CHAT.md, storia Git] - periodo coperto [dal ... al ...].
+  AGENT_CHAT.md, storia Git] - macchina [quale PC] - periodo coperto [dal ... al ...].
+- adozione osservata: ADOZIONE OSSERVATA / OSSERVAZIONE PARZIALE - UNA
+  POSTAZIONE / TRACCE ASSENTI (episodi deduplicati, stesso gesto in Git/chat/diario conta uno).
 - usati davvero: strumento -> frequenza osservata -> lavoro -> prova.
-- COLLEGATO E MAI USATO: strumento -> stato tecnico -> tracce consultate ->
-  prova che coprono il periodo. Segnala e lascia passare il verdetto.
-- ancora a mano: lavoro -> collegamento gia' pronto -> prova del gesto manuale.
+- NON USATO NEL PERIODO OSSERVATO: strumento -> stato tecnico -> tracce
+  consultate -> macchina -> prova che coprono il periodo. Segnala e lascia
+  passare il verdetto.
+- ancora a mano: lavoro -> collegamento gia' pronto -> prova del gesto manuale
+  esplicito (non la sola presenza del file).
 - TRACCE ASSENTI: [voce] -> traccia che servirebbe -> gesto che la avvia.
 
 RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.

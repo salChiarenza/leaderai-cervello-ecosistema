@@ -6,19 +6,31 @@
   dalle tracce gia' presenti sulla macchina (registro sessioni, cronologia dei
   file toccati, `logs/`, diario dei file progetto, `AGENT_CHAT.md`, `MEMORY.md`
   e storia Git) l'agente ricostruisce quali strumenti entrano davvero nelle
-  giornate di lavoro, con quale frequenza e su quali lavori.
-- Nasce la voce `COLLEGATO E MAI USATO`: uno strumento provato e funzionante
-  che resta assente dalle giornate osservate entra nel rapporto con la sua
-  prova, vive accanto all'elenco bloccante del gate e lascia il verdetto deciso
-  dalle sole condizioni tecniche.
-- Lo stesso passo elenca i lavori che il proprietario continua a svolgere a
-  mano mentre la casa tiene gia' pronto e provato il collegamento che li
-  coprirebbe. Ogni voce porta la sua prova: file letto, riga di log, data
-  osservata. Quando le tracce locali risultano povere, l'agente scrive
-  `TRACCE ASSENTI` e indica quale traccia servirebbe.
-- Il rapporto finale porta le tre righe nuove `Uso reale quotidiano`,
-  `Collegato e mai usato` e `Lavori ancora a mano`, piu' il blocco
-  `COME SI LAVORA QUI DENTRO` con tracce lette e periodo coperto.
+  giornate di lavoro, con quale frequenza e su quali lavori. La sezione dichiara
+  quali tracce ha letto, da quale macchina arrivano e quale periodo coprono.
+- L'etichetta e' legata al periodo: uno strumento provato e funzionante che
+  resta assente dalle tracce del periodo osservato si riporta come `NON USATO
+  NEL PERIODO OSSERVATO`, non come un mancato uso definitivo. Entra nel rapporto
+  con la sua prova, vive accanto all'elenco bloccante del gate e lascia il
+  verdetto deciso dalle sole condizioni tecniche.
+- Un episodio conta uno: lo stesso gesto presente in Git, chat e diario viene
+  deduplicato prima di contare, come chiede la regola deterministica
+  `adoption_rule.py -> classify_adoption`, con verdetti e tracce ammesse in
+  `install_contract.json -> inspection_policies -> adoption_observation` e
+  fixture di prova per doppione, tracce assenti e copertura parziale.
+- Osservazione parziale: le tracce vivono sulla macchina dell'agente mentre la
+  casa puo' stare su Drive/OneDrive condivisa fra piu' PC. Se la casa e'
+  condivisa e le tracce arrivano da una sola postazione, l'esito e'
+  `OSSERVAZIONE PARZIALE - UNA POSTAZIONE`; `TRACCE ASSENTI` resta al caso in cui
+  il registro manchi davvero. Con tracce insufficienti non si giudica l'uso.
+- Il gesto manuale chiede una prova esplicita: la sola presenza di un file e' un
+  indizio, la prova e' il gesto (messaggio scritto a mano, file creato a mano,
+  riga di diario) con data.
+- L'Output separa `VERDETTO CONFORMITA'` (com'e' fatta la casa) da `ADOZIONE
+  OSSERVATA` (come si lavora davvero): uno non decide l'altro. Il rapporto porta
+  le righe `Uso reale quotidiano`, `Non usato nel periodo` e `Lavori ancora a
+  mano`, piu' il blocco `COME SI LAVORA QUI DENTRO` con tracce, macchina e
+  periodo coperto.
 - Confine di prodotto scritto dentro il passo: il checkup dice cosa si usa; la
   misura della spesa e del consumo appartiene al prodotto `Il Consigliere`
   (repo `salChiarenza/il-consigliere`).

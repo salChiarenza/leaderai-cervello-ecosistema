@@ -1,0 +1,16 @@
+{
+  "descrizione": "Stesso gesto in Git, chat e diario: conta uno.",
+  "traces_read": true,
+  "house_shared": false,
+  "machines_in_house": ["mac-studio"],
+  "episodes": [
+    {"gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
+    {"gesture": "emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
+    {"gesture": "Emissione  fattura   elettronica", "source": "diario", "machine": "mac-studio", "date": "2026-08-11"}
+  ],
+  "expected": {
+    "verdict": "ADOZIONE OSSERVATA",
+    "unique_count": 1,
+    "duplicates_collapsed": 2
+  }
+}

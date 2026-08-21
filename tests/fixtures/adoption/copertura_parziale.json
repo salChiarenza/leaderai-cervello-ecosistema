@@ -1,0 +1,15 @@
+{
+  "descrizione": "Casa su OneDrive fra due PC; tracce dalla sola postazione ufficio.",
+  "traces_read": true,
+  "house_shared": true,
+  "machines_in_house": ["pc-ufficio", "portatile-casa"],
+  "episodes": [
+    {"gesture": "Analisi portafoglio cliente", "source": "git", "machine": "pc-ufficio", "date": "2026-08-12"},
+    {"gesture": "Bozza report banker", "source": "diario", "machine": "pc-ufficio", "date": "2026-08-13"}
+  ],
+  "expected": {
+    "verdict": "OSSERVAZIONE PARZIALE - UNA POSTAZIONE",
+    "unique_count": 2,
+    "duplicates_collapsed": 0
+  }
+}

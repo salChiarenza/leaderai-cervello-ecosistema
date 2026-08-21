@@ -1,0 +1,12 @@
+{
+  "descrizione": "Registro sessioni e diario vuoti: nessun giudizio d'uso.",
+  "traces_read": false,
+  "house_shared": false,
+  "machines_in_house": ["portatile-cliente"],
+  "episodes": [],
+  "expected": {
+    "verdict": "TRACCE ASSENTI",
+    "unique_count": 0,
+    "duplicates_collapsed": 0
+  }
+}

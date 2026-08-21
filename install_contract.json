@@ -31,6 +31,20 @@
       "sector_role": "Amministratore di settore",
       "default_reports_to": "Boss dell'Ecosistema"
     },
+    "adoption_observation": {
+      "verdicts": [
+        "TRACCE ASSENTI",
+        "OSSERVAZIONE PARZIALE - UNA POSTAZIONE",
+        "ADOZIONE OSSERVATA"
+      ],
+      "dedup_sources": [
+        "git",
+        "chat",
+        "diario"
+      ],
+      "rule": "adoption_rule.py -> classify_adoption",
+      "scope": "uso reale degli strumenti; spesa e consumo restano al prodotto Il Consigliere"
+    },
     "markdown_hygiene": {
       "router_names": [
         "AGENTS.md",

@@ -174,6 +174,32 @@ class CheckupGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase.lower(), text.lower())
 
+    def test_checkup_measures_observed_adoption_with_period_and_dedup(self):
+        checkup = " ".join(
+            (ROOT / "CHECKUP.md").read_text(encoding="utf-8").lower().split()
+        )
+
+        required = [
+            "Come si lavora davvero qui dentro",
+            "NON USATO NEL PERIODO OSSERVATO",
+            "OSSERVAZIONE PARZIALE - UNA POSTAZIONE",
+            "TRACCE ASSENTI",
+            "mai un giudizio di mancato uso",
+            "stesso episodio presente in Git, chat e diario vale uno",
+            "adoption_rule.py -> classify_adoption",
+            "inspection_policies -> adoption_observation",
+            "da quale macchina",
+            "sola presenza di un file non basta",
+            "gesto manuale esplicito",
+            "VERDETTO CONFORMITA'",
+            "ADOZIONE OSSERVATA",
+            "misura della spesa e del consumo appartiene al prodotto",
+            "Il Consigliere",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(" ".join(phrase.lower().split()), checkup)
+
     def test_instruction_audit_uses_clean_pairwise_sessions_and_safe_classification(self):
         checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
         skill = (ROOT / "templates" / "ISPETTORE_SKILL.md").read_text(
