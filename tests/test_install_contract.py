@@ -150,13 +150,30 @@ class InstallContractTest(unittest.TestCase):
     def test_room_lifecycle_rejects_ambiguous_or_weakened_policy(self):
         mutations = {
             "boolean_depth": lambda raw: raw.update(scan_depth=True),
+            "reduced_depth": lambda raw: raw.update(scan_depth=1),
             "same_templates": lambda raw: raw.update(
                 source_template=raw["map_template"]
+            ),
+            "asset_reused_as_map_template": lambda raw: raw.update(
+                map_template="ecosistema/ASSET.md"
+            ),
+            "windows_drive_relative_template": lambda raw: raw.update(
+                map_template="C:stanza.md"
             ),
             "invented_class": lambda raw: (
                 raw["classifications"].append("CARAMELLA"),
                 raw["root_owned_classifications"].append("CARAMELLA"),
             ),
+            "reduced_sections": lambda raw: raw["required_sections"].pop(),
+            "invented_term": lambda raw: raw["required_terms"].append(
+                "formula inventata"
+            ),
+            "reduced_source_headings": lambda raw: raw[
+                "owner_source_headings"
+            ].pop(),
+            "root_map_reused_as_registry": lambda raw: raw[
+                "root_owned_registry_paths"
+            ].__setitem__(0, "AGENTS.md"),
             "overlapping_sections": lambda raw: raw.update(
                 contents_section=raw["owner_source_section"]
             ),
@@ -171,6 +188,27 @@ class InstallContractTest(unittest.TestCase):
                 mutate(raw)
                 with self.assertRaises(ValueError):
                     install_contract.room_lifecycle_policy(contract)
+
+    def test_contract_rejects_duplicate_template_destinations(self):
+        for case, destination in (
+            ("exact", None),
+            ("windows_case_collision", "ecosistema/asset.md"),
+        ):
+            with self.subTest(case=case):
+                contract = copy.deepcopy(install_contract.CONTRACT)
+                duplicate = copy.deepcopy(contract["common"]["templates"][0])
+                duplicate["template"] = contract["common"]["templates"][1][
+                    "template"
+                ]
+                if destination is not None:
+                    duplicate["destination"] = destination
+                contract["common"]["templates"].append(duplicate)
+
+                with self.assertRaisesRegex(
+                    ValueError,
+                    "Destinazione template duplicata",
+                ):
+                    install_contract.template_rules(contract, "both")
 
     def test_every_contract_destination_is_installed_for_both(self):
         with tempfile.TemporaryDirectory() as tmp:

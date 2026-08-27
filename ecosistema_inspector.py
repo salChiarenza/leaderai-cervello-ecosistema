@@ -162,6 +162,11 @@ class Room:
     name: str
     path: str
     purpose: str
+    upstream: str
+    downstream: str
+    sources: str
+    outputs: str
+    capabilities: str
     map_path: str
     administrator: str
     reports_to: str
@@ -296,6 +301,11 @@ def _table_block_after_marker(content: str, marker: str) -> list[str]:
 def _room_from_cell(
     cell: str,
     purpose: str,
+    upstream: str,
+    downstream: str,
+    sources: str,
+    outputs: str,
+    capabilities: str,
     map_path: str,
     administrator: str,
     reports_to: str,
@@ -315,6 +325,11 @@ def _room_from_cell(
             name=name,
             path="",
             purpose=purpose,
+            upstream=upstream,
+            downstream=downstream,
+            sources=sources,
+            outputs=outputs,
+            capabilities=capabilities,
             map_path=map_path,
             administrator=administrator,
             reports_to=reports_to,
@@ -323,6 +338,11 @@ def _room_from_cell(
         name=name,
         path=canonical_path,
         purpose=purpose,
+        upstream=upstream,
+        downstream=downstream,
+        sources=sources,
+        outputs=outputs,
+        capabilities=capabilities,
         map_path=map_path,
         administrator=administrator,
         reports_to=reports_to,
@@ -347,6 +367,11 @@ def parse_room_registry(agents_text: str) -> list[Room]:
         room = _room_from_cell(
             cells[0],
             cells[1],
+            cells[2] if len(cells) > 2 else "",
+            cells[3] if len(cells) > 3 else "",
+            cells[4] if len(cells) > 4 else "",
+            cells[5] if len(cells) > 5 else "",
+            cells[6] if len(cells) > 6 else "",
             map_path,
             administrator,
             reports_to,
@@ -389,6 +414,23 @@ def parse_root_owned_registry(agents_text: str) -> dict[str, str]:
     return {
         row.path: row.classification for row in parse_root_owned_rows(agents_text)
     }
+
+
+def _registry_has_entry(content: str, marker: str, expected_path: str) -> bool:
+    table = _table_block_after_marker(_active_markdown(content), marker)
+    expected = _field_value(expected_path)
+    for line in table[2:]:
+        cells = _table_cells(line)
+        if not cells:
+            continue
+        raw = cells[0].strip()
+        candidates = [raw]
+        link = re.fullmatch(r"\[([^\]]+)\]\(([^)]+)\)", raw)
+        if link:
+            candidates.extend(link.groups())
+        if any(_field_value(candidate) == expected for candidate in candidates):
+            return True
+    return False
 
 
 def _canonical_memory_path(target: Path, agents_text: str) -> Path:
@@ -635,9 +677,114 @@ def _first_markdown_bullet(section: str) -> str:
     return ""
 
 
+def _markdown_bullets(section: str) -> list[str]:
+    return [
+        match.group(1).strip()
+        for line in section.splitlines()
+        if (match := re.match(r"^\s*-\s+(.+?)\s*$", line))
+    ]
+
+
+def _field_value(raw: str) -> str:
+    value = raw.strip().strip("`").strip()
+    value = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", value)
+    value = re.sub(r"\*\*([^*]+)\*\*", r"\1", value)
+    return re.sub(r"\s+", " ", _normalized(value)).strip()
+
+
+def _negates_claim(text: str, claims: tuple[str, ...]) -> bool:
+    normalized = re.sub(r"[^\w\s]", " ", _normalized(text))
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    negation = r"(?:non|nessun[oa]?|senza)"
+    denied_verbs = (
+        r"(?:esist\w*|avvien\w*|manten\w*|govern\w*|gest\w*|"
+        r"applic\w*|riconosc\w*)"
+    )
+    for claim in claims:
+        normalized_claim = re.sub(r"[^\w\s]", " ", _normalized(claim))
+        words = [re.escape(word) for word in normalized_claim.split()]
+        if not words:
+            continue
+        claim_pattern = r"\s+".join(words)
+        if re.search(
+            rf"\b{negation}\b(?:\s+\w+){{0,5}}\s+{claim_pattern}\b",
+            normalized,
+        ):
+            return True
+        if re.search(
+            rf"\b{claim_pattern}\b(?:\s+\w+){{0,8}}\s+\b{negation}\b"
+            rf"(?:\s+\w+){{0,4}}\s+\b{denied_verbs}\b",
+            normalized,
+        ):
+            return True
+    return False
+
+
+def _organization_route_is_negated(text: str) -> bool:
+    normalized = re.sub(r"[^\w\s]", " ", _normalized(text))
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return bool(
+        re.search(
+            r"\briport(?:a|o)\b(?:\s+\w+){0,5}\s+\bnon\b"
+            r"(?:\s+\w+){0,3}\s+\b(?:avvien\w*|esist\w*|oper\w*)\b",
+            normalized,
+        )
+    )
+
+
+def _declared_path_bullets(section: str) -> list[str]:
+    declared: list[str] = []
+    for value in _markdown_bullets(section):
+        match = re.fullmatch(r"`([^`]+)`", value)
+        if match:
+            declared.append(match.group(1).strip())
+    return declared
+
+
+def _room_operating_source_paths(room_path: Path) -> set[str]:
+    """Trova le fonti operative reali, anche se una copia non e' dichiarata."""
+    candidates: set[str] = set()
+    try:
+        paths = tuple(room_path.rglob("*"))
+    except OSError:
+        return candidates
+    for path in paths:
+        try:
+            relative = path.relative_to(room_path)
+            if (
+                path.suffix.casefold() != ".md"
+                or not path.is_file()
+                or _symlink_component(room_path, relative) is not None
+            ):
+                continue
+            content = _active_markdown(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, ValueError):
+            continue
+        title = re.search(r"(?m)^#\s+(.+?)\s*$", content)
+        if not title or not _field_value(title.group(1)).endswith(
+            "- fonte operativa"
+        ):
+            continue
+        headings = {_normalized(value) for value in _markdown_headings(content)}
+        if all(
+            _normalized(required) in headings
+            for required in ROOM_LIFECYCLE.owner_source_headings
+        ):
+            candidates.add(relative.as_posix().casefold())
+    return candidates
+
+
 def _business_source_declaration(content: str) -> tuple[str, Path | None]:
     section = _markdown_section(content, ROOM_LIFECYCLE.business_source_section)
-    value = _first_markdown_bullet(section)
+    declarations = [
+        value
+        for value in _markdown_bullets(section)
+        if _normalized(value).strip().startswith("non applicabile")
+        or re.fullmatch(r"`([^`]+)`", value)
+    ]
+    if len(declarations) > 1:
+        return ("multiple", None)
+    value = declarations[0] if declarations else ""
     normalized = _normalized(value).strip()
     if normalized.startswith("non applicabile"):
         reason = normalized.partition(":")[2].strip()
@@ -768,6 +915,8 @@ def _room_business_responsibility_is_proven(content: str) -> bool:
         return False
     if any(term in compact for term in UNPROVEN_ROOM_RESPONSIBILITY_TERMS):
         return False
+    if _negates_claim(compact, ("stato", "decisione", "decisioni")):
+        return False
     return "stato" in compact and "decision" in compact
 
 
@@ -872,7 +1021,12 @@ def _ecosystem_registry_findings(target: Path) -> list[Finding]:
     return findings
 
 
-def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[Finding]:
+def _room_prefab_findings(
+    target: Path,
+    room_path: Path,
+    content: str,
+    room_name: str,
+) -> list[Finding]:
     findings: list[Finding] = []
     room_rel = room_path.relative_to(target).as_posix()
     content = _active_markdown(content)
@@ -888,8 +1042,8 @@ def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[F
         )
 
     source_section = _markdown_section(content, ROOM_LIFECYCLE.owner_source_section)
-    source_match = re.search(r"`([^`]+)`", source_section)
-    source_raw = source_match.group(1).strip() if source_match else ""
+    source_declarations = _declared_path_bullets(source_section)
+    source_raw = source_declarations[0] if source_declarations else ""
     canonical_source = _canonical_relative_path(source_raw)
     source_candidate = Path(canonical_source) if canonical_source else None
     generic_source_stem = _normalized(Path(ROOM_LIFECYCLE.source_template).stem)
@@ -897,6 +1051,16 @@ def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[F
         source_candidate
         and source_candidate.name.casefold() not in ROOM_FILE_NAMES
     )
+    physical_sources = _room_operating_source_paths(room_path)
+    if len(source_declarations) > 1 or len(physical_sources) > 1:
+        findings.append(
+            Finding(
+                "ROOM_OWNER_SOURCE_MULTIPLE",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La stanza dichiara piu' di una fonte operativa proprietaria.",
+            )
+        )
     if not source_valid:
         findings.append(
             Finding(
@@ -961,6 +1125,28 @@ def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[F
                 )
             else:
                 source_text = _normalized(source_raw_text)
+                source_title_match = re.search(
+                    r"(?m)^#\s+(.+?)\s*$",
+                    source_raw_text,
+                )
+                source_title = (
+                    _field_value(source_title_match.group(1))
+                    if source_title_match
+                    else ""
+                )
+                expected_source_title = _field_value(
+                    f"{room_name} - fonte operativa"
+                )
+                if source_title != expected_source_title:
+                    findings.append(
+                        Finding(
+                            "ROOM_OWNER_SOURCE_TITLE_DRIFT",
+                            "BLOCKER",
+                            f"{room_rel}/{source_candidate.as_posix()}",
+                            "Il titolo della fonte operativa non identifica la stanza "
+                            "dichiarata nella mappa madre.",
+                        )
+                    )
                 if re.search(r"\{\{[^{}]+\}\}", source_text):
                     findings.append(
                         Finding(
@@ -1021,7 +1207,7 @@ def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[F
                     )
 
     business_declaration, business_candidate = _business_source_declaration(content)
-    if business_declaration in {"missing", "invalid"}:
+    if business_declaration in {"missing", "invalid", "multiple"}:
         findings.append(
             Finding(
                 "ROOM_BUSINESS_SOURCE_VALUE_MISSING",
@@ -1056,7 +1242,11 @@ def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[F
                     issue_details[issue],
                 )
             )
-        if source_candidate is not None and business_candidate == source_candidate:
+        if (
+            source_candidate is not None
+            and business_candidate.as_posix().casefold()
+            == source_candidate.as_posix().casefold()
+        ):
             findings.append(
                 Finding(
                     "ROOM_SOURCE_ROLE_CONFLICT",
@@ -1389,6 +1579,10 @@ def inspect_ecosystem(
     if (
         _normalized(ORGANIZATION.root_role) not in normalized_agents
         or "governa l'organigramma" not in normalized_agents
+        or _negates_claim(
+            normalized_agents,
+            (ORGANIZATION.root_role, "governa l'organigramma"),
+        )
     ):
         findings.append(
             Finding(
@@ -1639,6 +1833,30 @@ def inspect_ecosystem(
                 "La memoria canonica dichiarata nella mappa madre non contiene MEMORY.md.",
             )
         )
+    required_text_paths: dict[str, Path] = {
+        rel: target / rel for rel in required_files
+    }
+    memory_index = canonical_memory / "MEMORY.md"
+    try:
+        memory_label = memory_index.relative_to(target).as_posix()
+    except ValueError:
+        memory_label = str(memory_index)
+    required_text_paths[memory_label] = memory_index
+    for rel, path in sorted(required_text_paths.items()):
+        if not path.is_file() or path.is_symlink():
+            continue
+        try:
+            path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "REQUIRED_TEXT_UNREADABLE",
+                    "BLOCKER",
+                    rel,
+                    "Un file portante dello standard non e' leggibile come "
+                    "testo UTF-8.",
+                )
+            )
     rooms = parse_room_registry(active_agents_text)
 
     seen_paths: set[str] = set()
@@ -1726,6 +1944,34 @@ def inspect_ecosystem(
                     room.path,
                     "La riga della stanza non dichiara una responsabilita' "
                     "business concreta.",
+                )
+            )
+
+        registry_fields = {
+            "A monte": room.upstream,
+            "A valle": room.downstream,
+            "Fonti": room.sources,
+            "Output": room.outputs,
+            "Capacita'": room.capabilities,
+        }
+        unproven_registry_fields = [
+            label
+            for label, value in registry_fields.items()
+            if (
+                not _field_value(value)
+                or _field_value(value) in {"-", "non applicabile"}
+                or _contains_unproven_value(value)
+            )
+        ]
+        if unproven_registry_fields:
+            findings.append(
+                Finding(
+                    "ROOM_REGISTRY_FIELDS_UNPROVEN",
+                    "BLOCKER",
+                    room.path,
+                    "La riga della stanza conserva campi non compilati: "
+                    + ", ".join(unproven_registry_fields)
+                    + ".",
                 )
             )
 
@@ -1900,6 +2146,35 @@ def inspect_ecosystem(
                             "della mappa madre.",
                         )
                     )
+                local_registry_fields = {
+                    "A monte": ("a monte", room.upstream),
+                    "A valle": ("a valle", room.downstream),
+                    "Fonti": ("fonti", room.sources),
+                    "Output": ("output", room.outputs),
+                    "Capacita'": ("capacita", room.capabilities),
+                }
+                drifted_registry_fields: list[str] = []
+                for label, (section_name, root_value) in local_registry_fields.items():
+                    local_values = _markdown_bullets(
+                        _markdown_section(raw_content, section_name)
+                    )
+                    if (
+                        len(local_values) != 1
+                        or _field_value(local_values[0]) != _field_value(root_value)
+                    ):
+                        drifted_registry_fields.append(label)
+                if drifted_registry_fields:
+                    findings.append(
+                        Finding(
+                            "ROOM_REGISTRY_FIELD_DRIFT",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "I campi della mappa locale non coincidono con la riga "
+                            "madre: "
+                            + ", ".join(drifted_registry_fields)
+                            + ".",
+                        )
+                    )
                 if room_name_key and room_name_key not in organization_section:
                     findings.append(
                         Finding(
@@ -1914,6 +2189,10 @@ def inspect_ecosystem(
                     for term in ROOM_REQUIRED_TERMS
                     if term not in organization_section
                 ]
+                organization_negated = _negates_claim(
+                    organization_section,
+                    tuple(ROOM_REQUIRED_TERMS),
+                ) or _organization_route_is_negated(organization_section)
                 duplicate_sections = [
                     section
                     for section in ROOM_REQUIRED_SECTIONS
@@ -1935,6 +2214,7 @@ def inspect_ecosystem(
                     or empty_sections
                     or unproven_sections
                     or missing_terms
+                    or organization_negated
                 ):
                     details: list[str] = []
                     if missing_sections:
@@ -1948,6 +2228,8 @@ def inspect_ecosystem(
                         )
                     if missing_terms:
                         details.append("vincoli mancanti: " + ", ".join(missing_terms))
+                    if organization_negated:
+                        details.append("l'organigramma nega ruoli o riporto dichiarati")
                     findings.append(
                         Finding(
                             "ROOM_MAP_INCOMPLETE",
@@ -1967,7 +2249,14 @@ def inspect_ecosystem(
                             "bastano a dimostrare una stanza.",
                         )
                     )
-                findings.extend(_room_prefab_findings(target, room_path, raw_content))
+                findings.extend(
+                    _room_prefab_findings(
+                        target,
+                        room_path,
+                        raw_content,
+                        room.name,
+                    )
+                )
         if room_claude.is_symlink():
             findings.append(
                 Finding(
@@ -2046,6 +2335,11 @@ def inspect_ecosystem(
     room_path_keys = {
         _normalized(room.path).strip() for room in rooms if room.path
     }
+    registry_markers = {
+        "ecosistema/ASSET.md": "## Registro",
+        "ecosistema/FONTI.md": "## Fonti trovate",
+    }
+    registry_text_cache: dict[str, str | None] = {}
     valid_root_owned_paths: set[str] = set()
     for path, row in sorted(root_owned.items()):
         classification_key = _normalized(row.classification).strip()
@@ -2139,6 +2433,38 @@ def inspect_ecosystem(
                     "Il registro di dettaglio dichiarato non esiste come file locale.",
                 )
             )
+        else:
+            if registry_path not in registry_text_cache:
+                try:
+                    registry_text_cache[registry_path] = (
+                        target / registry_path
+                    ).read_text(encoding="utf-8")
+                except (OSError, UnicodeError):
+                    registry_text_cache[registry_path] = None
+            registry_text = registry_text_cache[registry_path]
+            if registry_text is None:
+                findings.append(
+                    Finding(
+                        "ROOT_OWNED_REGISTRY_UNREADABLE",
+                        "BLOCKER",
+                        registry_path,
+                        "Il registro di dettaglio non e' leggibile come testo UTF-8.",
+                    )
+                )
+            elif not _registry_has_entry(
+                registry_text,
+                registry_markers[registry_path],
+                path,
+            ):
+                findings.append(
+                    Finding(
+                        "ROOT_OWNED_DETAIL_MISSING",
+                        "BLOCKER",
+                        registry_path,
+                        "L'elemento dichiarato nella mappa madre non compare nel "
+                        "registro di dettaglio indicato.",
+                    )
+                )
         linked = _symlink_component(target, path)
         owned_path = target / path
         if linked is not None:
@@ -2243,16 +2569,30 @@ def inspect_ecosystem(
                 )
             )
         else:
-            content = path.read_text(encoding="utf-8")
-            if "CHECKUP.md" not in content or "ispettore-ecosistema" not in content:
+            try:
+                content = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeError):
                 findings.append(
                     Finding(
-                        "INSPECTOR_SKILL_INVALID",
+                        "INSPECTOR_SKILL_UNREADABLE",
                         "BLOCKER",
                         rel,
-                        "La skill non punta alla procedura unica CHECKUP.md.",
+                        "La skill non e' leggibile come testo UTF-8.",
                     )
                 )
+            else:
+                if (
+                    "CHECKUP.md" not in content
+                    or "ispettore-ecosistema" not in content
+                ):
+                    findings.append(
+                        Finding(
+                            "INSPECTOR_SKILL_INVALID",
+                            "BLOCKER",
+                            rel,
+                            "La skill non punta alla procedura unica CHECKUP.md.",
+                        )
+                    )
 
     if "claude" in active_agents:
         project_settings_paths = (
@@ -2266,7 +2606,7 @@ def inspect_ecosystem(
                 project_settings = json.loads(
                     project_settings_path.read_text(encoding="utf-8")
                 )
-            except (OSError, json.JSONDecodeError):
+            except (OSError, UnicodeError, json.JSONDecodeError):
                 project_settings = None
             if isinstance(project_settings, dict) and "autoMemoryDirectory" in project_settings:
                 findings.append(
@@ -2303,7 +2643,7 @@ def inspect_ecosystem(
         else:
             try:
                 settings = json.loads(settings_path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
+            except (OSError, UnicodeError, json.JSONDecodeError):
                 settings = None
             raw_memory = (
                 settings.get("autoMemoryDirectory")
@@ -2403,11 +2743,21 @@ def inspect_ecosystem(
         )
 
     asset_registry_path = target / "ecosistema" / "ASSET.md"
-    asset_registry = (
-        _normalized(asset_registry_path.read_text(encoding="utf-8"))
-        if asset_registry_path.is_file()
-        else ""
-    )
+    asset_registry = ""
+    if asset_registry_path.is_file():
+        try:
+            asset_registry = _normalized(
+                asset_registry_path.read_text(encoding="utf-8")
+            )
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "ASSET_REGISTRY_UNREADABLE",
+                    "BLOCKER",
+                    "ecosistema/ASSET.md",
+                    "Il registro asset non e' leggibile come testo UTF-8.",
+                )
+            )
     registered_sensitive_assets = {
         family
         for line in asset_registry.splitlines()
@@ -2443,7 +2793,18 @@ def inspect_ecosystem(
     for rel, path in _iter_files(target):
         if rel.name.casefold() != "progetto.md":
             continue
-        issue = _project_control_issue(path)
+        try:
+            issue = _project_control_issue(path)
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "PROJECT_CONTROL_UNREADABLE",
+                    "BLOCKER",
+                    rel.as_posix(),
+                    "Il file progetto non e' leggibile come testo UTF-8.",
+                )
+            )
+            continue
         if issue:
             findings.append(
                 Finding(

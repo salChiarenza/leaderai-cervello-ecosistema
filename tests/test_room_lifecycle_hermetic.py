@@ -27,9 +27,6 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
     """
 
     inspect = existing_inspector_tests.EcosistemaInspectorTest.inspect
-    add_room_to_registry = (
-        existing_inspector_tests.EcosistemaInspectorTest.add_room_to_registry
-    )
     create_valid_room = (
         existing_inspector_tests.EcosistemaInspectorTest.create_valid_room
     )
@@ -74,6 +71,9 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def add_room_to_registry(self, target: Path) -> None:
+        self.set_room_rows(target, self.room_row())
+
     def set_root_owned_rows(self, target: Path, *rows: str) -> None:
         agents = target / "AGENTS.md"
         text = agents.read_text(encoding="utf-8")
@@ -88,6 +88,11 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
         name: str = "Iscrizioni",
         path: str = "app-iscrizioni",
         purpose: str = "Gestire iscrizioni",
+        upstream: str = "Radice",
+        downstream: str = "Documenti",
+        sources: str = "Gestionale",
+        outputs: str = "Documenti",
+        capabilities: str = "App",
         map_path: str | None = None,
         administrator: str | None = None,
         reports_to: str = "Boss dell'Ecosistema",
@@ -95,8 +100,8 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
         map_path = map_path or f"{path}/AGENTS.md"
         administrator = administrator or f"Amministratore di settore {name}"
         return (
-            f"| [{name}]({path}) | {purpose} | Radice | Documenti | "
-            f"Gestionale | Pratiche | App | `{map_path}` | "
+            f"| [{name}]({path}) | {purpose} | {upstream} | {downstream} | "
+            f"{sources} | {outputs} | {capabilities} | `{map_path}` | "
             f"{administrator} | {reports_to} |"
         )
 
@@ -571,6 +576,234 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
         )
 
         self.assert_blocker(target, "DUPLICATE_ROOM_NAME")
+
+    def test_five_room_registry_routes_cannot_remain_placeholders(self):
+        for placeholder in ("DA DEFINIRE", "-", "NON APPLICABILE"):
+            with self.subTest(placeholder=placeholder):
+                target = self.fresh_target()
+                self.create_valid_room(target)
+                self.set_room_rows(
+                    target,
+                    self.room_row(
+                        upstream=placeholder,
+                        downstream=placeholder,
+                        sources=placeholder,
+                        outputs=placeholder,
+                        capabilities=placeholder,
+                    ),
+                )
+
+                inspection = self.inspect(target)
+
+                self.assertEqual(inspection.verdict, "NON PASSA")
+                self.assertIn(
+                    "ROOM_REGISTRY_FIELDS_UNPROVEN",
+                    self.codes(inspection),
+                )
+                detail = next(
+                    finding.detail
+                    for finding in inspection.findings
+                    if finding.code == "ROOM_REGISTRY_FIELDS_UNPROVEN"
+                )
+                for label in (
+                    "A monte",
+                    "A valle",
+                    "Fonti",
+                    "Output",
+                    "Capacita'",
+                ):
+                    self.assertIn(label, detail)
+
+    def test_five_room_registry_routes_must_match_the_local_map(self):
+        target = self.fresh_target()
+        self.create_valid_room(target)
+        self.set_room_rows(
+            target,
+            self.room_row(
+                upstream="Email",
+                downstream="Archivio",
+                sources="Foglio esterno",
+                outputs="Report finale",
+                capabilities="Script locale",
+            ),
+        )
+
+        inspection = self.inspect(target)
+
+        self.assertEqual(inspection.verdict, "NON PASSA")
+        self.assertIn("ROOM_REGISTRY_FIELD_DRIFT", self.codes(inspection))
+        detail = next(
+            finding.detail
+            for finding in inspection.findings
+            if finding.code == "ROOM_REGISTRY_FIELD_DRIFT"
+        )
+        for label in ("A monte", "A valle", "Fonti", "Output", "Capacita'"):
+            self.assertIn(label, detail)
+
+    def test_two_pure_operating_sources_are_ambiguous(self):
+        target = self.fresh_target()
+        self.create_valid_room(target)
+        self.add_room_to_registry(target)
+        room = target / "app-iscrizioni"
+        shutil.copy2(
+            room / "STATO_ISCRIZIONI.md",
+            room / "STATO_PRATICHE.md",
+        )
+
+        self.assert_blocker(target, "ROOM_OWNER_SOURCE_MULTIPLE")
+
+    def test_operating_source_h1_must_identify_its_room(self):
+        target = self.fresh_target()
+        self.create_valid_room(target)
+        self.add_room_to_registry(target)
+        source = target / "app-iscrizioni" / "STATO_ISCRIZIONI.md"
+        source.write_text(
+            source.read_text(encoding="utf-8").replace(
+                "# Iscrizioni - fonte operativa",
+                "# Segreteria - fonte operativa",
+                1,
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_blocker(target, "ROOM_OWNER_SOURCE_TITLE_DRIFT")
+
+    def test_business_and_operating_source_conflict_is_case_insensitive(self):
+        target = self.fresh_target()
+        self.create_valid_room(target)
+        self.add_room_to_registry(target)
+        room_map = target / "app-iscrizioni" / "AGENTS.md"
+        room_map.write_text(
+            room_map.read_text(encoding="utf-8").replace(
+                "NON APPLICABILE: nessun generatore",
+                "`stato_iscrizioni.MD`",
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_blocker(target, "ROOM_SOURCE_ROLE_CONFLICT")
+
+    def test_root_owned_element_must_appear_in_its_detail_registry(self):
+        target = self.fresh_target()
+        (target / "catalogo.txt").write_text("Catalogo vivo.\n", encoding="utf-8")
+        self.set_root_owned_rows(
+            target,
+            self.root_owned_row(
+                "catalogo.txt",
+                classification="FONTE",
+                registry="ecosistema/ASSET.md",
+            ),
+        )
+
+        self.assert_blocker(target, "ROOT_OWNED_DETAIL_MISSING")
+
+    def test_corrupt_utf8_operational_files_return_findings_not_exceptions(self):
+        cases = (
+            (
+                "inspector-skill",
+                ".claude/skills/ispettore-ecosistema/SKILL.md",
+                "INSPECTOR_SKILL_UNREADABLE",
+            ),
+            (
+                "asset-registry",
+                "ecosistema/ASSET.md",
+                "ASSET_REGISTRY_UNREADABLE",
+            ),
+            (
+                "project-control",
+                "app-iscrizioni/PROGETTO.md",
+                "PROJECT_CONTROL_UNREADABLE",
+            ),
+            (
+                "sources-registry",
+                "ecosistema/FONTI.md",
+                "REQUIRED_TEXT_UNREADABLE",
+            ),
+            (
+                "process-registry",
+                "ecosistema/PROCESSI.md",
+                "REQUIRED_TEXT_UNREADABLE",
+            ),
+            (
+                "agent-chat",
+                "AGENT_CHAT.md",
+                "REQUIRED_TEXT_UNREADABLE",
+            ),
+            (
+                "memory-index",
+                "memory/MEMORY.md",
+                "REQUIRED_TEXT_UNREADABLE",
+            ),
+        )
+        for case, relative, expected in cases:
+            with self.subTest(case=case):
+                target = self.fresh_target()
+                if case == "project-control":
+                    self.create_valid_room(target)
+                    self.add_room_to_registry(target)
+                path = target / relative
+                path.write_bytes(b"\xff\xfe\x00")
+                self.assert_blocker(target, expected)
+
+    def test_negated_business_responsibility_is_not_proof(self):
+        negated_values = (
+            "Non mantiene lo stato delle pratiche e non governa le decisioni "
+            "sulle iscrizioni",
+            "Lo stato non viene mantenuto in alcun modo operativo da questa "
+            "stanza. Le decisioni non vengono governate.",
+        )
+        for negated in negated_values:
+            with self.subTest(negated=negated):
+                target = self.fresh_target()
+                self.create_valid_room(target)
+                self.add_room_to_registry(target)
+                room_map = target / "app-iscrizioni" / "AGENTS.md"
+                room_map.write_text(
+                    room_map.read_text(encoding="utf-8").replace(
+                        "Mantiene lo stato delle pratiche e le decisioni "
+                        "sulle iscrizioni",
+                        negated,
+                    ),
+                    encoding="utf-8",
+                )
+
+                self.assert_blocker(
+                    target,
+                    "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
+                )
+
+    def test_negated_organization_terms_do_not_satisfy_the_contract(self):
+        for case in ("prepositive", "postpositive"):
+            with self.subTest(case=case):
+                target = self.fresh_target()
+                self.create_valid_room(target)
+                self.add_room_to_registry(target)
+                room_map = target / "app-iscrizioni" / "AGENTS.md"
+                text = room_map.read_text(encoding="utf-8")
+                if case == "prepositive":
+                    text = text.replace(
+                        "Ruolo: **Amministratore del settore",
+                        "Ruolo: **non Amministratore del settore",
+                    )
+                    text = text.replace("Riporta al **Boss", "Non riporta al **Boss")
+                    text = text.replace("Riporta al Boss", "Non riporta al Boss")
+                    text = text.replace("riporta al Boss", "non riporta al Boss")
+                else:
+                    text = text.replace(
+                        "Amministratore del settore `Iscrizioni`**.",
+                        "Amministratore del settore `Iscrizioni`**, che non esiste.",
+                    )
+                    text = text.replace(
+                        "Boss dell'Ecosistema** definito",
+                        "Boss dell'Ecosistema**, che non esiste, definito",
+                    )
+                    text = text.replace(
+                        "Riporta al Boss senza duplicare",
+                        "Riporta al Boss, ma il riporto non avviene, senza duplicare",
+                    )
+                room_map.write_text(text, encoding="utf-8")
+
+                self.assert_blocker(target, "ROOM_MAP_INCOMPLETE")
 
     def test_windows_absolute_and_reserved_paths_are_rejected(self):
         cases = (

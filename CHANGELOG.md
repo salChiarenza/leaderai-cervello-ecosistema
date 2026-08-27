@@ -13,6 +13,14 @@
   file, sezioni, organigramma e profondita' del controllo. L'Ispettore blocca
   campi incompleti, fonti assenti/vuote/illeggibili, sottocartelle fantasma,
   generiche, vuote, non dichiarate o collegate fuori casa e classi inventate.
+- Il metro di controllo non puo' essere indebolito dal contratto: classi,
+  registri, calchi, sezioni, termini, profondita' e nomi sono canonici. Anche
+  due destinazioni che differiscono soltanto per maiuscole vengono fermate,
+  per evitare collisioni silenziose su Windows.
+- La riga madre e la mappa locale devono coincidere in tutti i dieci campi;
+  una seconda fonte operativa, un elemento madre assente dal registro di
+  dettaglio, una frase che nega il ruolo dichiarato o un file portante non
+  leggibile producono un blocco esplicito, mai un verde falso o un crash.
 - Il caso anonimo di uno studio cliente, con materiale marketing collocato
   dentro `ecosistema/`, e' diventato una regressione deterministica. La stessa
   legge e' scritta in Manifest, installazione, checkup, skill e mappe dei due

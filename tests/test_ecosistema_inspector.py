@@ -11,7 +11,7 @@ import leaderai_setup
 
 ROOM_ROW = (
     "| [Iscrizioni](app-iscrizioni) | Gestire iscrizioni | Radice | "
-    "Documenti | Gestionale | Pratiche | App | `app-iscrizioni/AGENTS.md` | "
+    "Documenti | Gestionale | Documenti | App | `app-iscrizioni/AGENTS.md` | "
     "Amministratore di settore Iscrizioni | Boss dell'Ecosistema |"
 )
 
@@ -807,6 +807,20 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "`ecosistema/ASSET.md` |"
             )
             agents.write_text(text.replace(placeholder, row), encoding="utf-8")
+            asset_registry = target / "ecosistema" / "ASSET.md"
+            asset_text = asset_registry.read_text(encoding="utf-8")
+            asset_row = (
+                "| `Portafoglio Modello` | Capacita | Cartella madre | Tutte | "
+                "Costruzione portafogli | ATTIVO | `Portafoglio Modello/` | "
+                "Nessuno |\n"
+            )
+            asset_registry.write_text(
+                asset_text.replace(
+                    "\n\n## Regola di aggiornamento",
+                    f"\n{asset_row}\n## Regola di aggiornamento",
+                ),
+                encoding="utf-8",
+            )
 
             inspection = self.inspect(target)
 
@@ -848,6 +862,20 @@ class EcosistemaInspectorTest(unittest.TestCase):
             memory = target / "memory"
             (memory / "MEMORY.md").unlink()
             memory.rmdir()
+            asset_registry = target / "ecosistema" / "ASSET.md"
+            asset_text = asset_registry.read_text(encoding="utf-8")
+            asset_row = (
+                "| `_claude-memory` | Infrastruttura | Cartella madre | Tutte | "
+                "Memoria condivisa | ATTIVO | `_claude-memory/MEMORY.md` | "
+                "Nessuno |\n"
+            )
+            asset_registry.write_text(
+                asset_text.replace(
+                    "\n\n## Regola di aggiornamento",
+                    f"\n{asset_row}\n## Regola di aggiornamento",
+                ),
+                encoding="utf-8",
+            )
 
             inspection = self.inspect(target)
 
