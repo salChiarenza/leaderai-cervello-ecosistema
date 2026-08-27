@@ -19,14 +19,15 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIPETERE — 27/08/2026`
+`PROVA_DESTINATARIO_OK — 27/08/2026`
 
-L'ultima prova pubblica completata riguarda la versione `0.5.7` e il commit
+La prova pubblica completata riguarda la versione `0.5.8` e il commit
 immutabile
-`98751061f818115405491741b41e299b632cf116`. L'archivio scaricato senza
+`166c37775797893b6bcb593445795c935f212d2a`. L'archivio scaricato senza
 credenziali ha SHA256
-`72700b5753dd0380cdb86af9626020ae303a8bbcd751ac2c4a360dfde8301e57`;
-la sola copia estratta ha superato `246` test e la procedura `CHECKUP.md` ha
+`0bfcdab1a1020908151909f023b1fa46103ead1b431a1ba1a6452b245c0bf94f`;
+la sola copia estratta ha superato `279` test e la procedura
+`INSTALLA_CON_AI.md` ha
 risposto `HTTP 200`.
 
 ## Controlli prima dell'invio
