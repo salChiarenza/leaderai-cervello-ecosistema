@@ -19,12 +19,14 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIFARE — 27/08/2026`
+`PROVA_DESTINATARIO_OK — 27/08/2026`
 
-La versione `0.5.7` ha ricevuto ulteriori controlli ermetici dopo la prova
-pubblica precedente. Prima di usare questo modello va pubblicato il commit
-finale, scaricato il suo archivio immutabile senza credenziali e ripetuto il
-collaudo dalla sola copia estratta.
+La versione `0.5.7` pubblica provata corrisponde al commit immutabile
+`98751061f818115405491741b41e299b632cf116`. L'archivio scaricato senza
+credenziali ha SHA256
+`72700b5753dd0380cdb86af9626020ae303a8bbcd751ac2c4a360dfde8301e57`;
+la sola copia estratta ha superato `246` test e la procedura `CHECKUP.md` ha
+risposto `HTTP 200`.
 
 ## Controlli prima dell'invio
 
