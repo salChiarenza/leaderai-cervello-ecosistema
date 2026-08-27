@@ -31,6 +31,67 @@
       "sector_role": "Amministratore di settore",
       "default_reports_to": "Boss dell'Ecosistema"
     },
+    "room_lifecycle": {
+      "classifications": [
+        "STANZA",
+        "FONTE",
+        "OUTPUT",
+        "CAPACITA",
+        "INFRASTRUTTURA",
+        "ARCHIVIO",
+        "SOSPETTA"
+      ],
+      "root_owned_classifications": [
+        "FONTE",
+        "OUTPUT",
+        "CAPACITA",
+        "INFRASTRUTTURA",
+        "ARCHIVIO"
+      ],
+      "root_owned_registry_paths": [
+        "ecosistema/ASSET.md",
+        "ecosistema/FONTI.md"
+      ],
+      "room_required_files": [
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "bridge_content": "@AGENTS.md\n",
+      "map_template": "ecosistema/STANZA_AGENTS.md",
+      "source_template": "ecosistema/STANZA_FONTE.md",
+      "required_sections": [
+        "stato corrente e prossimo passo",
+        "scopo",
+        "responsabilita business",
+        "organigramma",
+        "dentro",
+        "fonti",
+        "output",
+        "fonte operativa",
+        "fonte business editabile",
+        "capacita",
+        "a monte",
+        "a valle",
+        "dove scrivere",
+        "regole"
+      ],
+      "required_terms": [
+        "amministratore del settore",
+        "boss dell'ecosistema",
+        "riporta al boss"
+      ],
+      "required_terms_section": "organigramma",
+      "owner_source_section": "fonte operativa",
+      "business_source_section": "fonte business editabile",
+      "owner_source_headings": [
+        "stato corrente",
+        "prossimo passo",
+        "decisioni",
+        "scadenze"
+      ],
+      "contents_section": "dentro",
+      "scan_depth": 2
+    },
     "adoption_observation": {
       "verdicts": [
         "TRACCE ASSENTI",
@@ -158,6 +219,11 @@
         "strategy": "create"
       },
       {
+        "template": "STANZA_FONTE.md",
+        "destination": "ecosistema/STANZA_FONTE.md",
+        "strategy": "create"
+      },
+      {
         "template": "INSTALL_LOG.md",
         "destination": "logs/install-log.md",
         "strategy": "event_log"
@@ -173,7 +239,8 @@
       "ecosistema/ASSET.md",
       "ecosistema/PROCESSI.md",
       "ecosistema/LIMITI.md",
-      "ecosistema/STANZA_AGENTS.md"
+      "ecosistema/STANZA_AGENTS.md",
+      "ecosistema/STANZA_FONTE.md"
     ],
     "forbidden": [],
     "external_effects": [

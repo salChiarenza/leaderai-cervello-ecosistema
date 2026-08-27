@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5.7 - 27/08/2026
+
+- `ecosistema/` diventa un armadio comune riservato: contiene soltanto i
+  registri e i calchi dichiarati dal contratto. Piani, bozze, asset e cartelle
+  operative al suo interno bloccano il collaudo.
+- Ogni vera stanza nasce come prefabbricato atomico: mappa `AGENTS.md`, ponte
+  `CLAUDE.md`, fonte operativa nominata e compilata, riga nella mappa madre e
+  prova. Il nuovo `STANZA_FONTE.md` porta in testa stato, prossimo passo,
+  decisioni e scadenze.
+- La policy macchina `inspection_policies -> room_lifecycle` governa classi,
+  file, sezioni, organigramma e profondita' del controllo. L'Ispettore blocca
+  campi incompleti, fonti assenti/vuote/illeggibili, sottocartelle fantasma,
+  generiche, vuote, non dichiarate o collegate fuori casa e classi inventate.
+- Il caso anonimo di uno studio cliente, con materiale marketing collocato
+  dentro `ecosistema/`, e' diventato una regressione deterministica. La stessa
+  legge e' scritta in Manifest, installazione, checkup, skill e mappe dei due
+  agenti.
+
 ## 0.5.6 - 21/08/2026
 
 - Il checkup guadagna il Passo 1-quinquies "Come si lavora davvero qui dentro":

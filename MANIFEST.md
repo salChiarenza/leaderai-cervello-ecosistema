@@ -13,7 +13,8 @@ Questo file e' lo standard di conformita' della repo `salChiarenza/leaderai-cerv
 
 La cartella viva del cliente e' il caso reale. Il checkup non giudica a
 sensazione: confronta il caso reale con questo Manifest, con
-`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e con le istruzioni
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
+`templates/STANZA_FONTE.md` e con le istruzioni
 operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara,
 lo prova e aggiorna la fonte proprietaria.
 
@@ -48,8 +49,9 @@ Restano stabili in ogni installazione:
 - `AGENTS.md` alla radice come mappa e router comune;
 - `CLAUDE.md` sempre presente come ponte di una riga (`@AGENTS.md`);
 - memoria indicizzata, log e registri di fonti, asset, processi e limiti;
-- calco locale `ecosistema/STANZA_AGENTS.md` per creare mappe senza dipendere
-  da un percorso esterno;
+- calchi locali `ecosistema/STANZA_AGENTS.md` e
+  `ecosistema/STANZA_FONTE.md` per creare stanze complete senza dipendere da
+  un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
 - audit comportamentale delle istruzioni con una sola variazione per volta,
   due sessioni nuove e classificazione non distruttiva del blocco;
@@ -110,6 +112,12 @@ l'ambiente e classifica ogni elemento rilevante come:
 - `ARCHIVIO`: materiale storico non operativo;
 - `SOSPETTA`: elemento ancora da chiarire.
 
+La cartella `ecosistema/` e' l'armadio comune della casa, non una stanza
+business: contiene soltanto i registri e i calchi installati dal contratto.
+Piani, bozze, asset visivi, progetti e cartelle operative vivono nella stanza
+proprietaria, allo stesso livello di `ecosistema/`. Qualunque elemento diverso
+dai percorsi ammessi da `install_contract.json` blocca il collaudo.
+
 L'insieme forma un organigramma. La cartella madre e' governata dal **Boss
 dell'Ecosistema**, che instrada richieste, coordina i passaggi tra settori e
 verifica il risultato. Ogni `STANZA` e' un ramo organizzativo governato dal
@@ -125,11 +133,12 @@ Una vera stanza passa il contratto quando:
 2. dichiara il proprio Amministratore di settore e il collegamento gerarchico
    al Boss dell'Ecosistema;
 3. e' raggiungibile dalla mappa madre;
-4. ha una mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md`
-   come ponte `@AGENTS.md`, con scopo, fonti, output e modo di muoversi;
-5. dichiara collegamenti a monte e a valle solo per processi reali;
-6. usa una sola fonte di verita' per ogni dato o stato;
-7. registra le capacita' che la servono e la prova che funzionano.
+4. nasce come prefabbricato completo: `AGENTS.md`, ponte `CLAUDE.md`, una
+   fonte operativa nominata e compilata, riga nella mappa madre e collaudo;
+5. dichiara nella mappa ogni sottocartella diretta e la sua funzione;
+6. dichiara collegamenti a monte e a valle solo per processi reali;
+7. usa una sola fonte di verita' per ogni dato o stato;
+8. registra le capacita' che la servono e la prova che funzionano.
 
 Script, skill, modelli, fonti e output possono formare una pipeline completa
 senza costituire una stanza. Descrivono **come** si esegue un lavoro; la stanza
@@ -143,13 +152,17 @@ Una casa semplice puo' avere **zero stanze**. Quando una capacita', fonte o
 output non appartiene a una responsabilita' business autonoma, la cartella
 madre puo' possederlo direttamente: lo registra nell'`AGENTS.md` radice e in
 `ecosistema/ASSET.md` o `ecosistema/FONTI.md`. In questo caso non nasce una
-mappa locale. La crescita futura puo' promuoverlo a stanza solo quando emerge
+mappa locale. Il percorso e' un elemento visibile direttamente nella radice,
+l'uso e' compilato e non collide con il telaio o con una stanza. La crescita
+futura puo' promuoverlo a stanza solo quando emerge
 una responsabilita' business reale approvata dal proprietario.
 
-Il contratto locale nasce dalla fonte repo `templates/STANZA_AGENTS.md` e viene
-installato come `ecosistema/STANZA_AGENTS.md`. Ogni cartella nuova
-viene classificata e assegnata alla cartella madre o a una stanza proprietaria
-prima del salvataggio.
+Il contratto macchina vive in
+`install_contract.json -> inspection_policies -> room_lifecycle`. I calchi
+repo `templates/STANZA_AGENTS.md` e `templates/STANZA_FONTE.md` vengono
+installati nell'armadio comune. Una stanza e' valida soltanto quando l'intero
+prefabbricato e' presente nello stesso salvataggio; una nascita parziale viene
+annullata o resta `NON PASSA`.
 Le cartelle ordinarie non ricevono mappe inutili: vivono sotto la stanza che le
 governa. Una cartella generica, vuota, concorrente o senza proprietario blocca
 il collaudo.
@@ -268,6 +281,7 @@ Il target passa solo se esistono:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md`
+- `ecosistema/STANZA_FONTE.md`
 
 Lo standard statico necessario alla procedura senza esecuzione di codice e'
 esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.

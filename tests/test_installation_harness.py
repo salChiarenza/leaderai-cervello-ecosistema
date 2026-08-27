@@ -55,6 +55,7 @@ write("ecosistema/FONTI.md", render("FONTI.md"))
 write("ecosistema/PROCESSI.md", render("PROCESSI.md"))
 write("ecosistema/LIMITI.md", render("LIMITI.md"))
 write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))
+write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))
 write(".gitignore", render("GITIGNORE.txt"))
 write(
     "logs/install-log.md",
@@ -118,6 +119,11 @@ class InstallationHarnessTest(unittest.TestCase):
         self.assertIn("esattamente `installazione iniziale`", prompt)
         self.assertIn("la conferma finale resta nel messaggio conclusivo", prompt)
         self.assertNotIn("Leggi integralmente", prompt)
+        core = install.split("<!-- START_NUCLEO_INSTALLAZIONE -->", 1)[1].split(
+            "<!-- END_NUCLEO_INSTALLAZIONE -->", 1
+        )[0]
+        self.assertIn("armadio comune ermetico", core)
+        self.assertIn("STANZA_FONTE.md", core)
 
     def make_fake(self, root: Path, source: str = FAKE_INSTALLER) -> Path:
         path = root / "fake agent.py"
@@ -183,6 +189,12 @@ class InstallationHarnessTest(unittest.TestCase):
             installation_harness._log_mode(
                 "- Nota: la modalita' consigliata potrebbe essere both.\n"
             )
+        )
+
+    def test_log_mode_accepts_markdown_bold_key_written_by_agent(self):
+        self.assertEqual(
+            installation_harness._log_mode("- **modalita':** claude\n"),
+            "claude",
         )
 
     def test_manual_mission_keeps_source_read_only_but_target_copies_writable(self):
@@ -264,6 +276,62 @@ class InstallationHarnessTest(unittest.TestCase):
                 if check["name"] == "versione_e_log_coerenti"
             )
             self.assertIn("modalita_mappa=codex", log_check["detail"])
+
+    def test_oracle_rejects_extra_content_inside_common_registry(self):
+        source = FAKE_INSTALLER.replace(
+            'write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))',
+            'write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))\n'
+            'write("ecosistema/piano-cliente.md", "# Piano\\n")',
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            result = self.run_fake(Path(tmp), mode="codex", source=source)
+            oracle = json.loads(
+                (Path(result.evidence_dir) / "oracle.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+
+            self.assertEqual(result.status, "ORACLE_FAIL")
+            check = next(
+                item
+                for item in oracle["checks"]
+                if item["name"] == "armadio_comune_ermetico"
+            )
+            self.assertFalse(check["passed"])
+
+    def test_oracle_rejects_empty_or_symlinked_room_templates(self):
+        variants = {
+            "empty_map": FAKE_INSTALLER.replace(
+                'write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))',
+                'write("ecosistema/STANZA_AGENTS.md", "")',
+            ),
+            "empty_source": FAKE_INSTALLER.replace(
+                'write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))',
+                'write("ecosistema/STANZA_FONTE.md", "")',
+            ),
+            "symlink_source": FAKE_INSTALLER.replace(
+                'write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))',
+                'link = target / "ecosistema/STANZA_FONTE.md"\n'
+                'link.parent.mkdir(parents=True, exist_ok=True)\n'
+                'link.symlink_to(snapshot / "templates/STANZA_FONTE.md")',
+            ),
+        }
+        for name, source in variants.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                result = self.run_fake(Path(tmp), mode="codex", source=source)
+                oracle = json.loads(
+                    (Path(result.evidence_dir) / "oracle.json").read_text(
+                        encoding="utf-8"
+                    )
+                )
+
+                self.assertEqual(result.status, "ORACLE_FAIL")
+                check = next(
+                    item
+                    for item in oracle["checks"]
+                    if item["name"] == "calchi_stanza_integri"
+                )
+                self.assertFalse(check["passed"])
 
     def test_paths_with_spaces_accents_and_apostrophe_are_supported(self):
         with tempfile.TemporaryDirectory(prefix="percorso città d'Artù - ") as tmp:

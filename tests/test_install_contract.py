@@ -1,3 +1,4 @@
+import copy
 import json
 import subprocess
 import tempfile
@@ -54,12 +55,55 @@ class InstallContractTest(unittest.TestCase):
         self.assertEqual(organization.root_role, "Boss dell'Ecosistema")
         self.assertEqual(organization.sector_role, "Amministratore di settore")
         self.assertEqual(organization.default_reports_to, organization.root_role)
+        room_policy = install_contract.room_lifecycle_policy(contract)
+        self.assertEqual(
+            room_policy.classifications,
+            (
+                "STANZA",
+                "FONTE",
+                "OUTPUT",
+                "CAPACITA",
+                "INFRASTRUTTURA",
+                "ARCHIVIO",
+                "SOSPETTA",
+            ),
+        )
+        self.assertEqual(room_policy.bridge_content, "@AGENTS.md\n")
+        self.assertEqual(room_policy.map_template, "ecosistema/STANZA_AGENTS.md")
+        self.assertEqual(room_policy.source_template, "ecosistema/STANZA_FONTE.md")
+        self.assertEqual(
+            room_policy.root_owned_classifications,
+            ("FONTE", "OUTPUT", "CAPACITA", "INFRASTRUTTURA", "ARCHIVIO"),
+        )
+        self.assertEqual(
+            room_policy.root_owned_registry_paths,
+            ("ecosistema/ASSET.md", "ecosistema/FONTI.md"),
+        )
+        self.assertIn("fonte operativa", room_policy.required_sections)
+        self.assertEqual(
+            room_policy.required_terms,
+            (
+                "amministratore del settore",
+                "boss dell'ecosistema",
+                "riporta al boss",
+            ),
+        )
+        self.assertEqual(room_policy.required_terms_section, "organigramma")
+        self.assertEqual(
+            room_policy.business_source_section,
+            "fonte business editabile",
+        )
+        self.assertEqual(
+            room_policy.owner_source_headings,
+            ("stato corrente", "prossimo passo", "decisioni", "scadenze"),
+        )
         both_destinations = {
             rule.destination
             for rule in install_contract.template_rules(contract, "both")
         }
         self.assertIn(".codex/README.md", both_destinations)
         self.assertIn(".claude/README.md", both_destinations)
+        self.assertIn("ecosistema/STANZA_FONTE.md", both_destinations)
         self.assertEqual(install_contract.forbidden_paths(contract, "both"), [])
         self.assertIn(
             ".claude/README.md",
@@ -103,6 +147,31 @@ class InstallContractTest(unittest.TestCase):
         )
         self.assertEqual(dynamic_defaults, {"memory/MEMORY.md"})
 
+    def test_room_lifecycle_rejects_ambiguous_or_weakened_policy(self):
+        mutations = {
+            "boolean_depth": lambda raw: raw.update(scan_depth=True),
+            "same_templates": lambda raw: raw.update(
+                source_template=raw["map_template"]
+            ),
+            "invented_class": lambda raw: (
+                raw["classifications"].append("CARAMELLA"),
+                raw["root_owned_classifications"].append("CARAMELLA"),
+            ),
+            "overlapping_sections": lambda raw: raw.update(
+                contents_section=raw["owner_source_section"]
+            ),
+            "routed_section_not_required": lambda raw: raw.update(
+                required_terms_section="sezione inventata"
+            ),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                contract = copy.deepcopy(install_contract.CONTRACT)
+                raw = contract["inspection_policies"]["room_lifecycle"]
+                mutate(raw)
+                with self.assertRaises(ValueError):
+                    install_contract.room_lifecycle_policy(contract)
+
     def test_every_contract_destination_is_installed_for_both(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -130,6 +199,35 @@ class InstallContractTest(unittest.TestCase):
                 "both",
             ):
                 self.assertTrue((target / rel).is_file(), rel)
+
+    def test_rerun_rejects_tampered_room_templates(self):
+        for relative in (
+            "ecosistema/STANZA_AGENTS.md",
+            "ecosistema/STANZA_FONTE.md",
+        ):
+            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                target = root / "Casa"
+                settings = self.settings_path(root)
+                leaderai_setup.run_setup(
+                    target,
+                    "Cliente",
+                    "both",
+                    claude_user_settings_path=settings,
+                )
+                (target / relative).write_text("", encoding="utf-8")
+
+                result = leaderai_setup.run_setup(
+                    target,
+                    "Cliente",
+                    "both",
+                    claude_user_settings_path=settings,
+                )
+
+                self.assertEqual(result.target_verdict, "NON PASSA")
+                self.assertTrue(
+                    any("calco stanza" in blocker.lower() for blocker in result.blockers)
+                )
 
     def test_claude_settings_preserve_other_keys_and_use_machine_path(self):
         with tempfile.TemporaryDirectory() as tmp:

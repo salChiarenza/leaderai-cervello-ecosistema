@@ -88,6 +88,7 @@ class CheckupGuidanceTest(unittest.TestCase):
             "Ispettore Ecosistema",
             "cartella visibile non classificata",
             "templates/STANZA_AGENTS.md",
+            "templates/STANZA_FONTE.md",
             "percorso | classe | responsabilita business | amministratore | riporta al",
             "cartelle generiche",
             "file sciolto nella home",
@@ -131,6 +132,15 @@ class CheckupGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertIn(" ".join(phrase.lower().split()), combined)
 
+        checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+        self.assertGreaterEqual(checkup.count("templates/STANZA_FONTE.md"), 6)
+        mission = checkup.split("## Modello email missione checkup", 1)[1].split(
+            "## ", 1
+        )[0]
+        self.assertIn("templates/STANZA_FONTE.md", mission)
+        proof = checkup.split("STANDARD APPLICATO:", 1)[1]
+        self.assertIn("templates/STANZA_FONTE.md", proof)
+
     def test_checkup_enforces_boss_and_sector_administrators(self):
         checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
         root_map = (ROOT / "templates" / "AGENTS.md").read_text(encoding="utf-8")
@@ -151,6 +161,30 @@ class CheckupGuidanceTest(unittest.TestCase):
             "riporta al Boss",
             "governa l'organigramma",
             "amministratore | riporta al",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(" ".join(phrase.lower().split()), combined)
+
+    def test_room_prefab_and_common_registry_are_enforced_everywhere(self):
+        surfaces = [
+            ROOT / "MANIFEST.md",
+            ROOT / "CHECKUP.md",
+            ROOT / "INSTALLA_CON_AI.md",
+            ROOT / "templates" / "AGENTS.md",
+            ROOT / "templates" / "ISPETTORE_SKILL.md",
+        ]
+        combined = " ".join(
+            " ".join(path.read_text(encoding="utf-8").lower().split())
+            for path in surfaces
+        )
+        required = [
+            "ecosistema/` e' l'armadio comune",
+            "ecosistema/stanza_fonte.md",
+            "inspection_policies -> room_lifecycle",
+            "sottocartella diretta",
+            "fonte operativa",
+            "stesso salvataggio",
         ]
         for phrase in required:
             with self.subTest(phrase=phrase):

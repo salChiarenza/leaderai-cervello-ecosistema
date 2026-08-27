@@ -16,6 +16,16 @@ VALID_STRATEGIES = {
     "event_log",
 }
 
+CANONICAL_ROOM_CLASSIFICATIONS = (
+    "STANZA",
+    "FONTE",
+    "OUTPUT",
+    "CAPACITA",
+    "INFRASTRUTTURA",
+    "ARCHIVIO",
+    "SOSPETTA",
+)
+
 
 @dataclass(frozen=True)
 class TemplateRule:
@@ -48,6 +58,25 @@ class OrganizationPolicy:
     default_reports_to: str
 
 
+@dataclass(frozen=True)
+class RoomLifecyclePolicy:
+    classifications: tuple[str, ...]
+    root_owned_classifications: tuple[str, ...]
+    root_owned_registry_paths: tuple[str, ...]
+    room_required_files: tuple[str, ...]
+    bridge_content: str
+    map_template: str
+    source_template: str
+    required_sections: tuple[str, ...]
+    required_terms: tuple[str, ...]
+    required_terms_section: str
+    owner_source_section: str
+    business_source_section: str
+    owner_source_headings: tuple[str, ...]
+    contents_section: str
+    scan_depth: int
+
+
 def _safe_relative(raw: str, label: str) -> str:
     path = Path(raw)
     if not raw or path.is_absolute() or ".." in path.parts:
@@ -71,6 +100,7 @@ def load_contract(path: Path = CONTRACT_PATH) -> dict[str, Any]:
         raise ValueError("Contratto privo delle sezioni common/agents.")
     official_sources(data)
     organization_policy(data)
+    room_lifecycle_policy(data)
     markdown_hygiene_policy(data)
     for agent in supported:
         if not isinstance(data["agents"].get(agent), dict):
@@ -280,6 +310,154 @@ def organization_policy(contract: dict[str, Any]) -> OrganizationPolicy:
     if policy.default_reports_to != policy.root_role:
         raise ValueError("Ogni settore deve riportare al ruolo radice.")
     return policy
+
+
+def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
+    policies = contract.get("inspection_policies")
+    if not isinstance(policies, dict):
+        raise ValueError("Contratto privo delle policy di ispezione.")
+    raw = policies.get("room_lifecycle")
+    if not isinstance(raw, dict):
+        raise ValueError("Contratto privo della policy ciclo di vita stanze.")
+
+    classifications = raw.get("classifications")
+    root_owned_classifications = raw.get("root_owned_classifications")
+    root_owned_registry_paths = raw.get("root_owned_registry_paths")
+    required_files = raw.get("room_required_files")
+    required_sections = raw.get("required_sections")
+    required_terms = raw.get("required_terms")
+    source_headings = raw.get("owner_source_headings")
+    lists = {
+        "classifications": classifications,
+        "root_owned_classifications": root_owned_classifications,
+        "root_owned_registry_paths": root_owned_registry_paths,
+        "room_required_files": required_files,
+        "required_sections": required_sections,
+        "required_terms": required_terms,
+        "owner_source_headings": source_headings,
+    }
+    for label, values in lists.items():
+        if (
+            not isinstance(values, list)
+            or not values
+            or any(not isinstance(value, str) or not value.strip() for value in values)
+        ):
+            raise ValueError(f"Policy stanze: {label} non valido.")
+        normalized = [value.casefold().strip() for value in values]
+        if len(normalized) != len(set(normalized)):
+            raise ValueError(f"Policy stanze: {label} contiene duplicati.")
+
+    for rel in required_files:
+        _safe_relative(rel, "File obbligatorio stanza")
+    if {value.casefold().strip() for value in required_files} != {
+        "agents.md",
+        "claude.md",
+    }:
+        raise ValueError("Policy stanze: servono AGENTS.md e CLAUDE.md.")
+    normalized_classifications = {
+        value.casefold().strip() for value in classifications
+    }
+    if tuple(value.strip() for value in classifications) != CANONICAL_ROOM_CLASSIFICATIONS:
+        raise ValueError(
+            "Policy stanze: l'insieme e l'ordine delle classi canoniche non "
+            "possono cambiare."
+        )
+    normalized_root_owned = {
+        value.casefold().strip() for value in root_owned_classifications
+    }
+    if not normalized_root_owned < normalized_classifications:
+        raise ValueError(
+            "Policy stanze: le classi della cartella madre devono essere un "
+            "sottoinsieme proprio delle classi disponibili."
+        )
+    if normalized_root_owned & {"stanza", "sospetta"}:
+        raise ValueError(
+            "Policy stanze: STANZA e SOSPETTA non sono classi risolte della "
+            "cartella madre."
+        )
+    normalized_registry_paths = {
+        _safe_relative(value, "Registro elementi cartella madre")
+        for value in root_owned_registry_paths
+    }
+    map_template = _safe_relative(str(raw.get("map_template", "")), "Calco mappa stanza")
+    source_template = _safe_relative(
+        str(raw.get("source_template", "")), "Calco fonte stanza"
+    )
+    if source_template == map_template:
+        raise ValueError("Policy stanze: mappa e fonte devono usare calchi distinti.")
+    installed_destinations = {
+        rule.destination for rule in template_rules(contract, "both")
+    }
+    if not normalized_registry_paths <= installed_destinations:
+        raise ValueError(
+            "Policy stanze: i registri della cartella madre devono essere "
+            "installati dal contratto."
+        )
+    for rel in (map_template, source_template):
+        if rel not in installed_destinations:
+            raise ValueError(f"Calco stanza non installato dal contratto: {rel}.")
+
+    bridge_content = raw.get("bridge_content")
+    if bridge_content != "@AGENTS.md\n":
+        raise ValueError("Il ponte stanza deve essere esattamente @AGENTS.md.")
+    scalar_fields = {
+        "required_terms_section": raw.get("required_terms_section"),
+        "owner_source_section": raw.get("owner_source_section"),
+        "business_source_section": raw.get("business_source_section"),
+        "contents_section": raw.get("contents_section"),
+    }
+    if any(not isinstance(value, str) or not value.strip() for value in scalar_fields.values()):
+        raise ValueError("Policy stanze: nomi sezione incompleti.")
+    normalized_required_sections = {
+        value.casefold().strip() for value in required_sections
+    }
+    routed_sections = {
+        str(value).casefold().strip() for value in scalar_fields.values()
+    }
+    if not routed_sections <= normalized_required_sections:
+        raise ValueError(
+            "Policy stanze: ogni sezione instradata deve essere obbligatoria."
+        )
+    if len(routed_sections) != len(scalar_fields):
+        raise ValueError(
+            "Policy stanze: organigramma, contenuti e fonti devono usare "
+            "sezioni distinte."
+        )
+    scan_depth = raw.get("scan_depth")
+    if (
+        isinstance(scan_depth, bool)
+        or not isinstance(scan_depth, int)
+        or scan_depth < 1
+        or scan_depth > 2
+    ):
+        raise ValueError("Policy stanze: scan_depth deve essere 1 o 2.")
+
+    return RoomLifecyclePolicy(
+        classifications=tuple(value.strip() for value in classifications),
+        root_owned_classifications=tuple(
+            value.strip() for value in root_owned_classifications
+        ),
+        root_owned_registry_paths=tuple(
+            _safe_relative(value, "Registro elementi cartella madre")
+            for value in root_owned_registry_paths
+        ),
+        room_required_files=tuple(value.strip() for value in required_files),
+        bridge_content=bridge_content,
+        map_template=map_template,
+        source_template=source_template,
+        required_sections=tuple(value.casefold().strip() for value in required_sections),
+        required_terms=tuple(value.casefold().strip() for value in required_terms),
+        required_terms_section=str(
+            scalar_fields["required_terms_section"]
+        ).casefold().strip(),
+        owner_source_section=str(scalar_fields["owner_source_section"]).casefold().strip(),
+        business_source_section=str(
+            scalar_fields["business_source_section"]
+        ).casefold().strip(),
+        owner_source_headings=tuple(value.casefold().strip() for value in source_headings),
+        contents_section=str(scalar_fields["contents_section"]).casefold().strip(),
+        scan_depth=scan_depth,
+    )
 
 
 def declared_agent(agents_text: str) -> str | None:

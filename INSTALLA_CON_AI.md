@@ -54,9 +54,14 @@ personalizzazione, fonti reali e prove macchina.
 8. Registra `default_browser`, `desktop_launcher` e `remote_backup` come
    `DA COLLAUDARE` o `DA COLLEGARE` nel collaudo anonimo. Sulla macchina
    cliente diventano `OK` soltanto dopo prova reale.
-9. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
+9. Tratta `ecosistema/` come armadio comune ermetico: ammette soltanto i
+   registri e i due calchi dichiarati dal contratto. I calchi
+   `STANZA_AGENTS.md` e `STANZA_FONTE.md` restano file locali, integri e
+   identici ai template della fotografia; nessun piano, bozza, asset o
+   sottocartella operativa entra nell'armadio.
+10. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
    log tecnico, commit iniziale e fotografia standard intatta.
-10. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
+11. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
    copiato nella casa.
 
 <!-- END_NUCLEO_INSTALLAZIONE -->
@@ -162,6 +167,7 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `MANIFEST.md`
    - `templates/AGENTS.md`
    - `templates/STANZA_AGENTS.md`
+   - `templates/STANZA_FONTE.md`
    - `templates/ISPETTORE_SKILL.md`
    - `templates/MEMORY.md`
    - `templates/ASSET.md`
@@ -193,6 +199,7 @@ Fase 4 - monta localmente il Cervello
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
    - `templates/STANZA_AGENTS.md` -> `ecosistema/STANZA_AGENTS.md`
+   - `templates/STANZA_FONTE.md` -> `ecosistema/STANZA_FONTE.md`
    - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
    - `templates/CLAUDE.md` -> `CLAUDE.md` (ponte, sempre)
    - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
@@ -245,15 +252,14 @@ Amministratore di settore, subordinato al Boss:
    i connettori, le procedure e gli archivi gia' presenti;
 2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
-3. riconosci come stanza solo una funzione operativa stabile con fonti,
-   processi o output propri;
+3. riconosci come stanza solo una responsabilita' business stabile con stato e
+   decisioni propri;
 4. aggiorna il registro delle stanze in `AGENTS.md`, assegna a ogni ramo il suo
    Amministratore di settore e collegalo al Boss dell'Ecosistema;
-5. per ogni vera stanza crea o integra `AGENTS.md` da
-   `ecosistema/STANZA_AGENTS.md` e `CLAUDE.md` come ponte di una riga
-   (`@AGENTS.md`), con scopo, contenuto, fonti, output, capacita',
-   collegamenti a monte e collegamenti a valle, dove scrivere, amministratore e
-   relazione gerarchica con il Boss;
+5. per ogni vera stanza crea nello stesso salvataggio `AGENTS.md` da
+   `ecosistema/STANZA_AGENTS.md`, `CLAUDE.md` come ponte di una riga, una fonte
+   operativa dal calco `ecosistema/STANZA_FONTE.md` con nome reale e la riga
+   nella mappa madre; compila tutto e dichiara ogni sottocartella diretta;
 6. collega direttamente due stanze solo quando un processo reale passa tra le
    due;
 7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
@@ -264,6 +270,11 @@ Skill, script, agenti, connettori, moduli e procedure sono capacita' della
 stanza che li usa. Se una capacita' e' gia' coperta, integrala o riusala. Una
 nuova stanza nasce solo quando nessuna stanza esistente puo' possedere quella
 funzione e il proprietario approva la proposta.
+
+`ecosistema/` resta l'armadio comune: contiene soltanto i registri e i due
+calchi dichiarati da `install_contract.json`. Le stanze e i loro materiali
+business vivono accanto a esso. Un piano, una bozza, un asset o una cartella
+operativa dentro `ecosistema/` blocca il collaudo.
 
 Ogni cartella nuova passa lo stesso ciclo prima del salvataggio: classe,
 proprietario, eventuale mappa locale, collegamento alla radice e prova. Nomi

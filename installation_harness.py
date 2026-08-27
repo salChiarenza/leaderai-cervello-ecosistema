@@ -53,6 +53,7 @@ STANDARD_FILES = (
     "templates/MEMORY.md",
     "templates/PROCESSI.md",
     "templates/STANZA_AGENTS.md",
+    "templates/STANZA_FONTE.md",
 )
 
 INSTALL_CONTRACT = install_contract.load_contract(
@@ -534,8 +535,9 @@ def _read_text(target: Path, relative: str) -> str:
 
 def _log_mode(install_log: str) -> str | None:
     match = re.search(
-        r"(?im)^\s*(?:[-*]\s*)?(?:agent|modalit(?:a'?|à))"
-        r"(?:\s+(?:scelta|installata|attiva))?\s*:\s*"
+        r"(?im)^\s*(?:(?:-|\*)\s+)?(?:\*\*)?"
+        r"(?:agent|modalit(?:a'?|à))"
+        r"(?:\s+(?:scelta|installata|attiva))?(?:\*\*)?\s*:\s*(?:\*\*)?\s*"
         r"`?(codex|claude|both)`?(?=\s|[.;,(]|$)",
         install_log,
     )
@@ -634,6 +636,48 @@ def evaluate_oracle(
         )
         if "{{" in _read_text(target, relative)
     )
+    ecosystem_allowed_files = {
+        relative
+        for relative in MODE_REQUIRED_FILES[mode]
+        if Path(relative).parts and Path(relative).parts[0] == "ecosistema"
+    }
+    ecosystem_allowed_dirs = {"ecosistema"}
+    for relative in ecosystem_allowed_files:
+        parent = Path(relative).parent
+        while parent != Path("."):
+            ecosystem_allowed_dirs.add(parent.as_posix())
+            parent = parent.parent
+    ecosystem_observed = {
+        relative
+        for relative in (*present_files, *present_dirs)
+        if Path(relative).parts and Path(relative).parts[0] == "ecosistema"
+    }
+    unexpected_ecosystem_entries = sorted(
+        ecosystem_observed - ecosystem_allowed_files - ecosystem_allowed_dirs
+    )
+    room_template_issues: list[str] = []
+    room_policy = install_contract.room_lifecycle_policy(INSTALL_CONTRACT)
+    room_template_destinations = {
+        room_policy.map_template,
+        room_policy.source_template,
+    }
+    for rule in install_contract.template_rules(INSTALL_CONTRACT, mode):
+        if rule.destination not in room_template_destinations:
+            continue
+        installed = target / rule.destination
+        expected = snapshot / "templates" / rule.template
+        if installed.is_symlink():
+            room_template_issues.append(f"{rule.destination}:symlink")
+            continue
+        try:
+            matches = (
+                installed.is_file()
+                and installed.read_bytes() == expected.read_bytes()
+            )
+        except OSError:
+            matches = False
+        if not matches:
+            room_template_issues.append(f"{rule.destination}:contenuto")
     python_files = sorted(
         relative for relative in present_files if relative.casefold().endswith(".py")
     )
@@ -720,6 +764,16 @@ def evaluate_oracle(
             "nessun_placeholder_cliente_nel_core",
             not generated_with_placeholders,
             f"file={generated_with_placeholders}",
+        ),
+        _check(
+            "armadio_comune_ermetico",
+            not unexpected_ecosystem_entries,
+            f"elementi_inattesi={unexpected_ecosystem_entries}",
+        ),
+        _check(
+            "calchi_stanza_integri",
+            not room_template_issues,
+            f"problemi={room_template_issues}",
         ),
         _check(
             "log_installazione_presente",

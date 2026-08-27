@@ -4,9 +4,9 @@ Questa e' la mappa locale della stanza `{{room_name}}`.
 
 ## Stato corrente e prossimo passo
 
-- Stato: da compilare nel file proprietario della stanza.
-- Prossimo passo: da compilare nel file proprietario della stanza.
-- Scadenze: nessuna oppure data, responsabile e azione in evidenza.
+- Stato, prossimo passo, decisioni e scadenze si leggono e si aggiornano nella
+  Fonte operativa dichiarata sotto.
+- Questa mappa instrada e non diventa un secondo diario.
 
 ## Scopo
 
@@ -34,6 +34,9 @@ non dimostra una stanza.
 ## Dentro
 
 - {{room_contents}}
+- Ogni sottocartella diretta usa il formato: percorso tra apici inversi,
+  seguito dalla sua funzione.
+- Se non esistono sottocartelle, scrivere NESSUNA SOTTOCARTELLA.
 
 ## Fonti
 
@@ -42,6 +45,14 @@ non dimostra una stanza.
 ## Output
 
 - {{room_outputs}}
+
+## Fonte operativa
+
+- `{{room_operating_source}}`
+- Deve esistere dentro questa stanza e mantenere, in testa, `Stato corrente`,
+  `Prossimo passo`, `Decisioni` e `Scadenze`. Se non esiste gia', nasce dal
+  calco `ecosistema/STANZA_FONTE.md` e riceve un nome che descrive la domanda
+  business della stanza.
 
 ## Fonte business editabile
 
@@ -73,6 +84,10 @@ non dimostra una stanza.
   `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`.
 - Non creare cartelle generiche, vuote o concorrenti.
 - Non duplicare dati, stato, procedure o output gia' governati altrove.
+- Non lasciare campi del calco non compilati: una stanza incompleta non viene
+  salvata.
+- Ogni sottocartella diretta e' dichiarata in `Dentro`; una cartella non
+  dichiarata non ha proprietario e blocca il collaudo.
 - Il contenuto business che il proprietario deve poter correggere vive in un
   file fonte esterno al codice e dichiarato in questa mappa. Codice e app lo
   leggono e generano PDF, Word o altri derivati; se la fonte manca, falliscono

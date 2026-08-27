@@ -31,7 +31,9 @@ Versione standard applicata: `{{version}}`.
 - Per Claude Code `autoMemoryDirectory` punta alla stessa memoria canonica: due
   memorie attive sono un blocco, non due livelli complementari.
 - `logs/install-log.md` registra solo installazione e cambi strutturali.
-- La mappa dell'azienda vive in `ecosistema/`.
+- `ecosistema/` e' l'armadio comune: contiene soltanto `FONTI.md`, `ASSET.md`,
+  `PROCESSI.md`, `LIMITI.md`, `STANZA_AGENTS.md` e `STANZA_FONTE.md`.
+- Le stanze business vivono accanto a `ecosistema/`, mai dentro di esso.
 - Il registro asset operativi vive in `ecosistema/ASSET.md`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
 - **Chi apre chiude (vale SEMPRE, non solo nelle missioni):** ogni pagina web,
@@ -96,14 +98,15 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
 3. assegna un proprietario: il Boss dell'Ecosistema oppure un Amministratore di
    settore;
-4. se e' una vera stanza, creala o integrala dal calco locale
-   `ecosistema/STANZA_AGENTS.md`, aggiungi `CLAUDE.md` con il solo
-   `@AGENTS.md`, assegna l'Amministratore di settore e collegala al Boss nel
-   registro qui sotto;
+4. se e' una vera stanza, crea nello stesso salvataggio la mappa dal calco
+   `ecosistema/STANZA_AGENTS.md`, il ponte `CLAUDE.md`, una fonte operativa
+   nominata dal calco `ecosistema/STANZA_FONTE.md` e la riga nel registro;
 5. se e' una sottocartella ordinaria, dichiarala nella mappa della stanza
    proprietaria senza trasformarla in una nuova stanza;
-6. applica subito le riparazioni meccaniche e reversibili;
-7. presenta al proprietario fusioni, spostamenti, eliminazioni o cambi di
+6. esegui l'Ispettore: campi incompleti, fonte mancante o sottocartella non
+   dichiarata bloccano il salvataggio della stanza;
+7. applica subito le riparazioni meccaniche e reversibili;
+8. presenta al proprietario fusioni, spostamenti, eliminazioni o cambi di
    proprieta' che coinvolgono contenuti preesistenti.
 
 Una cartella e' una stanza quando possiede una responsabilita' business stabile
@@ -127,6 +130,8 @@ con stato e decisioni propri, riconosciuta dal proprietario.
 | Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | Da assegnare | Boss dell'Ecosistema |
 
 La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.
+Nome, scopo e mappa locale sono compilati e coincidono con la mappa della
+stanza; il percorso e' una sola cartella visibile accanto a `ecosistema/`.
 Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si
 collegano direttamente solo quando un processo reale passa dall'una all'altra.
 Ogni riga dichiara l'Amministratore di settore e il collegamento gerarchico al
@@ -139,8 +144,9 @@ Boss dell'Ecosistema.
 | Da censire | Da definire | Da definire dal lavoro reale | `ecosistema/ASSET.md` o `ecosistema/FONTI.md` |
 
 Questa tabella possiede capacita', fonti e output che non richiedono una stanza
-autonoma. Il percorso resta senza mappa locale; i dettagli vivono nel registro
-indicato.
+autonoma. Ammette soltanto percorsi visibili direttamente nella radice, con uso
+reale compilato e un registro esatto fra `ecosistema/ASSET.md` ed
+`ecosistema/FONTI.md`. Il percorso resta senza mappa locale.
 
 ### Ispettore Ecosistema
 

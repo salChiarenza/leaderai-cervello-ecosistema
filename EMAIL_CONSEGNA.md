@@ -19,22 +19,11 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 21/08/2026`
+`PROVA_DESTINATARIO_DA_RIFARE — 27/08/2026`
 
-Verifica completata partendo dal solo archivio pubblico immutabile del commit
-`e11a72e2ca5d375376432122ff7798e0189496e4`.
-L'archivio pubblico letto dal livello di accesso del destinatario ha SHA-256
-`e21297a392cb0ea83078488b3ca9694f0ce89bd5ed5287fbb45d66fb1cf68bf6`.
-La versione `0.5.6` letta dalla copia estratta e' corretta; i `186` test
-deterministici sono passati dalla sola copia pubblica. La 0.5.6 aggiunge al
-checkup la misura dell'uso reale (Passo 1-quinquies) con etichetta legata al
-periodo osservato, deduplicazione per identita' di episodio, `OSSERVAZIONE
-PARZIALE - UNA POSTAZIONE`, `VERDETTO CONFORMITA'` separato da `ADOZIONE
-OSSERVATA` e regola deterministica `adoption_rule.py` sulla fonte macchina
-obbligatoria `install_contract.json`. La validazione richiede l'intero set
-canonico delle sette tracce: una policy con `dedup_sources` parziale (es. il
-solo Git) viene fermata con l'elenco delle mancanti, misurato sul glossario del
-contratto stesso. Tutto coperto da test.
+La versione 0.5.7 e' candidata al rilascio. Prima di usare questo modello va
+pubblicato il commit, scaricato il suo archivio immutabile dal livello di
+accesso del destinatario e ripetuto il collaudo dalla sola copia estratta.
 
 ## Controlli prima dell'invio
 

@@ -8,7 +8,8 @@ la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
 
 Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
 e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
-`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e le istruzioni operative
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
+`templates/STANZA_FONTE.md` e le istruzioni operative
 della repo; poi ripara, prova e riporta gli scostamenti.
 
 `install_contract.json` e' la fonte macchina unica per installazione manuale,
@@ -50,6 +51,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md`
+- `ecosistema/STANZA_FONTE.md`
 
 Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
 sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
@@ -199,7 +201,8 @@ un puntatore alla versione pubblicata.
 Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
 presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
 per `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
-`templates/STANZA_AGENTS.md` e `templates/ISPETTORE_SKILL.md`. Crea un clone
+`templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
+`templates/ISPETTORE_SKILL.md`. Crea un clone
 tecnico temporaneo solo con conferma esplicita.
 
 Nella nuova installazione, invece, parte sempre dalla lettura web della repo e

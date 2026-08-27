@@ -24,8 +24,9 @@ gesto umano vero previsto dal `CHECKUP.md`.
 2. Apri dalla release immutabile ufficiale `VERSION`,
    `install_contract.json`, inclusa la lista `official_sources`,
    `MANIFEST.md`, `CHECKUP.md`, `templates/AGENTS.md` e
-   `templates/STANZA_AGENTS.md`. Usa il contratto macchina per file
-   obbligatori e rami agente.
+   `templates/STANZA_AGENTS.md` e `templates/STANZA_FONTE.md`. Usa il contratto
+   macchina, inclusa `inspection_policies -> room_lifecycle`, per file
+   obbligatori, rami agente e ciclo di vita delle stanze.
 3. Apri e confronta in ogni checkup le tre fonti vive obbligatorie:
    `https://code.claude.com/docs/en/overview`,
    `https://learn.chatgpt.com/docs` e
@@ -36,8 +37,9 @@ gesto umano vero previsto dal `CHECKUP.md`.
    tecniche.
 4. Usa la cartella viva del proprietario come caso reale. Non creare una
    seconda casa e non giudicare dal nome.
-   Per creare una mappa locale usa il calco gia' installato
-   `ecosistema/STANZA_AGENTS.md`.
+   `ecosistema/` contiene soltanto registri e calchi comuni. Per creare una
+   stanza usa insieme `ecosistema/STANZA_AGENTS.md` e
+   `ecosistema/STANZA_FONTE.md`; la stanza vive accanto all'armadio comune.
 5. Esegui l'Ispettore completo descritto in `CHECKUP.md`: censimento,
    classificazione, riparazioni sicure, prove di instradamento e verdetto.
 6. Confronta la versione installata con il `VERSION` vivo. Senza lettura o con
@@ -52,7 +54,9 @@ gesto umano vero previsto dal `CHECKUP.md`.
    decisioni che governa. Script, skill, modelli, fonti e output, anche se
    formano una pipeline completa, non bastano. In dubbio usa `CAPACITA` o
    `SOSPETTA` e il verdetto resta `NON PASSA`.
-8. Nessuna cartella resta senza classe e proprietario. Cartelle generiche,
+8. Nessuna cartella resta senza classe e proprietario. Ogni sottocartella
+   diretta di una stanza e' dichiarata nella sua mappa; campi incompleti o
+   fonte operativa mancante bloccano il verdetto. Cartelle generiche,
    vuote, doppie, tecniche o sospette impediscono `PASSA` finche' non vengono
    risolte o portate al proprietario come decisione precisa.
 9. Ripara da solo file standard, ponti e puntatori mancanti. Elimina soltanto

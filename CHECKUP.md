@@ -28,6 +28,7 @@ Regola breve: non riparare a sentimento. `CHECKUP.md` non ripara a sentimento:
 - `templates/AGENTS.md` e' il comportamento atteso dell'agente nella cartella
   cliente;
 - `templates/STANZA_AGENTS.md` e' il contratto locale di ogni vera stanza;
+- `templates/STANZA_FONTE.md` e' il calco della sua fonte operativa nominata;
 - `AGENTS.md` e `README.md` spiegano come usare la repo;
 - la documentazione ufficiale viva Claude/Codex verifica solo la parte tecnica,
   non sostituisce lo standard LeaderAI.
@@ -55,12 +56,14 @@ Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
 Se la repo e' gia' presente sul computer, aggiornala e apri `CHECKUP.md`.
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per
 `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
-`templates/STANZA_AGENTS.md` e `templates/ISPETTORE_SKILL.md`. Crea un clone
+`templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
+`templates/ISPETTORE_SKILL.md`. Crea un clone
 tecnico temporaneo solo dopo conferma esplicita.
 
 Usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e'
 il caso reale: confrontala con lo standard della repo e con
-`templates/AGENTS.md` e `templates/STANZA_AGENTS.md`.
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e
+`templates/STANZA_FONTE.md`.
 
 Prima di dichiarare che non ci sono doppioni o cartelle tecniche fuori posto,
 fai la ricerca estesa obbligatoria: cerca anche nomi non standard, nomi
@@ -121,8 +124,9 @@ il gate e' `NON PASSA`. Non si puo' certificare una 0.3.0 contro se stessa
 quando lo standard vivo e' gia' successivo.
 
 Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
-file standard (`CHECKUP.md`, `install_contract.json`, `MANIFEST.md`, `templates/AGENTS.md`,
-`templates/STANZA_AGENTS.md`, `templates/ISPETTORE_SKILL.md`, `AGENTS.md`,
+file standard (`CHECKUP.md`, `install_contract.json`, `MANIFEST.md`,
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
+`templates/STANZA_FONTE.md`, `templates/ISPETTORE_SKILL.md`, `AGENTS.md`,
 `README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
 leggerli online, chiedi una sola conferma per creare un clone tecnico
 temporaneo in cartella temporanea di sistema. Il checkup di un ambiente gia'
@@ -137,6 +141,7 @@ Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 - `MANIFEST.md`;
 - `templates/AGENTS.md`;
 - `templates/STANZA_AGENTS.md`;
+- `templates/STANZA_FONTE.md`;
 - `templates/ISPETTORE_SKILL.md`;
 - `AGENTS.md`;
 - `README.md`.
@@ -453,9 +458,11 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   checkup invece della fonte usata nel lavoro quotidiano.
 - esiste una cartella visibile non classificata o senza proprietario nella
   cartella madre o in una stanza;
+- `ecosistema/` contiene piani, bozze, asset, progetti o cartelle diversi dai
+  registri e calchi ammessi dal contratto macchina;
 - una vera stanza non e' collegata alla mappa madre, non ha `AGENTS.md` e
-  `CLAUDE.md`, oppure la sua mappa locale non dichiara scopo, fonti, output,
-  capacita', monte, valle e dove scrivere;
+  `CLAUDE.md`, non ha la fonte operativa dichiarata e completa, conserva campi
+  del calco non compilati oppure ha sottocartelle dirette non dichiarate;
 - la mappa madre non dichiara il Boss dell'Ecosistema, oppure un ramo
   organizzativo nuovo o preesistente non ha un Amministratore di settore e una
   catena esplicita che riporta al Boss;
@@ -506,6 +513,8 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    Parti da tutte le cartelle e dai file visibili nella home, poi apri l'albero
    a due livelli delle voci non standard. Nessun percorso resta fuori dalla
    tabella di censimento.
+   Tratta `ecosistema/` come armadio comune riservato: confronta ricorsivamente
+   il suo contenuto con i soli percorsi ammessi da `install_contract.json`.
 2. Una stanza e' una responsabilita' business stabile riconosciuta dal
    proprietario. Mantiene stato operativo, decisioni e lavoro corrente. Una
    skill, uno script, un agente, un connettore, un modulo, un modello o una
@@ -534,12 +543,13 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    Boss. Una sottocartella di supporto non e' un ramo e resta subordinata al
    proprio amministratore.
 4. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
-   madre e abbia una mappa locale costruita o integrata da
+   madre e abbia un prefabbricato completo costruito o integrato da
    `ecosistema/STANZA_AGENTS.md` (calco locale installato dalla fonte repo
-   `templates/STANZA_AGENTS.md`): scopo, contenuto, fonti, output, capacita',
-   collegamenti a monte e collegamenti a valle e dove scrivere. Ogni vera
-   stanza mantiene il telaio comune: `AGENTS.md` locale e ponte `CLAUDE.md`
-   verso quella mappa.
+   `templates/STANZA_AGENTS.md`) e `ecosistema/STANZA_FONTE.md`: mappa locale,
+   ponte `CLAUDE.md`, fonte operativa nominata e completa, riga alla radice e
+   prova. La mappa dichiara ogni sottocartella diretta. La fonte porta in testa
+   `Stato corrente`, `Prossimo passo`, `Decisioni` e `Scadenze`; dichiara anche
+   collegamenti a monte e collegamenti a valle soltanto quando sono reali.
 5. Verifica che ogni collegamento corrisponda a un processo reale, che ogni
    capacita' abbia come proprietario la madre o una stanza e che due stanze non
    rispondano alla stessa funzione.
@@ -567,6 +577,9 @@ l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target
 sostituisce il giudizio dell'agente sui processi e non cancella dati. Se la
 repo non e' locale, esegui gli stessi controlli con gli strumenti file
 disponibili senza creare un clone automatico.
+
+La fonte macchina di questi blocchi e'
+`install_contract.json -> inspection_policies -> room_lifecycle`.
 
 ## Passo 1-quater — Unicita', protezione e ordine operativo
 
@@ -796,7 +809,8 @@ FONTI UFFICIALI CONFRONTATE
 fonte | ruolo | regola/capacita' confrontata | stato osservato | scostamento/riparazione | prova | data
 STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
 MANIFEST.md; templates/AGENTS.md; templates/STANZA_AGENTS.md;
-templates/ISPETTORE_SKILL.md; docs ufficiali vive per la parte tecnica.
+templates/STANZA_FONTE.md; templates/ISPETTORE_SKILL.md; docs ufficiali vive
+per la parte tecnica.
 VERSIONE METODO: installata [x] -> verificata oggi [y].
 VERDETTO CONFORMITA': PASSA / PASSA CON ATTENZIONE / NON PASSA
   (com'e' fatta la casa: telaio, stanze, collegamenti, condizioni bloccanti)

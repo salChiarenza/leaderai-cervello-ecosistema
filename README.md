@@ -19,7 +19,8 @@ e non sostituisce le specifiche tecniche.
 
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
 caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
-`templates/AGENTS.md` e `templates/STANZA_AGENTS.md`, ripara gli scostamenti
+`templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e
+`templates/STANZA_FONTE.md`, ripara gli scostamenti
 riparabili, prova, salva i fatti nelle fonti proprietarie e chiude localmente.
 Il ciclo ordinario produce zero aggiornamenti intermedi. Quando la missione
 richiede una conferma finale, ne parte una sola dopo il collaudo completo.
@@ -142,8 +143,11 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
+- `ecosistema/STANZA_FONTE.md` come calco della loro fonte operativa
 
-Questi pezzi sono infrastruttura comune. Le cartelle business vengono prima
+Questi pezzi sono l'armadio comune: `ecosistema/` non ospita cartelle o
+materiali business diversi dai registri e calchi dichiarati. Le cartelle
+business vivono accanto a esso e vengono prima
 classificate come stanza, fonte, output, capacita', infrastruttura, archivio o
 elemento sospetto. Ogni vera stanza deve essere raggiungibile dalla radice e
 avere `AGENTS.md` + `CLAUDE.md`, con mappa corta, fonti, output e collegamenti
@@ -155,11 +159,10 @@ a un **Amministratore di settore** che governa quella stanza e riporta al Boss.
 Le normali sottocartelle restano strumenti del settore e non diventano falsi
 rami.
 
-Ogni nuova stanza usa il calco installato `ecosistema/STANZA_AGENTS.md`,
-generato dalla fonte repo `templates/STANZA_AGENTS.md`. Prima del salvataggio
-l'Ispettore controlla che ogni percorso visibile nella home abbia classe e
-proprietario, che le stanze siano collegate alla radice e che non restino
-cartelle generiche, vuote, doppie, tecniche o file sciolti senza casa.
+Ogni nuova stanza nasce nello stesso salvataggio con mappa, ponte, fonte
+operativa, riga alla radice e prova, usando i due calchi installati. Prima del
+salvataggio l'Ispettore controlla anche campi incompleti e sottocartelle dirette
+non dichiarate, oltre a percorsi senza classe o proprietario.
 
 Controlla anche la salute dei Markdown: misura tutti i file, blocca mappe e
 indici cresciuti oltre le soglie del contratto macchina e revisiona i documenti

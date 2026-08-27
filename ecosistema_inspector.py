@@ -13,12 +13,13 @@ from pathlib import Path
 import install_contract
 
 
-CLAUDE_BRIDGE = "@AGENTS.md\n"
 ROOT = Path(__file__).resolve().parent
 STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 CONTRACT = install_contract.CONTRACT
 ORGANIZATION = install_contract.organization_policy(CONTRACT)
+ROOM_LIFECYCLE = install_contract.room_lifecycle_policy(CONTRACT)
 MARKDOWN_HYGIENE = install_contract.markdown_hygiene_policy(CONTRACT)
+CLAUDE_BRIDGE = ROOM_LIFECYCLE.bridge_content
 GITIGNORE_REQUIRED_RULES = tuple(
     line.strip()
     for line in (ROOT / "templates" / "GITIGNORE.txt")
@@ -49,6 +50,22 @@ ALLOWED_ROOT_FILES = {
     "AGENT_CHAT.md",
 }
 
+STANDARD_ECOSYSTEM_PATHS = {
+    Path(rule.destination).relative_to("ecosistema").as_posix()
+    for rule in install_contract.template_rules(CONTRACT, "both")
+    if Path(rule.destination).parts[0] == "ecosistema"
+}
+
+ROOM_TEMPLATE_RULES = {
+    rule.destination: rule.template
+    for rule in install_contract.template_rules(CONTRACT, "both")
+    if rule.destination
+    in {ROOM_LIFECYCLE.map_template, ROOM_LIFECYCLE.source_template}
+}
+
+IGNORED_OS_ENTRIES = {".DS_Store", "Thumbs.db", "desktop.ini"}
+IGNORED_ROOM_DIRS = {"__pycache__", "node_modules", ".venv", "venv"}
+
 GENERIC_NAMES = {
     "documenti",
     "documents",
@@ -65,28 +82,41 @@ GENERIC_NAMES = {
     "new folder",
 }
 
-ROOM_REQUIRED_TERMS = (
-    "amministratore del settore",
-    "boss dell'ecosistema",
-    "riporta al boss",
-    "stato corrente e prossimo passo",
-    "scopo",
-    "responsabilita business",
-    "dentro",
-    "fonti",
-    "output",
-    "capacita",
-    "a monte",
-    "a valle",
-    "dove scrivere",
-    "fonte business editabile",
-)
+WINDOWS_RESERVED_NAMES = {
+    "con",
+    "prn",
+    "aux",
+    "nul",
+    *(f"com{index}" for index in range(1, 10)),
+    *(f"lpt{index}" for index in range(1, 10)),
+}
+
+ROOM_REQUIRED_SECTIONS = ROOM_LIFECYCLE.required_sections
+ROOM_REQUIRED_TERMS = ROOM_LIFECYCLE.required_terms
+ROOM_FILE_NAMES = {
+    name.casefold(): name for name in ROOM_LIFECYCLE.room_required_files
+}
+ROOM_MAP_FILE = ROOM_FILE_NAMES["agents.md"]
+ROOM_BRIDGE_FILE = ROOM_FILE_NAMES["claude.md"]
 
 UNPROVEN_ROOM_RESPONSIBILITY_TERMS = (
     "{{",
     "da definire",
     "da compilare",
     "non applicabile",
+)
+
+UNPROVEN_VALUE_TERMS = (
+    "{{",
+    "da definire",
+    "da compilare",
+    "da collegare",
+)
+
+ROOM_RESPONSIBILITY_GUIDANCE = (
+    "descrivere la funzione aziendale riconosciuta dal proprietario, lo stato che "
+    "mantiene e le decisioni che governa. elencare script, skill, modelli o output "
+    "non dimostra una stanza."
 )
 
 CREDENTIAL_NAME_TERMS = {
@@ -132,8 +162,17 @@ class Room:
     name: str
     path: str
     purpose: str
+    map_path: str
     administrator: str
     reports_to: str
+
+
+@dataclass(frozen=True)
+class RootOwned:
+    path: str
+    classification: str
+    usage: str
+    registry_path: str
 
 
 @dataclass(frozen=True)
@@ -176,15 +215,85 @@ def _normalized(text: str) -> str:
     return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
+def _contains_unproven_value(text: str) -> bool:
+    normalized = _normalized(text)
+    return any(term in normalized for term in UNPROVEN_VALUE_TERMS) or bool(
+        re.search(r"\b(?:todo|tbd)\b", normalized)
+    )
+
+
+def _canonical_relative_path(raw: str) -> str | None:
+    value = raw.strip().replace("\\", "/")
+    if (
+        not value
+        or value == "."
+        or value.startswith("/")
+        or re.match(r"^[a-zA-Z]:", value)
+    ):
+        return None
+    parts = [part for part in value.split("/") if part not in {"", "."}]
+    if (
+        not parts
+        or ".." in parts
+        or any(
+            ":" in part
+            or part.rstrip(" .") != part
+            or part.split(".", 1)[0].casefold() in WINDOWS_RESERVED_NAMES
+            for part in parts
+        )
+    ):
+        return None
+    return "/".join(parts)
+
+
+def _active_markdown(text: str) -> str:
+    without_comments = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)
+    without_fences = re.sub(
+        r"(?ms)^\s*(```|~~~)[^\n]*\n.*?^\s*\1\s*$",
+        "",
+        without_comments,
+    )
+    return re.sub(
+        r"(?ms)^\s*(```|~~~)[^\n]*\n.*\Z",
+        "",
+        without_fences,
+    )
+
+
 def _table_cells(line: str) -> list[str]:
+    if line.startswith("\t") or len(line) - len(line.lstrip(" ")) >= 4:
+        return []
     if not line.lstrip().startswith("|"):
         return []
     return [cell.strip() for cell in line.strip().strip("|").split("|")]
 
 
+def _table_block_after_marker(content: str, marker: str) -> list[str]:
+    matches = list(
+        re.finditer(
+            rf"(?m)^[ ]{{0,3}}{re.escape(marker)}[ \t]*$",
+            content,
+        )
+    )
+    if len(matches) != 1:
+        return []
+    section = content[matches[0].end() :]
+    section = re.split(r"\n[ ]{0,3}#{2,3}\s", section, maxsplit=1)[0]
+    table_lines: list[str] = []
+    started = False
+    for line in section.splitlines():
+        if line.lstrip().startswith("|"):
+            started = True
+            table_lines.append(line)
+        elif started:
+            break
+    return table_lines
+
+
 def _room_from_cell(
     cell: str,
     purpose: str,
+    map_path: str,
     administrator: str,
     reports_to: str,
 ) -> Room | None:
@@ -197,33 +306,33 @@ def _room_from_cell(
             return None
         name = value
         path = value
-    path = path.replace("\\", "/").strip("/")
-    candidate = Path(path)
-    if candidate.is_absolute() or ".." in candidate.parts:
+    canonical_path = _canonical_relative_path(path)
+    if canonical_path is None:
         return Room(
             name=name,
             path="",
             purpose=purpose,
+            map_path=map_path,
             administrator=administrator,
             reports_to=reports_to,
         )
     return Room(
         name=name,
-        path=path,
+        path=canonical_path,
         purpose=purpose,
+        map_path=map_path,
         administrator=administrator,
         reports_to=reports_to,
     )
 
 
 def parse_room_registry(agents_text: str) -> list[Room]:
+    agents_text = _active_markdown(agents_text)
     marker = "### Registro delle stanze"
-    if marker not in agents_text:
+    if not _table_block_after_marker(agents_text, marker):
         return []
-    section = agents_text.split(marker, 1)[1]
-    section = re.split(r"\n#{2,3}\s", section, maxsplit=1)[0]
     rooms: list[Room] = []
-    for line in section.splitlines():
+    for line in _table_block_after_marker(agents_text, marker)[2:]:
         cells = _table_cells(line)
         if len(cells) < 2:
             continue
@@ -231,32 +340,52 @@ def parse_room_registry(agents_text: str) -> list[Room]:
             continue
         administrator = cells[8].strip("`").strip() if len(cells) > 8 else ""
         reports_to = cells[9].strip("`").strip() if len(cells) > 9 else ""
-        room = _room_from_cell(cells[0], cells[1], administrator, reports_to)
+        map_path = cells[7].strip("`").strip() if len(cells) > 7 else ""
+        room = _room_from_cell(
+            cells[0],
+            cells[1],
+            map_path,
+            administrator,
+            reports_to,
+        )
         if room is not None:
             rooms.append(room)
     return rooms
 
 
-def parse_root_owned_registry(agents_text: str) -> set[str]:
+def parse_root_owned_rows(agents_text: str) -> list[RootOwned]:
+    agents_text = _active_markdown(agents_text)
     marker = "### Elementi posseduti direttamente dalla cartella madre"
-    if marker not in agents_text:
-        return set()
-    section = agents_text.split(marker, 1)[1]
-    section = re.split(r"\n#{2,3}\s", section, maxsplit=1)[0]
-    paths: set[str] = set()
-    for line in section.splitlines():
+    if not _table_block_after_marker(agents_text, marker):
+        return []
+    rows: list[RootOwned] = []
+    for line in _table_block_after_marker(agents_text, marker)[2:]:
         cells = _table_cells(line)
         if len(cells) < 2:
             continue
         if all(set(cell) <= {"-", ":", " "} for cell in cells):
             continue
-        raw = cells[0].strip("`").strip().replace("\\", "/").strip("/")
+        raw = cells[0].strip("`").strip()
         if _normalized(raw) in {"percorso", "da censire"}:
             continue
-        candidate = Path(raw)
-        if raw and not candidate.is_absolute() and ".." not in candidate.parts:
-            paths.add(raw)
-    return paths
+        canonical_path = _canonical_relative_path(raw)
+        rows.append(
+            RootOwned(
+                path=canonical_path or "",
+                classification=cells[1].strip("`").strip(),
+                usage=cells[2].strip("`").strip() if len(cells) > 2 else "",
+                registry_path=(
+                    cells[3].strip("`").strip() if len(cells) > 3 else ""
+                ),
+            )
+        )
+    return rows
+
+
+def parse_root_owned_registry(agents_text: str) -> dict[str, str]:
+    return {
+        row.path: row.classification for row in parse_root_owned_rows(agents_text)
+    }
 
 
 def _canonical_memory_path(target: Path, agents_text: str) -> Path:
@@ -492,6 +621,52 @@ def _hardcoded_business_string(path: Path, text: str) -> bool:
     return False
 
 
+def _first_markdown_bullet(section: str) -> str:
+    for line in section.splitlines():
+        match = re.match(r"^\s*-\s+(.+?)\s*$", line)
+        if match:
+            return match.group(1).strip()
+    return ""
+
+
+def _business_source_declaration(content: str) -> tuple[str, Path | None]:
+    section = _markdown_section(content, ROOM_LIFECYCLE.business_source_section)
+    value = _first_markdown_bullet(section)
+    normalized = _normalized(value).strip()
+    if normalized.startswith("non applicabile"):
+        reason = normalized.partition(":")[2].strip()
+        return ("not_applicable" if reason else "invalid", None)
+    match = re.fullmatch(r"`([^`]+)`", value)
+    if not match:
+        return ("missing", None)
+    raw = match.group(1).strip()
+    canonical = _canonical_relative_path(raw)
+    candidate = Path(canonical) if canonical else None
+    if (
+        candidate is None
+        or candidate.name.casefold() in ROOM_FILE_NAMES
+    ):
+        return ("invalid", None)
+    return ("file", candidate)
+
+
+def _business_source_file_issue(room_path: Path, candidate: Path) -> str | None:
+    if _symlink_component(room_path, candidate) is not None:
+        return "symlink"
+    source = room_path / candidate
+    if not source.is_file():
+        return "missing"
+    try:
+        text = source.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return "unreadable"
+    if not text.strip():
+        return "empty"
+    if _contains_unproven_value(text):
+        return "placeholder"
+    return None
+
+
 def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
     generator_files: list[tuple[Path, str]] = []
     for rel, path in _iter_files(room_path):
@@ -509,32 +684,14 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
     if not generator_files:
         return []
 
-    room_agents = room_path / "AGENTS.md"
-    map_text = (
-        _normalized(room_agents.read_text(encoding="utf-8"))
-        if room_agents.is_file()
-        else ""
-    )
-    source_section = ""
-    match = re.search(
-        r"(?ms)^##\s+fonte business editabile\s*$\s*(.*?)(?=^##\s|\Z)",
-        map_text,
-    )
-    if match:
-        source_section = match.group(1).strip()
-    source_declared = bool(source_section) and not any(
-        token in source_section
-        for token in (
-            "{{",
-            "da definire",
-            "nessuna",
-            "non dichiarata",
-            "non applicabile",
-        )
-    )
-
     findings: list[Finding] = []
-    if not source_declared:
+    room_agents = room_path / ROOM_MAP_FILE
+    try:
+        map_text = _active_markdown(room_agents.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError):
+        map_text = ""
+    declaration, source_candidate = _business_source_declaration(map_text)
+    if declaration != "file" or source_candidate is None:
         findings.append(
             Finding(
                 "BUSINESS_SOURCE_UNDECLARED",
@@ -544,6 +701,42 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
                 "editabile esterna al codice.",
             )
         )
+    else:
+        issue = _business_source_file_issue(room_path, source_candidate)
+        issue_details = {
+            "symlink": (
+                "BUSINESS_SOURCE_SYMLINK",
+                "La fonte business deve essere un file locale, non un "
+                "collegamento simbolico.",
+            ),
+            "missing": (
+                "BUSINESS_SOURCE_MISSING",
+                "La fonte business dichiarata non esiste.",
+            ),
+            "unreadable": (
+                "BUSINESS_SOURCE_UNREADABLE",
+                "La fonte business non e' leggibile come testo UTF-8.",
+            ),
+            "empty": (
+                "BUSINESS_SOURCE_EMPTY",
+                "La fonte business dichiarata e' vuota.",
+            ),
+            "placeholder": (
+                "BUSINESS_SOURCE_PLACEHOLDER",
+                "La fonte business conserva campi non compilati.",
+            ),
+        }
+        if issue:
+            code, detail = issue_details[issue]
+            findings.append(
+                Finding(
+                    code,
+                    "BLOCKER",
+                    f"{room_path.relative_to(target).as_posix()}/"
+                    f"{source_candidate.as_posix()}",
+                    detail,
+                )
+            )
     for path, text in generator_files:
         if _hardcoded_business_string(path, text):
             findings.append(
@@ -560,16 +753,473 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
 
 
 def _room_business_responsibility_is_proven(content: str) -> bool:
-    match = re.search(
-        r"(?ms)^##\s+responsabilita business\s*$\s*(.*?)(?=^##\s|\Z)",
-        content,
-    )
-    if not match:
-        return False
-    section = match.group(1).strip()
+    section = _markdown_section(content, "responsabilita business")
     if not section:
         return False
-    return not any(term in section for term in UNPROVEN_ROOM_RESPONSIBILITY_TERMS)
+    compact = re.sub(r"\s+", " ", _normalized(section)).strip()
+    compact = compact.replace(ROOM_RESPONSIBILITY_GUIDANCE, "").strip()
+    if not compact:
+        return False
+    if any(term in compact for term in UNPROVEN_ROOM_RESPONSIBILITY_TERMS):
+        return False
+    return "stato" in compact and "decision" in compact
+
+
+def _markdown_section(content: str, heading: str) -> str:
+    match = re.search(
+        rf"^##\s+{re.escape(heading)}\s*$\s*(.*?)(?=^##\s|\Z)",
+        content,
+        flags=re.MULTILINE | re.DOTALL | re.IGNORECASE,
+    )
+    return match.group(1).strip() if match else ""
+
+
+def _markdown_headings(content: str, level: int = 2) -> tuple[str, ...]:
+    marker = "#" * level
+    return tuple(
+        match.group(1).strip()
+        for match in re.finditer(
+            rf"(?m)^{re.escape(marker)}\s+(.+?)\s*$",
+            content,
+        )
+    )
+
+
+def _ecosystem_registry_findings(target: Path) -> list[Finding]:
+    registry = target / "ecosistema"
+    if registry.is_symlink():
+        return [
+            Finding(
+                "ECOSYSTEM_REGISTRY_SYMLINK",
+                "BLOCKER",
+                "ecosistema",
+                "L'armadio comune deve essere locale alla cartella madre: il "
+                "collegamento simbolico non viene attraversato.",
+            )
+        ]
+    if not registry.is_dir():
+        return []
+
+    findings: list[Finding] = []
+    for path in sorted(registry.rglob("*"), key=lambda item: item.as_posix().casefold()):
+        rel = path.relative_to(registry)
+        if any(part in IGNORED_OS_ENTRIES for part in rel.parts):
+            continue
+        rel_text = rel.as_posix()
+        if rel_text in STANDARD_ECOSYSTEM_PATHS:
+            continue
+        if path.is_dir() and any(
+            standard.startswith(rel_text.rstrip("/") + "/")
+            for standard in STANDARD_ECOSYSTEM_PATHS
+        ):
+            continue
+        if any(
+            parent.as_posix() not in STANDARD_ECOSYSTEM_PATHS
+            and not any(
+                standard.startswith(parent.as_posix().rstrip("/") + "/")
+                for standard in STANDARD_ECOSYSTEM_PATHS
+            )
+            for parent in rel.parents
+            if parent != Path(".")
+        ):
+            continue
+        findings.append(
+            Finding(
+                "ECOSYSTEM_REGISTRY_CONTAMINATED",
+                "BLOCKER",
+                f"ecosistema/{rel_text}",
+                "La cartella ecosistema contiene soltanto registri e calchi "
+                "comuni dichiarati dal contratto. Spostare il contenuto nella "
+                "stanza proprietaria o classificarlo prima di creare una stanza.",
+            )
+        )
+    for destination, template_name in sorted(ROOM_TEMPLATE_RULES.items()):
+        installed = target / destination
+        expected = ROOT / "templates" / template_name
+        if installed.is_symlink():
+            findings.append(
+                Finding(
+                    "ECOSYSTEM_ROOM_TEMPLATE_SYMLINK",
+                    "BLOCKER",
+                    destination,
+                    "Il calco stanza deve essere un file locale della casa.",
+                )
+            )
+            continue
+        try:
+            matches = (
+                installed.is_file()
+                and installed.read_bytes() == expected.read_bytes()
+            )
+        except OSError:
+            matches = False
+        if not matches:
+            findings.append(
+                Finding(
+                    "ECOSYSTEM_ROOM_TEMPLATE_DRIFT",
+                    "BLOCKER",
+                    destination,
+                    "Il calco stanza e' vuoto, manomesso o diverso dalla versione "
+                    "ufficiale installata.",
+                )
+            )
+    return findings
+
+
+def _room_prefab_findings(target: Path, room_path: Path, content: str) -> list[Finding]:
+    findings: list[Finding] = []
+    room_rel = room_path.relative_to(target).as_posix()
+    content = _active_markdown(content)
+
+    if re.search(r"\{\{[^{}]+\}\}", content):
+        findings.append(
+            Finding(
+                "ROOM_MAP_PLACEHOLDER",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La mappa conserva campi del calco non compilati.",
+            )
+        )
+
+    source_section = _markdown_section(content, ROOM_LIFECYCLE.owner_source_section)
+    source_match = re.search(r"`([^`]+)`", source_section)
+    source_raw = source_match.group(1).strip() if source_match else ""
+    canonical_source = _canonical_relative_path(source_raw)
+    source_candidate = Path(canonical_source) if canonical_source else None
+    generic_source_stem = _normalized(Path(ROOM_LIFECYCLE.source_template).stem)
+    source_valid = bool(
+        source_candidate
+        and source_candidate.name.casefold() not in ROOM_FILE_NAMES
+    )
+    if not source_valid:
+        findings.append(
+            Finding(
+                "ROOM_OWNER_SOURCE_UNDECLARED",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La stanza non dichiara una fonte operativa relativa e sicura.",
+            )
+        )
+    else:
+        if generic_source_stem in _normalized(source_candidate.stem):
+            findings.append(
+                Finding(
+                    "ROOM_OWNER_SOURCE_GENERIC_NAME",
+                    "BLOCKER",
+                    f"{room_rel}/{source_candidate.as_posix()}",
+                    "La fonte operativa conserva il nome del calco: assegnarle "
+                    "un nome legato alla domanda business della stanza.",
+                )
+            )
+        summary_references = [
+            _canonical_relative_path(raw)
+            for raw in re.findall(
+                r"(?im)^\s*-\s*fonte operativa\s*:\s*`([^`]+)`",
+                content,
+            )
+        ]
+        if any(reference != canonical_source for reference in summary_references):
+            findings.append(
+                Finding(
+                    "ROOM_OWNER_SOURCE_CONFLICT",
+                    "BLOCKER",
+                    f"{room_rel}/{ROOM_MAP_FILE}",
+                    "I riferimenti alla fonte operativa non coincidono con la "
+                    "sezione proprietaria.",
+                )
+            )
+        source_path = room_path / source_candidate
+        linked = _symlink_component(room_path, source_candidate)
+        if linked is not None or not source_path.is_file():
+            findings.append(
+                Finding(
+                    "ROOM_OWNER_SOURCE_MISSING",
+                    "BLOCKER",
+                    f"{room_rel}/{source_candidate.as_posix()}",
+                    "La fonte operativa dichiarata non esiste come file locale.",
+                )
+            )
+        else:
+            try:
+                source_raw_text = _active_markdown(
+                    source_path.read_text(encoding="utf-8")
+                )
+            except (OSError, UnicodeError):
+                findings.append(
+                    Finding(
+                        "ROOM_OWNER_SOURCE_UNREADABLE",
+                        "BLOCKER",
+                        f"{room_rel}/{source_candidate.as_posix()}",
+                        "La fonte operativa non e' leggibile come testo UTF-8.",
+                    )
+                )
+            else:
+                source_text = _normalized(source_raw_text)
+                if re.search(r"\{\{[^{}]+\}\}", source_text):
+                    findings.append(
+                        Finding(
+                            "ROOM_OWNER_SOURCE_PLACEHOLDER",
+                            "BLOCKER",
+                            f"{room_rel}/{source_candidate.as_posix()}",
+                            "La fonte operativa conserva campi del calco non compilati.",
+                        )
+                    )
+                headings = _markdown_headings(source_text)
+                expected = ROOM_LIFECYCLE.owner_source_headings
+                duplicates = [
+                    heading for heading in expected if headings.count(heading) > 1
+                ]
+                if duplicates:
+                    findings.append(
+                        Finding(
+                            "ROOM_OWNER_SOURCE_SECTION_DUPLICATE",
+                            "BLOCKER",
+                            f"{room_rel}/{source_candidate.as_posix()}",
+                            "Sezioni operative duplicate: " + ", ".join(duplicates) + ".",
+                        )
+                    )
+                missing = [heading for heading in expected if heading not in headings]
+                empty = [
+                    heading
+                    for heading in expected
+                    if heading in headings and not _markdown_section(source_text, heading)
+                ]
+                unproven = [
+                    heading
+                    for heading in expected
+                    if heading in headings
+                    and _contains_unproven_value(
+                        _markdown_section(source_raw_text, heading)
+                    )
+                ]
+                wrong_order = headings[: len(expected)] != expected
+                if missing or empty or unproven or wrong_order:
+                    details: list[str] = []
+                    if missing:
+                        details.append("sezioni mancanti: " + ", ".join(missing))
+                    if empty:
+                        details.append("sezioni vuote: " + ", ".join(empty))
+                    if unproven:
+                        details.append(
+                            "sezioni non compilate: " + ", ".join(unproven)
+                        )
+                    if wrong_order:
+                        details.append("le sezioni operative non sono in testa e in ordine")
+                    findings.append(
+                        Finding(
+                            "ROOM_OWNER_SOURCE_INCOMPLETE",
+                            "BLOCKER",
+                            f"{room_rel}/{source_candidate.as_posix()}",
+                            "; ".join(details).capitalize() + ".",
+                        )
+                    )
+
+    business_declaration, business_candidate = _business_source_declaration(content)
+    if business_declaration in {"missing", "invalid"}:
+        findings.append(
+            Finding(
+                "ROOM_BUSINESS_SOURCE_VALUE_MISSING",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La sezione Fonte business editabile non contiene un valore "
+                "compilato o un NON APPLICABILE motivato.",
+            )
+        )
+    elif business_declaration == "file" and business_candidate is not None:
+        issue = _business_source_file_issue(room_path, business_candidate)
+        issue_codes = {
+            "symlink": "ROOM_BUSINESS_SOURCE_SYMLINK",
+            "missing": "ROOM_BUSINESS_SOURCE_MISSING",
+            "unreadable": "ROOM_BUSINESS_SOURCE_UNREADABLE",
+            "empty": "ROOM_BUSINESS_SOURCE_EMPTY",
+            "placeholder": "ROOM_BUSINESS_SOURCE_PLACEHOLDER",
+        }
+        issue_details = {
+            "symlink": "La fonte business deve essere un file locale.",
+            "missing": "La fonte business dichiarata non esiste.",
+            "unreadable": "La fonte business non e' leggibile come testo UTF-8.",
+            "empty": "La fonte business dichiarata e' vuota.",
+            "placeholder": "La fonte business conserva campi non compilati.",
+        }
+        if issue:
+            findings.append(
+                Finding(
+                    issue_codes[issue],
+                    "BLOCKER",
+                    f"{room_rel}/{business_candidate.as_posix()}",
+                    issue_details[issue],
+                )
+            )
+        if source_candidate is not None and business_candidate == source_candidate:
+            findings.append(
+                Finding(
+                    "ROOM_SOURCE_ROLE_CONFLICT",
+                    "BLOCKER",
+                    f"{room_rel}/{business_candidate.as_posix()}",
+                    "Fonte operativa e fonte business hanno responsabilita' "
+                    "diverse e non possono essere lo stesso file.",
+                )
+            )
+
+    contents = _markdown_section(content, ROOM_LIFECYCLE.contents_section)
+    declared_children: dict[str, str] = {}
+    invalid_child_declarations: list[str] = []
+    for raw in re.findall(r"`([^`]+)`", contents):
+        normalized_path = raw.strip().replace("\\", "/")
+        if not normalized_path.endswith("/"):
+            continue
+        canonical = _canonical_relative_path(normalized_path)
+        candidate = Path(canonical) if canonical else None
+        if candidate is None or len(candidate.parts) != 1:
+            invalid_child_declarations.append(raw)
+            continue
+        direct_name = candidate.parts[0]
+        declared_children[direct_name.casefold()] = direct_name
+    if invalid_child_declarations:
+        findings.append(
+            Finding(
+                "ROOM_CHILD_DECLARATION_INVALID",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "Dentro ammette soltanto nomi relativi di sottocartelle dirette.",
+            )
+        )
+    content_values = [
+        match.group(1).strip()
+        for line in contents.splitlines()
+        if (match := re.match(r"^\s*-\s+(.+?)\s*$", line))
+    ]
+    no_children_declared = any(
+        _normalized(value).strip() == "nessuna sottocartella"
+        for value in content_values
+    )
+    if not declared_children and not no_children_declared:
+        findings.append(
+            Finding(
+                "ROOM_CONTENTS_UNDECLARED",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La sezione Dentro non dichiara sottocartelle reali ne' "
+                "l'assenza esplicita di sottocartelle.",
+            )
+        )
+    if declared_children and no_children_declared:
+        findings.append(
+            Finding(
+                "ROOM_CONTENTS_CONFLICT",
+                "BLOCKER",
+                f"{room_rel}/{ROOM_MAP_FILE}",
+                "La sezione Dentro dichiara insieme sottocartelle e la loro assenza.",
+            )
+        )
+    for declared in sorted(declared_children.values(), key=str.casefold):
+        child = room_path / declared
+        if not child.is_dir() and not child.is_symlink():
+            findings.append(
+                Finding(
+                    "ROOM_CHILD_DECLARED_MISSING",
+                    "BLOCKER",
+                    f"{room_rel}/{declared}",
+                    "La mappa dichiara una sottocartella che non esiste.",
+                )
+            )
+
+    direct_children = sorted(room_path.iterdir(), key=lambda item: item.name.casefold())
+    for child in direct_children:
+        if (
+            child.name in IGNORED_OS_ENTRIES
+            or child.name.casefold() in IGNORED_ROOM_DIRS
+        ):
+            continue
+        if child.is_symlink():
+            continue
+        if child.is_dir() and child.name.casefold() not in declared_children:
+            findings.append(
+                Finding(
+                    "ROOM_CHILD_UNDECLARED",
+                    "BLOCKER",
+                    f"{room_rel}/{child.name}",
+                    "Sottocartella senza proprietario: dichiararla in Dentro "
+                    "oppure ricondurla alla stanza corretta.",
+                )
+            )
+
+    frontier: list[tuple[Path, int]] = [(room_path, 0)]
+    seen_symlinks: set[str] = set()
+    seen_unreadable: set[str] = set()
+    while frontier:
+        parent, depth = frontier.pop(0)
+        try:
+            children = sorted(parent.iterdir(), key=lambda item: item.name.casefold())
+        except OSError:
+            rel_text = parent.relative_to(room_path).as_posix()
+            if rel_text != "." and rel_text not in seen_unreadable:
+                findings.append(
+                    Finding(
+                        "ROOM_CHILD_UNREADABLE",
+                        "BLOCKER",
+                        f"{room_rel}/{rel_text}",
+                        "La sottocartella non e' leggibile: il collaudo non puo' "
+                        "verificare cosa contiene.",
+                    )
+                )
+                seen_unreadable.add(rel_text)
+            continue
+        for child in children:
+            rel = child.relative_to(room_path)
+            if any(
+                part in IGNORED_OS_ENTRIES
+                or part.casefold() in IGNORED_ROOM_DIRS
+                for part in rel.parts
+            ):
+                continue
+            rel_text = rel.as_posix()
+            if child.is_symlink():
+                if rel_text not in seen_symlinks:
+                    findings.append(
+                        Finding(
+                            "ROOM_CHILD_SYMLINK",
+                            "BLOCKER",
+                            f"{room_rel}/{rel_text}",
+                            "Una stanza non puo' delegare il proprio contenuto "
+                            "a un collegamento simbolico.",
+                        )
+                    )
+                    seen_symlinks.add(rel_text)
+                continue
+            if not child.is_dir():
+                continue
+            child_depth = depth + 1
+            if child_depth > ROOM_LIFECYCLE.scan_depth:
+                findings.append(
+                    Finding(
+                        "ROOM_CHILD_TOO_DEEP",
+                        "BLOCKER",
+                        f"{room_rel}/{rel_text}",
+                        "La stanza supera i due livelli ammessi dal contratto.",
+                    )
+                )
+                continue
+            if _normalized(child.name) in GENERIC_NAMES:
+                findings.append(
+                    Finding(
+                        "ROOM_CHILD_GENERIC",
+                        "BLOCKER",
+                        f"{room_rel}/{rel_text}",
+                        "Nome generico: assegnare una funzione concreta alla cartella.",
+                    )
+                )
+            if _is_empty_dir(child):
+                findings.append(
+                    Finding(
+                        "ROOM_CHILD_EMPTY",
+                        "BLOCKER",
+                        f"{room_rel}/{rel_text}",
+                        "Cartella vuota: non costituisce contenuto vivo della stanza.",
+                    )
+                )
+            frontier.append((child, child_depth))
+    return findings
 
 
 def _project_control_issue(path: Path) -> str | None:
@@ -605,6 +1255,77 @@ def _project_control_issue(path: Path) -> str | None:
     ):
         return "Stato, prossimo passo e scadenze devono precedere il diario."
     return None
+
+
+def _root_registry_structure_findings(target: Path, content: str) -> list[Finding]:
+    findings: list[Finding] = []
+    specifications = (
+        (
+            "### Registro delle stanze",
+            (
+                "stanza",
+                "scopo",
+                "a monte",
+                "a valle",
+                "fonti",
+                "output",
+                "capacita'",
+                "mappa locale",
+                "amministratore",
+                "riporta al",
+            ),
+            "ROOT_ROOM_REGISTRY",
+        ),
+        (
+            "### Elementi posseduti direttamente dalla cartella madre",
+            ("percorso", "classe", "uso", "registro di dettaglio"),
+            "ROOT_OWNED_REGISTRY",
+        ),
+    )
+    for marker, expected_header, code_prefix in specifications:
+        count = len(
+            re.findall(
+                rf"(?m)^[ ]{{0,3}}{re.escape(marker)}[ \t]*$",
+                content,
+            )
+        )
+        if count != 1:
+            findings.append(
+                Finding(
+                    f"{code_prefix}_{'MISSING' if count == 0 else 'DUPLICATE'}",
+                    "BLOCKER",
+                    "AGENTS.md",
+                    "La mappa madre deve contenere una sola sezione "
+                    f"`{marker.removeprefix('### ')}`.",
+                )
+            )
+            continue
+        table_lines = _table_block_after_marker(content, marker)
+        header = tuple(_normalized(cell).strip() for cell in _table_cells(table_lines[0])) if table_lines else ()
+        separator_ok = (
+            len(table_lines) >= 2
+            and len(_table_cells(table_lines[1])) == len(expected_header)
+            and all(
+                set(cell) <= {"-", ":", " "}
+                for cell in _table_cells(table_lines[1])
+            )
+        )
+        malformed_rows = [
+            index + 3
+            for index, line in enumerate(table_lines[2:])
+            if len(_table_cells(line)) != len(expected_header)
+        ]
+        if header != expected_header or not separator_ok or malformed_rows:
+            findings.append(
+                Finding(
+                    f"{code_prefix}_SCHEMA_INVALID",
+                    "BLOCKER",
+                    "AGENTS.md",
+                    "La tabella della mappa madre non rispetta colonne, "
+                    "separatore e righe previsti dal contratto.",
+                )
+            )
+    return findings
 
 
 def inspect_ecosystem(
@@ -643,12 +1364,22 @@ def inspect_ecosystem(
         )
 
     agents_path = target / "AGENTS.md"
-    agents_text = (
-        agents_path.read_text(encoding="utf-8")
-        if agents_path.is_file() and not agents_path.is_symlink()
-        else ""
-    )
-    normalized_agents = _normalized(agents_text)
+    agents_text = ""
+    if agents_path.is_file() and not agents_path.is_symlink():
+        try:
+            agents_text = agents_path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "ROOT_MAP_UNREADABLE",
+                    "BLOCKER",
+                    "AGENTS.md",
+                    "La mappa madre non e' leggibile come testo UTF-8.",
+                )
+            )
+    active_agents_text = _active_markdown(agents_text)
+    normalized_agents = _normalized(active_agents_text)
+    findings.extend(_root_registry_structure_findings(target, active_agents_text))
     if (
         _normalized(ORGANIZATION.root_role) not in normalized_agents
         or "governa l'organigramma" not in normalized_agents
@@ -741,6 +1472,7 @@ def inspect_ecosystem(
                     "File obbligatorio dello standard assente.",
                 )
             )
+    findings.extend(_ecosystem_registry_findings(target))
     if requested_mode is not None:
         for rel in install_contract.forbidden_paths(CONTRACT, requested_mode):
             path = target / rel
@@ -856,19 +1588,28 @@ def inspect_ecosystem(
                 )
 
     root_bridge = target / "CLAUDE.md"
-    if (
-        root_bridge.is_file()
-        and not root_bridge.is_symlink()
-        and root_bridge.read_text(encoding="utf-8") != CLAUDE_BRIDGE
-    ):
-        findings.append(
-            Finding(
-                "INVALID_ROOT_BRIDGE",
-                "BLOCKER",
-                "CLAUDE.md",
-                "Il ponte deve contenere soltanto @AGENTS.md.",
+    if root_bridge.is_file() and not root_bridge.is_symlink():
+        try:
+            root_bridge_content = root_bridge.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "ROOT_BRIDGE_UNREADABLE",
+                    "BLOCKER",
+                    "CLAUDE.md",
+                    "Il ponte radice non e' leggibile come testo UTF-8.",
+                )
             )
-        )
+        else:
+            if root_bridge_content != CLAUDE_BRIDGE:
+                findings.append(
+                    Finding(
+                        "INVALID_ROOT_BRIDGE",
+                        "BLOCKER",
+                        "CLAUDE.md",
+                        "Il ponte deve contenere soltanto @AGENTS.md.",
+                    )
+                )
 
     legacy_mission_file = target / "REPORT_FINALE.md"
     if legacy_mission_file.exists() or legacy_mission_file.is_symlink():
@@ -892,9 +1633,10 @@ def inspect_ecosystem(
                 "La memoria canonica dichiarata nella mappa madre non contiene MEMORY.md.",
             )
         )
-    rooms = parse_room_registry(agents_text)
+    rooms = parse_room_registry(active_agents_text)
 
     seen_paths: set[str] = set()
+    seen_names: set[str] = set()
     purposes: dict[str, str] = {}
     for room in rooms:
         if not room.path:
@@ -907,7 +1649,8 @@ def inspect_ecosystem(
                 )
             )
             continue
-        if room.path in seen_paths:
+        room_path_key = _normalized(room.path).strip()
+        if room_path_key in seen_paths:
             findings.append(
                 Finding(
                     "DUPLICATE_ROOM_PATH",
@@ -916,12 +1659,89 @@ def inspect_ecosystem(
                     "La stessa stanza compare piu' volte nella mappa madre.",
                 )
             )
-        seen_paths.add(room.path)
+        seen_paths.add(room_path_key)
+
+        if len(Path(room.path).parts) != 1 or room.path.startswith("."):
+            findings.append(
+                Finding(
+                    "ROOM_PATH_NOT_TOP_LEVEL",
+                    "BLOCKER",
+                    room.path,
+                    "Una stanza vive come cartella visibile accanto all'armadio "
+                    "ecosistema, non dentro un altro ramo.",
+                )
+            )
+        if _normalized(room.path) in {
+            _normalized(name) for name in STANDARD_DIRS | ALLOWED_ROOT_FILES
+        }:
+            findings.append(
+                Finding(
+                    "ROOM_STANDARD_COLLISION",
+                    "BLOCKER",
+                    room.path,
+                    "Un elemento del telaio standard non puo' diventare una "
+                    "stanza business.",
+                )
+            )
+
+        room_name_key = _normalized(room.name).strip()
+        if (
+            room_name_key in {"", "stanza", "da censire"}
+            or _contains_unproven_value(room_name_key)
+        ):
+            findings.append(
+                Finding(
+                    "ROOM_NAME_UNPROVEN",
+                    "BLOCKER",
+                    room.path,
+                    "La riga della stanza non dichiara un nome business reale.",
+                )
+            )
+        elif room_name_key in seen_names:
+            findings.append(
+                Finding(
+                    "DUPLICATE_ROOM_NAME",
+                    "BLOCKER",
+                    room.path,
+                    "Due stanze dichiarano lo stesso nome business.",
+                )
+            )
+        seen_names.add(room_name_key)
+
+        purpose_key = _normalized(room.purpose).strip()
+        if (
+            purpose_key in {"", "-", "non applicabile"}
+            or _contains_unproven_value(purpose_key)
+        ):
+            findings.append(
+                Finding(
+                    "ROOM_PURPOSE_UNPROVEN",
+                    "BLOCKER",
+                    room.path,
+                    "La riga della stanza non dichiara una responsabilita' "
+                    "business concreta.",
+                )
+            )
+
+        expected_map_path = f"{room.path}/{ROOM_MAP_FILE}"
+        actual_map_path = room.map_path.replace("\\", "/").strip("/")
+        if actual_map_path != expected_map_path:
+            findings.append(
+                Finding(
+                    "ROOM_MAP_ROUTE_INVALID",
+                    "BLOCKER",
+                    room.path,
+                    "La mappa locale dichiarata deve essere esattamente "
+                    f"`{expected_map_path}`.",
+                )
+            )
 
         administrator_key = _normalized(room.administrator).strip()
         if (
             not administrator_key
             or "da assegnare" in administrator_key
+            or "non applicabile" in administrator_key
+            or _contains_unproven_value(administrator_key)
             or _normalized(ORGANIZATION.sector_role) not in administrator_key
         ):
             findings.append(
@@ -945,7 +1765,6 @@ def inspect_ecosystem(
                 )
             )
 
-        purpose_key = _normalized(room.purpose).strip()
         if purpose_key and purpose_key not in {"-", "da definire dal lavoro reale"}:
             if purpose_key in purposes:
                 findings.append(
@@ -983,14 +1802,14 @@ def inspect_ecosystem(
             )
             continue
 
-        room_agents = room_path / "AGENTS.md"
-        room_claude = room_path / "CLAUDE.md"
+        room_agents = room_path / ROOM_MAP_FILE
+        room_claude = room_path / ROOM_BRIDGE_FILE
         if room_agents.is_symlink():
             findings.append(
                 Finding(
                     "ROOM_MAP_SYMLINK",
                     "BLOCKER",
-                    f"{room.path}/AGENTS.md",
+                    f"{room.path}/{ROOM_MAP_FILE}",
                     "La mappa della stanza deve essere un file locale.",
                 )
             )
@@ -999,39 +1818,156 @@ def inspect_ecosystem(
                 Finding(
                     "ROOM_AGENTS_MISSING",
                     "BLOCKER",
-                    f"{room.path}/AGENTS.md",
+                    f"{room.path}/{ROOM_MAP_FILE}",
                     "La stanza non ha la propria mappa locale.",
                 )
             )
         else:
-            content = _normalized(room_agents.read_text(encoding="utf-8"))
-            missing_terms = [term for term in ROOM_REQUIRED_TERMS if term not in content]
-            if missing_terms:
+            try:
+                raw_content = _active_markdown(
+                    room_agents.read_text(encoding="utf-8")
+                )
+            except (OSError, UnicodeError):
                 findings.append(
                     Finding(
-                        "ROOM_MAP_INCOMPLETE",
+                        "ROOM_MAP_UNREADABLE",
                         "BLOCKER",
-                        f"{room.path}/AGENTS.md",
-                        "Sezioni mancanti: " + ", ".join(missing_terms) + ".",
+                        f"{room.path}/{ROOM_MAP_FILE}",
+                        "La mappa locale non e' leggibile come testo UTF-8.",
                     )
                 )
-            elif not _room_business_responsibility_is_proven(content):
-                findings.append(
-                    Finding(
-                        "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
-                        "BLOCKER",
-                        f"{room.path}/AGENTS.md",
-                        "La mappa non prova una responsabilita' business reale "
-                        "con stato e decisioni: script, modelli e output non "
-                        "bastano a dimostrare una stanza.",
+            else:
+                content = _normalized(raw_content)
+                heading_list = _markdown_headings(content)
+                headings = set(heading_list)
+                missing_sections = [
+                    section
+                    for section in ROOM_REQUIRED_SECTIONS
+                    if section not in headings
+                ]
+                empty_sections = [
+                    section
+                    for section in ROOM_REQUIRED_SECTIONS
+                    if section in headings
+                    and not _markdown_section(raw_content, section)
+                ]
+                unproven_sections = [
+                    section
+                    for section in ROOM_REQUIRED_SECTIONS
+                    if section in headings
+                    and _contains_unproven_value(
+                        _markdown_section(raw_content, section)
+                    )
+                ]
+                organization_section = _normalized(
+                    _markdown_section(
+                        raw_content,
+                        ROOM_LIFECYCLE.required_terms_section,
                     )
                 )
+                local_title_match = re.search(r"(?m)^#\s+(.+?)\s*$", raw_content)
+                local_title = (
+                    _normalized(local_title_match.group(1)).strip()
+                    if local_title_match
+                    else ""
+                )
+                local_purpose = _normalized(
+                    _markdown_section(raw_content, "scopo")
+                ).strip()
+                if local_title != room_name_key:
+                    findings.append(
+                        Finding(
+                            "ROOM_NAME_DRIFT",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "Il nome della mappa locale non coincide con la riga "
+                            "della mappa madre.",
+                        )
+                    )
+                if local_purpose != purpose_key:
+                    findings.append(
+                        Finding(
+                            "ROOM_PURPOSE_DRIFT",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "Lo scopo della mappa locale non coincide con la riga "
+                            "della mappa madre.",
+                        )
+                    )
+                if room_name_key and room_name_key not in organization_section:
+                    findings.append(
+                        Finding(
+                            "ROOM_ORGANIZATION_NAME_DRIFT",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "L'amministratore locale non identifica la propria stanza.",
+                        )
+                    )
+                missing_terms = [
+                    term
+                    for term in ROOM_REQUIRED_TERMS
+                    if term not in organization_section
+                ]
+                duplicate_sections = [
+                    section
+                    for section in ROOM_REQUIRED_SECTIONS
+                    if heading_list.count(section) > 1
+                ]
+                if duplicate_sections:
+                    findings.append(
+                        Finding(
+                            "ROOM_MAP_SECTION_DUPLICATE",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "Sezioni contrattuali duplicate: "
+                            + ", ".join(duplicate_sections)
+                            + ".",
+                        )
+                    )
+                if (
+                    missing_sections
+                    or empty_sections
+                    or unproven_sections
+                    or missing_terms
+                ):
+                    details: list[str] = []
+                    if missing_sections:
+                        details.append("sezioni mancanti: " + ", ".join(missing_sections))
+                    if empty_sections:
+                        details.append("sezioni vuote: " + ", ".join(empty_sections))
+                    if unproven_sections:
+                        details.append(
+                            "sezioni non compilate: "
+                            + ", ".join(unproven_sections)
+                        )
+                    if missing_terms:
+                        details.append("vincoli mancanti: " + ", ".join(missing_terms))
+                    findings.append(
+                        Finding(
+                            "ROOM_MAP_INCOMPLETE",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "; ".join(details).capitalize() + ".",
+                        )
+                    )
+                if not _room_business_responsibility_is_proven(raw_content):
+                    findings.append(
+                        Finding(
+                            "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_MAP_FILE}",
+                            "La mappa non prova una responsabilita' business reale "
+                            "con stato e decisioni: script, modelli e output non "
+                            "bastano a dimostrare una stanza.",
+                        )
+                    )
+                findings.extend(_room_prefab_findings(target, room_path, raw_content))
         if room_claude.is_symlink():
             findings.append(
                 Finding(
                     "ROOM_BRIDGE_SYMLINK",
                     "BLOCKER",
-                    f"{room.path}/CLAUDE.md",
+                    f"{room.path}/{ROOM_BRIDGE_FILE}",
                     "Il ponte della stanza deve essere un file locale.",
                 )
             )
@@ -1040,25 +1976,195 @@ def inspect_ecosystem(
                 Finding(
                     "ROOM_CLAUDE_MISSING",
                     "BLOCKER",
-                    f"{room.path}/CLAUDE.md",
+                    f"{room.path}/{ROOM_BRIDGE_FILE}",
                     "La stanza non ha il ponte verso AGENTS.md.",
                 )
             )
-        elif room_claude.read_text(encoding="utf-8") != CLAUDE_BRIDGE:
+        else:
+            try:
+                bridge_content = room_claude.read_text(encoding="utf-8")
+            except (OSError, UnicodeError):
+                findings.append(
+                    Finding(
+                        "ROOM_BRIDGE_UNREADABLE",
+                        "BLOCKER",
+                        f"{room.path}/{ROOM_BRIDGE_FILE}",
+                        "Il ponte non e' leggibile come testo UTF-8.",
+                    )
+                )
+            else:
+                if bridge_content != CLAUDE_BRIDGE:
+                    findings.append(
+                        Finding(
+                            "ROOM_CLAUDE_INVALID",
+                            "BLOCKER",
+                            f"{room.path}/{ROOM_BRIDGE_FILE}",
+                            "Il ponte deve contenere soltanto @AGENTS.md.",
+                        )
+                    )
+
+    root_owned_rows = parse_root_owned_rows(active_agents_text)
+    seen_root_owned: set[str] = set()
+    for row in root_owned_rows:
+        if not row.path:
             findings.append(
                 Finding(
-                    "ROOM_CLAUDE_INVALID",
+                    "ROOT_OWNED_PATH_INVALID",
                     "BLOCKER",
-                    f"{room.path}/CLAUDE.md",
-                    "Il ponte deve contenere soltanto @AGENTS.md.",
+                    "AGENTS.md",
+                    "Il registro madre contiene un percorso non relativo o non sicuro.",
                 )
             )
-
-    root_owned = parse_root_owned_registry(agents_text)
-    declared_paths = {room.path for room in rooms if room.path} | root_owned
+            continue
+        path_key = _normalized(row.path).strip()
+        if path_key in seen_root_owned:
+            findings.append(
+                Finding(
+                    "DUPLICATE_ROOT_OWNED_PATH",
+                    "BLOCKER",
+                    row.path,
+                    "Lo stesso percorso compare piu' volte nel registro della "
+                    "cartella madre.",
+                )
+            )
+        seen_root_owned.add(path_key)
+    root_owned = {row.path: row for row in root_owned_rows if row.path}
+    allowed_classes = {
+        _normalized(classification)
+        for classification in ROOM_LIFECYCLE.root_owned_classifications
+    }
+    allowed_registries = set(ROOM_LIFECYCLE.root_owned_registry_paths)
+    standard_owned_names = {
+        _normalized(name) for name in STANDARD_DIRS | ALLOWED_ROOT_FILES
+    }
+    room_path_keys = {
+        _normalized(room.path).strip() for room in rooms if room.path
+    }
+    valid_root_owned_paths: set[str] = set()
+    for path, row in sorted(root_owned.items()):
+        classification_key = _normalized(row.classification).strip()
+        direct_path = len(Path(path).parts) == 1 and not path.startswith(".")
+        if not direct_path:
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_PATH_NOT_DIRECT",
+                    "BLOCKER",
+                    path,
+                    "Il registro della cartella madre ammette soltanto elementi "
+                    "visibili direttamente nella sua radice.",
+                )
+            )
+        elif _normalized(path) in standard_owned_names:
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_STANDARD_COLLISION",
+                    "BLOCKER",
+                    path,
+                    "Un elemento del telaio standard non puo' ricevere una "
+                    "seconda proprieta' business nel registro madre.",
+                )
+            )
+        else:
+            valid_root_owned_paths.add(path)
+        if _normalized(path).strip() in room_path_keys:
+            findings.append(
+                Finding(
+                    "ROOM_OWNERSHIP_CONFLICT",
+                    "BLOCKER",
+                    path,
+                    "Lo stesso elemento non puo' essere insieme stanza e asset "
+                    "posseduto dalla cartella madre.",
+                )
+            )
+        if classification_key == "sospetta":
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_CLASS_UNRESOLVED",
+                    "BLOCKER",
+                    path,
+                    "L'elemento e' ancora classificato come SOSPETTA: va risolto "
+                    "prima del collaudo.",
+                )
+            )
+        elif classification_key not in allowed_classes:
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_CLASS_INVALID",
+                    "BLOCKER",
+                    path,
+                    "Classe non ammessa dal contratto: "
+                    f"{row.classification or 'vuota'}.",
+                )
+            )
+        usage_key = _normalized(row.usage).strip()
+        if (
+            not usage_key
+            or usage_key in {"-", "non applicabile"}
+            or _contains_unproven_value(usage_key)
+        ):
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_USAGE_UNPROVEN",
+                    "BLOCKER",
+                    path,
+                    "L'elemento non dichiara un uso business concreto.",
+                )
+            )
+        registry_path = _canonical_relative_path(row.registry_path)
+        if registry_path not in allowed_registries:
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_REGISTRY_INVALID",
+                    "BLOCKER",
+                    path,
+                    "Il registro di dettaglio deve essere uno dei registri "
+                    "comuni ammessi dal contratto.",
+                )
+            )
+        elif (
+            _symlink_component(target, registry_path) is not None
+            or not (target / registry_path).is_file()
+        ):
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_REGISTRY_MISSING",
+                    "BLOCKER",
+                    registry_path,
+                    "Il registro di dettaglio dichiarato non esiste come file locale.",
+                )
+            )
+        linked = _symlink_component(target, path)
+        owned_path = target / path
+        if linked is not None:
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_PATH_SYMLINK",
+                    "BLOCKER",
+                    path,
+                    "Un elemento posseduto dalla cartella madre deve essere "
+                    "locale e non un collegamento simbolico.",
+                )
+            )
+        elif not owned_path.exists():
+            findings.append(
+                Finding(
+                    "ROOT_OWNED_PATH_MISSING",
+                    "BLOCKER",
+                    path,
+                    "La mappa madre dichiara un elemento che non esiste.",
+                )
+            )
+    declared_room_paths = {
+        room.path
+        for room in rooms
+        if room.path
+        and len(Path(room.path).parts) == 1
+        and not room.path.startswith(".")
+    }
+    declared_paths = declared_room_paths | valid_root_owned_paths
     declared_top_levels = {Path(path).parts[0] for path in declared_paths}
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
-        if not child.is_dir() or child.name in STANDARD_DIRS or child.name.startswith("."):
+        if not child.is_dir() or child.name in STANDARD_DIRS:
             continue
         if child.name not in declared_top_levels:
             findings.append(
@@ -1090,7 +2196,7 @@ def inspect_ecosystem(
         findings.extend(_business_source_findings(target, child))
 
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
-        if not child.is_file() or child.name.startswith("."):
+        if not child.is_file() or child.name in IGNORED_OS_ENTRIES:
             continue
         if (
             child.name in ALLOWED_ROOT_FILES
