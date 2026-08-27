@@ -56,6 +56,11 @@ write("ecosistema/PROCESSI.md", render("PROCESSI.md"))
 write("ecosistema/LIMITI.md", render("LIMITI.md"))
 write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))
 write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))
+write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
+write(
+    ".agent/hooks/guardiano_stanze_windows.ps1",
+    render("GUARDIANO_STANZE_WINDOWS.ps1"),
+)
 write(".gitignore", render("GITIGNORE.txt"))
 write(
     "logs/install-log.md",
@@ -69,12 +74,14 @@ write(
 
 if mode in ("codex", "both"):
     write(".codex/README.md", render("CODEX_README.md"))
+    write(".codex/hooks.json", render("CODEX_HOOKS.json"))
     write(
         ".agents/skills/ispettore-ecosistema/SKILL.md",
         render("ISPETTORE_SKILL.md"),
     )
 if mode in ("claude", "both"):
     write(".claude/README.md", render("CLAUDE_README.md"))
+    write(".claude/settings.json", render("CLAUDE_SETTINGS.json"))
     write(
         ".claude/skills/ispettore-ecosistema/SKILL.md",
         render("ISPETTORE_SKILL.md"),
@@ -208,6 +215,18 @@ class InstallationHarnessTest(unittest.TestCase):
             self.assertIn("fonte resta intoccabile", normalized)
             self.assertIn("rendi scrivibili soltanto i file", normalized)
 
+    def test_windows_wrapper_prefers_git_bash_and_normalizes_failures(self):
+        wrapper = (
+            installation_harness.REPO_ROOT
+            / "templates"
+            / "GUARDIANO_STANZE_WINDOWS.ps1"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("Get-Command git.exe", wrapper)
+        self.assertIn("System32", wrapper)
+        self.assertIn("if ($LASTEXITCODE -ne 0)", wrapper)
+        self.assertIn("exit 2", wrapper)
+
     def test_fake_agent_passes_all_installation_modes_without_network(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -332,6 +351,48 @@ class InstallationHarnessTest(unittest.TestCase):
                     if item["name"] == "calchi_stanza_integri"
                 )
                 self.assertFalse(check["passed"])
+
+    def test_oracle_rejects_missing_stop_guard_handler(self):
+        source = FAKE_INSTALLER.replace(
+            'write(".codex/hooks.json", render("CODEX_HOOKS.json"))',
+            'write(".codex/hooks.json", "{}\\n")',
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            result = self.run_fake(Path(tmp), mode="codex", source=source)
+            oracle = json.loads(
+                (Path(result.evidence_dir) / "oracle.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+
+            self.assertEqual(result.status, "ORACLE_FAIL")
+            check = next(
+                item
+                for item in oracle["checks"]
+                if item["name"] == "guardiano_configurato_e_script_provato"
+            )
+            self.assertFalse(check["passed"])
+
+    def test_oracle_rejects_tampered_guard_script(self):
+        source = FAKE_INSTALLER.replace(
+            'write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))',
+            'write(".agent/hooks/guardiano_stanze.sh", "#!/usr/bin/env bash\\nexit 0\\n")',
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            result = self.run_fake(Path(tmp), mode="claude", source=source)
+            oracle = json.loads(
+                (Path(result.evidence_dir) / "oracle.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+
+            self.assertEqual(result.status, "ORACLE_FAIL")
+            check = next(
+                item
+                for item in oracle["checks"]
+                if item["name"] == "guardiano_configurato_e_script_provato"
+            )
+            self.assertFalse(check["passed"])
 
     def test_paths_with_spaces_accents_and_apostrophe_are_supported(self):
         with tempfile.TemporaryDirectory(prefix="percorso città d'Artù - ") as tmp:

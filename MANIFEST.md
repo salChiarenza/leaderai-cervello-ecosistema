@@ -53,6 +53,9 @@ Restano stabili in ogni installazione:
   `ecosistema/STANZA_FONTE.md` per creare stanze complete senza dipendere da
   un percorso esterno;
 - Ispettore Ecosistema richiamabile dall'agente attivo;
+- guardiano deterministico di chiusura, comune ai due agenti: la casa pulita
+  chiude in silenzio; un percorso fuori contratto obbliga l'agente a
+  continuare una volta e il secondo passaggio non crea un ciclo infinito;
 - audit comportamentale delle istruzioni con una sola variazione per volta,
   due sessioni nuove e classificazione non distruttiva del blocco;
 - ingresso verificato: cartella madre come progetto primario/CWD e nuova
@@ -163,6 +166,11 @@ repo `templates/STANZA_AGENTS.md` e `templates/STANZA_FONTE.md` vengono
 installati nell'armadio comune. Una stanza e' valida soltanto quando l'intero
 prefabbricato e' presente nello stesso salvataggio; una nascita parziale viene
 annullata o resta `NON PASSA`.
+Lo stesso contratto viene controllato a ogni chiusura da
+`.agent/hooks/guardiano_stanze.sh`, registrato una sola volta nel ramo attivo.
+I JSON di Codex e Claude vengono uniti alle configurazioni del cliente e non
+le sostituiscono. Codex richiede la verifica e l'autorizzazione del project
+hook da `/hooks`; Claude deve mostrarlo da `/hooks` con origine `Project`.
 Le cartelle ordinarie non ricevono mappe inutili: vivono sotto la stanza che le
 governa. Una cartella generica, vuota, concorrente o senza proprietario blocca
 il collaudo.

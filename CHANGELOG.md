@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.5.8 - 27/08/2026
+
+- Il contratto delle stanze non dipende piu' soltanto dall'Ispettore avviato a
+  richiesta: un project hook `Stop` controlla automaticamente ogni chiusura di
+  Codex e Claude Code.
+- Il guardiano blocca materiali business dentro `ecosistema/`, elementi
+  sciolti senza proprietario, stanze senza mappa o ponte, copie `_v2`/`_finale`,
+  cartelle vuote e router oltre 350 righe o 24 KiB. Il secondo passaggio non
+  crea un ciclo infinito.
+- Una mappa presente soltanto di nome non basta: registri, celle obbligatorie,
+  sezioni compilate, fonte operativa, fonte business e sottocartelle dichiarate
+  devono coincidere con percorsi reali. Testo di esempio, prefissi simili e
+  istruzioni del calco non possono produrre un verde falso.
+- Il ramo Codex include anche il comando Windows; Claude usa Git Bash su
+  Windows come previsto dalla documentazione ufficiale. Le configurazioni JSON
+  vengono unite senza cancellare chiavi o hook del cliente e senza duplicare
+  il guardiano.
+- Setup, Ispettore e collaudo manuale verificano contenuto degli script, una
+  sola registrazione `Stop`, variante Windows e prove reali pulita/bloccante.
+  Un JSON cliente non valido viene preservato e produce un blocco esplicito
+  prima di qualsiasi altra scrittura; un hook cliente dal nome simile resta
+  intatto.
+- Le specifiche ufficiali degli hook Codex e Claude Code sono entrate nelle
+  fonti vive del contratto. Il template della mappa madre e' stato alleggerito
+  da 350 a 325 righe per lasciare spazio al lavoro reale senza superare da solo
+  il proprio limite.
+
 ## 0.5.7 - 27/08/2026
 
 - `ecosistema/` diventa un armadio comune riservato: contiene soltanto i

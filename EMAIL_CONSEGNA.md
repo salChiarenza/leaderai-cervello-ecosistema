@@ -19,9 +19,10 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 27/08/2026`
+`PROVA_DESTINATARIO_DA_RIPETERE — 27/08/2026`
 
-La versione `0.5.7` pubblica provata corrisponde al commit immutabile
+L'ultima prova pubblica completata riguarda la versione `0.5.7` e il commit
+immutabile
 `98751061f818115405491741b41e299b632cf116`. L'archivio scaricato senza
 credenziali ha SHA256
 `72700b5753dd0380cdb86af9626020ae303a8bbcd751ac2c4a360dfde8301e57`;

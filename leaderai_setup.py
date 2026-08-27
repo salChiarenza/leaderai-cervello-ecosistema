@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import datetime as dt
 import hashlib
 import json
@@ -213,6 +214,11 @@ def _generated_agent_file_is_safe(
     expected = read_template(rule.template, context).rstrip() + "\n"
     if current == expected:
         return True
+    if rule.strategy == "merge_hooks_json":
+        try:
+            return json.loads(current) == json.loads(expected)
+        except json.JSONDecodeError:
+            return False
     if rule.template == "ISPETTORE_SKILL.md":
         return (
             "name: ispettore-ecosistema" in current
@@ -364,6 +370,179 @@ def ensure_text(path: Path, content: str, result: InstallResult, dry_run: bool) 
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content.rstrip() + "\n", encoding="utf-8")
     result.record("created", path)
+
+
+def ensure_managed_text(
+    path: Path,
+    content: str,
+    result: InstallResult,
+    dry_run: bool,
+) -> None:
+    expected = content.rstrip() + "\n"
+    if path.exists() or path.is_symlink():
+        if path.is_file() and not path.is_symlink():
+            try:
+                current = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeError):
+                current = None
+            if current == expected:
+                result.record("existing", path)
+                return
+        result.record("existing", path)
+        result.blockers.append(
+            f"File di controllo LeaderAI modificato o illeggibile: "
+            f"{path.relative_to(result.target).as_posix()}."
+        )
+        return
+    if not dry_run:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(expected, encoding="utf-8")
+    result.record("created", path)
+
+
+def _managed_guard_commands() -> set[str]:
+    commands: set[str] = set()
+    for template_name in ("CODEX_HOOKS.json", "CLAUDE_SETTINGS.json"):
+        template = json.loads(
+            (ROOT / "templates" / template_name).read_text(encoding="utf-8")
+        )
+        for group in template["hooks"]["Stop"]:
+            for handler in group["hooks"]:
+                command = handler.get("command")
+                if isinstance(command, str):
+                    commands.add(command)
+    return commands
+
+
+def _is_managed_guardiano(handler: object) -> bool:
+    if not isinstance(handler, dict):
+        return False
+    return (
+        handler.get("type") == "command"
+        and handler.get("command") in _managed_guard_commands()
+    )
+
+
+def _load_json_object(path: Path, label: str) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"{label} non e' JSON valido: {path}") from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} deve contenere un oggetto JSON: {path}")
+    return value
+
+
+def ensure_hooks_json(
+    path: Path,
+    content: str,
+    result: InstallResult,
+    dry_run: bool,
+) -> None:
+    try:
+        desired = json.loads(content)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Template hook LeaderAI non valido: {path.name}") from exc
+    desired_hooks = desired.get("hooks")
+    if not isinstance(desired_hooks, dict):
+        raise ValueError(f"Template hook LeaderAI privo di hooks: {path.name}")
+
+    if path.exists() or path.is_symlink():
+        if path.is_symlink() or not path.is_file():
+            result.record("existing", path)
+            result.blockers.append(
+                f"Configurazione hook non modificabile in sicurezza: "
+                f"{path.relative_to(result.target).as_posix()}."
+            )
+            return
+        try:
+            current = _load_json_object(path, "Configurazione hook")
+        except ValueError as exc:
+            result.record("existing", path)
+            result.blockers.append(str(exc))
+            return
+    else:
+        current = {}
+
+    merged = copy.deepcopy(current)
+    current_hooks = merged.setdefault("hooks", {})
+    if not isinstance(current_hooks, dict):
+        result.record("existing", path)
+        result.blockers.append(
+            f"La chiave hooks non e' un oggetto in "
+            f"{path.relative_to(result.target).as_posix()}."
+        )
+        return
+
+    for event_name, desired_groups in desired_hooks.items():
+        if not isinstance(desired_groups, list):
+            raise ValueError(
+                f"Template hook LeaderAI non valido per {event_name}: {path.name}"
+            )
+        existing_groups = current_hooks.get(event_name, [])
+        if not isinstance(existing_groups, list):
+            result.record("existing", path)
+            result.blockers.append(
+                f"L'evento {event_name} non e' una lista in "
+                f"{path.relative_to(result.target).as_posix()}."
+            )
+            return
+
+        cleaned_groups: list[dict] = []
+        for group in existing_groups:
+            if not isinstance(group, dict) or not isinstance(group.get("hooks"), list):
+                result.record("existing", path)
+                result.blockers.append(
+                    f"Gruppo hook {event_name} non riconosciuto in "
+                    f"{path.relative_to(result.target).as_posix()}."
+                )
+                return
+            cleaned = copy.deepcopy(group)
+            cleaned["hooks"] = [
+                handler
+                for handler in cleaned["hooks"]
+                if not _is_managed_guardiano(handler)
+            ]
+            if cleaned["hooks"]:
+                cleaned_groups.append(cleaned)
+
+        cleaned_groups.extend(copy.deepcopy(desired_groups))
+        current_hooks[event_name] = cleaned_groups
+
+    rendered = json.dumps(merged, ensure_ascii=False, indent=2) + "\n"
+    if path.exists() and path.is_file() and path.read_text(encoding="utf-8") == rendered:
+        result.record("existing", path)
+        return
+    status = "updated" if path.exists() else "created"
+    if not dry_run:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(rendered, encoding="utf-8")
+    result.record(status, path)
+
+
+def _preflight_managed_rules(
+    target: Path,
+    rules: list[install_contract.TemplateRule],
+    context: dict[str, str],
+) -> list[str]:
+    scratch = InstallResult(target=target)
+    for rule in rules:
+        path = target / rule.destination
+        if rule.strategy == "managed_text":
+            ensure_managed_text(
+                path,
+                read_template(rule.template, context),
+                scratch,
+                dry_run=True,
+            )
+        elif rule.strategy == "merge_hooks_json":
+            ensure_hooks_json(
+                path,
+                read_template(rule.template, context),
+                scratch,
+                dry_run=True,
+            )
+    return scratch.blockers
 
 
 def _claude_bridge_state(path: Path, agents_path: Path) -> str:
@@ -789,6 +968,8 @@ def _inspect_and_align(
         destination = result.blockers if item.severity == "BLOCKER" else result.warnings
         if message not in destination:
             destination.append(message)
+    if result.blockers:
+        result.target_verdict = "NON PASSA"
     return inspection
 
 
@@ -915,6 +1096,15 @@ def run_setup(
             settings_path,
         )
 
+    rules = install_contract.template_rules(CONTRACT, agent)
+    managed_blockers = _preflight_managed_rules(target, rules, context)
+    if managed_blockers:
+        result.blockers.extend(managed_blockers)
+        result.target_verdict = "NON PASSA"
+        if target.is_dir() and not dry_run:
+            _inspect_and_align(result, agent, settings_path)
+        return result
+
     bridge_state = _claude_bridge_state(target / "CLAUDE.md", target / "AGENTS.md")
     if bridge_state in {"invalid", "valid-symlink"} and not force:
         ensure_claude_bridge(
@@ -942,7 +1132,6 @@ def run_setup(
         result,
         dry_run,
     )
-    rules = install_contract.template_rules(CONTRACT, agent)
     for rule in rules:
         if rule.strategy == "event_log":
             continue
@@ -973,6 +1162,20 @@ def run_setup(
                 target / "AGENTS.md",
                 result,
                 force,
+                dry_run,
+            )
+        elif rule.strategy == "managed_text":
+            ensure_managed_text(
+                path,
+                read_template(rule.template, context),
+                result,
+                dry_run,
+            )
+        elif rule.strategy == "merge_hooks_json":
+            ensure_hooks_json(
+                path,
+                read_template(rule.template, context),
+                result,
                 dry_run,
             )
         else:

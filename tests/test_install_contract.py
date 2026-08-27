@@ -28,6 +28,8 @@ class InstallContractTest(unittest.TestCase):
                 "https://code.claude.com/docs/en/overview",
                 "https://learn.chatgpt.com/docs",
                 "https://openai.com/it-IT/academy/codex-for-work/",
+                "https://code.claude.com/docs/en/hooks",
+                "https://learn.chatgpt.com/docs/hooks",
             ],
         )
         self.assertEqual(
@@ -36,6 +38,8 @@ class InstallContractTest(unittest.TestCase):
                 "technical_entrypoint",
                 "technical_entrypoint",
                 "operational_training",
+                "technical_specification",
+                "technical_specification",
             ],
         )
         markdown_policy = install_contract.markdown_hygiene_policy(contract)

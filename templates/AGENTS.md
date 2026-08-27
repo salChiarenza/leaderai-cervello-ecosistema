@@ -34,6 +34,10 @@ Versione standard applicata: `{{version}}`.
 - `ecosistema/` e' l'armadio comune: contiene soltanto `FONTI.md`, `ASSET.md`,
   `PROCESSI.md`, `LIMITI.md`, `STANZA_AGENTS.md` e `STANZA_FONTE.md`.
 - Le stanze business vivono accanto a `ecosistema/`, mai dentro di esso.
+- Il guardiano delle stanze gira a ogni chiusura: file sciolti, cartelle senza
+  contratto, copie, mappe gonfie o materiali business dentro `ecosistema/`
+  fanno continuare l'agente una volta, senza ciclo infinito. Codex lo autorizza
+  da `/hooks`; Claude lo mostra li' con origine `Project`.
 - Il registro asset operativi vive in `ecosistema/ASSET.md`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
 - **Chi apre chiude (vale SEMPRE, non solo nelle missioni):** ogni pagina web,
@@ -264,44 +268,25 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 
 ## Riflesso asset operativo
 
-Quando il cliente dice "aggiungi", "abbiamo", "ho comprato", "attiva",
-"collega" o indica una nuova risorsa operativa, non basta nominarla in chat.
-
-Ogni asset deve lasciare quattro tracce:
-
-- casa/fonte vera;
-- riga in `ecosistema/ASSET.md`;
-- processo o limite aggiornato, solo se cambia davvero;
-- log in `logs/install-log.md` solo se cambia installazione o struttura.
+Quando il cliente aggiunge o collega una risorsa operativa, l'asset lascia
+quattro tracce: casa/fonte vera, riga in `ecosistema/ASSET.md`, processo o
+limite aggiornato solo se cambia davvero e log tecnico solo per cambi di
+installazione o struttura.
 
 Esempi di asset: PEC, email, banca, auto, gestionale, Drive, WhatsApp,
 fornitore, sito, repo, kit, app o archivio.
 
 ## Fase 1 - Cervello
 
-Il Cervello e' pronto quando:
-
-- questa mappa esiste;
-- la memoria unica a file esiste e Claude Code, se attivo, usa la stessa
-  directory tramite `autoMemoryDirectory`;
-- i log esistono;
-- l'agente scelto ha il suo punto di aggancio;
-- una nuova chat sa dove leggere e dove scrivere.
-- la versione del metodo applicato e' dichiarata in questa mappa e nel log
-  tecnico.
+Il Cervello e' pronto quando mappa, memoria unica, log e aggancio dell'agente
+esistono; Claude Code usa la stessa memoria tramite `autoMemoryDirectory`; una
+nuova chat sa dove leggere e scrivere; versione applicata e log coincidono.
 
 ## Fase 2 - Ecosistema
 
-L'Ecosistema non e' una copia dell'azienda.
-
-E' la mappa delle fonti reali:
-
-- cartelle operative;
-- documenti ricorrenti;
-- email e calendario se collegati;
-- gestionali/CRM/fatture se esistono;
-- processi ricorrenti;
-- limiti e azioni che richiedono conferma.
+L'Ecosistema e' la mappa delle fonti reali: cartelle operative, documenti
+ricorrenti, email e calendario collegati, gestionali/CRM/fatture esistenti,
+processi, limiti e azioni che richiedono conferma.
 
 Comprende anche la rete delle stanze: ogni stanza e' raggiungibile dalla mappa
 madre, dichiara monte/valle e supera almeno una prova richiesta -> fonte ->
@@ -312,11 +297,8 @@ andrebbe collegata. Non inventare percorsi, CRM o cartelle clienti.
 
 ## Mappa moduli
 
-Alla fine del setup o di un audit, il report deve dire quali moduli servono
-davvero e quali no. Non partire dal modulo preferito del momento.
-
-Stati ammessi: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`,
-`ATTIVO`.
+Alla fine del setup o di un audit, il report dice quali moduli servono davvero.
+Stati: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`, `ATTIVO`.
 
 Moduli minimi da valutare: PEC/email certificata, email/calendario,
 calendario operativo, Drive/OneDrive/cartelle, CRM/gestionale/export,

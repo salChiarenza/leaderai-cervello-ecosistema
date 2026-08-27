@@ -23,6 +23,18 @@
       "url": "https://openai.com/it-IT/academy/codex-for-work/",
       "role": "operational_training",
       "comparison": "Pratiche operative di Codex nel lavoro; orienta le prove d'uso e non sostituisce le specifiche tecniche."
+    },
+    {
+      "id": "anthropic_claude_code_hooks",
+      "url": "https://code.claude.com/docs/en/hooks",
+      "role": "technical_specification",
+      "comparison": "Specifica viva dei project hook Claude Code, del blocco Stop, di stop_hook_active e dell'esecuzione Git Bash su Windows."
+    },
+    {
+      "id": "openai_codex_hooks",
+      "url": "https://learn.chatgpt.com/docs/hooks",
+      "role": "technical_specification",
+      "comparison": "Specifica viva dei project hook Codex, del trust, di commandWindows e del comportamento Stop."
     }
   ],
   "inspection_policies": {
@@ -224,6 +236,16 @@
         "strategy": "create"
       },
       {
+        "template": "GUARDIANO_STANZE.sh",
+        "destination": ".agent/hooks/guardiano_stanze.sh",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_STANZE_WINDOWS.ps1",
+        "destination": ".agent/hooks/guardiano_stanze_windows.ps1",
+        "strategy": "managed_text"
+      },
+      {
         "template": "INSTALL_LOG.md",
         "destination": "logs/install-log.md",
         "strategy": "event_log"
@@ -240,7 +262,9 @@
       "ecosistema/PROCESSI.md",
       "ecosistema/LIMITI.md",
       "ecosistema/STANZA_AGENTS.md",
-      "ecosistema/STANZA_FONTE.md"
+      "ecosistema/STANZA_FONTE.md",
+      ".agent/hooks/guardiano_stanze.sh",
+      ".agent/hooks/guardiano_stanze_windows.ps1"
     ],
     "forbidden": [],
     "external_effects": [
@@ -267,11 +291,17 @@
           "template": "ISPETTORE_SKILL.md",
           "destination": ".agents/skills/ispettore-ecosistema/SKILL.md",
           "strategy": "create"
+        },
+        {
+          "template": "CODEX_HOOKS.json",
+          "destination": ".codex/hooks.json",
+          "strategy": "merge_hooks_json"
         }
       ],
       "required": [
         ".codex/README.md",
-        ".agents/skills/ispettore-ecosistema/SKILL.md"
+        ".agents/skills/ispettore-ecosistema/SKILL.md",
+        ".codex/hooks.json"
       ],
       "forbidden": [
         ".claude/README.md",
@@ -290,11 +320,17 @@
           "template": "ISPETTORE_SKILL.md",
           "destination": ".claude/skills/ispettore-ecosistema/SKILL.md",
           "strategy": "create"
+        },
+        {
+          "template": "CLAUDE_SETTINGS.json",
+          "destination": ".claude/settings.json",
+          "strategy": "merge_hooks_json"
         }
       ],
       "required": [
         ".claude/README.md",
-        ".claude/skills/ispettore-ecosistema/SKILL.md"
+        ".claude/skills/ispettore-ecosistema/SKILL.md",
+        ".claude/settings.json"
       ],
       "forbidden": [
         ".codex/README.md",

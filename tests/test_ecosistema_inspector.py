@@ -112,6 +112,78 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertFalse((target / ".claude" / "settings.local.json").exists())
             self.assertNotIn("REPORT_FINALE.md", tracked)
 
+    def test_missing_or_duplicate_stop_guard_blocks_pass(self):
+        for case in ("missing", "duplicate"):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as tmp:
+                target = self.make_target(tmp)
+                settings_path = target / ".claude" / "settings.json"
+                settings = json.loads(settings_path.read_text(encoding="utf-8"))
+                stop = settings["hooks"]["Stop"]
+                if case == "missing":
+                    settings["hooks"]["Stop"] = []
+                else:
+                    stop.append(json.loads(json.dumps(stop[0])))
+                settings_path.write_text(
+                    json.dumps(settings),
+                    encoding="utf-8",
+                )
+
+                codes = self.codes(self.inspect(target))
+
+                self.assertIn(
+                    "GUARDIAN_HOOK_MISSING"
+                    if case == "missing"
+                    else "GUARDIAN_HOOK_DUPLICATE",
+                    codes,
+                )
+
+    def test_inert_handler_that_only_mentions_guard_name_is_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, agent="codex")
+            hooks_path = target / ".codex" / "hooks.json"
+            hooks = json.loads(hooks_path.read_text(encoding="utf-8"))
+            hooks["hooks"]["Stop"] = [
+                {
+                    "hooks": [
+                        {
+                            "type": "command",
+                            "command": "exit 0",
+                            "description": "guardiano_stanze solo nominato",
+                        }
+                    ]
+                }
+            ]
+            hooks_path.write_text(json.dumps(hooks), encoding="utf-8")
+
+            self.assertIn(
+                "GUARDIAN_HOOK_MISSING",
+                self.codes(self.inspect(target)),
+            )
+
+    def test_tampered_guard_script_blocks_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / ".agent" / "hooks" / "guardiano_stanze.sh").write_text(
+                "#!/usr/bin/env bash\nexit 0\n",
+                encoding="utf-8",
+            )
+
+            self.assertIn("GUARDIAN_SCRIPT_DRIFT", self.codes(self.inspect(target)))
+
+    def test_codex_guard_requires_windows_command(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, agent="codex")
+            hooks_path = target / ".codex" / "hooks.json"
+            hooks = json.loads(hooks_path.read_text(encoding="utf-8"))
+            handler = hooks["hooks"]["Stop"][0]["hooks"][0]
+            handler.pop("commandWindows")
+            hooks_path.write_text(json.dumps(hooks), encoding="utf-8")
+
+            self.assertIn(
+                "GUARDIAN_WINDOWS_COMMAND_MISSING",
+                self.codes(self.inspect(target)),
+            )
+
     def test_oversized_markdown_router_blocks_pass(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)

@@ -38,6 +38,9 @@ personalizzazione, fonti reali e prove macchina.
    `{{agent}}` e `{{version}}`; `CLAUDE.md` resta il ponte esatto
    `@AGENTS.md`. In una casa nuova usa copia e sostituzione meccanica in batch
    dai template: non riscrivere i file uno alla volta.
+   Le regole `managed_text` devono coincidere col template; le regole
+   `merge_hooks_json` uniscono il solo guardiano LeaderAI al JSON esistente,
+   preservano tutte le altre chiavi e impediscono doppioni.
 4. La fotografia puo' avere file protetti in sola lettura. La fonte resta
    intoccabile; dopo la copia rendi scrivibili soltanto i file creati nella
    cartella madre, prima di personalizzarli. Non cambiare mai i permessi della
@@ -60,7 +63,12 @@ personalizzazione, fonti reali e prove macchina.
    identici ai template della fotografia; nessun piano, bozza, asset o
    sottocartella operativa entra nell'armadio.
 10. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
-   log tecnico, commit iniziale e fotografia standard intatta.
+   log tecnico, commit iniziale e fotografia standard intatta. Prova anche il
+   guardiano: casa pulita silenziosa, file di prova fuori posto bloccato e poi
+   rimosso. In Codex esamina e autorizza il project hook da `/hooks`; in Claude
+   verifica da `/hooks` che l'origine sia `Project`. La prova diretta dello
+   script dimostra il controllo; soltanto questa verifica nella nuova sessione
+   dimostra che l'agente lo ha realmente caricato.
 11. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
    copiato nella casa.
 
@@ -180,6 +188,10 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/LIMITI.md`
    - `templates/INSTALL_LOG.md`
    - `templates/AGENT_CHAT.md`
+   - `templates/GUARDIANO_STANZE.sh`
+   - `templates/GUARDIANO_STANZE_WINDOWS.ps1`
+   - `templates/CODEX_HOOKS.json`
+   - `templates/CLAUDE_SETTINGS.json`
 2. Registra nel log tecnico la versione letta. Se un file non e' leggibile, chiedi
    soltanto l'autorizzazione per l'accesso web di sola lettura e riprova.
 3. Il percorso predefinito termina qui per la repo: niente clone e niente
@@ -204,6 +216,14 @@ Fase 4 - monta localmente il Cervello
    - `templates/CLAUDE.md` -> `CLAUDE.md` (ponte, sempre)
    - `templates/AGENT_CHAT.md` -> `AGENT_CHAT.md` (chat di gruppo: bacheca
      comune di tutti gli agenti della casa, regole d'uso dentro al file)
+   - `templates/GUARDIANO_STANZE.sh` ->
+     `.agent/hooks/guardiano_stanze.sh`
+   - `templates/GUARDIANO_STANZE_WINDOWS.ps1` ->
+     `.agent/hooks/guardiano_stanze_windows.ps1`
+   - modalita' Claude -> unisci `templates/CLAUDE_SETTINGS.json` a
+     `.claude/settings.json`, senza cancellare chiavi o hook esistenti
+   - modalita' Codex -> unisci `templates/CODEX_HOOKS.json` a
+     `.codex/hooks.json`, senza cancellare chiavi o hook esistenti
    - modalita' Claude -> `templates/ISPETTORE_SKILL.md` in
      `.claude/skills/ispettore-ecosistema/SKILL.md`
    - modalita' Codex -> `templates/ISPETTORE_SKILL.md` in
@@ -216,6 +236,8 @@ Fase 4 - monta localmente il Cervello
    configurazione per agente: modalita' Claude -> `.claude/README.md`;
    modalita' Codex -> `.codex/README.md`. Usa entrambe le configurazioni solo
    se LeaderAI lo ha chiesto esplicitamente.
+   Il guardiano di chiusura e' obbligatorio nel ramo attivo: una sola
+   registrazione `Stop`, mai una seconda configurazione parallela.
 4. Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user
    settings di ogni computer (`~/.claude/settings.json`) con la forma portabile
    `~/...` della memoria canonica dichiarata nell'`AGENTS.md` quando vive sotto
@@ -579,6 +601,8 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - cartella madre = repository git si/no;
 - `.gitignore` esclude i segreti si/no;
 - memoria unica e, per Claude, prova `autoMemoryDirectory` + `/memory`;
+- guardiano di chiusura presente una sola volta, visibile in `/hooks`, con
+  prova pulita e prova bloccante;
 - backup scelto: GitHub privato / copia su Drive-OneDrive / da fare (Domanda 2);
 - seconda postazione impostata si/no/non serve;
 - Cervello verificato si/no;

@@ -368,11 +368,15 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    `-C` o quella corrente. Dopo ogni correzione apri una nuova task.
 2. Verifica `.agents/skills/ispettore-ecosistema/SKILL.md`: deve essere
    richiamabile e puntare alla procedura unica `CHECKUP.md`.
-3. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
+3. Verifica `.codex/hooks.json`: un solo handler `Stop` deve richiamare
+   `guardiano_stanze`, con variante Windows. Apri `/hooks`, esamina e autorizza
+   la definizione corrente; poi prova casa pulita e file temporaneo fuori
+   posto, che deve impedire la chiusura. Elimina la prova subito dopo.
+4. Se esiste `.codex/config.toml`, validane sintassi, percorsi e impostazioni;
    le configurazioni di progetto vengono caricate solo in un progetto trusted.
-4. Se servono impostazioni Codex di progetto e `.codex/config.toml` manca,
+5. Se servono impostazioni Codex di progetto e `.codex/config.toml` manca,
    crealo con il minimo necessario e senza segreti.
-5. Le altre skill, hook, MCP e agenti specializzati sono opzionali. Se
+6. Le altre skill, hook, MCP e agenti specializzati sono opzionali. Se
    presenti, confrontali con la documentazione ufficiale, prova il caso reale e
    rimuovi dal verdetto ogni presunzione non verificata.
 
@@ -395,7 +399,9 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    solo dopo cambia il percorso. Non svuotare o abbandonare la memoria esterna
    prima della prova.
 5. Se esiste `.claude/settings.json`, validane struttura, scope e permessi.
-   Nessun segreto in chiaro.
+   Nessun segreto in chiaro. Deve contenere un solo handler `Stop` per
+   `guardiano_stanze`; `/hooks` lo mostra con origine `Project`. Prova casa
+   pulita e file temporaneo fuori posto, poi elimina subito la prova.
 6. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
    crealo con il minimo necessario e senza segreti.
 7. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
@@ -424,8 +430,8 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 
 Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 
-- `install_contract.json -> official_sources` non e' stato letto, una delle tre
-  fonti ufficiali obbligatorie non e' stata aperta oggi, oppure il log tecnico
+- `install_contract.json -> official_sources` non e' stato letto, una delle
+  fonti ufficiali dichiarate non e' stata aperta oggi, oppure il log tecnico
   non collega la regola ufficiale allo stato osservato e alla prova;
 - una guida operativa e' stata usata come specifica tecnica per creare o
   modificare file senza una pagina tecnica ufficiale che sostenga la modifica;
@@ -442,6 +448,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - manca `.agents/skills/ispettore-ecosistema/SKILL.md` quando Codex e' attivo;
 - manca `.claude/skills/ispettore-ecosistema/SKILL.md` quando Claude Code e'
   attivo;
+- manca il guardiano comune, manca la configurazione `Stop` del ramo attivo,
+  l'handler e' duplicato, non e' autorizzato/visibile in `/hooks` oppure la
+  prova bloccante non continua il lavoro;
 - in modalita' `both` manca uno dei due agganci;
 - la prova `Crea la Brand Identity` contiene indizi tecnici, non raggiunge una
   fonte brand reale o scrive l'output fuori dalla responsabilita' proprietaria;

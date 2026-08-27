@@ -42,11 +42,15 @@ STANDARD_FILES = (
     "templates/AGENTS.md",
     "templates/AGENT_CHAT.md",
     "templates/ASSET.md",
+    "templates/CLAUDE_SETTINGS.json",
     "templates/CLAUDE.md",
     "templates/CLAUDE_README.md",
     "templates/CODEX_README.md",
+    "templates/CODEX_HOOKS.json",
     "templates/FONTI.md",
     "templates/GITIGNORE.txt",
+    "templates/GUARDIANO_STANZE.sh",
+    "templates/GUARDIANO_STANZE_WINDOWS.ps1",
     "templates/INSTALL_LOG.md",
     "templates/ISPETTORE_SKILL.md",
     "templates/LIMITI.md",
@@ -544,6 +548,122 @@ def _log_mode(install_log: str) -> str | None:
     return match.group(1).casefold() if match else None
 
 
+def _guardiano_oracle_issues(target: Path, snapshot: Path, mode: str) -> list[str]:
+    issues: list[str] = []
+    managed = {
+        ".agent/hooks/guardiano_stanze.sh": "GUARDIANO_STANZE.sh",
+        ".agent/hooks/guardiano_stanze_windows.ps1": (
+            "GUARDIANO_STANZE_WINDOWS.ps1"
+        ),
+    }
+    for relative, template in managed.items():
+        installed = target / relative
+        expected = snapshot / "templates" / template
+        try:
+            matches = (
+                installed.is_file()
+                and not installed.is_symlink()
+                and installed.read_bytes() == expected.read_bytes()
+            )
+        except OSError:
+            matches = False
+        if not matches:
+            issues.append(f"{relative}:contenuto")
+
+    configs: list[tuple[str, bool, str]] = []
+    if mode in {"codex", "both"}:
+        configs.append((".codex/hooks.json", True, "CODEX_HOOKS.json"))
+    if mode in {"claude", "both"}:
+        configs.append((".claude/settings.json", False, "CLAUDE_SETTINGS.json"))
+    for relative, needs_windows, template_name in configs:
+        try:
+            config = json.loads((target / relative).read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            config = None
+        hook_map = config.get("hooks") if isinstance(config, dict) else None
+        stop_groups = hook_map.get("Stop", []) if isinstance(hook_map, dict) else []
+        try:
+            expected_config = json.loads(
+                (snapshot / "templates" / template_name).read_text(encoding="utf-8")
+            )
+            expected_handler = expected_config["hooks"]["Stop"][0]["hooks"][0]
+        except (OSError, UnicodeError, json.JSONDecodeError, KeyError, IndexError, TypeError):
+            expected_handler = {}
+        matches: list[dict] = []
+        if isinstance(stop_groups, list):
+            for group in stop_groups:
+                handlers = group.get("hooks", []) if isinstance(group, dict) else []
+                if not isinstance(handlers, list):
+                    continue
+                matches.extend(
+                    handler
+                    for handler in handlers
+                    if isinstance(handler, dict)
+                    and expected_handler
+                    and all(
+                        handler.get(key) == value
+                        for key, value in expected_handler.items()
+                    )
+                )
+        if len(matches) != 1:
+            issues.append(f"{relative}:handler={len(matches)}")
+        elif needs_windows and matches[0].get("commandWindows") != expected_handler.get(
+            "commandWindows"
+        ):
+            issues.append(f"{relative}:commandWindows")
+
+    guard = target / ".agent" / "hooks" / "guardiano_stanze.sh"
+    if guard.is_file() and not guard.is_symlink():
+        payload = json.dumps(
+            {
+                "hook_event_name": "Stop",
+                "stop_hook_active": False,
+                "cwd": str(target),
+            }
+        )
+        try:
+            clean = subprocess.run(
+                ["bash", str(guard)],
+                cwd=target,
+                input=payload,
+                text=True,
+                capture_output=True,
+                timeout=10,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            clean = None
+        if clean is None or clean.returncode != 0 or clean.stdout:
+            issues.append("guardiano:prova_pulita")
+
+        probe = target / "ecosistema" / "PROVA_GUARDIANO.tmp"
+        try:
+            probe.write_text("prova temporanea\n", encoding="utf-8")
+            blocked = subprocess.run(
+                ["bash", str(guard)],
+                cwd=target,
+                input=payload,
+                text=True,
+                capture_output=True,
+                timeout=10,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            blocked = None
+        finally:
+            try:
+                probe.unlink()
+            except OSError:
+                pass
+        if (
+            blocked is None
+            or blocked.returncode != 2
+            or "ecosistema/PROVA_GUARDIANO.tmp" not in blocked.stderr
+        ):
+            issues.append("guardiano:prova_bloccante")
+    return issues
+
+
 def evaluate_oracle(
     *,
     target: Path,
@@ -696,6 +816,7 @@ def evaluate_oracle(
         if Path(relative).parts
     }
     unexpected_root_entries = sorted(observed_root_names - allowed_root_names)
+    guardiano_issues = _guardiano_oracle_issues(target, snapshot, mode)
     snapshot_diff = diff_manifests(snapshot_before, snapshot_after)
     target_diff = diff_manifests(target_before, target_after)
 
@@ -774,6 +895,11 @@ def evaluate_oracle(
             "calchi_stanza_integri",
             not room_template_issues,
             f"problemi={room_template_issues}",
+        ),
+        _check(
+            "guardiano_configurato_e_script_provato",
+            not guardiano_issues,
+            f"problemi={guardiano_issues}",
         ),
         _check(
             "log_installazione_presente",

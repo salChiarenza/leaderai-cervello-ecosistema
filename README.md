@@ -9,7 +9,9 @@ conferma unica.
 ## Fonti ufficiali vive del checkup
 
 - [Claude Code - panoramica ufficiale](https://code.claude.com/docs/en/overview)
+- [Claude Code - hook ufficiali](https://code.claude.com/docs/en/hooks)
 - [ChatGPT - documentazione ufficiale](https://learn.chatgpt.com/docs)
+- [Codex - hook ufficiali](https://learn.chatgpt.com/docs/hooks)
 - [OpenAI Academy - Codex per il lavoro](https://openai.com/it-IT/academy/codex-for-work/)
 
 L'Ispettore apre queste fonti a ogni checkup e collega le regole pertinenti
@@ -130,11 +132,15 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se richiesto Codex
+- `.codex/hooks.json` con il controllo finale, unito alle impostazioni esistenti
 - `.claude/README.md` se richiesto Claude Code
+- `.claude/settings.json` con lo stesso controllo finale, senza sovrascritture
 - user settings Claude Code (`~/.claude/settings.json`) con
   `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
+- `.agent/hooks/guardiano_stanze.sh` e adattatore Windows: prima della chiusura
+  intercettano file fuori posto, cartelle incomplete, copie e mappe gonfie
 - `memory/MEMORY.md`
 - `AGENT_CHAT.md`
 - `logs/install-log.md`

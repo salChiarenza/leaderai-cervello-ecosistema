@@ -220,6 +220,147 @@ def _normalized(text: str) -> str:
     return "".join(char for char in decomposed if not unicodedata.combining(char))
 
 
+def _expected_guard_handler(template_name: str) -> dict:
+    template = json.loads(
+        (ROOT / "templates" / template_name).read_text(encoding="utf-8")
+    )
+    return template["hooks"]["Stop"][0]["hooks"][0]
+
+
+def _matches_guard_handler(handler: object, expected: dict) -> bool:
+    return (
+        isinstance(handler, dict)
+        and handler.get("type") == expected.get("type")
+        and handler.get("command") == expected.get("command")
+    )
+
+
+def _guardiano_findings(target: Path, mode: str) -> list[Finding]:
+    findings: list[Finding] = []
+    managed_scripts = {
+        ".agent/hooks/guardiano_stanze.sh": "GUARDIANO_STANZE.sh",
+        ".agent/hooks/guardiano_stanze_windows.ps1": (
+            "GUARDIANO_STANZE_WINDOWS.ps1"
+        ),
+    }
+    for relative, template_name in managed_scripts.items():
+        path = target / relative
+        if not path.is_file() or path.is_symlink():
+            continue
+        expected = (ROOT / "templates" / template_name).read_bytes()
+        try:
+            current = path.read_bytes()
+        except OSError:
+            current = b""
+        if current != expected:
+            findings.append(
+                Finding(
+                    "GUARDIAN_SCRIPT_DRIFT",
+                    "BLOCKER",
+                    relative,
+                    "Il guardiano installato non coincide con il template "
+                    "dello standard corrente.",
+                )
+            )
+
+    configs: list[tuple[str, bool, str]] = []
+    if mode in {"codex", "both"}:
+        configs.append((".codex/hooks.json", True, "CODEX_HOOKS.json"))
+    if mode in {"claude", "both"}:
+        configs.append((".claude/settings.json", False, "CLAUDE_SETTINGS.json"))
+
+    for relative, needs_windows, template_name in configs:
+        path = target / relative
+        if not path.is_file() or path.is_symlink():
+            continue
+        try:
+            config = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            config = None
+        if not isinstance(config, dict):
+            findings.append(
+                Finding(
+                    "GUARDIAN_CONFIG_INVALID",
+                    "BLOCKER",
+                    relative,
+                    "La configurazione del guardiano non e' un oggetto JSON valido.",
+                )
+            )
+            continue
+        if relative.startswith(".claude/") and config.get("disableAllHooks") is True:
+            findings.append(
+                Finding(
+                    "GUARDIAN_HOOK_DISABLED",
+                    "BLOCKER",
+                    relative,
+                    "Gli hook di progetto sono disattivati.",
+                )
+            )
+
+        hook_map = config.get("hooks")
+        stop_groups = hook_map.get("Stop", []) if isinstance(hook_map, dict) else []
+        expected_handler = _expected_guard_handler(template_name)
+        matching: list[dict] = []
+        if isinstance(stop_groups, list):
+            for group in stop_groups:
+                handlers = group.get("hooks", []) if isinstance(group, dict) else []
+                if not isinstance(handlers, list):
+                    continue
+                for handler in handlers:
+                    if _matches_guard_handler(handler, expected_handler):
+                        matching.append(handler)
+
+        if not matching:
+            findings.append(
+                Finding(
+                    "GUARDIAN_HOOK_MISSING",
+                    "BLOCKER",
+                    relative,
+                    "Manca l'unico handler Stop del guardiano delle stanze.",
+                )
+            )
+            continue
+        if len(matching) > 1:
+            findings.append(
+                Finding(
+                    "GUARDIAN_HOOK_DUPLICATE",
+                    "BLOCKER",
+                    relative,
+                    "Il guardiano e' registrato piu' di una volta.",
+                )
+            )
+        if any(
+            any(
+                handler.get(key) != value
+                for key, value in expected_handler.items()
+                if key != "commandWindows"
+            )
+            for handler in matching
+        ):
+            findings.append(
+                Finding(
+                    "GUARDIAN_HOOK_INVALID",
+                    "BLOCKER",
+                    relative,
+                    "Il comando del guardiano esiste ma la configurazione non "
+                    "coincide con lo standard corrente.",
+                )
+            )
+        if needs_windows and not any(
+            handler.get("commandWindows") == expected_handler.get("commandWindows")
+            for handler in matching
+        ):
+            findings.append(
+                Finding(
+                    "GUARDIAN_WINDOWS_COMMAND_MISSING",
+                    "BLOCKER",
+                    relative,
+                    "Il ramo Codex non contiene il comando Windows del guardiano.",
+                )
+            )
+    return findings
+
+
 def _contains_unproven_value(text: str) -> bool:
     normalized = _normalized(text)
     return any(term in normalized for term in UNPROVEN_VALUE_TERMS) or bool(
@@ -1672,6 +1813,8 @@ def inspect_ecosystem(
                     "File obbligatorio dello standard assente.",
                 )
             )
+    if requested_mode is not None:
+        findings.extend(_guardiano_findings(target, requested_mode))
     findings.extend(_ecosystem_registry_findings(target))
     if requested_mode is not None:
         for rel in install_contract.forbidden_paths(CONTRACT, requested_mode):

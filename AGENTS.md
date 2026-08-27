@@ -40,6 +40,8 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
 - `.claude/README.md` se serve Claude Code
+- project hook `Stop` del ramo attivo e guardiano comune in `.agent/hooks/`;
+  i JSON vengono uniti senza cancellare configurazioni del cliente
 - user settings Claude Code (`~/.claude/settings.json`) con
   `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
 - skill `ispettore-ecosistema` nel percorso dell'agente attivo
