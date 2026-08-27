@@ -279,13 +279,16 @@ def _table_block_after_marker(content: str, marker: str) -> list[str]:
         return []
     section = content[matches[0].end() :]
     section = re.split(r"\n[ ]{0,3}#{2,3}\s", section, maxsplit=1)[0]
+    section_lines = section.splitlines()
+    while section_lines and not section_lines[0].strip():
+        section_lines.pop(0)
+    if not section_lines or not section_lines[0].lstrip().startswith("|"):
+        return []
     table_lines: list[str] = []
-    started = False
-    for line in section.splitlines():
+    for line in section_lines:
         if line.lstrip().startswith("|"):
-            started = True
             table_lines.append(line)
-        elif started:
+        else:
             break
     return table_lines
 
@@ -442,7 +445,10 @@ def _extract_installed_version(target: Path) -> str | None:
     for path, patterns in candidates:
         if not path.is_file() or path.is_symlink():
             continue
-        text = path.read_text(encoding="utf-8")
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            continue
         for pattern in patterns:
             match = re.search(pattern, text, flags=re.IGNORECASE)
             if match:
