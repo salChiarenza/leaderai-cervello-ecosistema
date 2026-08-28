@@ -19,11 +19,15 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_DA_RIPETERE — 28/08/2026`
+`PROVA_DESTINATARIO_OK — 28/08/2026`
 
-La versione `0.6.0` ha superato il collaudo locale. La prova pubblica del
-destinatario viene registrata qui dopo il push e prima di usare questa email
-per una consegna.
+La prova pubblica completata riguarda la versione `0.6.0` e il commit
+immutabile
+`337b028151a03090d1afa76d5e12e9951ea00f16`. L'archivio scaricato senza
+credenziali ha SHA256
+`f470c0834756328f181f9d9fda78966275786921e85a0ff31f0fd30bc3ffd51f`;
+la sola copia estratta ha superato `283` test e la procedura
+`INSTALLA_CON_AI.md` ha risposto `HTTP 200`.
 
 ## Controlli prima dell'invio
 
