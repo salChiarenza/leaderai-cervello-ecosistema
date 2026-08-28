@@ -1,6 +1,6 @@
 ---
 name: ispettore-ecosistema
-description: Usa quando l'utente dice lancia l'Ispettore, controlla la casa, verifica l'Ecosistema, cerca cartelle inutili o doppioni, controlla le strade, oppure dopo la creazione, rinomina, fusione o spostamento di cartelle nell'Ecosistema.
+description: Usa quando l'utente dice lancia l'Ispettore, controlla la casa, verifica l'Ecosistema, cerca cartelle inutili o doppioni, controlla le strade, controlla istruzioni, capacita' o passaggi manuali, oppure dopo la creazione, rinomina, fusione o spostamento di cartelle nell'Ecosistema.
 ---
 
 # Ispettore Ecosistema
@@ -14,6 +14,15 @@ Se l'utente ha gia' detto `lancia l'Ispettore`, `controlla l'Ecosistema`,
 `verifica le strade`, `cerca doppioni` o una formula equivalente, inizia il
 checkup. Non chiedere di nuovo se vuole avviarlo. Chiedi soltanto davanti a un
 gesto umano vero previsto dal `CHECKUP.md`.
+
+## Scelta del controllo
+
+Se la richiesta riguarda una casa cliente installata o il controllo completo,
+esegui tutto il `CHECKUP.md`. Se riguarda soltanto istruzioni, capacita' o
+passaggi manuali, dichiara `CONTROLLO FOCALIZZATO - ISTRUZIONI` ed esegui il
+Passo 2-ter. Il controllo focalizzato non emette il verdetto complessivo
+PASSA / PASSA CON ATTENZIONE / NON PASSA, non crea, rinomina o rimodella
+stanze e non trasforma una casa diversa dal telaio cliente in un errore.
 
 ## Missione
 
@@ -76,7 +85,11 @@ gesto umano vero previsto dal `CHECKUP.md`.
     `MANTIENI`, `ACCORPA`, `SPOSTA NELLA PROCEDURA/SKILL GIUSTA`, `RISCRIVI` o
     `CANDIDATA ALLA RIMOZIONE`. Sicurezza, privacy, autorizzazione e integrita'
     non si eliminano automaticamente; nessuna modifica distruttiva senza
-    approvazione.
+    approvazione. Se trovi un `non posso` o un passaggio manuale, separa
+    capacita', autorizzazione e perimetro predefinito: il primo tentativo
+    fallito non dimostra che l'agente non puo' farlo. Controlla le fonti vive
+    della casa, diagnostica e riprova; accetta il limite soltanto con percorso
+    provato, data e prova osservabile e marca `SUPERATO` il verdetto smentito.
 12. Non fermarti al controllo dei file: prova almeno due percorsi reali
    `richiesta -> stanza -> fonte -> capacita/processo -> output`.
 13. Esegui in una nuova task/sessione la richiesta esatta

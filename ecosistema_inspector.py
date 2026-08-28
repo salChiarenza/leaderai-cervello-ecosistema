@@ -2038,9 +2038,14 @@ def inspect_ecosystem(
                     "ecosistema, non dentro un altro ramo.",
                 )
             )
-        if _normalized(room.path) in {
-            _normalized(name) for name in STANDARD_DIRS | ALLOWED_ROOT_FILES
-        }:
+        standard_room_paths = {
+            _normalized(name) for name in ROOM_LIFECYCLE.standard_room_paths
+        }
+        if (
+            _normalized(room.path)
+            in {_normalized(name) for name in STANDARD_DIRS | ALLOWED_ROOT_FILES}
+            and _normalized(room.path) not in standard_room_paths
+        ):
             findings.append(
                 Finding(
                     "ROOM_STANDARD_COLLISION",

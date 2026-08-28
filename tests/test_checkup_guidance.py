@@ -284,8 +284,71 @@ class CheckupGuidanceTest(unittest.TestCase):
                 "conflicting_instructions",
                 "missing_final_verification",
                 "unnecessary_human_request",
+                "unsupported_capability_claim_without_evidence",
+                "capability_authorization_scope_confusion",
+                "first_attempt_failure_misclassified_as_manual_limit",
             },
         )
+
+    def test_instruction_audit_blocks_unproven_manual_handoffs(self):
+        import json
+
+        contract = json.loads((ROOT / "install_contract.json").read_text(encoding="utf-8"))
+        policy = contract["inspection_policies"]["instruction_audit"]
+        self.assertTrue(
+            {
+                "unsupported_capability_claim_without_evidence",
+                "capability_authorization_scope_confusion",
+                "first_attempt_failure_misclassified_as_manual_limit",
+            }.issubset(set(policy["initial_cases"]))
+        )
+
+        combined = " ".join(
+            (
+                (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+                + (ROOT / "MANIFEST.md").read_text(encoding="utf-8")
+                + (ROOT / "templates" / "ISPETTORE_SKILL.md").read_text(
+                    encoding="utf-8"
+                )
+            ).lower().split()
+        )
+        required = [
+            "capacita', autorizzazione e perimetro predefinito",
+            "il primo tentativo fallito non dimostra che l'agente non puo' farlo",
+            "percorso provato, data e prova osservabile",
+            "diagnostica e riprova",
+            "superato",
+            "casa viva",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, combined)
+
+    def test_instruction_focused_check_does_not_impose_the_client_structure(self):
+        import json
+
+        contract = json.loads((ROOT / "install_contract.json").read_text(encoding="utf-8"))
+        policy = contract["inspection_policies"]["instruction_audit"]
+        self.assertEqual(policy.get("supported_scopes"), ["full", "instructions"])
+
+        combined = " ".join(
+            (
+                (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+                + (ROOT / "templates" / "ISPETTORE_SKILL.md").read_text(
+                    encoding="utf-8"
+                )
+            ).lower().split()
+        )
+        required = [
+            "controllo focalizzato - istruzioni",
+            "non emette il verdetto complessivo passa / passa con attenzione / non passa",
+            "non crea, rinomina o rimodella stanze",
+            "esegue il passo 2-ter",
+            "istruzioni, capacita' o passaggi manuali",
+        ]
+        for phrase in required:
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, combined)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.6.0 - 28/08/2026
+
+- Nasce `Ecosystem Check`, prima stanza standard installata in ogni casa
+  accanto a `ecosistema/`: mappa, stato, standard di reparto, registro dei
+  controlli e sei ruoli separati per assegnazione, controllo, intervento e
+  verifica finale.
+- Il prefabbricato ora distingue la stanza comune di controllo dalle stanze
+  business adattive del cliente. Una casa puo' avere zero stanze business, ma
+  non resta senza il reparto che verifica struttura, istruzioni e continuita'.
+- Il registro conserva un riepilogo per ciclo; il controllo iniziale precede
+  l'eventuale attivazione della cadenza settimanale.
+- L'Ispettore distingue capacita', autorizzazione e perimetro predefinito:
+  un primo tentativo fallito non diventa piu' automaticamente un limite o un
+  lavoro manuale scaricato sulla persona.
+- Ogni `non posso` deve indicare percorso provato, data e prova osservabile;
+  prima l'agente controlla le capacita' vive, diagnostica e riprova. I verdetti
+  smentiti da una prova successiva vengono marcati `SUPERATO` e corretti nella
+  fonte proprietaria.
+- LeaderAI diventa il banco di collaudo reale dell'Ispettore: la fonte resta
+  questa repo, i test automatici girano qui e la prova d'uso avviene nella casa
+  `/Users/sal/leaderai`; le lezioni tornano nel prodotto prima del rilascio.
+- Aggiunto il controllo focalizzato sulle istruzioni: puo' essere usato anche
+  in una casa che non adotta il telaio cliente, senza imporre stanze, registri
+  o verdetto di conformita' complessivo.
+
 ## 0.5.8 - 27/08/2026
 
 - Il contratto delle stanze non dipende piu' soltanto dall'Ispettore avviato a

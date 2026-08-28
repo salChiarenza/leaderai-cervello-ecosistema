@@ -17,6 +17,21 @@ unica della procedura. Nel workspace interno
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` resta soltanto un
 puntatore a questa versione pubblicata.
 
+## Scelta del controllo
+
+- **Checkup completo.** Si usa su un Cervello + Ecosistema cliente gia'
+  installato o quando il proprietario chiede il controllo completo della casa.
+  Applica l'intero standard e produce il verdetto complessivo.
+- **CONTROLLO FOCALIZZATO - ISTRUZIONI.** Si usa quando la richiesta riguarda
+  soltanto istruzioni, capacita' o passaggi manuali, anche in una casa che non
+  adotta il telaio cliente. Esegue il Passo 2-ter, confronta fonti e prove vive
+  e corregge soltanto le istruzioni autorizzate. Non emette il verdetto
+  complessivo PASSA / PASSA CON ATTENZIONE / NON PASSA, non crea, rinomina o
+  rimodella stanze e non tratta le differenze strutturali come errori.
+
+Il controllo focalizzato dichiara sempre il proprio perimetro nell'uscita. Non
+puo' essere usato per dichiarare conforme l'intera casa.
+
 ## Regola madre - standard contro caso reale
 
 La repo GitHub `salChiarenza/leaderai-cervello-ecosistema` e' lo standard
@@ -538,9 +553,11 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    - se il proprietario usa davvero quel nome per la funzione, oppure e' solo
      il nome di un prodotto, progetto, modello, script o output.
    Se una risposta manca, classifica `CAPACITA` o `SOSPETTA` e assegna la
-   cartella alla madre o a una stanza gia' riconosciuta. Una casa semplice puo'
-   avere zero stanze: l'`AGENTS.md` radice registra direttamente capacita',
-   fonti e output, senza mappe locali. Porta una `PROPOSTA STRUTTURALE` solo
+   cartella alla madre o a una stanza gia' riconosciuta. Verifica sempre la
+   stanza standard `Ecosystem Check`, accanto a `ecosistema/`, con mappa, stato,
+   standard, registro e ruoli. Una casa semplice puo' avere zero stanze business
+   oltre a questa: l'`AGENTS.md` radice registra direttamente capacita',
+   fonti e output, senza altre mappe locali. Porta una `PROPOSTA STRUTTURALE` solo
    quando emerge una responsabilita' business autonoma. Caso di regressione:
    `Portafoglio Modello` con motori, skill, fonti e documenti non e' di per se'
    una stanza; e' una capacita' posseduta dalla madre finche' la
@@ -770,6 +787,15 @@ attivo (articolo Anthropic sui modelli di generazione 5 per Claude Code, pagina
 6. **Peso misurato.** Per Codex confronta la dimensione di `AGENTS.md` con il
    tetto `project_doc_max_bytes` (32 KiB di default) e riporta il valore. Per
    Claude Code riporta l'esito di `/doctor` sul costo della configurazione.
+7. **Falsa uscita manuale.** Se una istruzione dice che l'agente non puo'
+   caricare, allegare, inviare, selezionare un file o usare un collegamento,
+   separa **capacita', autorizzazione e perimetro predefinito**. Il primo
+   tentativo fallito non dimostra che l'agente non puo' farlo. Prima di
+   coinvolgere la persona controlla le capacita' e le fonti vive della casa,
+   diagnostica e riprova sullo stesso percorso. Una dichiarazione negativa e'
+   valida soltanto se registra percorso provato, data e prova osservabile. Se
+   una prova reale successiva la smentisce, correggi la fonte proprietaria e
+   marca il verdetto storico `SUPERATO` invece di lasciarlo come istruzione.
 
 La lettura veloce produce segnalazioni, mai rimozioni. I blocchi che restano
 dubbi, e tutti quelli su semantica protetta, passano alla prova sotto.

@@ -41,6 +41,8 @@ CANONICAL_ROOT_OWNED_REGISTRIES = (
     "ecosistema/FONTI.md",
 )
 
+CANONICAL_STANDARD_ROOM_PATHS = ("ecosystem-check",)
+
 CANONICAL_ROOM_REQUIRED_FILES = (
     "AGENTS.md",
     "CLAUDE.md",
@@ -137,6 +139,7 @@ class RoomLifecyclePolicy:
     owner_source_headings: tuple[str, ...]
     contents_section: str
     scan_depth: int
+    standard_room_paths: tuple[str, ...] = ()
 
 
 def _safe_relative(raw: str, label: str) -> str:
@@ -402,6 +405,7 @@ def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
     classifications = raw.get("classifications")
     root_owned_classifications = raw.get("root_owned_classifications")
     root_owned_registry_paths = raw.get("root_owned_registry_paths")
+    standard_room_paths = raw.get("standard_room_paths")
     required_files = raw.get("room_required_files")
     required_sections = raw.get("required_sections")
     required_terms = raw.get("required_terms")
@@ -410,6 +414,7 @@ def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
         "classifications": classifications,
         "root_owned_classifications": root_owned_classifications,
         "root_owned_registry_paths": root_owned_registry_paths,
+        "standard_room_paths": standard_room_paths,
         "room_required_files": required_files,
         "required_sections": required_sections,
         "required_terms": required_terms,
@@ -456,6 +461,13 @@ def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
             "Policy stanze: i registri canonici della cartella madre non possono "
             "cambiare."
         )
+    normalized_standard_rooms = tuple(
+        _safe_relative(value, "Stanza standard") for value in standard_room_paths
+    )
+    if normalized_standard_rooms != CANONICAL_STANDARD_ROOM_PATHS:
+        raise ValueError(
+            "Policy stanze: le stanze standard canoniche non possono cambiare."
+        )
     map_template = _safe_relative(str(raw.get("map_template", "")), "Calco mappa stanza")
     source_template = _safe_relative(
         str(raw.get("source_template", "")), "Calco fonte stanza"
@@ -473,6 +485,13 @@ def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
             "Policy stanze: i registri della cartella madre devono essere "
             "installati dal contratto."
         )
+    for room_path in normalized_standard_rooms:
+        for filename in CANONICAL_ROOM_REQUIRED_FILES:
+            required = f"{room_path}/{filename}"
+            if required not in installed_destinations:
+                raise ValueError(
+                    f"Stanza standard incompleta nel contratto: {required}."
+                )
     for rel in (map_template, source_template):
         if rel not in installed_destinations:
             raise ValueError(f"Calco stanza non installato dal contratto: {rel}.")
@@ -551,6 +570,7 @@ def room_lifecycle_policy(contract: dict[str, Any]) -> RoomLifecyclePolicy:
         owner_source_headings=normalized_source_headings,
         contents_section=str(scalar_fields["contents_section"]).casefold().strip(),
         scan_depth=scan_depth,
+        standard_room_paths=normalized_standard_rooms,
     )
 
 

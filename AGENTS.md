@@ -9,7 +9,7 @@ la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
 Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
 e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
-`templates/STANZA_FONTE.md` e le istruzioni operative
+`templates/STANZA_FONTE.md`, `templates/ecosystem-check/` e le istruzioni operative
 della repo; poi ripara, prova e riporta gli scostamenti.
 
 `install_contract.json` e' la fonte macchina unica per installazione manuale,
@@ -17,8 +17,9 @@ setup tecnico, Ispettore e harness di rilascio. Vietato mantenere una seconda
 lista di file obbligatori o rami agente.
 
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
-adattivo con cui si scoprono le stanze del cliente. La repo non assegna nomi di
-reparti o cartelle business: censisce l'ambiente reale, classifica stanze,
+adattivo con cui si scoprono le stanze del cliente. Installa una sola stanza
+comune, `Ecosystem Check`, che governa controlli e manutenzione della casa AI.
+La repo non assegna nomi di reparti o cartelle business: censisce l'ambiente reale, classifica stanze,
 fonti, output, capacita', infrastruttura e archivi, poi verifica che ogni stanza
 sia raggiungibile dalla mappa madre. Un modulo si integra nella cartella madre
 o nella stanza proprietaria; una nuova stanza richiede una responsabilita'
@@ -54,10 +55,11 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/LIMITI.md`
 - `ecosistema/STANZA_AGENTS.md`
 - `ecosistema/STANZA_FONTE.md`
+- `ecosystem-check/` con mappa, stato, standard, registro e ruoli separati
 
-Questi sono il telaio e i registri comuni. Le stanze operative del cliente non
-sono elencate qui: emergono dai suoi processi reali e rispettano il contratto
-adattivo di `MANIFEST.md`.
+Questi sono il telaio, i registri comuni e la stanza di controllo. Le stanze
+business del cliente non sono elencate qui: emergono dai suoi processi reali e
+rispettano il contratto adattivo di `MANIFEST.md`.
 
 Moduli professionali versionati:
 
@@ -76,6 +78,15 @@ compliance/privacy/AI Act.
 Il cliente non deve fare debug tecnico. L'agente del cliente fa autodiagnosi,
 installa o ripara cio' che manca, crea la cartella madre nel posto giusto e
 chiude solo dopo un collaudo reale.
+
+## Collaudo dell'Ispettore sulla casa LeaderAI
+
+La repo e' la fonte del prodotto; `/Users/sal/leaderai` e' la prima casa viva
+su cui provarlo. Ogni modifica all'Ispettore nasce qui, supera i test della
+repo, viene resa richiamabile in LeaderAI per Claude Code e Codex e viene poi
+eseguita sulla casa reale. I difetti osservati in LeaderAI tornano in questa
+repo come regola e regressione prima del rilascio ai clienti. I test della repo
+provano il contratto; il collaudo reale avviene in LeaderAI.
 
 ## Telaio comune e scelta agente
 

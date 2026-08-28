@@ -56,6 +56,41 @@ write("ecosistema/PROCESSI.md", render("PROCESSI.md"))
 write("ecosistema/LIMITI.md", render("LIMITI.md"))
 write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))
 write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))
+write("ecosystem-check/AGENTS.md", render("ecosystem-check/AGENTS.md"))
+write("ecosystem-check/CLAUDE.md", render("ecosystem-check/CLAUDE.md"))
+write("ecosystem-check/STATO.md", render("ecosystem-check/STATO.md"))
+write(
+    "ecosystem-check/REGISTRO_CONTROLLI.md",
+    render("ecosystem-check/REGISTRO_CONTROLLI.md"),
+)
+write(
+    "ecosystem-check/STANDARD_REPARTO.md",
+    render("ecosystem-check/STANDARD_REPARTO.md"),
+)
+write(
+    "ecosystem-check/ruoli/ORCHESTRATORE.md",
+    render("ecosystem-check/ruoli/ORCHESTRATORE.md"),
+)
+write(
+    "ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
+    render("ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md"),
+)
+write(
+    "ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
+    render("ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md"),
+)
+write(
+    "ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md",
+    render("ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md"),
+)
+write(
+    "ecosystem-check/ruoli/INTERVENTO.md",
+    render("ecosystem-check/ruoli/INTERVENTO.md"),
+)
+write(
+    "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
+    render("ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md"),
+)
 write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
 write(
     ".agent/hooks/guardiano_stanze_windows.ps1",

@@ -61,7 +61,9 @@ personalizzazione, fonti reali e prove macchina.
    registri e i due calchi dichiarati dal contratto. I calchi
    `STANZA_AGENTS.md` e `STANZA_FONTE.md` restano file locali, integri e
    identici ai template della fotografia; nessun piano, bozza, asset o
-   sottocartella operativa entra nell'armadio.
+   sottocartella operativa entra nell'armadio. Installa `ecosystem-check/`
+   accanto all'armadio come prima stanza standard, completa di mappa, stato,
+   standard, registro e ruoli; non inventare altre stanze business.
 10. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
    log tecnico, commit iniziale e fotografia standard intatta. Prova anche il
    guardiano: casa pulita silenziosa, file di prova fuori posto bloccato e poi

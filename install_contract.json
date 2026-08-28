@@ -64,6 +64,9 @@
         "ecosistema/ASSET.md",
         "ecosistema/FONTI.md"
       ],
+      "standard_room_paths": [
+        "ecosystem-check"
+      ],
       "room_required_files": [
         "AGENTS.md",
         "CLAUDE.md"
@@ -144,6 +147,10 @@
       "document_review_bytes": 81920
     },
     "instruction_audit": {
+      "supported_scopes": [
+        "full",
+        "instructions"
+      ],
       "classifications": [
         "MANTIENI",
         "ACCORPA",
@@ -164,7 +171,10 @@
         "excess_rules_or_files",
         "conflicting_instructions",
         "missing_final_verification",
-        "unnecessary_human_request"
+        "unnecessary_human_request",
+        "unsupported_capability_claim_without_evidence",
+        "capability_authorization_scope_confusion",
+        "first_attempt_failure_misclassified_as_manual_limit"
       ],
       "metrics": [
         "observable_outcome",
@@ -236,6 +246,61 @@
         "strategy": "create"
       },
       {
+        "template": "ecosystem-check/AGENTS.md",
+        "destination": "ecosystem-check/AGENTS.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/CLAUDE.md",
+        "destination": "ecosystem-check/CLAUDE.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/STATO.md",
+        "destination": "ecosystem-check/STATO.md",
+        "strategy": "create"
+      },
+      {
+        "template": "ecosystem-check/REGISTRO_CONTROLLI.md",
+        "destination": "ecosystem-check/REGISTRO_CONTROLLI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "ecosystem-check/STANDARD_REPARTO.md",
+        "destination": "ecosystem-check/STANDARD_REPARTO.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/ORCHESTRATORE.md",
+        "destination": "ecosystem-check/ruoli/ORCHESTRATORE.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
+        "destination": "ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
+        "destination": "ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md",
+        "destination": "ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/INTERVENTO.md",
+        "destination": "ecosystem-check/ruoli/INTERVENTO.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
+        "destination": "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
+        "strategy": "managed_text"
+      },
+      {
         "template": "GUARDIANO_STANZE.sh",
         "destination": ".agent/hooks/guardiano_stanze.sh",
         "strategy": "managed_text"
@@ -263,6 +328,17 @@
       "ecosistema/LIMITI.md",
       "ecosistema/STANZA_AGENTS.md",
       "ecosistema/STANZA_FONTE.md",
+      "ecosystem-check/AGENTS.md",
+      "ecosystem-check/CLAUDE.md",
+      "ecosystem-check/STATO.md",
+      "ecosystem-check/REGISTRO_CONTROLLI.md",
+      "ecosystem-check/STANDARD_REPARTO.md",
+      "ecosystem-check/ruoli/ORCHESTRATORE.md",
+      "ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
+      "ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
+      "ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md",
+      "ecosystem-check/ruoli/INTERVENTO.md",
+      "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
       ".agent/hooks/guardiano_stanze.sh",
       ".agent/hooks/guardiano_stanze_windows.ps1"
     ],

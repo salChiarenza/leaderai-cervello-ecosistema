@@ -122,15 +122,17 @@ porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
 contiene, fonti, output, capacita', collegamenti a monte e collegamenti a valle.
 
 Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate
-alla cartella madre o a una stanza. Una casa semplice puo' avere zero stanze.
-Un prodotto o un modello non diventa stanza perche' ha una pipeline completa.
-Una nuova stanza nasce solo quando emerge una responsabilita' business stabile
-con stato e decisioni propri, riconosciuta dal proprietario.
+alla cartella madre o a una stanza. Ogni casa installa la stanza di controllo
+`Ecosystem Check`; una casa semplice puo' avere zero stanze business oltre a
+questa. Un prodotto o un modello non diventa stanza perche' ha una pipeline
+completa. Una nuova stanza business nasce solo quando emerge una responsabilita'
+stabile con stato e decisioni propri, riconosciuta dal proprietario.
 
 ### Registro delle stanze
 
 | Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale | Amministratore | Riporta al |
 |---|---|---|---|---|---|---|---|---|---|
+| [Ecosystem Check](ecosystem-check/) | Mantenere ordinato, verificabile e funzionante il Cervello + Ecosistema. | Boss dell'Ecosistema e standard ufficiale. | Tutte le stanze e gli elementi della casa. | Mappa madre, mappe e fonti operative delle stanze, standard ufficiale. | `STATO.md` e `REGISTRO_CONTROLLI.md`. | Orchestratore, controllori, intervento, verifica finale, Ispettore. | `ecosystem-check/AGENTS.md` | Amministratore di settore Ecosystem Check | Boss dell'Ecosistema |
 | Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | Da assegnare | Boss dell'Ecosistema |
 
 La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.

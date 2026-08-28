@@ -22,7 +22,7 @@ e non sostituisce le specifiche tecniche.
 Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
 caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e
-`templates/STANZA_FONTE.md`, ripara gli scostamenti
+`templates/STANZA_FONTE.md` e `templates/ecosystem-check/`, ripara gli scostamenti
 riparabili, prova, salva i fatti nelle fonti proprietarie e chiude localmente.
 Il ciclo ordinario produce zero aggiornamenti intermedi. Quando la missione
 richiede una conferma finale, ne parte una sola dopo il collaudo completo.
@@ -33,9 +33,10 @@ la stessa lista di file obbligatori e rami agente. Browser, launcher e backup
 remoto sono controlli della macchina cliente dichiarati nello stesso contratto
 e restano `DA COLLAUDARE` nel gate anonimo.
 
-La repo fornisce un telaio minimo e un metodo adattivo. Il telaio rende stabile
-il Cervello; il metodo censisce il lavoro reale, riconosce le stanze gia' vive e
-le collega alla mappa madre. La cartella madre e ogni vera stanza hanno sempre
+La repo fornisce un telaio minimo, la stanza standard `Ecosystem Check` e un
+metodo adattivo. Il telaio rende stabile il Cervello; Ecosystem Check governa
+controlli, interventi e storico; il metodo censisce il lavoro reale, riconosce
+le stanze business gia' vive e le collega alla mappa madre. La cartella madre e ogni vera stanza hanno sempre
 `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte `@AGENTS.md`. I nomi
 delle stanze appartengono al cliente, non al template.
 
@@ -214,6 +215,11 @@ consumo quando disponibile e sicurezza; propone soltanto una classificazione,
 senza modifiche distruttive automatiche. La missione non contiene indizi su
 cartella, fonte o risultato atteso; un solo caso non puo' candidare la rimozione
 di una istruzione.
+
+Quando la richiesta riguarda soltanto istruzioni, capacita' o passaggi
+manuali, l'Ispettore usa il controllo focalizzato: verifica questi punti senza
+imporre il telaio cliente, creare stanze o emettere il verdetto complessivo
+della casa. Un primo tentativo fallito non prova un limite tecnico.
 
 I file vivi del cliente restano intatti. `--force` serve soltanto a riparare il
 ponte canonico `CLAUDE.md` quando e' mancante o errato.

@@ -151,7 +151,10 @@ di lavorazione, per esempio `Portafoglio Modello`, resta `CAPACITA` o
 business autonoma con stato e decisioni propri. In dubbio il gate e'
 `NON PASSA`: l'agente non crea la mappa locale e non inventa una stanza.
 
-Una casa semplice puo' avere **zero stanze**. Quando una capacita', fonte o
+Ogni casa ha la stanza standard `Ecosystem Check`, installata accanto a
+`ecosistema/`: mantiene stato e decisioni dei controlli, separa osservazione,
+intervento e verifica finale e conserva un registro compatto. Una casa semplice
+puo' avere **zero stanze business oltre a Ecosystem Check**. Quando una capacita', fonte o
 output non appartiene a una responsabilita' business autonoma, la cartella
 madre puo' possederlo direttamente: lo registra nell'`AGENTS.md` radice e in
 `ecosistema/ASSET.md` o `ecosistema/FONTI.md`. In questo caso non nasce una
@@ -163,7 +166,8 @@ una responsabilita' business reale approvata dal proprietario.
 Il contratto macchina vive in
 `install_contract.json -> inspection_policies -> room_lifecycle`. I calchi
 repo `templates/STANZA_AGENTS.md` e `templates/STANZA_FONTE.md` vengono
-installati nell'armadio comune. Una stanza e' valida soltanto quando l'intero
+installati nell'armadio comune; `templates/ecosystem-check/` e' il prefabbricato
+della stanza di controllo. Una stanza e' valida soltanto quando l'intero
 prefabbricato e' presente nello stesso salvataggio; una nascita parziale viene
 annullata o resta `NON PASSA`.
 Lo stesso contratto viene controllato a ogni chiusura da
@@ -250,6 +254,13 @@ soltanto quando serve un gesto che puo' compiere il proprietario. Nello stesso
 canale scrive `SERVE UN TUO PASSAGGIO`, cosa ha gia' sistemato, il solo gesto
 richiesto e `Appena lo fai: riprendo e completo il lavoro.` Dopo la risposta
 riprende la stessa missione. Le classificazioni tecniche restano nella casa.
+
+Un primo tentativo fallito non autorizza il passaggio del lavoro alla persona.
+Prima di dichiarare un limite l'agente separa capacita', autorizzazione e
+perimetro predefinito, controlla le fonti vive della casa, diagnostica e
+riprova. Un `non posso` valido registra percorso provato, data e prova
+osservabile; una prova successiva che lo smentisce rende il verdetto storico
+`SUPERATO` e aggiorna la fonte proprietaria.
 
 Se Sal richiede espressamente una conferma finale, parte una volta sola quando
 tutti i criteri sono completati e provati. La

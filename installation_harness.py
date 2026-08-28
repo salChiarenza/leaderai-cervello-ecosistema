@@ -58,6 +58,17 @@ STANDARD_FILES = (
     "templates/PROCESSI.md",
     "templates/STANZA_AGENTS.md",
     "templates/STANZA_FONTE.md",
+    "templates/ecosystem-check/AGENTS.md",
+    "templates/ecosystem-check/CLAUDE.md",
+    "templates/ecosystem-check/STATO.md",
+    "templates/ecosystem-check/REGISTRO_CONTROLLI.md",
+    "templates/ecosystem-check/STANDARD_REPARTO.md",
+    "templates/ecosystem-check/ruoli/ORCHESTRATORE.md",
+    "templates/ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
+    "templates/ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
+    "templates/ecosystem-check/ruoli/CONTROLLO_CONTINUITA.md",
+    "templates/ecosystem-check/ruoli/INTERVENTO.md",
+    "templates/ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
 )
 
 INSTALL_CONTRACT = install_contract.load_contract(
