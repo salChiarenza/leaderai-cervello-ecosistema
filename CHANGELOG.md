@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.1 - 29/08/2026
+
+- Corretta una regola tecnica superata sul ramo Claude Code: `autoMemoryDirectory`
+  e' letta da ogni scope di settings (user, project, local, policy, `--settings`),
+  non solo dalle user settings. Nelle settings di progetto o locali il valore vale
+  dopo il trust del workspace. Lo standard LeaderAI resta le user settings, ma ora
+  per la ragione giusta: la memoria segue la macchina, non la copia della repo.
+- Nuovo controllo C.7 del ramo Claude Code: la chiave di permesso nel posto
+  sbagliato. Una chiave inventata o annidata sotto il blocco sbagliato viene
+  scartata in silenzio e lascia il proprietario convinto di aver autorizzato
+  qualcosa. Il controllo nomina il caso trovato sul banco di collaudo LeaderAI:
+  `autoMode` sta al primo livello del file, non dentro `permissions`, e il
+  classificatore lo legge solo da `~/.claude/settings.json`, dalle managed
+  settings e da `--settings`.
+- Aggiunte alle fonti Claude Code del Passo 1 la pagina di riferimento delle
+  chiavi settings e quella di configurazione di auto mode.
+
 ## 0.6.0 - 28/08/2026
 
 - Nasce `Ecosystem Check`, prima stanza standard installata in ogni casa

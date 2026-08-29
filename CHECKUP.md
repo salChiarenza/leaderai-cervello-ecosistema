@@ -336,6 +336,10 @@ Se e' attivo **Claude Code**, apri inoltre:
 - directory `.claude/`: <https://code.claude.com/docs/en/claude-directory>
 - settings: <https://code.claude.com/docs/en/settings>
 - permessi: <https://code.claude.com/docs/en/permissions>
+- riferimento chiavi settings, per riconoscere una chiave inventata:
+  <https://code.claude.com/docs/en/settings-reference>
+- configurazione di auto mode e scope da cui il classificatore la legge:
+  <https://code.claude.com/docs/en/auto-mode-config>
 - hook, skill, subagent e MCP solo se presenti nell'ambiente.
 
 ## Passo 1-bis — Diagnosi e riparazione del Cervello
@@ -406,9 +410,11 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    computer (`~/.claude/settings.json`) impostano `autoMemoryDirectory` sul
    percorso portabile `~/...` quando la memoria e' sotto la home di quella
    macchina. Un percorso assoluto e' valido soltanto se e' stato letto sulla
-   stessa macchina e la memoria vive fuori dalla home. La chiave non e'
-   accettata nelle settings project/local. Il valore e' attivo solo dopo il
-   trust del workspace.
+   stessa macchina e la memoria vive fuori dalla home. La chiave e' letta da
+   ogni scope di settings (user, project, local, policy, `--settings`); nelle
+   settings di progetto o locali il valore vale solo dopo il trust del
+   workspace, come gli hook. Lo standard LeaderAI resta le user settings,
+   perche' la memoria segue la macchina e non la copia della repo.
 4. Se esiste una memoria auto esterna con contenuti diversi, confronta le due
    fonti, unisci le voci uniche nella `memory/` della casa, prova `/memory` e
    solo dopo cambia il percorso. Non svuotare o abbandonare la memoria esterna
@@ -419,7 +425,19 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    pulita e file temporaneo fuori posto, poi elimina subito la prova.
 6. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
    crealo con il minimo necessario e senza segreti.
-7. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
+7. **Chiave di permesso nel posto sbagliato.** Ogni chiave dei settings va
+   confrontata con la pagina ufficiale che la definisce, non con la sua forma
+   plausibile: una chiave inventata o annidata sotto il blocco sbagliato viene
+   scartata in silenzio e lascia il proprietario convinto di aver autorizzato
+   qualcosa. Controlla in particolare `autoMode`, che sta al primo livello del
+   file e non dentro `permissions`, e che il classificatore legge soltanto da
+   `~/.claude/settings.json`, dalle managed settings e da `--settings`: un
+   blocco `autoMode` in `.claude/settings.json` o `.claude/settings.local.json`
+   non ha effetto. Ogni autorizzazione trovata in una chiave inerte si riporta
+   come permesso non attivo, con la riga esatta e la fonte ufficiale, e si
+   sposta solo dopo conferma del proprietario: rimetterla in funzione allarga
+   davvero cio' che l'agente puo' fare da solo.
+8. Le altre skill, rule, hook, subagent e MCP sono opzionali. Se presenti,
    verifica sintassi e comportamento contro le pagine ufficiali vive; se devono
    bloccare un'azione, prova davvero il blocco.
 
