@@ -205,7 +205,8 @@ solo se il cliente usa sia Claude sia Codex.
 L'Ispettore confronta sempre la versione installata con il `VERSION` vivo,
 verifica che Claude usi una sola memoria, individua configurazioni credenziali
 fuori `.secrets/` senza aprirle, controlla firma/timbro e impedisce copie
-hardcoded di contenuti business modificabili.
+hardcoded di contenuti business modificabili. Quando una memoria viene fusa,
+controlla anche che nessun wikilink resti puntato a una voce sostituita.
 
 Controlla anche se istruzioni, skill, rule o hook stanno stringendo troppo
 l'agente. Il confronto cambia un solo blocco per volta e usa due sessioni

@@ -113,6 +113,39 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertFalse((target / ".claude" / "settings.local.json").exists())
             self.assertNotIn("REPORT_FINALE.md", tracked)
 
+    def test_stale_reference_to_a_merged_memory_blocks_pass(self):
+        """Una fusione deve lasciare tutti i richiami sul file che resta vivo."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / "memory" / "MEMORY.md").write_text(
+                "# Memoria\n\nVedi [[regola-che-non-esiste]].\n",
+                encoding="utf-8",
+            )
+            (target / "memory" / "regola-unificata.md").write_text(
+                "---\nreplaces:\n  - regola-che-non-esiste\n---\n"
+                "# Regola unificata\n",
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("MEMORY_MERGE_REFERENCE_STALE", self.codes(inspection))
+
+    def test_merged_memory_without_a_replace_contract_blocks_pass(self):
+        """Il controllo deve sapere quali nomi verificare prima dell'archivio."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / "memory" / "regola-unificata.md").write_text(
+                "# Regola unificata (fusione di due memorie)\n",
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertIn("MEMORY_MERGE_CONTRACT_MISSING", self.codes(inspection))
+
     def test_missing_or_duplicate_stop_guard_blocks_pass(self):
         for case in ("missing", "duplicate"):
             with self.subTest(case=case), tempfile.TemporaryDirectory() as tmp:

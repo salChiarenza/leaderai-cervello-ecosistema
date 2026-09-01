@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.3 - 01/09/2026
+
+- L'Ispettore ora protegge le fusioni della memoria: il file consolidato
+  dichiara nel frontmatter `replaces:` gli stem superati e il controllo blocca
+  ogni wikilink interno ancora rivolto a una di quelle voci. Una memoria fusa
+  senza contratto `replaces:` non passa il collaudo.
+- Il Passo 2-ter richiede anche la prova diretta degli inneschi ereditati dal
+  richiamo attivo della casa: avere un `trigger:` sintatticamente valido non
+  dimostra che le parole operative rimangano raggiungibili.
+
 ## 0.6.2 - 01/09/2026
 
 - Nuovo controllo del censimento: nessun percorso della casa, dotfile esclusi,

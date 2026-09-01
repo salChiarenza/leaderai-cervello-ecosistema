@@ -6,6 +6,9 @@ Indice della memoria condivisa del Cervello.
 
 - Una riga per ogni memoria stabile.
 - Ogni riga deve puntare a un file reale o a una sezione reale.
+- Se fondi memorie, il file che resta dichiara `replaces:` con gli stem
+  superati; aggiorna i loro rimandi e prova ogni innesco ereditato prima di
+  archiviare le sorgenti.
 - Non usare questa memoria per segreti, password, token o dati bancari.
 - Non duplicare lo stato operativo: lo stato business vive nel file
   proprietario della stanza; il log e' solo tecnico e il report e' temporaneo.

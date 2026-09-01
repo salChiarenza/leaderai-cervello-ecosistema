@@ -811,10 +811,17 @@ attivo (articolo Anthropic sui modelli di generazione 5 per Claude Code, pagina
    progetto, skill o hook. Segnala `ACCORPA` indicando quale copia resta.
 5. **Memoria scritta a mano.** Righe che duplicano cio' che l'agente salva gia'
    da solo nella sua memoria.
-6. **Peso misurato.** Per Codex confronta la dimensione di `AGENTS.md` con il
+6. **Fusione di memorie.** Prima di archiviare le voci sorelle, il file che
+   resta dichiara nel frontmatter `replaces:` con tutti gli stem sostituiti.
+   Aggiorna ogni wikilink interno che li nomina e prova con prompt diretti tutti
+   gli inneschi ereditati dal meccanismo di richiamo attivo della casa. Indice
+   snello e `trigger:` presente non bastano: una fusione che rende irraggiungibile
+   una regola o la lascia passiva e' un errore di integrita'. L'Ispettore blocca
+   i rimandi rimasti agli stem dichiarati in `replaces:`.
+7. **Peso misurato.** Per Codex confronta la dimensione di `AGENTS.md` con il
    tetto `project_doc_max_bytes` (32 KiB di default) e riporta il valore. Per
    Claude Code riporta l'esito di `/doctor` sul costo della configurazione.
-7. **Falsa uscita manuale.** Se una istruzione dice che l'agente non puo'
+8. **Falsa uscita manuale.** Se una istruzione dice che l'agente non puo'
    caricare, allegare, inviare, selezionare un file o usare un collegamento,
    separa **capacita', autorizzazione e perimetro predefinito**. Il primo
    tentativo fallito non dimostra che l'agente non puo' farlo. Prima di

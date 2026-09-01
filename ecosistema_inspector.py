@@ -67,6 +67,7 @@ ROOM_TEMPLATE_RULES = {
 
 IGNORED_OS_ENTRIES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 IGNORED_ROOM_DIRS = {"__pycache__", "node_modules", ".venv", "venv"}
+MEMORY_WIKILINK_RE = re.compile(r"\[\[([^\]\n]+)\]\]")
 
 GENERIC_NAMES = {
     "documenti",
@@ -611,6 +612,114 @@ def _canonical_memory_path(target: Path, agents_text: str) -> Path:
     if not candidate.is_absolute():
         candidate = target / candidate
     return candidate.resolve()
+
+
+def _frontmatter_list(path: Path, key: str) -> list[str]:
+    """Legge una lista semplice dal frontmatter senza dipendere da PyYAML."""
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return []
+    if not lines or lines[0].strip() != "---":
+        return []
+
+    values: list[str] = []
+    index = 1
+    while index < len(lines):
+        line = lines[index]
+        stripped = line.strip()
+        if stripped == "---":
+            break
+        if not line.startswith((" ", "\t")) and stripped.startswith(f"{key}:"):
+            inline = stripped.split(":", 1)[1].strip()
+            if inline:
+                values.extend(
+                    item.strip().strip("\"'")
+                    for item in inline.strip("[]").split(",")
+                    if item.strip()
+                )
+                break
+            index += 1
+            while index < len(lines):
+                candidate = lines[index].strip()
+                if candidate.startswith("- "):
+                    values.append(candidate[2:].strip().strip("\"'"))
+                    index += 1
+                    continue
+                if not candidate:
+                    index += 1
+                    continue
+                break
+            break
+        index += 1
+    return values
+
+
+def _memory_reference_key(raw: str) -> str | None:
+    reference = raw.split("|", 1)[0].split("#", 1)[0].strip()
+    if not reference or "/" in reference or reference.startswith(("http:", "https:", "mailto:")):
+        return None
+    stem = Path(reference).stem
+    normalized = _normalized(stem).replace("_", "").replace("-", "")
+    if normalized.startswith("feedback"):
+        normalized = normalized.removeprefix("feedback")
+    return normalized or None
+
+
+def _memory_merge_reference_findings(target: Path, memory: Path) -> list[Finding]:
+    """Una fusione non puo' lasciare wikilink alle voci mandate in archivio."""
+    if not memory.is_dir():
+        return []
+
+    findings: list[Finding] = []
+    replacements: dict[str, Path] = {}
+    files = sorted(
+        path for path in memory.rglob("*.md") if path.is_file() and not path.is_symlink()
+    )
+    for path in files:
+        try:
+            content = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        sources = _frontmatter_list(path, "replaces")
+        if re.search(r"\bfusion(?:e|i|ato|ata|ati|ate)?\b", content, flags=re.IGNORECASE) and not sources:
+            findings.append(
+                Finding(
+                    "MEMORY_MERGE_CONTRACT_MISSING",
+                    "BLOCKER",
+                    path.relative_to(target).as_posix(),
+                    "Memoria fusa senza elenco `replaces`: non e' possibile provare "
+                    "che tutti i rimandi siano stati aggiornati.",
+                )
+            )
+        for source in sources:
+            key = _memory_reference_key(source)
+            if key:
+                replacements[key] = path
+
+    if not replacements:
+        return findings
+
+    for path in files:
+        try:
+            content = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for match in MEMORY_WIKILINK_RE.finditer(content):
+            reference = match.group(1).strip()
+            replacement = replacements.get(_memory_reference_key(reference) or "")
+            if replacement is None:
+                continue
+            findings.append(
+                Finding(
+                    "MEMORY_MERGE_REFERENCE_STALE",
+                    "BLOCKER",
+                    path.relative_to(target).as_posix(),
+                    "Rimando alla memoria superata `[[%s]]`: puntare a `%s`."
+                    % (reference, replacement.relative_to(target).as_posix()),
+                )
+            )
+    return findings
 
 
 def _is_empty_dir(path: Path) -> bool:
@@ -2024,6 +2133,7 @@ def inspect_ecosystem(
                     "testo UTF-8.",
                 )
             )
+    findings.extend(_memory_merge_reference_findings(target, canonical_memory))
     rooms = parse_room_registry(active_agents_text)
 
     seen_paths: set[str] = set()
