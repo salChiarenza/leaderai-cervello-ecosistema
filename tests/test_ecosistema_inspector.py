@@ -1,5 +1,6 @@
 import json
 import os
+import stat
 import subprocess
 import tempfile
 import unittest
@@ -978,6 +979,28 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             self.assertIn("DUPLICATE_ROOM_PURPOSE", self.codes(inspection))
             self.assertIn("UNOWNED_ROOT_FILE", self.codes(inspection))
+
+    def test_hidden_flag_on_root_path_blocks_pass(self):
+        if not hasattr(os, "chflags") or not hasattr(stat, "UF_HIDDEN"):
+            self.skipTest("flag hidden non disponibile su questa piattaforma")
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            hidden_dir = target / "memoria-nascosta"
+            hidden_dir.mkdir()
+            (hidden_dir / "nota.md").write_text("contenuto\n", encoding="utf-8")
+            os.chflags(hidden_dir, stat.UF_HIDDEN)
+
+            inspection = self.inspect(target)
+
+            self.assertIn("HIDDEN_FROM_OWNER", self.codes(inspection))
+
+    def test_dotfiles_are_not_hidden_from_owner_findings(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+
+            inspection = self.inspect(target)
+
+            self.assertNotIn("HIDDEN_FROM_OWNER", self.codes(inspection))
 
     def test_missing_active_agent_skill_blocks_pass(self):
         with tempfile.TemporaryDirectory() as tmp:

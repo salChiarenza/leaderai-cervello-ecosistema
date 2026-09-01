@@ -4,7 +4,9 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import re
+import stat
 import subprocess
 import unicodedata
 from dataclasses import asdict, dataclass
@@ -218,6 +220,28 @@ class Inspection:
 def _normalized(text: str) -> str:
     decomposed = unicodedata.normalize("NFKD", text.casefold())
     return "".join(char for char in decomposed if not unicodedata.combining(char))
+
+
+def _hidden_from_owner(path: Path) -> bool:
+    """Flag di invisibilita' che nasconde il percorso al proprietario.
+
+    macOS/BSD: chflags hidden (st_flags & UF_HIDDEN). Windows: attributo
+    Hidden. I dotfile restano fuori: li nasconde la convenzione di sistema,
+    non un flag messo sul singolo percorso.
+    """
+    if path.name.startswith("."):
+        return False
+    try:
+        info = os.stat(path, follow_symlinks=False)
+    except OSError:
+        return False
+    uf_hidden = getattr(stat, "UF_HIDDEN", 0)
+    if uf_hidden and getattr(info, "st_flags", 0) & uf_hidden:
+        return True
+    attr_hidden = getattr(stat, "FILE_ATTRIBUTE_HIDDEN", 0)
+    if attr_hidden and getattr(info, "st_file_attributes", 0) & attr_hidden:
+        return True
+    return False
 
 
 def _expected_guard_handler(template_name: str) -> dict:
@@ -2692,6 +2716,19 @@ def inspect_ecosystem(
                 "File sciolto nella home senza proprietario dichiarato.",
             )
         )
+
+    for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
+        if child.name in IGNORED_OS_ENTRIES:
+            continue
+        if _hidden_from_owner(child):
+            findings.append(
+                Finding(
+                    "HIDDEN_FROM_OWNER",
+                    "BLOCKER",
+                    child.name,
+                    "Percorso con flag di invisibilita': il proprietario non lo vede nel Finder/Explorer.",
+                )
+            )
 
     active_agents = _active_agents(
         target,

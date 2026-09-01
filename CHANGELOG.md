@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.2 - 01/09/2026
+
+- Nuovo controllo del censimento: nessun percorso della casa, dotfile esclusi,
+  puo' portare un flag di invisibilita' (macOS `chflags hidden`, Windows
+  attributo `Hidden`). Il caso reale sul banco LeaderAI: `memory/`, `docs/` e
+  `console/` invisibili nel Finder — per il proprietario "mai esistite" mentre
+  l'agente le usava ogni giorno. Il censimento ora confronta cio' che vede
+  l'agente con cio' che vede il proprietario; il flag si toglie nello stesso
+  turno.
+- `ecosistema_inspector.py`: finding bloccante `HIDDEN_FROM_OWNER` con test
+  dedicati (flag su cartella di radice; i dotfile restano esclusi).
+
 ## 0.6.1 - 29/08/2026
 
 - Corretta una regola tecnica superata sul ramo Claude Code: `autoMemoryDirectory`

@@ -515,6 +515,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   lavoro vivo;
 - due stanze rispondono alla stessa funzione;
 - un file sciolto nella home non ha un proprietario dichiarato;
+- un percorso della casa, dotfile esclusi, porta un flag di invisibilita'
+  (macOS `chflags hidden`, Windows attributo `Hidden`) che nasconde al
+  proprietario cio' che l'agente vede;
 - una mappa o un indice Markdown (`AGENTS.md`, `MEMORY.md`, `AGENT_CHAT.md`)
   supera i limiti macchina di righe o byte senza essere stato alleggerito e
   ricondotto alle fonti proprietarie;
@@ -555,6 +558,12 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    Parti da tutte le cartelle e dai file visibili nella home, poi apri l'albero
    a due livelli delle voci non standard. Nessun percorso resta fuori dalla
    tabella di censimento.
+   Confronta cio' che vede l'agente con cio' che vede il proprietario: nessun
+   percorso della casa, dotfile esclusi, deve portare un flag di invisibilita'
+   (macOS `ls -lO` -> `chflags hidden`; Windows attributo `Hidden`). Una
+   cartella che il proprietario non vede nel Finder/Explorer per lui non
+   esiste: togli il flag nello stesso turno e registra chi o cosa lo aveva
+   messo, se ricostruibile.
    Tratta `ecosistema/` come armadio comune riservato: confronta ricorsivamente
    il suo contenuto con i soli percorsi ammessi da `install_contract.json`.
 2. Una stanza e' una responsabilita' business stabile riconosciuta dal
