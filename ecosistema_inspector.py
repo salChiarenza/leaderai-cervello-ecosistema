@@ -963,7 +963,24 @@ def _markdown_hygiene_findings(target: Path) -> list[Finding]:
     return findings
 
 
+# Immagini, documenti e media non sono configurazioni di credenziali ne' asset
+# di firma da soli: una schermata "credential-cards" o una nota sulla password
+# non contengono segreti da spostare.
+NON_CONFIG_SUFFIXES = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".heic", ".tif", ".tiff",
+    ".md", ".docx", ".doc", ".pptx", ".xlsx", ".pdf", ".mp4", ".mov", ".mp3",
+    ".wav", ".m4a", ".mjs", ".js", ".ts", ".py", ".sh", ".html", ".css",
+}
+SENSITIVE_ASSET_SUFFIXES = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".heic", ".tif", ".tiff",
+    ".pdf", ".p12", ".pfx", ".p7m", ".ai", ".eps",
+}
+SIGNED_DOCUMENT_TERMS = ("firmato", "firmata", "firmati", "firmate", "signed", "timbrato", "timbrata")
+
+
 def _is_credential_candidate(rel: Path) -> bool:
+    if rel.suffix.casefold() in NON_CONFIG_SUFFIXES:
+        return False
     normalized = _normalized(rel.as_posix())
     name = _normalized(rel.name)
     if any(term in normalized for term in CREDENTIAL_NAME_TERMS):
@@ -977,7 +994,14 @@ def _is_credential_candidate(rel: Path) -> bool:
 
 
 def _sensitive_asset_term(rel: Path) -> str | None:
+    """Solo l'asset sorgente (immagine o certificato di firma, timbro, sigillo)
+    e' ad alto rischio; un documento gia' firmato e' un output, uno script o
+    una nota che parlano di firma non sono l'asset."""
+    if rel.suffix.casefold() not in SENSITIVE_ASSET_SUFFIXES:
+        return None
     normalized = _normalized(rel.name)
+    if any(term in normalized for term in SIGNED_DOCUMENT_TERMS):
+        return None
     for family, aliases in SENSITIVE_ASSET_FAMILIES.items():
         if any(alias in normalized for alias in aliases):
             return family
@@ -3127,6 +3151,15 @@ def inspect_ecosystem(
                     "Il registro asset non e' leggibile come testo UTF-8.",
                 )
             )
+    for canonical in parse_canonical_registries(agents_text):
+        canonical_path = target / canonical
+        if canonical_path.is_file():
+            try:
+                asset_registry += "\n" + _normalized(
+                    canonical_path.read_text(encoding="utf-8")
+                )
+            except (OSError, UnicodeError):
+                pass
     registered_sensitive_assets = {
         family
         for line in asset_registry.splitlines()

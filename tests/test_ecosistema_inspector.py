@@ -1171,6 +1171,71 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "docs", [f.path for f in findings if f.code == "BUSINESS_SOURCE_UNDECLARED"]
             )
 
+    def test_images_notes_and_signed_documents_are_not_credentials_or_assets(self):
+        """Caso reale LeaderAI 02/09/2026: schermate 'credential-cards', una nota
+        sulla password Google, contratti gia' firmati e uno script 'seam-stamp'."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            folder = target / "lavoro"
+            folder.mkdir()
+            (folder / "credential-cards-live.png").write_bytes(b"png")
+            (folder / "cambio_password_google.md").write_text("# nota\n", encoding="utf-8")
+            (folder / "contratto_firmato_sal.docx").write_bytes(b"docx")
+            (folder / "seam-stamp.mjs").write_text("export {}\n", encoding="utf-8")
+            self.register_root_owned(target, "lavoro", "OUTPUT", "ecosistema/ASSET.md")
+            self.register_asset_detail(target, "lavoro")
+
+            findings = self.inspect(target).findings
+            noisy = [
+                f"{f.code} {f.path}"
+                for f in findings
+                if f.path.startswith("lavoro/")
+                and f.code
+                in {
+                    "CREDENTIAL_FILE_OUTSIDE_SECRETS",
+                    "SENSITIVE_ASSET_OUTSIDE_PROTECTED",
+                    "SENSITIVE_ASSET_UNREGISTERED",
+                }
+            ]
+            self.assertEqual(noisy, [])
+
+    def test_signature_image_in_secrets_registered_in_canonical_registry_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / ".secrets" / "firma").mkdir(parents=True)
+            (target / ".secrets" / "firma" / "firma_sal.png").write_bytes(b"png")
+            registry = target / "memory" / "anagrafe_asset.md"
+            registry.write_text(
+                "# Anagrafe\n\n| Asset | Casa |\n|---|---|\n| Firma grafica di Sal | `.secrets/firma/` |\n",
+                encoding="utf-8",
+            )
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    "- Registro di dettaglio canonico: `memory/anagrafe_asset.md`\n\n"
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            codes = {f.code for f in self.inspect(target).findings if "firma" in f.path}
+
+            self.assertEqual(codes, set())
+
+    def test_signature_image_outside_secrets_is_still_blocked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / "lavoro").mkdir()
+            (target / "lavoro" / "firma_sal.png").write_bytes(b"png")
+            self.register_root_owned(target, "lavoro", "OUTPUT", "ecosistema/ASSET.md")
+            self.register_asset_detail(target, "lavoro")
+
+            codes = self.codes(self.inspect(target))
+
+            self.assertIn("SENSITIVE_ASSET_OUTSIDE_PROTECTED", codes)
+
     def test_dotfiles_are_not_hidden_from_owner_findings(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)

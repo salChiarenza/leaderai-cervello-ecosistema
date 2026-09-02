@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.5 - 02/09/2026
+
+- Precisione dei rilevatori sul banco LeaderAI: immagini, note Markdown,
+  documenti e media non sono piu' candidati "configurazione credenziali"
+  (una schermata `credential-cards` o una nota sul cambio password non
+  contengono segreti). Gli asset di firma, timbro e sigillo sono soltanto le
+  immagini o i certificati sorgente: un contratto gia' firmato e' un output, uno
+  script o una nota che parlano di firma non sono l'asset.
+- Gli asset ad alto rischio possono essere registrati anche nel registro di
+  dettaglio canonico dichiarato dalla mappa madre (casa consolidata), non solo
+  in `ecosistema/ASSET.md`.
+
+
 ## 0.6.4 - 02/09/2026
 
 - Il guardiano di chiusura (`guardiano_stanze.sh`) ripete a ogni `Stop` il
