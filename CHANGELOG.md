@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.6.4 - 02/09/2026
+
+- Il guardiano di chiusura (`guardiano_stanze.sh`) ripete a ogni `Stop` il
+  controllo dei percorsi invisibili al proprietario (macOS `chflags hidden`,
+  Windows attributo Hidden): caso reale LeaderAI 01/09/2026, tre cartelle
+  nascoste "per una scena video" e mai fatte ricomparire. L'Ispettore le vedeva
+  (0.6.2), il guardiano no. Test dedicato su macOS.
+- `ecosistema_inspector.py` esclude dal censimento dei file gli ambienti tecnici
+  (`.venv`, `node_modules`, `site-packages`, cache, cartelle con `pyvenv.cfg`,
+  `.playwright-cli`): sul banco LeaderAI producevano oltre 1.600 finding di
+  business, credenziali, asset e Markdown che non erano contenuto del
+  proprietario. Le dotdir di editor e strumenti (`.obsidian`, `.vscode`, ...)
+  non richiedono una classe; ogni altra dotdir alla radice resta da classificare.
+- Casa consolidata: la mappa madre puo' dichiarare
+  `- Registro di dettaglio canonico: \`percorso.md\`` e usare un registro proprio al
+  posto di `ecosistema/ASSET.md` e `ecosistema/FONTI.md`, senza creare doppioni.
+  Una cartella dal nome generico dichiarata e registrata dalla madre resta una
+  segnalazione, non un blocco, e non deve avere la mappa di una stanza.
+- `.mcp.json` (configurazione MCP di progetto di Claude Code) e' un file di
+  radice ammesso.
+
+
 ## 0.6.3 - 01/09/2026
 
 - L'Ispettore ora protegge le fusioni della memoria: il file consolidato

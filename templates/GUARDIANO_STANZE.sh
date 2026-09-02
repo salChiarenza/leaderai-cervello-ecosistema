@@ -515,6 +515,31 @@ while IFS= read -r -d '' item; do
     fi
 done < <(find "$ROOT" -mindepth 1 -maxdepth 1 ! -name '.*' -print0 2>/dev/null)
 
+# Nessun percorso della casa puo' essere invisibile al proprietario
+# (macOS `chflags hidden`, Windows attributo Hidden). Dotfile esclusi.
+is_hidden_from_owner() {
+    local path="$1"
+    local flags
+    if flags="$(stat -f '%Sf' -- "$path" 2>/dev/null)"; then
+        case ",$flags," in *,hidden,*) return 0 ;; esac
+        return 1
+    fi
+    if command -v attrib >/dev/null 2>&1; then
+        case "$(attrib "$path" 2>/dev/null | cut -c1-12)" in *H*) return 0 ;; esac
+    fi
+    return 1
+}
+
+while IFS= read -r -d '' visible_item; do
+    if is_hidden_from_owner "$visible_item"; then
+        add_issue "$(relative_path "$visible_item") - nascosto al proprietario: togliere il flag (chflags nohidden / attrib -h)"
+    fi
+done < <(
+    find "$ROOT" -mindepth 1 -maxdepth 2 \
+        \( -type d \( -name '.*' -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name vendor \) -prune \) -o \
+        ! -name '.*' -print0 2>/dev/null
+)
+
 # Le mappe corte non possono diventare archivi paralleli.
 while IFS= read -r -d '' router; do
     lines="$(wc -l < "$router" | tr -d '[:space:]')"

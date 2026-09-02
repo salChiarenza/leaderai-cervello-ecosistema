@@ -157,7 +157,9 @@ intervento e verifica finale e conserva un registro compatto. Una casa semplice
 puo' avere **zero stanze business oltre a Ecosystem Check**. Quando una capacita', fonte o
 output non appartiene a una responsabilita' business autonoma, la cartella
 madre puo' possederlo direttamente: lo registra nell'`AGENTS.md` radice e in
-`ecosistema/ASSET.md` o `ecosistema/FONTI.md`. In questo caso non nasce una
+`ecosistema/ASSET.md` o `ecosistema/FONTI.md`. Una casa consolidata che ha gia'
+un'anagrafe propria dichiara nella mappa madre `- Registro di dettaglio canonico:
+`percorso.md`` e usa quella, senza creare registri doppi. In questo caso non nasce una
 mappa locale. Il percorso e' un elemento visibile direttamente nella radice,
 l'uso e' compilato e non collide con il telaio o con una stanza. La crescita
 futura puo' promuoverlo a stanza solo quando emerge

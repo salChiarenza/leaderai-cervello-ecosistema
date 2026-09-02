@@ -105,7 +105,9 @@
         "scadenze"
       ],
       "contents_section": "dentro",
-      "scan_depth": 2
+      "scan_depth": 2,
+      "canonical_registry_declaration": "Registro di dettaglio canonico: `percorso.md`",
+      "canonical_registry_note": "Casa consolidata: la mappa madre puo' dichiarare registri di dettaglio propri (una o piu' righe con il prefisso indicato) al posto di ecosistema/ASSET.md e ecosistema/FONTI.md. Il registro deve esistere e contenere una riga di tabella con il percorso dell'elemento."
     },
     "adoption_observation": {
       "verdicts": [

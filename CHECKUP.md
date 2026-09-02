@@ -564,8 +564,17 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    cartella che il proprietario non vede nel Finder/Explorer per lui non
    esiste: togli il flag nello stesso turno e registra chi o cosa lo aveva
    messo, se ricostruibile.
+   Il guardiano di chiusura (`guardiano_stanze`) ripete lo stesso controllo a
+   ogni `Stop`: una modifica "di scena" ordinata dal proprietario si annulla
+   nello stesso turno, senza aspettare un secondo segnale.
    Tratta `ecosistema/` come armadio comune riservato: confronta ricorsivamente
    il suo contenuto con i soli percorsi ammessi da `install_contract.json`.
+   Ambienti tecnici (`.venv`, `node_modules`, `site-packages`, cache, cartelle
+   con `pyvenv.cfg`, `.playwright-cli`) e le dotdir di editor o strumenti non
+   sono contenuto del proprietario: restano fuori dal censimento dei file e non
+   richiedono una classe. Una casa consolidata puo' dichiarare nella mappa madre
+   `- Registro di dettaglio canonico: \`percorso.md\`` e usare quel registro al
+   posto di `ecosistema/ASSET.md` e `ecosistema/FONTI.md`, senza creare doppioni.
 2. Una stanza e' una responsabilita' business stabile riconosciuta dal
    proprietario. Mantiene stato operativo, decisioni e lavoro corrente. Una
    skill, uno script, un agente, un connettore, un modulo, un modello o una

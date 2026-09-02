@@ -47,6 +47,7 @@ STANDARD_DIRS = {
 
 ALLOWED_ROOT_FILES = {
     ".gitignore",
+    ".mcp.json",
     "AGENTS.md",
     "CLAUDE.md",
     "AGENT_CHAT.md",
@@ -67,6 +68,43 @@ ROOM_TEMPLATE_RULES = {
 
 IGNORED_OS_ENTRIES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 IGNORED_ROOM_DIRS = {"__pycache__", "node_modules", ".venv", "venv"}
+# Ambienti tecnici: librerie, cache e strumenti installati, mai contenuto del
+# proprietario. Restano fuori dal censimento dei file (business, credenziali,
+# asset, igiene Markdown). Una cartella con `pyvenv.cfg` e' un ambiente Python
+# anche se non si chiama .venv.
+TECHNICAL_ENV_DIRS = {
+    ".venv", "venv", "env", ".env", "node_modules", "__pycache__",
+    ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", ".nox",
+    "site-packages", "dist-packages", ".playwright-cli", ".playwright-mcp",
+    ".cache", "vendor",
+}
+
+
+# Cartelle di configurazione di editor e strumenti: create dal software, non
+# dal proprietario. Ogni altra dotdir alla radice resta da classificare.
+TOOL_CONFIG_DIRS = {".obsidian", ".vscode", ".idea", ".cursor", ".windsurf", ".superpowers"}
+
+
+def _is_tool_or_env_dir(path: Path) -> bool:
+    return path.name.casefold() in TOOL_CONFIG_DIRS or _is_technical_env_dir(path)
+
+
+def _is_technical_env_dir(path: Path) -> bool:
+    if path.name.casefold() in TECHNICAL_ENV_DIRS:
+        return True
+    try:
+        return (path / "pyvenv.cfg").is_file()
+    except OSError:
+        return False
+
+
+def _inside_technical_env(root: Path, rel: Path) -> bool:
+    current = root
+    for part in rel.parts[:-1]:
+        current = current / part
+        if _is_technical_env_dir(current):
+            return True
+    return False
 MEMORY_WIKILINK_RE = re.compile(r"\[\[([^\]\n]+)\]\]")
 
 GENERIC_NAMES = {
@@ -576,16 +614,38 @@ def parse_root_owned_rows(agents_text: str) -> list[RootOwned]:
     return rows
 
 
+CANONICAL_REGISTRY_RE = re.compile(
+    r"(?im)^[ \t]*[-*]?[ \t]*Registro di dettaglio canonico:[ \t]*`([^`\n]+)`"
+)
+
+
+def parse_canonical_registries(agents_text: str) -> list[str]:
+    """Casa consolidata: la mappa madre puo' dichiarare uno o piu' registri di
+    dettaglio propri (`- Registro di dettaglio canonico: \`percorso.md\``) al
+    posto di `ecosistema/ASSET.md` e `ecosistema/FONTI.md`. Il registro deve
+    esistere come file locale e contenere una riga di tabella con il percorso."""
+    registries: list[str] = []
+    for match in CANONICAL_REGISTRY_RE.finditer(_active_markdown(agents_text)):
+        canonical = _canonical_relative_path(match.group(1).strip())
+        if canonical and canonical not in registries:
+            registries.append(canonical)
+    return registries
+
+
 def parse_root_owned_registry(agents_text: str) -> dict[str, str]:
     return {
         row.path: row.classification for row in parse_root_owned_rows(agents_text)
     }
 
 
-def _registry_has_entry(content: str, marker: str, expected_path: str) -> bool:
-    table = _table_block_after_marker(_active_markdown(content), marker)
+def _registry_has_entry(content: str, marker: str | None, expected_path: str) -> bool:
+    active = _active_markdown(content)
+    if marker is None:
+        table = [line for line in active.splitlines() if line.lstrip().startswith("|")]
+    else:
+        table = _table_block_after_marker(active, marker)
     expected = _field_value(expected_path)
-    for line in table[2:]:
+    for line in table[2:] if marker is not None else table:
         cells = _table_cells(line)
         if not cells:
             continue
@@ -846,6 +906,8 @@ def _iter_files(target: Path, *, include_protected: bool = False):
         if not include_protected and ".secrets" in rel.parts:
             continue
         if path.is_symlink() or not path.is_file():
+            continue
+        if _inside_technical_env(target, rel):
             continue
         yield rel, path
 
@@ -2611,16 +2673,20 @@ def inspect_ecosystem(
         for classification in ROOM_LIFECYCLE.root_owned_classifications
     }
     allowed_registries = set(ROOM_LIFECYCLE.root_owned_registry_paths)
+    canonical_registries = parse_canonical_registries(agents_text)
+    allowed_registries.update(canonical_registries)
     standard_owned_names = {
         _normalized(name) for name in STANDARD_DIRS | ALLOWED_ROOT_FILES
     }
     room_path_keys = {
         _normalized(room.path).strip() for room in rooms if room.path
     }
-    registry_markers = {
+    registry_markers: dict[str, str | None] = {
         "ecosistema/ASSET.md": "## Registro",
         "ecosistema/FONTI.md": "## Fonti trovate",
     }
+    for canonical in canonical_registries:
+        registry_markers.setdefault(canonical, None)
     registry_text_cache: dict[str, str | None] = {}
     valid_root_owned_paths: set[str] = set()
     for path, row in sorted(root_owned.items()):
@@ -2780,6 +2846,10 @@ def inspect_ecosystem(
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
         if not child.is_dir() or child.name in STANDARD_DIRS:
             continue
+        if child.name.startswith(".") and _is_tool_or_env_dir(child):
+            # configurazione di editor/strumenti o ambiente tecnico: creata dal
+            # software, non contenuto del proprietario, nessuna classe richiesta.
+            continue
         if child.name not in declared_top_levels:
             findings.append(
                 Finding(
@@ -2793,7 +2863,7 @@ def inspect_ecosystem(
             findings.append(
                 Finding(
                     "GENERIC_DIR",
-                    "BLOCKER",
+                    "ATTENZIONE" if child.name in valid_root_owned_paths else "BLOCKER",
                     child.name,
                     "Nome generico: classificare i contenuti e portarli alla cartella madre o alla stanza proprietaria.",
                 )
@@ -2807,6 +2877,10 @@ def inspect_ecosystem(
                     "Cartella vuota: non costituisce una stanza viva.",
                 )
             )
+        if child.name in valid_root_owned_paths:
+            # fonte, capacita' o output della madre: non e' una stanza e non
+            # deve avere una mappa con la fonte business editabile.
+            continue
         findings.extend(_business_source_findings(target, child))
 
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):

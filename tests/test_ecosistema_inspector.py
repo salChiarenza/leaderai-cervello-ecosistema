@@ -87,6 +87,43 @@ class EcosistemaInspectorTest(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def append_table_row(self, path: Path, marker: str, row: str) -> None:
+        """Aggiunge una riga alla tabella che segue `marker`, subito dopo la riga
+        separatrice: l'Ispettore legge solo righe contigue."""
+        lines = path.read_text(encoding="utf-8").splitlines()
+        self.assertIn(marker, lines)
+        start = lines.index(marker)
+        separator = next(
+            index
+            for index in range(start + 1, len(lines))
+            if lines[index].lstrip().startswith("|---")
+        )
+        lines.insert(separator + 1, row.rstrip())
+        path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    def register_root_owned(
+        self, target: Path, name: str, classification: str, registry: str
+    ) -> None:
+        self.append_table_row(
+            target / "AGENTS.md",
+            "### Elementi posseduti direttamente dalla cartella madre",
+            f"| `{name}` | {classification} | Uso verificato | `{registry}` |",
+        )
+
+    def register_asset_detail(self, target: Path, name: str) -> None:
+        self.append_table_row(
+            target / "ecosistema" / "ASSET.md",
+            "## Registro",
+            f"| {name} | Capacita | `{name}` | Tutte | Uso verificato | ATTIVO | Test locale | Nessuno |",
+        )
+
+    def register_source_detail(self, target: Path, name: str) -> None:
+        self.append_table_row(
+            target / "ecosistema" / "FONTI.md",
+            "## Fonti trovate",
+            f"| {name} | `{name}` | Marketing | Test locale | ATTIVO |",
+        )
+
     def codes(self, inspection: ecosistema_inspector.Inspection) -> set[str]:
         return {item.code for item in inspection.findings}
 
@@ -1026,6 +1063,113 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = self.inspect(target)
 
             self.assertIn("HIDDEN_FROM_OWNER", self.codes(inspection))
+
+    def test_technical_environments_are_not_censused_as_owner_content(self):
+        """Caso reale LeaderAI 02/09/2026: .venv e .playwright-cli producevano
+        oltre 1.600 finding di business, credenziali, asset e Markdown."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            noisy_dirs = [
+                target / ".venv" / "lib" / "python3.13" / "site-packages" / "libreria",
+                target / ".playwright-cli" / "sessione",
+                target / "strumenti" / "ambiente-python",
+            ]
+            for folder in noisy_dirs:
+                folder.mkdir(parents=True)
+                (folder / "credentials.json").write_text("{}", encoding="utf-8")
+                (folder / "generatore_docx.py").write_text(
+                    "import docx\nTESTO = " + repr("Gentile cliente, " * 200) + "\n",
+                    encoding="utf-8",
+                )
+                (folder / "README.md").write_text("# nota\n" * 900, encoding="utf-8")
+                (folder / "firma_timbro.png").write_bytes(b"png")
+            (target / "strumenti" / "ambiente-python" / "pyvenv.cfg").write_text(
+                "home = /usr/bin\n", encoding="utf-8"
+            )
+            self.register_root_owned(target, "strumenti", "CAPACITA", "ecosistema/ASSET.md")
+            self.register_asset_detail(target, "strumenti")
+
+            inspection = self.inspect(target)
+
+            noisy = [
+                finding
+                for finding in inspection.findings
+                if finding.code
+                in {
+                    "BUSINESS_CONTENT_HARDCODED_RISK",
+                    "CREDENTIAL_FILE_OUTSIDE_SECRETS",
+                    "SENSITIVE_ASSET_OUTSIDE_PROTECTED",
+                    "SENSITIVE_ASSET_UNREGISTERED",
+                    "MARKDOWN_DOCUMENT_REVIEW",
+                }
+                and (".venv" in finding.path or ".playwright-cli" in finding.path or "ambiente-python" in finding.path)
+            ]
+            self.assertEqual(noisy, [], [f"{f.code} {f.path}" for f in noisy])
+
+    def test_consolidated_house_can_declare_its_own_detail_registry(self):
+        """Caso reale LeaderAI 02/09/2026: anagrafe asset gia' in memory/, niente
+        doppioni in ecosistema/ASSET.md."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / "strumenti").mkdir()
+            (target / "strumenti" / "nota.txt").write_text("uso reale\n", encoding="utf-8")
+            registry = target / "memory" / "anagrafe_asset.md"
+            registry.write_text(
+                "# Anagrafe\n\n| Asset | Uso |\n|---|---|\n| `strumenti` | script della casa |\n",
+                encoding="utf-8",
+            )
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    "- Registro di dettaglio canonico: `memory/anagrafe_asset.md`\n\n"
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            self.register_root_owned(target, "strumenti", "CAPACITA", "memory/anagrafe_asset.md")
+
+            codes = self.codes(self.inspect(target))
+
+            self.assertNotIn("ROOT_OWNED_REGISTRY_INVALID", codes)
+            self.assertNotIn("ROOT_OWNED_DETAIL_MISSING", codes)
+            self.assertNotIn("UNCLASSIFIED_DIR", codes)
+
+    def test_editor_dot_directories_and_mcp_config_are_not_owner_content(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / ".obsidian").mkdir()
+            (target / ".obsidian" / "app.json").write_text("{}", encoding="utf-8")
+            (target / ".mcp.json").write_text("{}", encoding="utf-8")
+
+            findings = self.inspect(target).findings
+
+            self.assertNotIn(
+                ".obsidian", [f.path for f in findings if f.code == "UNCLASSIFIED_DIR"]
+            )
+            self.assertNotIn(
+                ".mcp.json", [f.path for f in findings if f.code == "UNOWNED_ROOT_FILE"]
+            )
+
+    def test_declared_root_owned_generic_folder_is_a_warning_not_a_room(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / "docs").mkdir()
+            (target / "docs" / "genera_report.py").write_text(
+                "import docx\nTESTO = " + repr("Gentile cliente, " * 200) + "\n",
+                encoding="utf-8",
+            )
+            self.register_root_owned(target, "docs", "FONTE", "ecosistema/FONTI.md")
+            self.register_source_detail(target, "docs")
+
+            findings = self.inspect(target).findings
+            generic = [f for f in findings if f.code == "GENERIC_DIR" and f.path == "docs"]
+
+            self.assertEqual([f.severity for f in generic], ["ATTENZIONE"])
+            self.assertNotIn(
+                "docs", [f.path for f in findings if f.code == "BUSINESS_SOURCE_UNDECLARED"]
+            )
 
     def test_dotfiles_are_not_hidden_from_owner_findings(self):
         with tempfile.TemporaryDirectory() as tmp:

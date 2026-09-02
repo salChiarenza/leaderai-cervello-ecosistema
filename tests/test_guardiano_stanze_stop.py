@@ -1,4 +1,6 @@
 import json
+import os
+import stat
 import subprocess
 import tempfile
 import unittest
@@ -123,6 +125,23 @@ class GuardianoStanzeStopTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(result.stdout.strip(), "")
+
+    @unittest.skipUnless(hasattr(os, "chflags") and hasattr(stat, "UF_HIDDEN"), "flag Finder solo su macOS/BSD")
+    def test_hidden_path_blocks_first_stop_until_visible_again(self):
+        """Caso reale LeaderAI 01/09/2026: cartelle nascoste 'per una scena' e mai
+        fatte ricomparire. L'Ispettore le vedeva, il guardiano di chiusura no."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            hidden = target / "ecosystem-check"
+            os.chflags(hidden, stat.UF_HIDDEN)
+            try:
+                result = self.run_guard(target)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("ecosystem-check - nascosto al proprietario", result.stderr)
+            finally:
+                os.chflags(hidden, 0)
+
+            self.assertEqual(self.run_guard(target).returncode, 0)
 
     def test_extra_file_in_common_cabinet_blocks_first_stop(self):
         """Break caught: business output must never remain inside ecosistema/."""
