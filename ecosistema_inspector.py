@@ -632,6 +632,141 @@ def parse_canonical_registries(agents_text: str) -> list[str]:
     return registries
 
 
+ROOM_CONTRACT_RE = re.compile(
+    r"(?im)^[ \t]*[-*]?[ \t]*Contratto di stanza:[ \t]*(consolidato|completo)[ \t]*$"
+)
+DECLARED_CHAT_RE = re.compile(
+    r"(?im)^[ \t]*[-*]?[ \t]*Chat di gruppo:[ \t]*`([^`\n]+)`"
+)
+DECLARED_GUARDIAN_RE = re.compile(
+    r"(?im)^[ \t]*[-*]?[ \t]*Guardiano di chiusura:[ \t]*`([^`\n]+)`"
+)
+# Casa consolidata: le stanze nate prima dello standard tengono la loro mappa.
+# Restano obbligatori ponte, mappa leggibile, riga completa nella mappa madre
+# (nome, scopo, amministratore, catena al Boss), registri dichiarati e
+# visibilita'. Il calco a 14 sezioni, la sezione Dentro, la profondita' e la
+# fonte business per stanza valgono solo per il contratto completo.
+CONSOLIDATED_EXEMPT_CODES = {
+    "ROOM_NAME_DRIFT",
+    "ROOM_PURPOSE_DRIFT",
+    "ROOM_REGISTRY_FIELD_DRIFT",
+    "ROOM_ORGANIZATION_NAME_DRIFT",
+    "ROOM_MAP_INCOMPLETE",
+    "ROOM_MAP_SECTION_DUPLICATE",
+    "ROOM_MAP_PLACEHOLDER",
+    "ROOM_BUSINESS_RESPONSIBILITY_UNPROVEN",
+    "ROOM_OWNER_SOURCE_UNDECLARED",
+    "ROOM_OWNER_SOURCE_MISSING",
+    "ROOM_OWNER_SOURCE_INCOMPLETE",
+    "ROOM_OWNER_SOURCE_PLACEHOLDER",
+    "ROOM_OWNER_SOURCE_SYMLINK",
+    "ROOM_OWNER_SOURCE_UNREADABLE",
+    "ROOM_BUSINESS_SOURCE_VALUE_MISSING",
+    "ROOM_BUSINESS_SOURCE_MISSING",
+    "ROOM_BUSINESS_SOURCE_EMPTY",
+    "ROOM_BUSINESS_SOURCE_PLACEHOLDER",
+    "ROOM_BUSINESS_SOURCE_SYMLINK",
+    "ROOM_BUSINESS_SOURCE_UNREADABLE",
+    "ROOM_CONTENTS_UNDECLARED",
+    "ROOM_CONTENTS_CONFLICT",
+    "ROOM_CHILD_UNDECLARED",
+    "ROOM_CHILD_DECLARED_MISSING",
+    "ROOM_CHILD_DECLARATION_INVALID",
+    "ROOM_CHILD_TOO_DEEP",
+    "ROOM_CHILD_SYMLINK",
+    "ROOM_CHILD_GENERIC",
+    "ROOM_CHILD_EMPTY",
+    "ROOM_CHILD_UNREADABLE",
+    "BUSINESS_SOURCE_UNDECLARED",
+}
+CONSOLIDATED_OPTIONAL_STANDARD_FILES = {
+    "ecosistema/FONTI.md",
+    "ecosistema/ASSET.md",
+    "ecosistema/PROCESSI.md",
+    "ecosistema/LIMITI.md",
+    "ecosistema/STANZA_AGENTS.md",
+    "ecosistema/STANZA_FONTE.md",
+}
+
+
+def parse_room_contract(agents_text: str) -> str:
+    matches = ROOM_CONTRACT_RE.findall(_active_markdown(agents_text))
+    return matches[-1].casefold() if matches else "completo"
+
+
+def parse_declared_path(agents_text: str, pattern: re.Pattern[str]) -> str | None:
+    """Le dichiarazioni del contratto consolidato (chat, guardiano) valgono solo
+    se compaiono dopo la riga `Contratto di stanza: consolidato`: cosi' il testo
+    descrittivo del template non viene scambiato per una dichiarazione."""
+    active = _active_markdown(agents_text)
+    contract = None
+    for contract in ROOM_CONTRACT_RE.finditer(active):
+        pass
+    if contract is None:
+        return None
+    block = active[contract.end():]
+    matches = pattern.findall(block)
+    if not matches:
+        return None
+    return _canonical_relative_path(matches[0].strip())
+
+
+def _apply_consolidated_contract(
+    target: Path, agents_text: str, findings: list[Finding]
+) -> list[Finding]:
+    """Filtra i finding del calco completo quando la mappa madre dichiara
+    `Contratto di stanza: consolidato` e aggiunge i controlli propri del
+    contratto leggero (chat e guardiano dichiarati)."""
+    if parse_room_contract(agents_text) != "consolidato":
+        return findings
+    kept: list[Finding] = []
+    canonical = parse_canonical_registries(agents_text)
+    chat = parse_declared_path(agents_text, DECLARED_CHAT_RE)
+    guardian = parse_declared_path(agents_text, DECLARED_GUARDIAN_RE)
+    chat_ok = bool(chat) and (target / chat).is_file()
+    guardian_ok = bool(guardian) and (target / guardian).is_file()
+    guardian_hooked = False
+    if guardian_ok:
+        for config_rel in (".claude/settings.json", ".codex/hooks.json"):
+            config_path = target / config_rel
+            if not config_path.is_file():
+                continue
+            try:
+                config = json.loads(config_path.read_text(encoding="utf-8"))
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                continue
+            hooks = config.get("hooks", config) if isinstance(config, dict) else {}
+            stop_groups = hooks.get("Stop", []) if isinstance(hooks, dict) else []
+            for group in stop_groups if isinstance(stop_groups, list) else []:
+                for handler in group.get("hooks", []) if isinstance(group, dict) else []:
+                    command = handler.get("command", "") if isinstance(handler, dict) else ""
+                    if guardian and guardian in command:
+                        guardian_hooked = True
+    for finding in findings:
+        if finding.code in CONSOLIDATED_EXEMPT_CODES:
+            continue
+        if finding.code == "MISSING_STANDARD_FILE":
+            if finding.path in CONSOLIDATED_OPTIONAL_STANDARD_FILES and canonical:
+                continue
+            if finding.path == "AGENT_CHAT.md" and chat_ok:
+                continue
+            if finding.path.startswith(".agent/hooks/guardiano_stanze") and guardian_hooked:
+                continue
+        if finding.code == "GUARDIAN_HOOK_MISSING" and guardian_hooked:
+            continue
+        kept.append(finding)
+    if chat and not chat_ok:
+        kept.append(Finding("CONSOLIDATED_CHAT_MISSING", "BLOCKER", chat,
+                            "La chat di gruppo dichiarata dalla mappa madre non esiste."))
+    if guardian and not guardian_ok:
+        kept.append(Finding("CONSOLIDATED_GUARDIAN_MISSING", "BLOCKER", guardian,
+                            "Il guardiano di chiusura dichiarato dalla mappa madre non esiste."))
+    elif guardian and not guardian_hooked:
+        kept.append(Finding("CONSOLIDATED_GUARDIAN_NOT_HOOKED", "BLOCKER", guardian,
+                            "Il guardiano dichiarato non e' registrato come hook Stop dell'agente attivo."))
+    return kept
+
+
 def parse_root_owned_registry(agents_text: str) -> dict[str, str]:
     return {
         row.path: row.classification for row in parse_root_owned_rows(agents_text)
@@ -3218,6 +3353,7 @@ def inspect_ecosystem(
             )
 
     findings.extend(_markdown_hygiene_findings(target))
+    findings = _apply_consolidated_contract(target, agents_text, findings)
 
     return Inspection(
         target=str(target),

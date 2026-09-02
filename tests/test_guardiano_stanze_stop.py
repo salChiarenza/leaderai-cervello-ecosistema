@@ -143,6 +143,38 @@ class GuardianoStanzeStopTest(unittest.TestCase):
 
             self.assertEqual(self.run_guard(target).returncode, 0)
 
+    def test_consolidated_house_keeps_its_own_room_maps_and_registry(self):
+        """Casa consolidata (caso LeaderAI 02/09/2026): mappa madre con contratto
+        consolidato e registro canonico; le stanze tengono le mappe proprie."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            room = target / "commerciale"
+            room.mkdir()
+            (room / "AGENTS.md").write_text("# Statuto commerciale\n\nRegole del reparto.\n", encoding="utf-8")
+            (room / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+            (room / "clienti").mkdir()
+            (room / "clienti" / "nota.md").write_text("# cliente\n", encoding="utf-8")
+            self.register_root_room(target, "commerciale")
+            (target / "tests").mkdir()
+            (target / "tests" / "test_x.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
+            registry = target / "memory" / "anagrafe.md"
+            registry.write_text("# Anagrafe\n\n| Percorso | Classe |\n|---|---|\n| `tests` | CAPACITA |\n", encoding="utf-8")
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8")
+                + "\n- Contratto di stanza: consolidato\n- Registro di dettaglio canonico: `memory/anagrafe.md`\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+            (room / "CLAUDE.md").write_text("copia\n", encoding="utf-8")
+            broken = self.run_guard(target)
+            self.assertEqual(broken.returncode, 2)
+            self.assertIn("commerciale/CLAUDE.md", broken.stderr)
+
     def test_extra_file_in_common_cabinet_blocks_first_stop(self):
         """Break caught: business output must never remain inside ecosistema/."""
         with tempfile.TemporaryDirectory() as tmp:

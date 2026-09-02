@@ -569,6 +569,17 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    nello stesso turno, senza aspettare un secondo segnale.
    Tratta `ecosistema/` come armadio comune riservato: confronta ricorsivamente
    il suo contenuto con i soli percorsi ammessi da `install_contract.json`.
+   Casa consolidata: una casa nata prima dello standard, con statuti di reparto
+   propri e funzionanti, dichiara nella mappa madre `- Contratto di stanza:
+   consolidato` e, sotto quella riga, `- Chat di gruppo: \`percorso\``,
+   `- Guardiano di chiusura: \`percorso\`` (registrato come hook Stop
+   dell'agente attivo) e `- Registro di dettaglio canonico: \`percorso.md\``.
+   Con questo contratto restano obbligatori per ogni stanza il ponte
+   `CLAUDE.md`, la mappa leggibile e la riga completa nella mappa madre (nome,
+   scopo, amministratore, catena al Boss); il calco a 14 sezioni, la sezione
+   Dentro, la profondita' massima e la fonte business per stanza valgono solo
+   per il contratto completo delle case nuove. Visibilita', segreti, testi
+   business nel codice e igiene dei router restano uguali per tutti.
    Ambienti tecnici (`.venv`, `node_modules`, `site-packages`, cache, cartelle
    con `pyvenv.cfg`, `.playwright-cli`) e le dotdir di editor o strumenti non
    sono contenuto del proprietario: restano fuori dal censimento dei file e non

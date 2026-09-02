@@ -1236,6 +1236,80 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             self.assertIn("SENSITIVE_ASSET_OUTSIDE_PROTECTED", codes)
 
+    def test_consolidated_contract_keeps_existing_room_maps(self):
+        """Casa consolidata (LeaderAI 02/09/2026): statuti propri, chat in docs/,
+        guardiano proprio, registro canonico. Restano ponte e riga madre."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            room = target / "commerciale"
+            room.mkdir()
+            (room / "AGENTS.md").write_text("# Statuto\n\nRegole del reparto.\n", encoding="utf-8")
+            (room / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
+            deep = room / "clienti" / "rossi" / "proposta"
+            deep.mkdir(parents=True)
+            (deep / "genera.py").write_text(
+                "import docx\nTESTO = " + repr("Gentile cliente, " * 200) + "\n", encoding="utf-8"
+            )
+            self.add_room_to_registry(
+                target,
+                "| [Commerciale](commerciale) | Lead e clienti | Marketing | Amministrazione | STATUS | Proposte | Skill | `commerciale/AGENTS.md` | Amministratore di settore Commerciale | Boss dell'Ecosistema |",
+            )
+            (target / "docs").mkdir()
+            (target / "docs" / "AGENT_CHAT.md").write_text("# Agent Chat\n", encoding="utf-8")
+            (target / ".agent" / "hooks" / "mio_guardiano.py").write_text("print('ok')\n", encoding="utf-8")
+            settings = target / ".claude" / "settings.json"
+            config = json.loads(settings.read_text(encoding="utf-8"))
+            config["hooks"]["Stop"][0]["hooks"].append(
+                {"type": "command", "command": "python3 \"$CLAUDE_PROJECT_DIR/.agent/hooks/mio_guardiano.py\""}
+            )
+            settings.write_text(json.dumps(config, indent=2), encoding="utf-8")
+            registry = target / "memory" / "anagrafe.md"
+            registry.write_text("# Anagrafe\n\n| Percorso | Classe |\n|---|---|\n| `docs` | FONTE |\n", encoding="utf-8")
+            for rel in ("ecosistema/FONTI.md", "ecosistema/ASSET.md", "AGENT_CHAT.md",
+                        ".agent/hooks/guardiano_stanze.sh", ".agent/hooks/guardiano_stanze_windows.ps1"):
+                (target / rel).unlink()
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    "- Contratto di stanza: consolidato\n"
+                    "- Chat di gruppo: `docs/AGENT_CHAT.md`\n"
+                    "- Guardiano di chiusura: `.agent/hooks/mio_guardiano.py`\n"
+                    "- Registro di dettaglio canonico: `memory/anagrafe.md`\n\n"
+                    "### Elementi posseduti direttamente dalla cartella madre",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+            self.register_root_owned(target, "docs", "FONTE", "memory/anagrafe.md")
+
+            findings = self.inspect(target).findings
+            codes = {f.code for f in findings}
+
+            self.assertFalse({c for c in codes if c.startswith("ROOM_")}, codes)
+            self.assertNotIn("MISSING_STANDARD_FILE", codes)
+            self.assertNotIn("GUARDIAN_HOOK_MISSING", codes)
+            self.assertNotIn("BUSINESS_SOURCE_UNDECLARED", codes)
+            self.assertIn("BUSINESS_CONTENT_HARDCODED_RISK", codes)
+
+            (room / "CLAUDE.md").write_text("copia\n", encoding="utf-8")
+            self.assertIn("ROOM_CLAUDE_INVALID", self.codes(self.inspect(target)))
+
+    def test_consolidated_contract_requires_declared_chat_and_guardian_to_exist(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8")
+                + "\n- Contratto di stanza: consolidato\n- Chat di gruppo: `docs/CHAT.md`\n- Guardiano di chiusura: `.agent/hooks/assente.py`\n",
+                encoding="utf-8",
+            )
+
+            codes = self.codes(self.inspect(target))
+
+            self.assertIn("CONSOLIDATED_CHAT_MISSING", codes)
+            self.assertIn("CONSOLIDATED_GUARDIAN_MISSING", codes)
+
     def test_dotfiles_are_not_hidden_from_owner_findings(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)

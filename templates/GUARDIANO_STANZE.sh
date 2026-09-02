@@ -34,6 +34,47 @@ add_issue() {
     printf '%s\n' "$1" >> "$ISSUES_FILE"
 }
 
+# Casa consolidata: la mappa madre dichiara `- Contratto di stanza: consolidato`
+# e uno o piu' `- Registro di dettaglio canonico: \`percorso.md\``. Le stanze
+# gia' vive tengono la loro mappa; il guardiano controlla ponte, registrazione
+# nella mappa madre e registri dichiarati, non il calco a 14 sezioni.
+CONSOLIDATED=false
+if [ -f "$ROOT/AGENTS.md" ] && sed 's/\r$//' "$ROOT/AGENTS.md" | grep -Eq '^[[:space:]]*[-*]?[[:space:]]*Contratto di stanza:[[:space:]]*consolidato[[:space:]]*$'; then
+    CONSOLIDATED=true
+fi
+
+canonical_registries() {
+    [ -f "$ROOT/AGENTS.md" ] || return 0
+    sed 's/\r$//' "$ROOT/AGENTS.md" | sed -nE 's/^[[:space:]]*[-*]?[[:space:]]*Registro di dettaglio canonico:[[:space:]]*`([^`]+)`.*$/\1/p'
+}
+
+registered_in_canonical_registry() {
+    local rel="$1"
+    local registry
+    while IFS= read -r registry; do
+        [ -n "$registry" ] || continue
+        [ -f "$ROOT/$registry" ] || continue
+        if awk -F'|' -v target="$rel" '
+            function trim(value) { gsub(/^[[:space:]]+|[[:space:]]+$/, "", value); return value }
+            function reference(cell, rest, start, finish) {
+                cell = trim(cell)
+                start = index(cell, "](")
+                if (start > 0) { rest = substr(cell, start + 2); finish = index(rest, ")"); if (finish > 0) return substr(rest, 1, finish - 1) }
+                if (substr(cell, 1, 1) == "`" && substr(cell, length(cell), 1) == "`") return substr(cell, 2, length(cell) - 2)
+                return cell
+            }
+            $0 ~ /^[[:space:]]*\|/ {
+                path = reference($2); sub(/\/$/, "", path)
+                if (path == target) found = 1
+            }
+            END { exit(found ? 0 : 1) }
+        ' "$ROOT/$registry"; then
+            return 0
+        fi
+    done < <(canonical_registries)
+    return 1
+}
+
 relative_path() {
     case "$1" in
         "$ROOT") printf '.\n' ;;
@@ -479,7 +520,11 @@ validate_room_map() {
 
 # L'armadio comune contiene soltanto i sei file canonici.
 if [ ! -d "$ROOT/ecosistema" ]; then
-    add_issue "ecosistema/ - armadio comune mancante"
+    if [ "$CONSOLIDATED" = true ] && [ -n "$(canonical_registries)" ]; then
+        :
+    else
+        add_issue "ecosistema/ - armadio comune mancante"
+    fi
 else
     while IFS= read -r -d '' item; do
         name="$(basename -- "$item")"
@@ -506,11 +551,13 @@ while IFS= read -r -d '' item; do
         if ! room_registered_at_root "$ROOT/AGENTS.md" "$rel"; then
             add_issue "$rel - stanza non registrata nella mappa madre"
         fi
-        validate_room_map "$item" "$rel"
+        if [ "$CONSOLIDATED" = false ]; then
+            validate_room_map "$item" "$rel"
+        fi
         continue
     fi
 
-    if ! is_registered_at_root "$rel"; then
+    if ! is_registered_at_root "$rel" && ! registered_in_canonical_registry "$rel"; then
         add_issue "$rel - elemento sciolto senza proprietario e registro"
     fi
 done < <(find "$ROOT" -mindepth 1 -maxdepth 1 ! -name '.*' -print0 2>/dev/null)

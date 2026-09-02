@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.6 - 02/09/2026
+
+- Contratto di stanza "consolidato": una casa nata prima dello standard, con
+  statuti di reparto propri e provati (caso reale: la casa madre LeaderAI, tre
+  prove di instradamento su tre), dichiara `- Contratto di stanza: consolidato`
+  nella mappa madre e, sotto, `Chat di gruppo`, `Guardiano di chiusura` e
+  `Registro di dettaglio canonico`. Restano obbligatori ponte, mappa leggibile e
+  riga completa nella mappa madre; il calco a 14 sezioni, la sezione Dentro, la
+  profondita' massima e la fonte business per stanza valgono per il contratto
+  completo delle case nuove. Il guardiano di chiusura applica lo stesso
+  contratto e accetta i registri canonici.
+- Nuovi finding `CONSOLIDATED_CHAT_MISSING`, `CONSOLIDATED_GUARDIAN_MISSING`,
+  `CONSOLIDATED_GUARDIAN_NOT_HOOKED`; test dedicati per Ispettore e guardiano.
+- Casa del prodotto: Ecosistema Base su Google Drive (cartella madre "LeaderAI
+  Ecosystem", accanto a "Ecosistema di Sal"); la repo resta backup tecnico e
+  numerazione delle versioni. La release viene ricostruita dal Drive file per
+  file (`leaderai-ecosistema/tools/ecosistema_base_drive.py` nella casa LeaderAI).
+
+
 ## 0.6.5 - 02/09/2026
 
 - Precisione dei rilevatori sul banco LeaderAI: immagini, note Markdown,

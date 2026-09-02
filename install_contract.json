@@ -107,7 +107,12 @@
       "contents_section": "dentro",
       "scan_depth": 2,
       "canonical_registry_declaration": "Registro di dettaglio canonico: `percorso.md`",
-      "canonical_registry_note": "Casa consolidata: la mappa madre puo' dichiarare registri di dettaglio propri (una o piu' righe con il prefisso indicato) al posto di ecosistema/ASSET.md e ecosistema/FONTI.md. Il registro deve esistere e contenere una riga di tabella con il percorso dell'elemento."
+      "canonical_registry_note": "Casa consolidata: la mappa madre puo' dichiarare registri di dettaglio propri (una o piu' righe con il prefisso indicato) al posto di ecosistema/ASSET.md e ecosistema/FONTI.md. Il registro deve esistere e contenere una riga di tabella con il percorso dell'elemento.",
+      "room_contracts": {
+        "completo": "calco integrale (sezioni obbligatorie, Dentro, profondita' 2, fonte business per stanza)",
+        "consolidato": "ponte, mappa leggibile e riga completa nella mappa madre; dichiarazioni sotto la riga del contratto: Chat di gruppo, Guardiano di chiusura, Registro di dettaglio canonico"
+      },
+      "room_contract_declaration": "Contratto di stanza: consolidato"
     },
     "adoption_observation": {
       "verdicts": [
