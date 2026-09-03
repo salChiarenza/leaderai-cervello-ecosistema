@@ -21,12 +21,12 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 `PROVA_DESTINATARIO_OK — 03/09/2026`
 
-La prova pubblica completata riguarda la versione `0.6.8` e il commit
+La prova pubblica completata riguarda la versione `0.6.9` e il commit
 immutabile
-`12f5261454a7bcf5dac93a8afad95b96270efe06`. L'archivio scaricato senza
+`567f1eb74258886c9c5e65bae8b7d9b42c7326e3`. L'archivio scaricato senza
 credenziali ha SHA256
-`dc09d0b7e8f4aa53eecd0470bf945edcf9d99ae597bf15f897ff501d76591e87`;
-la sola copia estratta ha superato `318` test e le procedure
+`cd8027a60484579fbdb7db6e3eafed4e97b7a22dd7355ed0e8d7117cf41c9fc5`;
+la sola copia estratta ha superato `325` test e le procedure
 `INSTALLA_CON_AI.md` e `CHECKUP.md` hanno risposto `HTTP 200`.
 
 ## Controlli prima dell'invio
