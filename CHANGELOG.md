@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6.10 - 03/09/2026
+
+- Il guardiano di chiusura misura anche i documenti vivi: un Markdown oltre 800
+  righe o 80 KiB (fuori dalle mappe, gia' limitate a 350) blocca la chiusura e
+  chiede di spostare la parte vecchia in `<nome>_archivio_<data>.md` nella
+  stessa stanza o di spezzare per responsabilita'. Gli archivi datati e le
+  cartelle `_archivio`/`_storico` non si misurano. Soglie da
+  `install_contract.json` (`document_review_lines`/`document_review_bytes`),
+  finora applicate solo dall'Ispettore a comando.
+- La chat di gruppo vive 48 ore anche per il guardiano: le note datate
+  (`## gg/mm/aaaa` o `## aaaa-mm-gg`) piu' vecchie di due giorni bloccano la
+  chiusura finche' non vengono promosse nel file proprietario o archiviate.
+- Caso reale 03/09/2026 nella casa LeaderAI: stato operativo a 1.770 righe e
+  chat a 567 senza che nessun controllo automatico se ne accorgesse; regola 10
+  dell'Ispettore esisteva ma partiva solo a comando.
+
 ## 0.6.9 - 03/09/2026
 
 - Fase del percorso guidato dichiarata nella mappa madre: `- Fase del percorso:

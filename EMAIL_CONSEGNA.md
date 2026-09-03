@@ -21,7 +21,7 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 `PROVA_DESTINATARIO_OK — 03/09/2026`
 
-La prova pubblica completata riguarda la versione `0.6.9` e il commit
+La prova pubblica completata riguarda la versione `0.6.10` e il commit
 immutabile
 `567f1eb74258886c9c5e65bae8b7d9b42c7326e3`. L'archivio scaricato senza
 credenziali ha SHA256

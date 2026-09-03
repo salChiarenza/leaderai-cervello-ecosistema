@@ -608,6 +608,42 @@ done < <(
         -type f \( -name AGENTS.md -o -name MEMORY.md -o -name AGENT_CHAT.md \) -print0 2>/dev/null
 )
 
+# Un documento vivo non e' un archivio: oltre 800 righe o 80 KiB si spezza o si archivia.
+# Gli archivi datati (`*_archivio_*.md`, cartelle `_archivio`/`_storico`) non si misurano.
+while IFS= read -r -d '' document; do
+    case "$(basename -- "$document")" in
+        AGENTS.md|MEMORY.md|AGENT_CHAT.md|CLAUDE.md) continue ;;
+        *_archivio_*|*_storico_*) continue ;;
+    esac
+    lines="$(wc -l < "$document" | tr -d '[:space:]')"
+    bytes="$(wc -c < "$document" | tr -d '[:space:]')"
+    if [ "$lines" -gt 800 ] || [ "$bytes" -gt 81920 ]; then
+        add_issue "$(relative_path "$document") - documento oltre 800 righe o 80 KiB: sposta la parte vecchia in <nome>_archivio_<data>.md nella stessa stanza o spezza per responsabilita'"
+    fi
+done < <(
+    find "$ROOT" \
+        \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor -o -name _archivio -o -name _storico -o -name archivio \) -prune \) -o \
+        -type f -name '*.md' -print0 2>/dev/null
+)
+
+# La chat di gruppo vive 48 ore: le note piu' vecchie si promuovono nel file giusto e si tolgono.
+chat_cutoff="$(date -v-2d +%Y%m%d 2>/dev/null || date -d '2 days ago' +%Y%m%d 2>/dev/null || printf '')"
+if [ -n "$chat_cutoff" ]; then
+    while IFS= read -r -d '' chat; do
+        stale="$(sed 's/\r$//' "$chat" | awk -v cutoff="$chat_cutoff" '
+            /^## +[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]/ { split($2, p, "/"); if (p[3] p[2] p[1] < cutoff) n++ }
+            /^## +[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/ { d = substr($2, 1, 10); gsub(/-/, "", d); if (d < cutoff) n++ }
+            END { print n + 0 }')"
+        if [ "${stale:-0}" -gt 0 ]; then
+            add_issue "$(relative_path "$chat") - $stale note piu' vecchie di 48 ore: promuovi nel file proprietario o in <nome>_archivio_<data>.md e togli dalla chat"
+        fi
+    done < <(
+        find "$ROOT" \
+            \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
+            -type f -name AGENT_CHAT.md -print0 2>/dev/null
+    )
+fi
+
 # Copie e nomi di versione non possono diventare nuove fonti vive.
 while IFS= read -r -d '' candidate; do
     name="$(basename -- "$candidate" | tr '[:upper:]' '[:lower:]')"

@@ -459,6 +459,55 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             self.assertEqual(result.returncode, 2)
             self.assertIn("AGENT_CHAT.md", result.stderr)
 
+    def test_oversized_room_document_blocks_first_stop(self):
+        """Break caught: a living document cannot silently grow into an archive."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            room = self.register_room(target, "marketing")
+            source = room / "STATO.md"
+            source.write_text(
+                source.read_text(encoding="utf-8") + "\n" + "- voce storica\n" * 801,
+                encoding="utf-8",
+            )
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("marketing/STATO.md", result.stderr)
+            self.assertIn("800 righe", result.stderr)
+
+    def test_dated_archive_document_is_not_measured(self):
+        """Break caught: the archive is where the old part goes; it must not be blocked."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            room = self.register_room(target, "marketing")
+            (room / "STATO_archivio_2026-09-03.md").write_text(
+                "# Archivio\n" + "- voce storica\n" * 1200,
+                encoding="utf-8",
+            )
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_stale_agent_chat_note_blocks_first_stop(self):
+        """Break caught: a note older than 48 hours must leave the coordination board."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            chat = target / "AGENT_CHAT.md"
+            chat.write_text(
+                chat.read_text(encoding="utf-8")
+                + "\n## 2026-01-05 N001 - Codex -> Claude Code\n\n- nota vecchia\n"
+                + "\n## 05/01/2026 10:00 - Claude\n\n- altra nota vecchia\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("AGENT_CHAT.md", result.stderr)
+            self.assertIn("2 note piu' vecchie di 48 ore", result.stderr)
+
     def test_registered_root_owned_capability_is_not_forced_into_a_room(self):
         """Break caught: the guard must preserve legitimate root-owned capabilities."""
         with tempfile.TemporaryDirectory() as tmp:
