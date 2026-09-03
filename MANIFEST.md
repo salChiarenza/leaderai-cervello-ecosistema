@@ -60,6 +60,12 @@ Restano stabili in ogni installazione:
   due sessioni nuove e classificazione non distruttiva del blocco;
 - ingresso verificato: cartella madre come progetto primario/CWD e nuova
   task/sessione che legge la mappa prima del lavoro;
+- istruzioni globali dell'agente attivo su ogni computer (`~/.claude/CLAUDE.md`
+  per Claude Code, `~/.codex/AGENTS.md` per Codex) con il blocco `LEADERAI-CASA`:
+  nominano la cartella madre e fanno rispondere `FUORI DAL CERVELLO` a una
+  sessione nata altrove;
+- anagrafe dei soggetti giuridici in `ecosistema/SOGGETTI.md`: piu' soggetti,
+  una casa, stanze per funzione;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
 - versione del metodo applicato e prove di collaudo.
 
@@ -114,6 +120,13 @@ l'ambiente e classifica ogni elemento rilevante come:
 - `INFRASTRUTTURA`: supporto tecnico del Cervello;
 - `ARCHIVIO`: materiale storico non operativo;
 - `SOSPETTA`: elemento ancora da chiarire.
+
+Piu' soggetti giuridici, una casa: societa', cooperative, associazioni ed enti
+governati dal proprietario vivono come righe di `ecosistema/SOGGETTI.md`. Le
+stanze seguono le funzioni del lavoro, non i soggetti; un soggetto separa una
+stanza in sottocartelle dichiarate solo dove la legge o il lavoro lo impongono,
+e ottiene una stanza propria soltanto con processi che nessuna stanza
+funzionale puo' ospitare.
 
 La cartella `ecosistema/` e' l'armadio comune della casa, non una stanza
 business: contiene soltanto i registri e i calchi installati dal contratto.
@@ -304,6 +317,7 @@ Il target passa solo se esistono:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
+- `ecosistema/SOGGETTI.md`
 - `ecosistema/STANZA_AGENTS.md`
 - `ecosistema/STANZA_FONTE.md`
 
@@ -317,6 +331,9 @@ Per Claude Code:
 - `autoMemoryDirectory` nelle user settings di ogni computer
   (`~/.claude/settings.json`), **in forma portabile `~/`** verso la memoria
   canonica dichiarata nella mappa madre, con prova `/memory` su ogni postazione
+- blocco `LEADERAI-CASA` in `~/.claude/CLAUDE.md` di ogni computer, con il
+  percorso della cartella madre e il gate `FUORI DAL CERVELLO`, provato da una
+  cartella estranea
 
 Per Codex:
 
@@ -324,6 +341,8 @@ Per Codex:
 - `.agents/skills/ispettore-ecosistema/SKILL.md`
 - Codex Desktop con cartella madre come progetto locale primario oppure Codex
   CLI avviato con la cartella madre come `-C`/directory corrente
+- blocco `LEADERAI-CASA` in `~/.codex/AGENTS.md` (o `AGENTS.override.md` se
+  esiste) di ogni computer, provato da una cartella estranea
 
 ## Gate di rilascio del prodotto
 
@@ -341,7 +360,8 @@ e zero test saltati. Il gate completo richiede inoltre:
 8. richiesta esatta `Crea la Brand Identity`, senza indizi tecnici nel prompt,
    con fonte brand reale e output nella responsabilita' proprietaria.
 
-I controlli macchina `default_browser`, `desktop_launcher` e `remote_backup`
+I controlli macchina `default_browser`, `desktop_launcher`, `remote_backup` e
+`user_instructions_gate`
 sono dichiarati in `install_contract.json`. Il gate anonimo verifica che
 restino esplicitamente `DA COLLAUDARE`; il loro `OK` nasce soltanto dalla prova
 sulla macchina cliente.
@@ -422,6 +442,14 @@ Il pacchetto e' pronto quando:
   stanze senza mappa o file sciolti senza casa;
 - la versione installata coincide con il `VERSION` vivo e Claude usa una sola
   memoria;
+- le istruzioni globali dell'agente attivo nominano la cartella madre e la
+  prova da cartella estranea risponde `FUORI DAL CERVELLO`;
+- i soggetti giuridici del proprietario hanno una riga in
+  `ecosistema/SOGGETTI.md` e nessuna stanza nasce per replicare l'organigramma
+  giuridico;
+- la conferma finale, quando richiesta, parte soltanto con verdetto `PASSA`
+  pieno: con `PASSA CON ATTENZIONE` resta nella casa e chiede al massimo un
+  passaggio umano;
 - contenuti business modificabili, credenziali, firma/timbro e file progetto
   rispettano il contratto di unicita', protezione e ordine;
 - mappe e indici Markdown rispettano le soglie macchina; ogni documento esteso

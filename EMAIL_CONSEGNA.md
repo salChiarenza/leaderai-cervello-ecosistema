@@ -64,9 +64,15 @@ la sola copia estratta ha superato `297` test e la procedura
     stesso canale soltanto dopo i tentativi sicuri, poi ripresa della stessa
     missione.
 13. Se Sal richiede una conferma finale, autorizza una sola risposta e soltanto
-    quando tutti i criteri sono completati e provati: apre con `Perfetto,
+    quando tutti i criteri sono completati e provati, cioe' con verdetto
+    `PASSA` pieno: apre con `Perfetto,
     l'ho fatto. Tutto completato e funzionante.` e contiene le prove essenziali
-    della missione.
+    della missione. Con `PASSA CON ATTENZIONE` niente conferma: resta nella
+    casa e, se serve un gesto umano, parte soltanto `SERVE UN TUO PASSAGGIO`.
+14. Verifica che la missione chieda le istruzioni globali dell'agente attivo
+    (blocco `LEADERAI-CASA` in `~/.claude/CLAUDE.md` o `~/.codex/AGENTS.md`)
+    e, quando il proprietario governa piu' soggetti, l'anagrafe
+    `ecosistema/SOGGETTI.md`.
 
 ## Modello corrente
 
@@ -166,8 +172,13 @@ missione; poi continua.</p>
 
 <p>Confronta la versione installata con <code>VERSION [VERSIONE VERIFICATA]</code>, configura
 la memoria unica prevista per l'agente attivo e usa
-<code>ecosistema/STANZA_AGENTS.md</code> per ogni stanza reale. Lancia
-l'Ispettore, ripara i punti sicuri e prova le strade fino agli output.</p>
+<code>ecosistema/STANZA_AGENTS.md</code> per ogni stanza reale. Verifica le
+istruzioni globali dell'agente attivo: il blocco <code>LEADERAI-CASA</code> in
+<code>~/.claude/CLAUDE.md</code> (Claude Code) o <code>~/.codex/AGENTS.md</code>
+(Codex) nomina la cartella madre; prova da una cartella estranea che la
+risposta sia <code>FUORI DAL CERVELLO</code>. Censisci i soggetti giuridici in
+<code>ecosistema/SOGGETTI.md</code>. Lancia l'Ispettore in una nuova
+sessione, ripara i punti sicuri e prova le strade fino agli output.</p>
 
 <p>In una task/sessione nuova esegui la richiesta esatta
 <code>Crea la Brand Identity</code>. Il prompt resta senza percorsi, file,
@@ -183,9 +194,11 @@ aperti per il lavoro.</p>
 
 <p>Ogni stato intermedio resta nella casa. Se Sal richiede espressamente una
 conferma finale, inviala una volta sola quando tutti i criteri sono completati
-e provati. La prima riga e' <strong>Perfetto, l'ho fatto. Tutto
-completato e funzionante.</strong> Poi riporta le prove essenziali di tutti i
-criteri della missione.</p>
+e provati, cioe' con verdetto <strong>PASSA</strong> pieno. La prima riga e'
+<strong>Perfetto, l'ho fatto. Tutto completato e funzionante.</strong> Poi
+riporta le prove essenziali di tutti i criteri della missione. Con
+<strong>PASSA CON ATTENZIONE</strong> la conferma non parte: se serve un gesto
+del proprietario scrivi soltanto <code>SERVE UN TUO PASSAGGIO</code>.</p>
 
 <p>[FIRMA AGENTE: Sal &amp; Codex / Sal &amp; Claude Code]</p>
 ```
@@ -278,8 +291,12 @@ missione in Gmail cercando mittente, oggetto e ID missione; poi continua.
 
 Confronta la versione installata con VERSION [VERSIONE VERIFICATA], configura la memoria unica
 prevista per l'agente attivo e usa ecosistema/STANZA_AGENTS.md per ogni stanza
-reale. Lancia l'Ispettore, ripara i punti sicuri e prova le strade fino agli
-output.
+reale. Verifica le istruzioni globali dell'agente attivo: il blocco
+LEADERAI-CASA in ~/.claude/CLAUDE.md (Claude Code) o ~/.codex/AGENTS.md (Codex)
+nomina la cartella madre; prova da una cartella estranea che la risposta sia
+FUORI DAL CERVELLO. Censisci i soggetti giuridici in ecosistema/SOGGETTI.md.
+Lancia l'Ispettore in una nuova sessione, ripara i punti sicuri e prova le
+strade fino agli output.
 
 In una task/sessione nuova esegui la richiesta esatta Crea la Brand Identity.
 Il prompt resta senza percorsi, file, stanze, fonti, skill o output suggeriti.
@@ -294,8 +311,10 @@ aperti per il lavoro.
 
 Ogni stato intermedio resta nella casa. Se Sal richiede espressamente una
 conferma finale, inviala una volta sola quando tutti i criteri sono completati
-e provati. Apri con la riga Perfetto, l'ho fatto. Tutto completato e
-funzionante. Poi riporta le prove essenziali della missione.
+e provati, cioe' con verdetto PASSA pieno. Apri con la riga Perfetto, l'ho
+fatto. Tutto completato e funzionante. Poi riporta le prove essenziali della
+missione. Con PASSA CON ATTENZIONE la conferma non parte: se serve un gesto
+del proprietario scrivi soltanto SERVE UN TUO PASSAGGIO.
 
 [FIRMA AGENTE: Sal & Codex / Sal & Claude Code]
 ```

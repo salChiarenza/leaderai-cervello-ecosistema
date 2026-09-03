@@ -48,6 +48,23 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
         root = Path(context.name)
         target = root / "EcosistemaAI-Test"
         shutil.copytree(self._seed_target, target, symlinks=True)
+        # Home finta della copia: istruzioni globali che portano nella casa copiata.
+        context_values = {
+            "client_name": "Cliente Test",
+            "version": leaderai_setup.STANDARD_VERSION,
+            "house_path": leaderai_setup._portable_machine_path(target),
+        }
+        self.claude_user_instructions = root / "home-finta" / ".claude" / "CLAUDE.md"
+        self.codex_user_instructions = root / "home-finta" / ".codex" / "AGENTS.md"
+        for path, template in (
+            (self.claude_user_instructions, "CLAUDE_USER.md"),
+            (self.codex_user_instructions, "CODEX_USER_AGENTS.md"),
+        ):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                leaderai_setup.read_template(template, context_values),
+                encoding="utf-8",
+            )
         self.claude_user_settings = root / "claude-user-settings.json"
         self.claude_user_settings.write_text(
             json.dumps(

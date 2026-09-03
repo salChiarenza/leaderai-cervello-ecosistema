@@ -25,3 +25,4 @@ Indice della memoria condivisa del Cervello.
 - `ecosistema/ASSET.md` - capacita' e asset collegati alle stanze che servono.
 - `ecosistema/PROCESSI.md` - processi osservati o candidati.
 - `ecosistema/LIMITI.md` - azioni che richiedono conferma umana.
+- `ecosistema/SOGGETTI.md` - anagrafe dei soggetti giuridici governati dalla casa.

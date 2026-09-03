@@ -53,6 +53,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
+- `ecosistema/SOGGETTI.md`
 - `ecosistema/STANZA_AGENTS.md`
 - `ecosistema/STANZA_FONTE.md`
 - `ecosystem-check/` con mappa, stato, standard, registro e ruoli separati

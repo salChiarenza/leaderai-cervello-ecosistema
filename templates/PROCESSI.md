@@ -48,6 +48,9 @@ quando tutti i criteri sono completati e provati. Apri con `Perfetto, l'ho
 fatto. Tutto completato e
 funzionante.` e riporta le prove essenziali di tutti i criteri della missione.
 Ogni stato intermedio resta nella casa e alimenta la stessa missione.
+La conferma parte soltanto con verdetto `PASSA` pieno: `PASSA CON ATTENZIONE`
+non la autorizza. Se resta un gesto umano, il messaggio e' soltanto
+`SERVE UN TUO PASSAGGIO`, mai un rapporto.
 
 Ogni email operativa agente-agente, in entrambe le direzioni, apre con:
 

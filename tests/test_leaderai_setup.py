@@ -14,6 +14,15 @@ class LeaderAISetupTest(unittest.TestCase):
                 "claude_user_settings_path",
                 target.parent / f"{target.name}-claude-user-settings.json",
             )
+            kwargs.setdefault(
+                "claude_user_instructions_path",
+                target.parent / f"{target.name}-claude-user-CLAUDE.md",
+            )
+        if agent in {"codex", "both"}:
+            kwargs.setdefault(
+                "codex_user_instructions_path",
+                target.parent / f"{target.name}-codex-user-AGENTS.md",
+            )
         return leaderai_setup.run_setup(
             target,
             "Cliente Test",
@@ -155,11 +164,15 @@ class LeaderAISetupTest(unittest.TestCase):
     def test_second_run_does_not_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Test"
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             marker = "MODIFICA CLIENTE\n"
             (target / "AGENTS.md").write_text(marker, encoding="utf-8")
 
-            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertIn("AGENTS.md", result.existing)
             self.assertEqual((target / "AGENTS.md").read_text(encoding="utf-8"), marker)
@@ -206,7 +219,9 @@ class LeaderAISetupTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertIn("CLAUDE.md", result.created)
             self.assertEqual(
@@ -232,6 +247,7 @@ class LeaderAISetupTest(unittest.TestCase):
                 "Cliente Test",
                 "codex",
                 force=True,
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
             )
 
             self.assertIn("CLAUDE.md", result.updated)
@@ -260,6 +276,7 @@ class LeaderAISetupTest(unittest.TestCase):
                 "Cliente Test",
                 "codex",
                 force=True,
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
             )
             (target / "CLAUDE.md").write_text(
                 "ISTRUZIONI CLIENTE DUE\n",
@@ -270,6 +287,7 @@ class LeaderAISetupTest(unittest.TestCase):
                 "Cliente Test",
                 "codex",
                 force=True,
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
             )
 
             self.assertEqual(
@@ -293,7 +311,9 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / "AGENTS.md").write_text(original_agents, encoding="utf-8")
             (target / "CLAUDE.md").symlink_to("file-che-non-esiste.md")
 
-            blocked = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            blocked = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertTrue(blocked.blockers)
             self.assertEqual(blocked.target_verdict, "NON PASSA")
@@ -301,7 +321,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertFalse((target / "REPORT_FINALE.md").exists())
 
             result = leaderai_setup.run_setup(
-                target, "Cliente Test", "codex", force=True
+                target, "Cliente Test", "codex", force=True, codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
             )
 
             self.assertIn("CLAUDE.md", result.updated)
@@ -324,7 +344,9 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / "AGENTS.md").write_text(original_agents, encoding="utf-8")
             (target / "CLAUDE.md").write_text(wrong_bridge, encoding="utf-8")
 
-            preserved = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            preserved = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertEqual(
                 (target / "CLAUDE.md").read_text(encoding="utf-8"),
@@ -339,6 +361,7 @@ class LeaderAISetupTest(unittest.TestCase):
                 "Cliente Test",
                 "codex",
                 force=True,
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
             )
 
             self.assertIn("CLAUDE.md", repaired.updated)
@@ -418,9 +441,13 @@ class LeaderAISetupTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             first = (target / ".gitignore").read_text(encoding="utf-8")
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             second = (target / ".gitignore").read_text(encoding="utf-8")
 
             for rule in leaderai_setup._required_gitignore_rules():
@@ -444,7 +471,9 @@ class LeaderAISetupTest(unittest.TestCase):
                 capture_output=True,
             )
 
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             secret = target / "segreto.env"
             secret.write_text("NON-COMMITTERE\n", encoding="utf-8")
 
@@ -476,7 +505,9 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / "ecosistema").symlink_to(outside, target_is_directory=True)
 
             with self.assertRaisesRegex(ValueError, "Directory standard.*symlink"):
-                leaderai_setup.run_setup(target, "Cliente Test", "codex")
+                leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertEqual(list(outside.iterdir()), [])
             self.assertFalse((target / "CLAUDE.md").exists())
@@ -491,7 +522,9 @@ class LeaderAISetupTest(unittest.TestCase):
             target = linked_parent / "EcosistemaAI-Test"
 
             with self.assertRaisesRegex(ValueError, "(padre|antenata).*symlink"):
-                leaderai_setup.run_setup(target, "Cliente Test", "codex")
+                leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertEqual(list(outside.iterdir()), [])
 
@@ -506,7 +539,9 @@ class LeaderAISetupTest(unittest.TestCase):
             target = linked_parent / "EcosistemaAI-Test"
 
             with self.assertRaisesRegex(ValueError, "antenata.*symlink"):
-                leaderai_setup.run_setup(target, "Cliente Test", "codex")
+                leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertEqual(list(real_target.iterdir()), [])
 
@@ -518,7 +553,9 @@ class LeaderAISetupTest(unittest.TestCase):
             (target / ".codex" / "README.md").mkdir(parents=True)
 
             with self.assertRaisesRegex(ValueError, "File standard.*directory"):
-                leaderai_setup.run_setup(target, "Cliente Test", "codex")
+                leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertFalse((target / "CLAUDE.md").exists())
 
@@ -537,7 +574,9 @@ class LeaderAISetupTest(unittest.TestCase):
                 "run",
                 side_effect=fail_first_commit,
             ):
-                result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+                result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             log = (target / "logs" / "install-log.md").read_text(encoding="utf-8")
             self.assertIn("primo commit fallito", result.git_outcome)
@@ -582,7 +621,9 @@ class LeaderAISetupTest(unittest.TestCase):
     def test_identical_rerun_does_not_append_log_or_create_commit(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Idempotente"
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             log_before = (target / "logs" / "install-log.md").read_text(
                 encoding="utf-8"
             )
@@ -594,7 +635,9 @@ class LeaderAISetupTest(unittest.TestCase):
                 text=True,
             ).stdout.strip()
 
-            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             self.assertEqual(
                 (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
@@ -642,7 +685,9 @@ class LeaderAISetupTest(unittest.TestCase):
                 "dato cliente\n", encoding="utf-8"
             )
 
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             count = subprocess.run(
                 ["git", "rev-list", "--count", "HEAD"],
@@ -677,7 +722,9 @@ class LeaderAISetupTest(unittest.TestCase):
             old = "# Report vecchio\n\nVERDETTO\n- PASSA\n"
             (target / "REPORT_FINALE.md").write_text(old, encoding="utf-8")
 
-            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             report = (target / "REPORT_FINALE.md").read_text(encoding="utf-8")
             self.assertEqual(report, old)
@@ -686,13 +733,17 @@ class LeaderAISetupTest(unittest.TestCase):
     def test_legacy_report_is_never_overwritten(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Migrazione"
-            leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
             report_path = target / "REPORT_FINALE.md"
             old = "# Residuo storico\n\nFatto del cliente\n"
             report_path.write_text(old, encoding="utf-8")
             (target / ".codex" / "README.md").unlink()
 
-            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+            result = leaderai_setup.run_setup(
+                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
+            )
 
             report = report_path.read_text(encoding="utf-8")
             self.assertEqual(report, old)
@@ -715,6 +766,118 @@ class LeaderAISetupTest(unittest.TestCase):
 
             with self.assertRaisesRegex(ValueError, "CHECKUP.md"):
                 self.run_setup(target, "claude")
+
+
+    def test_user_instructions_block_is_added_without_touching_existing_content(self):
+        """Il blocco LEADERAI-CASA entra nel file utente e lo lascia intatto."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+            instructions = Path(tmp) / "claude-user-CLAUDE.md"
+            instructions.write_text(
+                "# Preferenze personali\n\n- Rispondi in italiano.\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_setup(
+                target, "claude", claude_user_instructions_path=instructions
+            )
+
+            text = instructions.read_text(encoding="utf-8")
+            self.assertTrue(text.startswith("# Preferenze personali\n"))
+            self.assertIn("- Rispondi in italiano.", text)
+            self.assertIn("<!-- LEADERAI-CASA:inizio -->", text)
+            self.assertIn("<!-- LEADERAI-CASA:fine -->", text)
+            self.assertIn("FUORI DAL CERVELLO", text)
+            self.assertIn(leaderai_setup._portable_machine_path(target), text)
+            self.assertNotIn("{{", text)
+            self.assertTrue(
+                any(
+                    "Istruzioni globali Claude Code aggiornate" in item
+                    for item in result.external_effects
+                )
+            )
+            self.assertEqual(result.target_verdict, "PASSA")
+
+            again = self.run_setup(
+                target, "claude", claude_user_instructions_path=instructions
+            )
+            self.assertEqual(instructions.read_text(encoding="utf-8"), text)
+            self.assertEqual(text.count("<!-- LEADERAI-CASA:inizio -->"), 1)
+            self.assertTrue(
+                any("gia' corrette" in item for item in again.external_effects)
+            )
+
+    def test_user_instructions_block_is_refreshed_in_place(self):
+        """Un blocco vecchio viene sostituito dove sta, non duplicato in coda."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+            instructions = Path(tmp) / "claude-user-CLAUDE.md"
+            instructions.write_text(
+                "<!-- LEADERAI-CASA:inizio -->\nvecchio blocco\n"
+                "<!-- LEADERAI-CASA:fine -->\n\n# Dopo\n",
+                encoding="utf-8",
+            )
+
+            self.run_setup(target, "claude", claude_user_instructions_path=instructions)
+
+            text = instructions.read_text(encoding="utf-8")
+            self.assertNotIn("vecchio blocco", text)
+            self.assertEqual(text.count("<!-- LEADERAI-CASA:inizio -->"), 1)
+            self.assertTrue(text.rstrip().endswith("# Dopo"))
+
+    def test_user_instructions_are_not_written_without_a_path_read_on_this_machine(self):
+        """Senza percorso letto sulla macchina il setup non tocca la home."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+
+            result = leaderai_setup.run_setup(target, "Cliente Test", "codex")
+
+            self.assertEqual(
+                sorted(item.name for item in Path(tmp).iterdir()),
+                ["EcosistemaAI-Test"],
+            )
+            self.assertTrue(
+                any(
+                    "Istruzioni globali Codex: DA COLLAUDARE" in item
+                    for item in result.external_effects
+                )
+            )
+
+    def test_codex_override_file_receives_the_block_when_present(self):
+        """Codex legge AGENTS.override.md al posto di AGENTS.md: il blocco va li'."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+            home_codex = Path(tmp) / "codex-home"
+            home_codex.mkdir()
+            override = home_codex / "AGENTS.override.md"
+            override.write_text("# Override attivo\n", encoding="utf-8")
+            requested = home_codex / "AGENTS.md"
+
+            self.run_setup(target, "codex", codex_user_instructions_path=requested)
+
+            self.assertFalse(requested.exists())
+            self.assertIn(
+                "<!-- LEADERAI-CASA:inizio -->",
+                override.read_text(encoding="utf-8"),
+            )
+
+    def test_user_instructions_inside_the_house_are_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Test"
+
+            result = self.run_setup(
+                target,
+                "claude",
+                claude_user_instructions_path=target / "CLAUDE_UTENTE.md",
+            )
+
+            self.assertTrue(
+                any(
+                    "non possono vivere dentro la cartella cliente" in item
+                    for item in result.blockers
+                )
+            )
+            self.assertEqual(result.target_verdict, "NON PASSA")
 
 
 if __name__ == "__main__":

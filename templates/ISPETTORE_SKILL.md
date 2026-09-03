@@ -30,10 +30,16 @@ stanze e non trasforma una casa diversa dal telaio cliente in un errore.
    progetto primario/CWD, percorso dichiarato, `AGENTS.md` caricato e tre
    regole mostrate. Se non coincide, esci con `FUORI DAL CERVELLO`, chiedi un
    solo gesto preciso e riparti da una nuova task/sessione.
+   Verifica poi le istruzioni globali dell'agente attivo: `~/.claude/CLAUDE.md`
+   per Claude Code, `~/.codex/AGENTS.md` (o `AGENTS.override.md`) per Codex
+   devono portare il blocco `LEADERAI-CASA` con il percorso della cartella
+   madre e il gate `FUORI DAL CERVELLO`. Se manca, aggiungi il blocco dal calco
+   ufficiale senza toccare il resto del file e prova da una cartella estranea.
 2. Apri dalla release immutabile ufficiale `VERSION`,
    `install_contract.json`, inclusa la lista `official_sources`,
    `MANIFEST.md`, `CHECKUP.md`, `templates/AGENTS.md` e
-   `templates/STANZA_AGENTS.md` e `templates/STANZA_FONTE.md`. Usa il contratto
+   `templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
+   `templates/SOGGETTI.md`. Usa il contratto
    macchina, inclusa `inspection_policies -> room_lifecycle`, per file
    obbligatori, rami agente e ciclo di vita delle stanze.
 3. Apri e confronta in ogni checkup le tre fonti vive obbligatorie:
@@ -53,6 +59,9 @@ stanze e non trasforma una casa diversa dal telaio cliente in un errore.
    classificazione, riparazioni sicure, prove di instradamento e verdetto.
 6. Confronta la versione installata con il `VERSION` vivo. Senza lettura o con
    valori diversi il verdetto e' `NON PASSA`.
+6-bis. Censisci i soggetti giuridici che il proprietario governa da questa casa
+   in `ecosistema/SOGGETTI.md`, una riga per soggetto. Le stanze seguono le
+   funzioni, non i soggetti: piu' societa' non fanno piu' case ne' piu' stanze.
 7. Ogni vera stanza deve essere raggiungibile dalla mappa madre e avere
    `AGENTS.md` + `CLAUDE.md`, con `CLAUDE.md` uguale a `@AGENTS.md`.
    La cartella madre dichiara il `Boss dell'Ecosistema`; ogni ramo organizzativo
@@ -99,7 +108,9 @@ stanze e non trasforma una casa diversa dal telaio cliente in un errore.
     `LEZIONE CANDIDATA`. Se e' ripetibile, la lezione va restituita a LeaderAI
     per diventare regola e test della release successiva.
 15. Salva i fatti nelle fonti proprietarie e completa la conferma finale con
-    esito e prove essenziali. Ogni invio esterno richiede autorizzazione
+    esito e prove essenziali soltanto con verdetto `PASSA` pieno; con
+    `PASSA CON ATTENZIONE` resta nella casa e, se serve un gesto umano, usa
+    `SERVE UN TUO PASSAGGIO`. Ogni invio esterno richiede autorizzazione
     esplicita del proprietario.
 
 ## Uscita obbligatoria

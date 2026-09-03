@@ -35,6 +35,18 @@
       "url": "https://learn.chatgpt.com/docs/hooks",
       "role": "technical_specification",
       "comparison": "Specifica viva dei project hook Codex, del trust, di commandWindows e del comportamento Stop."
+    },
+    {
+      "id": "anthropic_claude_code_memory",
+      "url": "https://code.claude.com/docs/en/memory",
+      "role": "technical_specification",
+      "comparison": "Specifica viva dei file CLAUDE.md per scope (managed, utente ~/.claude/CLAUDE.md, progetto, locale), dell'import @AGENTS.md e di autoMemoryDirectory."
+    },
+    {
+      "id": "openai_codex_agents_md",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
+      "role": "technical_specification",
+      "comparison": "Specifica viva del caricamento gerarchico di AGENTS.md: globale ~/.codex/AGENTS.md, radice progetto, sottocartelle, override e tetto project_doc_max_bytes."
     }
   ],
   "inspection_policies": {
@@ -243,6 +255,11 @@
         "strategy": "create"
       },
       {
+        "template": "SOGGETTI.md",
+        "destination": "ecosistema/SOGGETTI.md",
+        "strategy": "create"
+      },
+      {
         "template": "STANZA_AGENTS.md",
         "destination": "ecosistema/STANZA_AGENTS.md",
         "strategy": "create"
@@ -333,6 +350,7 @@
       "ecosistema/ASSET.md",
       "ecosistema/PROCESSI.md",
       "ecosistema/LIMITI.md",
+      "ecosistema/SOGGETTI.md",
       "ecosistema/STANZA_AGENTS.md",
       "ecosistema/STANZA_FONTE.md",
       "ecosystem-check/AGENTS.md",
@@ -359,7 +377,8 @@
     "environment_checks": [
       "default_browser",
       "desktop_launcher",
-      "remote_backup"
+      "remote_backup",
+      "user_instructions_gate"
     ]
   },
   "agents": {
@@ -390,7 +409,9 @@
         ".claude/README.md",
         ".claude/skills/ispettore-ecosistema/SKILL.md"
       ],
-      "external_effects": []
+      "external_effects": [
+        "codex_user_instructions"
+      ]
     },
     "claude": {
       "templates": [
@@ -420,7 +441,8 @@
         ".agents/skills/ispettore-ecosistema/SKILL.md"
       ],
       "external_effects": [
-        "claude_user_settings"
+        "claude_user_settings",
+        "claude_user_instructions"
       ]
     },
     "both": {
@@ -432,7 +454,9 @@
       "required": [],
       "forbidden": [],
       "external_effects": [
-        "claude_user_settings"
+        "claude_user_settings",
+        "claude_user_instructions",
+        "codex_user_instructions"
       ]
     }
   },
@@ -446,6 +470,24 @@
       "default_path": "~/.claude/settings.json",
       "key": "autoMemoryDirectory",
       "description": "Preserva le altre chiavi e collega Claude alla memoria canonica della casa."
+    },
+    "claude_user_instructions": {
+      "scope": "user",
+      "default_path": "~/.claude/CLAUDE.md",
+      "template": "CLAUDE_USER.md",
+      "strategy": "merge_marked_block",
+      "block_start": "<!-- LEADERAI-CASA:inizio -->",
+      "block_end": "<!-- LEADERAI-CASA:fine -->",
+      "description": "Istruzioni utente di Claude Code lette in ogni sessione: dichiarano la cartella madre e il gate FUORI DAL CERVELLO. Il blocco marcato si aggiunge o si aggiorna; il resto del file resta intatto."
+    },
+    "codex_user_instructions": {
+      "scope": "user",
+      "default_path": "~/.codex/AGENTS.md",
+      "template": "CODEX_USER_AGENTS.md",
+      "strategy": "merge_marked_block",
+      "block_start": "<!-- LEADERAI-CASA:inizio -->",
+      "block_end": "<!-- LEADERAI-CASA:fine -->",
+      "description": "AGENTS.md globale di Codex letto in ogni sessione: dichiara la cartella madre e il gate FUORI DAL CERVELLO. Il blocco marcato si aggiunge o si aggiorna; il resto del file resta intatto."
     }
   },
   "environment_checks": {
@@ -460,6 +502,10 @@
     "remote_backup": {
       "scope": "account",
       "description": "Dopo la scelta del proprietario collega il backup remoto; ogni push resta un comando esplicito."
+    },
+    "user_instructions_gate": {
+      "scope": "machine",
+      "description": "Sulla macchina cliente apri l'agente da una cartella estranea alla casa: le istruzioni globali devono farlo rispondere FUORI DAL CERVELLO senza scrivere nulla. Prova su ogni postazione."
     }
   },
   "semantic_requirements": {

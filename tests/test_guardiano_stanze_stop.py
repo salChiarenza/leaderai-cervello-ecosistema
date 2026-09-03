@@ -59,6 +59,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             "Studio Test",
             "both",
             claude_user_settings_path=Path(parent) / "claude-user-settings.json",
+            claude_user_instructions_path=(Path(parent) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+            codex_user_instructions_path=(Path(parent) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
         )
         return target
 
@@ -577,6 +579,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
                 "Studio Test",
                 "both",
                 claude_user_settings_path=Path(tmp) / "claude-user-settings.json",
+                claude_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
             )
 
             codex = json.loads(codex_path.read_text(encoding="utf-8"))
@@ -622,6 +626,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
                 "Studio Test",
                 "both",
                 claude_user_settings_path=Path(tmp) / "claude-user-settings.json",
+                claude_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
             )
 
             updated = json.loads(codex_path.read_text(encoding="utf-8"))
@@ -655,6 +661,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
                 "Studio Test",
                 "both",
                 claude_user_settings_path=Path(tmp) / "claude-user-settings.json",
+                claude_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
             )
 
             updated = json.loads(codex_path.read_text(encoding="utf-8"))
@@ -681,6 +689,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
                 "Studio Test",
                 "both",
                 claude_user_settings_path=Path(tmp) / "claude-user-settings.json",
+                claude_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
             )
 
             self.assertEqual(result.target_verdict, "NON PASSA")
@@ -700,6 +710,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
                 "Studio Test",
                 "both",
                 claude_user_settings_path=Path(tmp) / "claude-user-settings.json",
+                claude_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=(Path(tmp) / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
             )
 
             self.assertEqual(result.target_verdict, "NON PASSA")

@@ -21,6 +21,10 @@ class EcosistemaInspectorTest(unittest.TestCase):
     def make_target(self, root: str, agent: str = "claude") -> Path:
         target = Path(root) / "EcosistemaAI-Test"
         self.claude_user_settings = Path(root) / "claude-user-settings.json"
+        # Nomi reali dei file utente, in una home finta: Codex sostituisce
+        # AGENTS.md con AGENTS.override.md solo quando il nome e' quello vero.
+        self.claude_user_instructions = Path(root) / "home-finta" / ".claude" / "CLAUDE.md"
+        self.codex_user_instructions = Path(root) / "home-finta" / ".codex" / "AGENTS.md"
         leaderai_setup.run_setup(
             target,
             "Cliente Test",
@@ -30,6 +34,8 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 if agent in {"claude", "both"}
                 else None
             ),
+            claude_user_instructions_path=self.claude_user_instructions,
+            codex_user_instructions_path=self.codex_user_instructions,
         )
         if agent == "codex":
             self.claude_user_settings.write_text("{}\n", encoding="utf-8")
@@ -39,6 +45,8 @@ class EcosistemaInspectorTest(unittest.TestCase):
         return ecosistema_inspector.inspect_ecosystem(
             target,
             claude_user_settings_path=self.claude_user_settings,
+            claude_user_instructions_path=self.claude_user_instructions,
+            codex_user_instructions_path=self.codex_user_instructions,
         )
 
     def add_room_to_registry(self, target: Path, row: str = ROOM_ROW) -> None:
@@ -1466,6 +1474,76 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",
                 self.codes(inspection),
             )
+
+
+    def test_missing_user_instructions_block_pass(self):
+        """Caso Pastore 03/09/2026: casa installata, ma l'agente aperto da
+        un'altra cartella non sapeva dove fosse la casa."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "claude")
+            self.claude_user_instructions.unlink()
+
+            inspection = self.inspect(target)
+
+            self.assertIn("USER_INSTRUCTIONS_MISSING", self.codes(inspection))
+            self.assertEqual(inspection.verdict, "NON PASSA")
+
+    def test_user_instructions_without_house_path_block_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "claude")
+            self.claude_user_instructions.write_text(
+                "# Preferenze\n- Rispondi in italiano.\n", encoding="utf-8"
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertIn("USER_INSTRUCTIONS_WITHOUT_HOUSE", self.codes(inspection))
+            self.assertEqual(inspection.verdict, "NON PASSA")
+
+    def test_user_instructions_naming_the_house_without_gate_is_a_warning(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "claude")
+            self.claude_user_instructions.write_text(
+                f"La casa e' `{target.resolve()}`.\n", encoding="utf-8"
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertIn("USER_INSTRUCTIONS_WITHOUT_GATE", self.codes(inspection))
+            self.assertEqual(inspection.verdict, "PASSA CON ATTENZIONE")
+
+    def test_user_instructions_accept_portable_home_form(self):
+        with tempfile.TemporaryDirectory(dir=Path.home()) as tmp:
+            target = self.make_target(tmp, "claude")
+            relative = target.resolve().relative_to(Path.home().resolve())
+            self.claude_user_instructions.write_text(
+                f"Casa: `~/{relative.as_posix()}`. Fuori = FUORI DAL CERVELLO.\n",
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertNotIn("USER_INSTRUCTIONS_WITHOUT_HOUSE", self.codes(inspection))
+            self.assertNotIn("USER_INSTRUCTIONS_WITHOUT_GATE", self.codes(inspection))
+
+    def test_codex_reads_override_instructions_when_present(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "codex")
+            override = self.codex_user_instructions.with_name("AGENTS.override.md")
+            override.write_text("# Override senza casa\n", encoding="utf-8")
+
+            inspection = self.inspect(target)
+
+            self.assertIn("USER_INSTRUCTIONS_WITHOUT_HOUSE", self.codes(inspection))
+
+    def test_codex_user_instructions_missing_block_pass(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp, "codex")
+            self.codex_user_instructions.unlink()
+
+            inspection = self.inspect(target)
+
+            self.assertIn("USER_INSTRUCTIONS_MISSING", self.codes(inspection))
 
 
 if __name__ == "__main__":

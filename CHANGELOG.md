@@ -1,5 +1,49 @@
 # Changelog
 
+## 0.6.7 - 03/09/2026
+
+- Istruzioni globali dell'agente attivo (caso reale Pastore, 03/09/2026: casa
+  installata, ma Claude Code aperto da un'altra cartella non sapeva che la casa
+  esistesse). Lo standard ora scrive il blocco marcato `LEADERAI-CASA` nelle
+  istruzioni lette in ogni sessione: `~/.claude/CLAUDE.md` per Claude Code
+  (calco `templates/CLAUDE_USER.md`), `~/.codex/AGENTS.md` o
+  `AGENTS.override.md` per Codex (calco `templates/CODEX_USER_AGENTS.md`).
+  Il blocco si aggiunge o si aggiorna senza toccare il resto del file. Nuovi
+  effetti esterni `claude_user_instructions` e `codex_user_instructions`, nuovo
+  controllo ambiente `user_instructions_gate` (prova da cartella estranea ->
+  `FUORI DAL CERVELLO`). `leaderai_setup.py` li applica solo con un percorso
+  letto sulla macchina (`--claude-user-instructions`,
+  `--codex-user-instructions`); senza, non tocca la home. L'Ispettore emette
+  `USER_INSTRUCTIONS_MISSING` e `USER_INSTRUCTIONS_WITHOUT_HOUSE` (bloccanti) e
+  `USER_INSTRUCTIONS_WITHOUT_GATE` (attenzione); accetta il percorso della casa
+  in forma assoluta, `~/`, `$HOME/` o `%USERPROFILE%\`.
+- Fonti ufficiali obbligatorie in ogni checkup: la pagina memory di Claude Code
+  (scope dei `CLAUDE.md`) e la pagina `AGENTS.md` di Codex (caricamento
+  gerarchico, override, tetto di byte).
+- Anagrafe dei soggetti giuridici: nuovo calco `templates/SOGGETTI.md` ->
+  `ecosistema/SOGGETTI.md`, obbligatorio nell'armadio comune (contratto,
+  guardiano, harness). Regola "piu' soggetti, una casa": stanze per funzione,
+  sottocartelle per soggetto solo dove la legge o il lavoro lo impongono,
+  stanza per soggetto solo con processi propri. Caso reale: sei enti dichiarati
+  dopo una proposta costruita su tre attivita'.
+- Percorso guidato LeaderAI: finche' `logs/install-log.md` non registra
+  `PERCORSO GUIDATO CHIUSO`, creare, fondere, spostare o eliminare stanze si
+  decide nella sessione con il consulente (`DA DECIDERE IN CALL`), anche se il
+  proprietario approva a voce. Riga aggiunta in `ecosistema/LIMITI.md`.
+- Ispettore come ultimo passo obbligatorio dell'installazione, in una nuova
+  sessione nata dalla cartella madre: la sessione che monta la casa non chiude
+  l'installazione.
+- Criterio della conferma finale reso esplicito ovunque: parte soltanto con
+  verdetto `PASSA` pieno; con `PASSA CON ATTENZIONE` resta nella casa e, se
+  serve un gesto umano, il solo messaggio ammesso e' `SERVE UN TUO PASSAGGIO`.
+  Caso reale: rapporto di nove sezioni partito con collaudo incompleto.
+- Lezione candidata promossa: su Windows i comandi di testo POSIX (sed, awk)
+  perdono i backslash dei percorsi `%USERPROFILE%\...`; dopo ogni scrittura
+  automatica dei registri si verifica con una ricerca e si registra la prova.
+- Risolto un avviso di sintassi nell'Ispettore (sequenza di escape in una
+  stringa) che sarebbe diventato errore nelle prossime versioni di Python.
+
+
 ## 0.6.6 - 02/09/2026
 
 - Contratto di stanza "consolidato": una casa nata prima dello standard, con

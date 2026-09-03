@@ -157,6 +157,8 @@ Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 - `templates/AGENTS.md`;
 - `templates/STANZA_AGENTS.md`;
 - `templates/STANZA_FONTE.md`;
+- `templates/SOGGETTI.md`;
+- `templates/CLAUDE_USER.md` e `templates/CODEX_USER_AGENTS.md`;
 - `templates/ISPETTORE_SKILL.md`;
 - `AGENTS.md`;
 - `README.md`.
@@ -212,8 +214,8 @@ Segnali di vita da pesare piu' del nome:
 
 - `memory/MEMORY.md compilata`, non solo file vuoto o template;
 - `logs/ con attivita'`;
-- `ecosistema/ASSET.md`, `FONTI.md`, `PROCESSI.md` o `LIMITI.md` con contenuto
-  del proprietario;
+- `ecosistema/ASSET.md`, `FONTI.md`, `PROCESSI.md`, `LIMITI.md` o `SOGGETTI.md`
+  con contenuto del proprietario;
 - `commit git` oltre al primo commit tecnico;
 - file di lavoro recenti, output, procedure, bozze o documenti davvero usati;
 - connettori provati con un dato reale letto, non solo dichiarati.
@@ -269,8 +271,8 @@ agenti realmente attivi:
 
 | Modalita' rilevata | Aggancio minimo obbligatorio | Configurazione tecnica da verificare |
 |---|---|---|
-| Codex | `AGENTS.md` + `.codex/README.md` + `.agents/skills/ispettore-ecosistema/SKILL.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto |
-| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `autoMemoryDirectory` nelle user settings di ogni PC (`~/.claude/settings.json`) sulla memoria canonica della casa; altre settings solo se servono |
+| Codex | `AGENTS.md` + `.codex/README.md` + `.agents/skills/ispettore-ecosistema/SKILL.md` | `.codex/config.toml` se esiste o se servono impostazioni di progetto; blocco `LEADERAI-CASA` in `~/.codex/AGENTS.md` (o `AGENTS.override.md`) di ogni PC |
+| Claude Code | `CLAUDE.md` + `.claude/README.md` + `.claude/skills/ispettore-ecosistema/SKILL.md` | `autoMemoryDirectory` nelle user settings di ogni PC (`~/.claude/settings.json`) sulla memoria canonica della casa; blocco `LEADERAI-CASA` in `~/.claude/CLAUDE.md` di ogni PC; altre settings solo se servono |
 | Entrambi | entrambi gli agganci | entrambi i rami, senza duplicare le istruzioni comuni |
 
 La modalita' `both` vale solo se risultano entrambi realmente attivi oppure se
@@ -357,6 +359,17 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    documento aperto altrove non costituiscono accesso al Cervello. Percorso
    diverso = `FUORI DAL CERVELLO`, nessuna scrittura e un solo gesto preciso
    per aprire la cartella madre.
+1-bis. **Istruzioni globali dell'agente attivo** — Claude Code legge
+   `~/.claude/CLAUDE.md` in ogni sessione, Codex legge `~/.codex/AGENTS.md`
+   (o `AGENTS.override.md` se esiste) in ogni task. Su ogni computer del
+   proprietario quel file porta il blocco `LEADERAI-CASA` con il percorso
+   della cartella madre e il gate `FUORI DAL CERVELLO`. Se manca o non
+   nomina la casa, aggiungi o aggiorna soltanto il blocco dal calco
+   ufficiale (`templates/CLAUDE_USER.md`, `templates/CODEX_USER_AGENTS.md`)
+   senza toccare il resto del file, poi prova da una cartella estranea: la
+   risposta deve essere `FUORI DAL CERVELLO` senza scritture. Finding
+   macchina: `USER_INSTRUCTIONS_MISSING`, `USER_INSTRUCTIONS_WITHOUT_HOUSE`
+   (bloccanti), `USER_INSTRUCTIONS_WITHOUT_GATE` (attenzione).
 2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
 3. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
@@ -492,6 +505,11 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - Claude Code e' attivo ma `autoMemoryDirectory` nelle user settings non punta
   alla memoria canonica della casa, il trust non e' confermato o esistono due
   memorie divergenti non riconciliate;
+- le istruzioni globali dell'agente attivo mancano o non nominano la cartella
+  madre (`USER_INSTRUCTIONS_MISSING`, `USER_INSTRUCTIONS_WITHOUT_HOUSE`),
+  oppure la prova da cartella estranea non risponde `FUORI DAL CERVELLO`;
+- manca `ecosistema/SOGGETTI.md` oppure un soggetto giuridico nominato dal
+  proprietario non ha la sua riga nell'anagrafe;
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
 - una prova di processo o di fonte e' circolare, inventata durante il checkup
@@ -586,6 +604,15 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    richiedono una classe. Una casa consolidata puo' dichiarare nella mappa madre
    `- Registro di dettaglio canonico: \`percorso.md\`` e usare quel registro al
    posto di `ecosistema/ASSET.md` e `ecosistema/FONTI.md`, senza creare doppioni.
+1-bis. Censisci i soggetti giuridici che il proprietario governa da questa
+   casa in `ecosistema/SOGGETTI.md`, una riga per soggetto, con stato
+   `DA CENSIRE`, `ATTIVO`, `CONTENITORE` o `CHIUSO`. Le stanze seguono le
+   funzioni del lavoro, non i soggetti: sei societa' non fanno sei case ne'
+   sei stanze. Dentro una stanza il soggetto e' una sottocartella dichiarata
+   solo dove la legge o il lavoro lo separano; una stanza per soggetto nasce
+   soltanto se ha processi propri che nessuna stanza funzionale puo' ospitare.
+   Durante un percorso guidato LeaderAI `IN CORSO` la decisione resta
+   `DA DECIDERE IN CALL` nella sessione con il consulente.
 2. Una stanza e' una responsabilita' business stabile riconosciuta dal
    proprietario. Mantiene stato operativo, decisioni e lavoro corrente. Una
    skill, uno script, un agente, un connettore, un modulo, un modello o una
@@ -921,6 +948,8 @@ Settings e permessi     OK / RIPARATO / NON ATTIVO / NON PASSA - ...
 Chat di gruppo          OK / RIPARATO / DA FARE - AGENT_CHAT.md presente e disciplinata
 Memoria                 OK / RIPARATO / DA FARE - ...
 Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
+Istruzioni globali      OK / RIPARATO / NON PASSA - file utente, casa nominata, gate provato da fuori...
+Soggetti giuridici      OK / RIPARATO / DA CENSIRE - anagrafe ecosistema/SOGGETTI.md, stanze per funzione...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...
@@ -1027,10 +1056,13 @@ risposta, riprendi la stessa missione e arriva alla fine.
 
 Quando Sal richiede espressamente una conferma finale, inviala una volta sola
 quando tutti i criteri della missione sono completati e provati, compreso il
-processo reale e la riapertura del contesto. Apri con
+processo reale e la riapertura del contesto, cioe' soltanto con verdetto
+`PASSA` pieno. Apri con
 `Perfetto, l'ho fatto. Tutto completato e funzionante.` e riporta le prove
-essenziali. Gli esiti intermedi restano nella casa e alimentano la stessa
-missione.
+essenziali. Con `PASSA CON ATTENZIONE` la conferma non parte: se serve un
+gesto del proprietario, il solo messaggio ammesso e' `SERVE UN TUO
+PASSAGGIO`. Un rapporto lungo con collaudo incompleto non e' una conferma.
+Gli esiti intermedi restano nella casa e alimentano la stessa missione.
 
 ## Chiusura locale
 

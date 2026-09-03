@@ -23,6 +23,12 @@ Prima di lavorare Codex mostra:
 Percorso diverso o mappa non caricata = `FUORI DAL CERVELLO`: nessuna
 scrittura, un solo gesto preciso per aprire la cartella, poi nuova task.
 
+Questo gate funziona anche quando la task nasce altrove perche' l'`AGENTS.md`
+globale di Codex (`~/.codex/AGENTS.md`, oppure `AGENTS.override.md` se
+esiste, letto in ogni task) porta il blocco `LEADERAI-CASA` con il percorso
+della cartella madre. Senza quel blocco l'agente aperto da un'altra cartella
+parte cieco. L'Ispettore lo verifica e lo ripara.
+
 Per il controllo completo il proprietario puo' dire `lancia l'Ispettore` o
 richiamare `$ispettore-ecosistema`. La skill apre la procedura unica
 `CHECKUP.md` della repo `salChiarenza/leaderai-cervello-ecosistema`.

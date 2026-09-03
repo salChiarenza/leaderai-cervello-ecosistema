@@ -45,7 +45,9 @@ STANDARD_FILES = (
     "templates/CLAUDE_SETTINGS.json",
     "templates/CLAUDE.md",
     "templates/CLAUDE_README.md",
+    "templates/CLAUDE_USER.md",
     "templates/CODEX_README.md",
+    "templates/CODEX_USER_AGENTS.md",
     "templates/CODEX_HOOKS.json",
     "templates/FONTI.md",
     "templates/GITIGNORE.txt",
@@ -56,6 +58,7 @@ STANDARD_FILES = (
     "templates/LIMITI.md",
     "templates/MEMORY.md",
     "templates/PROCESSI.md",
+    "templates/SOGGETTI.md",
     "templates/STANZA_AGENTS.md",
     "templates/STANZA_FONTE.md",
     "templates/ecosystem-check/AGENTS.md",
@@ -146,8 +149,8 @@ Esegui il nucleo deterministico della procedura manuale:
 - lascia le prove che richiedono account, browser, impostazioni utente o dati
   reali come `DA COLLAUDARE` o `DA COLLEGARE`, senza fermare il telaio;
 - registra in `logs/install-log.md`, con queste chiavi esatte, `default_browser`,
-  `desktop_launcher` e `remote_backup`, ciascuna con stato `DA COLLAUDARE` o
-  `DA COLLEGARE`;
+  `desktop_launcher`, `remote_backup` e `user_instructions_gate`, ciascuna con
+  stato `DA COLLAUDARE` o `DA COLLEGARE`;
 - registra nello stesso evento del log standard, versione, modalita', prove
   svolte e limiti; la conferma finale resta nel messaggio conclusivo;
 - il messaggio del primo commit contiene esattamente `installazione iniziale`.

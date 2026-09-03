@@ -18,6 +18,12 @@ Percorso diverso, ponte assente o mappa non caricata = `FUORI DAL CERVELLO`:
 nessuna scrittura, un solo gesto preciso per entrare nella cartella, poi nuova
 sessione.
 
+Questo gate funziona anche quando la sessione nasce altrove perche' le
+istruzioni utente di Claude Code (`~/.claude/CLAUDE.md`, lette in ogni
+sessione) portano il blocco `LEADERAI-CASA` con il percorso della cartella
+madre. Senza quel blocco l'agente aperto da un'altra cartella parte cieco.
+L'Ispettore lo verifica e lo ripara.
+
 Per il controllo completo il proprietario puo' dire `lancia l'Ispettore` o
 usare `/ispettore-ecosistema`. La skill apre la procedura unica `CHECKUP.md`
 della repo `salChiarenza/leaderai-cervello-ecosistema`.

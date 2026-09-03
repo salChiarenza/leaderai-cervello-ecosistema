@@ -27,6 +27,8 @@ class EcosystemCheckRoomTest(unittest.TestCase):
             "Cliente Test",
             "both",
             claude_user_settings_path=target.parent / "claude-user-settings.json",
+            claude_user_instructions_path=(target.parent / "claude-user-settings.json").with_name("claude-user-CLAUDE.md"),
+            codex_user_instructions_path=(target.parent / "claude-user-settings.json").with_name("codex-user-AGENTS.md"),
         )
 
     def test_fresh_install_creates_complete_ecosystem_check_room(self):

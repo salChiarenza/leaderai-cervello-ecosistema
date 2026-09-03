@@ -47,14 +47,18 @@ personalizzazione, fonti reali e prove macchina.
    fotografia standard.
 5. Per Claude in un collaudo isolato non toccare le user settings: registra
    `autoMemoryDirectory` come `DA COLLAUDARE`. Sulla macchina cliente lo
-   configuri e lo provi seguendo la Fase 4.
+   configuri e lo provi seguendo la Fase 4. Lo stesso vale per le istruzioni
+   globali dell'agente (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`): nel
+   collaudo isolato restano `DA COLLAUDARE`, sulla macchina cliente si
+   scrivono e si provano.
 6. Inizializza Git locale. Prima del commit usa la allowlist dei file standard
    del contratto, rileggi lo staging e controlla nomi e contenuti per segreti.
    Il primo messaggio contiene la frase `installazione iniziale`.
 7. Registra in `logs/install-log.md` standard/versione, modalita', prove
    strutturali e limiti. Le prove macchina differite restano nelle fonti
    proprietarie con il prossimo passo preciso.
-8. Registra `default_browser`, `desktop_launcher` e `remote_backup` come
+8. Registra `default_browser`, `desktop_launcher`, `remote_backup` e
+   `user_instructions_gate` come
    `DA COLLAUDARE` o `DA COLLEGARE` nel collaudo anonimo. Sulla macchina
    cliente diventano `OK` soltanto dopo prova reale.
 9. Tratta `ecosistema/` come armadio comune ermetico: ammette soltanto i
@@ -188,6 +192,9 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/FONTI.md`
    - `templates/PROCESSI.md`
    - `templates/LIMITI.md`
+   - `templates/SOGGETTI.md`
+   - `templates/CLAUDE_USER.md`
+   - `templates/CODEX_USER_AGENTS.md`
    - `templates/INSTALL_LOG.md`
    - `templates/AGENT_CHAT.md`
    - `templates/GUARDIANO_STANZE.sh`
@@ -212,6 +219,7 @@ Fase 4 - monta localmente il Cervello
    - `templates/FONTI.md` -> `ecosistema/FONTI.md`
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
+   - `templates/SOGGETTI.md` -> `ecosistema/SOGGETTI.md`
    - `templates/STANZA_AGENTS.md` -> `ecosistema/STANZA_AGENTS.md`
    - `templates/STANZA_FONTE.md` -> `ecosistema/STANZA_FONTE.md`
    - `templates/INSTALL_LOG.md` -> `logs/install-log.md`
@@ -240,6 +248,10 @@ Fase 4 - monta localmente il Cervello
    se LeaderAI lo ha chiesto esplicitamente.
    Il guardiano di chiusura e' obbligatorio nel ramo attivo: una sola
    registrazione `Stop`, mai una seconda configurazione parallela.
+3-bis. Su Windows, dopo ogni scrittura automatica dei registri, cerca nei file
+   creati i percorsi `%USERPROFILE%\...` e verifica che i backslash siano
+   intatti: gli strumenti di testo POSIX (sed, awk) li perdono in silenzio.
+   Registra la prova nel log tecnico (caso reale del 03/09/2026).
 4. Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user
    settings di ogni computer (`~/.claude/settings.json`) con la forma portabile
    `~/...` della memoria canonica dichiarata nell'`AGENTS.md` quando vive sotto
@@ -249,6 +261,16 @@ Fase 4 - monta localmente il Cervello
    workspace e verifica ogni postazione con `/memory`. Se trovi una memoria
    auto esterna gia' piena, confronta e unisci le voci prima di cambiare il
    percorso.
+4-bis. Istruzioni globali dell'agente attivo, su ogni computer del cliente:
+   Claude Code legge `~/.claude/CLAUDE.md` in ogni sessione, Codex legge
+   `~/.codex/AGENTS.md` (o `AGENTS.override.md` se esiste) in ogni task.
+   Inserisci li' il blocco `LEADERAI-CASA` dal calco `templates/CLAUDE_USER.md`
+   o `templates/CODEX_USER_AGENTS.md`, con il percorso portabile della
+   cartella madre: se il file esiste, aggiungi o aggiorna soltanto il blocco
+   tra i due marcatori e lascia intatto il resto. Senza questo blocco l'agente
+   aperto da un'altra cartella non sa che la casa esiste e non puo' rispondere
+   `FUORI DAL CERVELLO`. Prova subito: apri l'agente da una cartella estranea
+   e verifica che rifiuti di scrivere e chieda di aprire la cartella madre.
 5. Aggiorna direttamente le fonti proprietarie: stato operativo, memoria,
    asset, processi, limiti e storia tecnica restano nei rispettivi file.
 6. Integra le sezioni mancanti dei file vivi e registra nel log tecnico cosa
@@ -288,7 +310,22 @@ Amministratore di settore, subordinato al Boss:
    due;
 7. ripara ponti e puntatori tecnici rotti; per creare, fondere, rinominare,
    spostare o eliminare stanze presenta una proposta e attendi la decisione del
-   proprietario.
+   proprietario. Finche' il percorso guidato LeaderAI e' `IN CORSO` (dalla
+   installazione fino alla riga `PERCORSO GUIDATO CHIUSO` in
+   `logs/install-log.md`), quella decisione si prende nella sessione con il
+   consulente: la proposta resta nella fonte proprietaria come `DA DECIDERE IN
+   CALL`, anche se il proprietario e' entusiasta.
+
+Piu' soggetti giuridici, una casa. Se il proprietario governa piu' societa',
+cooperative, associazioni o enti, censiscili in `ecosistema/SOGGETTI.md`, una
+riga per soggetto: cosa fa davvero, chi lo amministra, quante persone, dove
+vivono i documenti, se riceve fatture, stato. Compilare quella tabella con il
+proprietario e' la prima discovery. Le stanze seguono le funzioni del lavoro
+(amministrazione, personale, commerciale, progetti), non i soggetti: dentro
+una stanza il soggetto diventa una sottocartella dichiarata solo dove la legge
+o il lavoro lo separano davvero (fatture, dipendenti, bilanci). Una stanza per
+soggetto nasce soltanto se quel soggetto ha processi propri che nessuna stanza
+funzionale puo' ospitare. Sei societa' non fanno sei case ne' sei stanze.
 
 Skill, script, agenti, connettori, moduli e procedure sono capacita' della
 stanza che li usa. Se una capacita' e' gia' coperta, integrala o riusala. Una
@@ -429,6 +466,9 @@ Chiudilo cosi':
 6. Prova da una posizione estranea alla casa. La nuova task/sessione deve
    dichiarare percorso corrente, mappa caricata e tre regole lette da
    `AGENTS.md`. Percorso diverso = `FUORI DAL CERVELLO`, nessuna scrittura.
+   Questa risposta arriva soltanto se le istruzioni globali del punto 4-bis
+   sono al loro posto: un agente che da fuori casa lavora come se niente
+   fosse dimostra che il blocco `LEADERAI-CASA` manca.
 7. Esegui quindi, senza aggiungere percorsi o indizi, la richiesta esatta:
    `Crea la Brand Identity`. La prova passa solo se l'agente instrada dalla
    mappa madre alla responsabilita' proprietaria, apre fonti brand reali e
@@ -440,7 +480,7 @@ Fase 6 - collaudo
 1. Verifica che nella cartella madre esistano:
    AGENTS.md, CLAUDE.md, .gitignore, memory/MEMORY.md,
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
-   ecosistema/LIMITI.md, logs/install-log.md.
+   ecosistema/LIMITI.md, ecosistema/SOGGETTI.md, logs/install-log.md.
    Verifica anche che ogni vera stanza abbia `AGENTS.md` + `CLAUDE.md` e che
    ogni `CLAUDE.md` contenga soltanto `@AGENTS.md`. Verifica che la mappa madre
    dichiari il Boss dell'Ecosistema e che ogni ramo, nuovo o preesistente,
@@ -452,6 +492,10 @@ Fase 6 - collaudo
    entrambe in modalita' both.
    Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
    del workspace e `/memory` sulla memoria canonica.
+   Verifica su ogni computer le istruzioni globali dell'agente attivo
+   (`~/.claude/CLAUDE.md` o `~/.codex/AGENTS.md`): blocco `LEADERAI-CASA`
+   presente, percorso della cartella madre corretto, prova da cartella
+   estranea superata.
 2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
    `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
    esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
@@ -485,10 +529,14 @@ Fase 6 - collaudo
 8. Verifica che ogni stanza sia raggiungibile dalla mappa madre, che nessuna
    capacita' sia isolata, che ogni amministratore riporti al Boss e che non
    esistano due stanze per la stessa funzione.
-9. Lancia l'Ispettore sul risultato: censisci ogni cartella e file visibile
-   nella home, classifica i percorsi, ripara i buchi sicuri e blocca il
-   verdetto se restano cartelle generiche, vuote, doppie, tecniche, senza
-   proprietario o stanze senza mappa. Registra la tabella
+9. Lancia l'Ispettore sul risultato, in una NUOVA sessione nata dalla cartella
+   madre: e' l'ultimo passo obbligatorio dell'installazione, non un compito
+   da rimandare alla prossima volta. La sessione che ha montato la casa chiude
+   con lo stato salvato; quella nuova esegue l'Ispettore, prova le tre domande
+   senza indizi e solo allora l'installazione e' chiusa. Censisci ogni
+   cartella e file visibile nella home, classifica i percorsi, ripara i buchi
+   sicuri e blocca il verdetto se restano cartelle generiche, vuote, doppie,
+   tecniche, senza proprietario o stanze senza mappa. Registra la tabella
    `percorso | classe | amministratore | riporta al | mappa locale |
    collegamento radice | azione | prova`.
 10. Confronta la versione in `AGENTS.md` con il `VERSION` appena letto: senza
@@ -603,6 +651,9 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - cartella madre = repository git si/no;
 - `.gitignore` esclude i segreti si/no;
 - memoria unica e, per Claude, prova `autoMemoryDirectory` + `/memory`;
+- istruzioni globali dell'agente attivo con blocco `LEADERAI-CASA`, percorso
+  della cartella madre e prova da cartella estranea (`user_instructions_gate`);
+- soggetti giuridici censiti in `ecosistema/SOGGETTI.md`, stanze per funzione;
 - guardiano di chiusura presente una sola volta, visibile in `/hooks`, con
   prova pulita e prova bloccante;
 - backup scelto: GitHub privato / copia su Drive-OneDrive / da fare (Domanda 2);
@@ -672,9 +723,13 @@ tecniche restano nelle fonti della casa.
 
 Quando Sal richiede espressamente una conferma finale, inviala una volta sola
 quando tutti i criteri della missione, compreso il processo reale e la
-riapertura del contesto, sono completati e provati. Apri con
+riapertura del contesto, sono completati e provati, cioe' soltanto con
+verdetto `PASSA` pieno. Apri con
 `Perfetto, l'ho fatto. Tutto completato e funzionante.` e aggiungi le prove
-essenziali. Ogni stato intermedio resta nella casa e alimenta
+essenziali. Con `PASSA CON ATTENZIONE` la conferma non parte: lo stato resta
+nella casa e, se serve un gesto del proprietario, il solo messaggio ammesso
+e' `SERVE UN TUO PASSAGGIO`. Un rapporto lungo con collaudo incompleto non e'
+una conferma. Ogni stato intermedio resta nella casa e alimenta
 l'auto-riparazione della stessa missione.
 
 Regola stabile: ogni email di missione da LeaderAI si ESEGUE, si ripara tutto

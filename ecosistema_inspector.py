@@ -621,7 +621,7 @@ CANONICAL_REGISTRY_RE = re.compile(
 
 def parse_canonical_registries(agents_text: str) -> list[str]:
     """Casa consolidata: la mappa madre puo' dichiarare uno o piu' registri di
-    dettaglio propri (`- Registro di dettaglio canonico: \`percorso.md\``) al
+    dettaglio propri (`- Registro di dettaglio canonico: \\`percorso.md\\``) al
     posto di `ecosistema/ASSET.md` e `ecosistema/FONTI.md`. Il registro deve
     esistere come file locale e contenere una riga di tabella con il percorso."""
     registries: list[str] = []
@@ -965,6 +965,116 @@ def _extract_installed_version(target: Path) -> str | None:
             if match:
                 return match.group(1)
     return None
+
+
+USER_INSTRUCTIONS_FILES = {
+    # agente -> (etichetta, file predefinito, file che lo sostituisce se esiste)
+    "claude": ("~/.claude/CLAUDE.md", (".claude", "CLAUDE.md"), None),
+    "codex": ("~/.codex/AGENTS.md", (".codex", "AGENTS.md"), (".codex", "AGENTS.override.md")),
+}
+
+
+def _house_references(target: Path) -> set[str]:
+    """Modi in cui un file di istruzioni puo' nominare la cartella madre.
+
+    Portabile (`~/...`, `$HOME/...`, `%USERPROFILE%\\...`) quando la casa vive
+    sotto la home; assoluto in ogni caso.
+    """
+    references = {str(target), target.as_posix()}
+    try:
+        relative = target.resolve().relative_to(Path.home().resolve())
+    except ValueError:
+        return references
+    if relative.parts:
+        references.add(f"~/{relative.as_posix()}")
+        references.add(f"$HOME/{relative.as_posix()}")
+        references.add("%USERPROFILE%\\" + "\\".join(relative.parts))
+    return references
+
+
+def _user_instructions_candidates(
+    agent: str, requested: Path | None
+) -> tuple[list[Path], str]:
+    label, default_parts, override_parts = USER_INSTRUCTIONS_FILES[agent]
+    if requested is not None:
+        path = requested.expanduser()
+        candidates = [path]
+        if override_parts is not None and path.name == default_parts[-1]:
+            candidates.insert(0, path.with_name(override_parts[-1]))
+        return candidates, str(requested)
+    candidates = []
+    if override_parts is not None:
+        candidates.append(Path.home().joinpath(*override_parts))
+    candidates.append(Path.home().joinpath(*default_parts))
+    return candidates, label
+
+
+def _user_instructions_findings(
+    target: Path,
+    active_agents: set[str],
+    claude_user_instructions_path: Path | None,
+    codex_user_instructions_path: Path | None,
+) -> list[Finding]:
+    """Le istruzioni globali dell'agente attivo devono portarlo nella casa.
+
+    Senza questo blocco l'agente aperto da un'altra cartella parte cieco:
+    non sa che la casa esiste e non puo' rispondere FUORI DAL CERVELLO.
+    """
+    findings: list[Finding] = []
+    requested_paths = {
+        "claude": claude_user_instructions_path,
+        "codex": codex_user_instructions_path,
+    }
+    references = _house_references(target)
+    for active_agent in sorted(active_agents):
+        candidates, label = _user_instructions_candidates(
+            active_agent, requested_paths[active_agent]
+        )
+        active = next((item for item in candidates if item.is_file()), None)
+        if active is None:
+            findings.append(
+                Finding(
+                    "USER_INSTRUCTIONS_MISSING",
+                    "BLOCKER",
+                    label,
+                    "Manca il file di istruzioni globali dell'agente attivo: "
+                    "aperto da un'altra cartella non sa dove sta la casa.",
+                )
+            )
+            continue
+        try:
+            text = active.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            findings.append(
+                Finding(
+                    "USER_INSTRUCTIONS_UNREADABLE",
+                    "BLOCKER",
+                    label,
+                    "Il file di istruzioni globali non e' leggibile come testo UTF-8.",
+                )
+            )
+            continue
+        if not any(reference in text for reference in references):
+            findings.append(
+                Finding(
+                    "USER_INSTRUCTIONS_WITHOUT_HOUSE",
+                    "BLOCKER",
+                    label,
+                    "Le istruzioni globali non nominano la cartella madre: "
+                    "aggiungere il blocco LEADERAI-CASA con il percorso della casa.",
+                )
+            )
+        elif "FUORI DAL CERVELLO" not in text:
+            findings.append(
+                Finding(
+                    "USER_INSTRUCTIONS_WITHOUT_GATE",
+                    "ATTENZIONE",
+                    label,
+                    "Le istruzioni globali nominano la casa ma non il gate "
+                    "FUORI DAL CERVELLO: l'agente aperto altrove puo' scrivere fuori casa.",
+                )
+            )
+    return findings
 
 
 def _is_inside_home(path: Path) -> bool:
@@ -2023,6 +2133,8 @@ def inspect_ecosystem(
     target: Path,
     agent: str = "auto",
     claude_user_settings_path: Path | None = None,
+    claude_user_instructions_path: Path | None = None,
+    codex_user_instructions_path: Path | None = None,
 ) -> Inspection:
     requested_target = target.expanduser()
     if requested_target.is_symlink():
@@ -3224,6 +3336,15 @@ def inspect_ecosystem(
                         )
                     )
 
+    findings.extend(
+        _user_instructions_findings(
+            target,
+            active_agents,
+            claude_user_instructions_path,
+            codex_user_instructions_path,
+        )
+    )
+
     current_credential_paths: set[str] = set()
     for rel, _path in _iter_files(target):
         if _is_credential_candidate(rel):
@@ -3403,6 +3524,20 @@ def parse_args() -> argparse.Namespace:
             "Default: ~/.claude/settings.json."
         ),
     )
+    parser.add_argument(
+        "--claude-user-instructions",
+        help=(
+            "Percorso delle istruzioni utente Claude Code letto su questa macchina. "
+            "Default: ~/.claude/CLAUDE.md."
+        ),
+    )
+    parser.add_argument(
+        "--codex-user-instructions",
+        help=(
+            "Percorso dell'AGENTS.md globale di Codex letto su questa macchina. "
+            "Default: ~/.codex/AGENTS.override.md se esiste, altrimenti ~/.codex/AGENTS.md."
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Emette JSON.")
     return parser.parse_args()
 
@@ -3415,6 +3550,16 @@ def main() -> int:
         claude_user_settings_path=(
             Path(args.claude_user_settings)
             if args.claude_user_settings
+            else None
+        ),
+        claude_user_instructions_path=(
+            Path(args.claude_user_instructions)
+            if args.claude_user_instructions
+            else None
+        ),
+        codex_user_instructions_path=(
+            Path(args.codex_user_instructions)
+            if args.codex_user_instructions
             else None
         ),
     )

@@ -138,6 +138,9 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `.claude/settings.json` con lo stesso controllo finale, senza sovrascritture
 - user settings Claude Code (`~/.claude/settings.json`) con
   `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
+- istruzioni globali dell'agente attivo su ogni PC (`~/.claude/CLAUDE.md` o
+  `~/.codex/AGENTS.md`) con il blocco `LEADERAI-CASA`: nominano la cartella
+  madre e fanno rispondere `FUORI DAL CERVELLO` a una sessione nata altrove
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
 - `.agent/hooks/guardiano_stanze.sh` e adattatore Windows: prima della chiusura
@@ -149,6 +152,7 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/ASSET.md`
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
+- `ecosistema/SOGGETTI.md` anagrafe dei soggetti giuridici: piu' soggetti, una casa
 - `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
 - `ecosistema/STANZA_FONTE.md` come calco della loro fonte operativa
 

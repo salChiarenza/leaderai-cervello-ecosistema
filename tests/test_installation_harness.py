@@ -54,6 +54,7 @@ write("ecosistema/ASSET.md", render("ASSET.md"))
 write("ecosistema/FONTI.md", render("FONTI.md"))
 write("ecosistema/PROCESSI.md", render("PROCESSI.md"))
 write("ecosistema/LIMITI.md", render("LIMITI.md"))
+write("ecosistema/SOGGETTI.md", render("SOGGETTI.md"))
 write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))
 write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))
 write("ecosystem-check/AGENTS.md", render("ecosystem-check/AGENTS.md"))
@@ -104,7 +105,8 @@ write(
     "Modalita': " + mode + "\n"
     "default_browser: DA COLLAUDARE\n"
     "desktop_launcher: DA COLLAUDARE\n"
-    "remote_backup: DA COLLEGARE\n",
+    "remote_backup: DA COLLEGARE\n"
+    "user_instructions_gate: DA COLLAUDARE\n",
 )
 
 if mode in ("codex", "both"):

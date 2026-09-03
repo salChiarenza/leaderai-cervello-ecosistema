@@ -30,6 +30,8 @@ class InstallContractTest(unittest.TestCase):
                 "https://openai.com/it-IT/academy/codex-for-work/",
                 "https://code.claude.com/docs/en/hooks",
                 "https://learn.chatgpt.com/docs/hooks",
+                "https://code.claude.com/docs/en/memory",
+                "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
             ],
         )
         self.assertEqual(
@@ -38,6 +40,8 @@ class InstallContractTest(unittest.TestCase):
                 "technical_entrypoint",
                 "technical_entrypoint",
                 "operational_training",
+                "technical_specification",
+                "technical_specification",
                 "technical_specification",
                 "technical_specification",
             ],
@@ -119,15 +123,20 @@ class InstallContractTest(unittest.TestCase):
         )
         self.assertEqual(
             install_contract.external_effects(contract, "codex"),
-            {"git_baseline"},
+            {"git_baseline", "codex_user_instructions"},
         )
         self.assertEqual(
             install_contract.external_effects(contract, "claude"),
-            {"git_baseline", "claude_user_settings"},
+            {"git_baseline", "claude_user_settings", "claude_user_instructions"},
         )
         self.assertEqual(
             install_contract.environment_checks(contract),
-            {"default_browser", "desktop_launcher", "remote_backup"},
+            {
+                "default_browser",
+                "desktop_launcher",
+                "remote_backup",
+                "user_instructions_gate",
+            },
         )
         common_destinations = {
             str(rule["destination"])
@@ -225,6 +234,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "both",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
 
             self.assertEqual(result.target_verdict, "PASSA")
@@ -256,6 +267,8 @@ class InstallContractTest(unittest.TestCase):
                     "Cliente",
                     "both",
                     claude_user_settings_path=settings,
+                    claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                    codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
                 )
                 (target / relative).write_text("", encoding="utf-8")
 
@@ -264,6 +277,8 @@ class InstallContractTest(unittest.TestCase):
                     "Cliente",
                     "both",
                     claude_user_settings_path=settings,
+                    claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                    codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
                 )
 
                 self.assertEqual(result.target_verdict, "NON PASSA")
@@ -291,6 +306,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
 
             payload = json.loads(settings.read_text(encoding="utf-8"))
@@ -313,6 +330,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
 
             payload = json.loads(settings.read_text(encoding="utf-8"))
@@ -335,6 +354,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente Uno",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
             original = settings.read_text(encoding="utf-8")
 
@@ -343,6 +364,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente Due",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
 
             self.assertEqual(result.target_verdict, "NON PASSA")
@@ -356,13 +379,20 @@ class InstallContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "Casa"
-            leaderai_setup.run_setup(target, "Cliente", "codex")
+            leaderai_setup.run_setup(
+                target,
+                "Cliente",
+                "codex",
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
+            )
 
             result = leaderai_setup.run_setup(
                 target,
                 "Cliente",
                 "claude",
                 claude_user_settings_path=self.settings_path(root),
+                claude_user_instructions_path=self.settings_path(root).with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=self.settings_path(root).with_name("codex-user-AGENTS.md"),
             )
 
             self.assertEqual(result.target_verdict, "NON PASSA")
@@ -377,13 +407,20 @@ class InstallContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "Casa"
-            leaderai_setup.run_setup(target, "Cliente", "codex")
+            leaderai_setup.run_setup(
+                target,
+                "Cliente",
+                "codex",
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
+            )
 
             result = leaderai_setup.run_setup(
                 target,
                 "Cliente",
                 "claude",
                 claude_user_settings_path=self.settings_path(root),
+                claude_user_instructions_path=self.settings_path(root).with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=self.settings_path(root).with_name("codex-user-AGENTS.md"),
                 migrate_agent=True,
             )
 
@@ -401,7 +438,12 @@ class InstallContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "Casa"
-            leaderai_setup.run_setup(target, "Cliente", "codex")
+            leaderai_setup.run_setup(
+                target,
+                "Cliente",
+                "codex",
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
+            )
             customer_file = target / ".codex" / "cliente.txt"
             customer_file.write_text("preservare\n", encoding="utf-8")
 
@@ -410,6 +452,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=self.settings_path(root),
+                claude_user_instructions_path=self.settings_path(root).with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=self.settings_path(root).with_name("codex-user-AGENTS.md"),
                 migrate_agent=True,
             )
 
@@ -421,7 +465,12 @@ class InstallContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "Casa"
-            leaderai_setup.run_setup(target, "Cliente", "codex")
+            leaderai_setup.run_setup(
+                target,
+                "Cliente",
+                "codex",
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
+            )
             agents = target / "AGENTS.md"
             old = agents.read_text(encoding="utf-8").replace(
                 f"Versione standard applicata: `{leaderai_setup.STANDARD_VERSION}`.",
@@ -430,7 +479,12 @@ class InstallContractTest(unittest.TestCase):
             agents.write_text(old, encoding="utf-8")
             before = agents.read_text(encoding="utf-8")
 
-            result = leaderai_setup.run_setup(target, "Cliente", "codex")
+            result = leaderai_setup.run_setup(
+                target,
+                "Cliente",
+                "codex",
+                codex_user_instructions_path=target.parent / "codex-user-AGENTS.md",
+            )
 
             self.assertEqual(result.target_verdict, "NON PASSA")
             self.assertEqual(agents.read_text(encoding="utf-8"), before)
@@ -449,11 +503,15 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
             inspection = ecosistema_inspector.inspect_ecosystem(
                 target,
                 agent="claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
             self.assertEqual(result.target_verdict, inspection.verdict)
             self.assertFalse((target / "REPORT_FINALE.md").exists())
@@ -472,6 +530,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
             log_before = (target / "logs" / "install-log.md").read_text(
                 encoding="utf-8"
@@ -482,6 +542,8 @@ class InstallContractTest(unittest.TestCase):
                 "Cliente",
                 "claude",
                 claude_user_settings_path=settings,
+                claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
+                codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
             status = subprocess.run(
                 ["git", "status", "--porcelain"],
@@ -500,6 +562,35 @@ class InstallContractTest(unittest.TestCase):
                 (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
                 log_before,
             )
+
+
+    def test_user_instruction_effects_are_described_for_both_agents(self):
+        contract = install_contract.load_contract()
+
+        self.assertEqual(
+            install_contract.external_effects(contract, "both"),
+            {
+                "git_baseline",
+                "claude_user_settings",
+                "claude_user_instructions",
+                "codex_user_instructions",
+            },
+        )
+        for effect, default_path in (
+            ("claude_user_instructions", "~/.claude/CLAUDE.md"),
+            ("codex_user_instructions", "~/.codex/AGENTS.md"),
+        ):
+            spec = contract["external_effects"][effect]
+            self.assertEqual(spec["scope"], "user")
+            self.assertEqual(spec["default_path"], default_path)
+            self.assertEqual(spec["strategy"], "merge_marked_block")
+            template = install_contract.CONTRACT_PATH.parent / "templates" / spec["template"]
+            text = template.read_text(encoding="utf-8")
+            self.assertTrue(text.startswith(spec["block_start"]))
+            self.assertTrue(text.rstrip().endswith(spec["block_end"]))
+            self.assertIn("{{house_path}}", text)
+            self.assertIn("FUORI DAL CERVELLO", text)
+        self.assertIn("ecosistema/SOGGETTI.md", install_contract.required_paths(contract, "codex"))
 
 
 if __name__ == "__main__":

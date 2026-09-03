@@ -32,7 +32,7 @@ Versione standard applicata: `{{version}}`.
   memorie attive sono un blocco, non due livelli complementari.
 - `logs/install-log.md` registra solo installazione e cambi strutturali.
 - `ecosistema/` e' l'armadio comune: contiene soltanto `FONTI.md`, `ASSET.md`,
-  `PROCESSI.md`, `LIMITI.md`, `STANZA_AGENTS.md` e `STANZA_FONTE.md`.
+  `PROCESSI.md`, `LIMITI.md`, `SOGGETTI.md`, `STANZA_AGENTS.md` e `STANZA_FONTE.md`.
 - Le stanze business vivono accanto a `ecosistema/`, mai dentro di esso.
 - Il guardiano delle stanze gira a ogni chiusura: file sciolti, cartelle senza
   contratto, copie, mappe gonfie o materiali business dentro `ecosistema/`
@@ -72,6 +72,10 @@ Versione standard applicata: `{{version}}`.
   apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
   senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
+- Le istruzioni globali dell'agente attivo (`~/.claude/CLAUDE.md` per Claude
+  Code, `~/.codex/AGENTS.md` per Codex) portano il blocco `LEADERAI-CASA` con
+  il percorso di questa cartella: e' cio' che fa rispondere `FUORI DAL
+  CERVELLO` a una sessione nata altrove. L'Ispettore lo verifica e lo ripara.
 - Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
 
 ## Architettura adattiva: mappa madre e stanze
@@ -111,7 +115,11 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
    dichiarata bloccano il salvataggio della stanza;
 7. applica subito le riparazioni meccaniche e reversibili;
 8. presenta al proprietario fusioni, spostamenti, eliminazioni o cambi di
-   proprieta' che coinvolgono contenuti preesistenti.
+   proprieta' che coinvolgono contenuti preesistenti. Finche' il percorso
+   guidato LeaderAI e' `IN CORSO` (fino alla riga `PERCORSO GUIDATO CHIUSO`
+   in `logs/install-log.md`), creare, fondere, spostare o eliminare stanze si
+   decide nella sessione con il consulente: la proposta resta nella fonte
+   proprietaria come `DA DECIDERE IN CALL`.
 
 Una cartella e' una stanza quando possiede una responsabilita' business stabile
 riconosciuta dal proprietario e mantiene stato, decisioni e lavoro corrente.
@@ -120,6 +128,11 @@ pipeline o una capacita'. Ogni vera stanza ha sempre una mappa corta alla
 porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
 (`@AGENTS.md`). La mappa locale dichiara responsabilita' business, scopo, cosa
 contiene, fonti, output, capacita', collegamenti a monte e collegamenti a valle.
+
+Piu' soggetti giuridici, una casa: i soggetti che il proprietario governa
+vivono in `ecosistema/SOGGETTI.md`, una riga ciascuno. Le stanze seguono le
+funzioni del lavoro, non i soggetti; un soggetto separa una stanza in
+sottocartelle dichiarate solo dove la legge o il lavoro lo impongono.
 
 Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate
 alla cartella madre o a una stanza. Ogni casa installa la stanza di controllo
@@ -247,10 +260,11 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Evita aggiornamenti di avanzamento e richieste a puntate: ogni stato
   intermedio resta nella fonte proprietaria.
 - Se Sal richiede una conferma finale, inviala una volta sola quando tutti i
-  criteri sono completati e provati: apri con `Perfetto, l'ho fatto. Tutto
-  completato e
+  criteri sono completati e provati, cioe' con verdetto `PASSA` pieno: apri
+  con `Perfetto, l'ho fatto. Tutto completato e
   funzionante.` e riporta le prove essenziali di tutti i criteri della
-  missione.
+  missione. Con `PASSA CON ATTENZIONE` niente conferma: al massimo
+  `SERVE UN TUO PASSAGGIO`.
 
 ## Comunicazione e fonti di verita'
 

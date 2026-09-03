@@ -192,6 +192,100 @@ def ensure_claude_user_settings(
     )
 
 
+USER_INSTRUCTIONS = {
+    "claude": {"effect": "claude_user_instructions", "label": "Claude Code"},
+    "codex": {"effect": "codex_user_instructions", "label": "Codex"},
+}
+
+
+def _user_instructions_spec(agent: str) -> dict:
+    return CONTRACT["external_effects"][USER_INSTRUCTIONS[agent]["effect"]]
+
+
+def _active_user_instructions_path(agent: str, requested: Path) -> Path:
+    """File di istruzioni globali che l'agente legge davvero su questa macchina.
+
+    Codex legge `AGENTS.override.md` al posto di `AGENTS.md` quando esiste:
+    il blocco va nel file attivo, altrimenti resta invisibile.
+    """
+    path = requested.expanduser().absolute()
+    if agent == "codex" and path.name == "AGENTS.md":
+        override = path.with_name("AGENTS.override.md")
+        if override.is_file():
+            return override
+    return path
+
+
+def merge_marked_block(existing: str, block: str, start: str, end: str) -> str:
+    """Inserisce o aggiorna il blocco marcato senza toccare il resto del file."""
+    block = block.strip("\n")
+    if start in existing and end in existing and existing.index(start) < existing.index(end):
+        head, _, rest = existing.partition(start)
+        _, _, tail = rest.partition(end)
+        merged = head + block + tail
+    elif existing.strip():
+        merged = existing.rstrip("\n") + "\n\n" + block + "\n"
+    else:
+        merged = block + "\n"
+    if not merged.endswith("\n"):
+        merged += "\n"
+    return merged
+
+
+def _prepare_user_instructions(
+    agent: str,
+    target: Path,
+    requested: Path,
+    context: dict[str, str],
+) -> tuple[Path, str, bool]:
+    spec = _user_instructions_spec(agent)
+    path = _active_user_instructions_path(agent, requested)
+    _safe_external_file(path)
+    if target == path or target in path.parents:
+        raise ValueError(
+            "Le istruzioni globali dell'agente non possono vivere dentro la cartella cliente."
+        )
+    block = read_template(str(spec["template"]), context).strip("\n")
+    if path.exists():
+        try:
+            existing = path.read_text(encoding="utf-8")
+        except UnicodeError as exc:
+            raise ValueError(
+                f"Le istruzioni globali non sono testo UTF-8 leggibile: {path}"
+            ) from exc
+    else:
+        existing = ""
+    merged = merge_marked_block(
+        existing, block, str(spec["block_start"]), str(spec["block_end"])
+    )
+    return path, merged, merged != existing
+
+
+def ensure_user_instructions(
+    agent: str,
+    target: Path,
+    requested: Path | None,
+    context: dict[str, str],
+    result: InstallResult,
+    dry_run: bool,
+) -> None:
+    label = USER_INSTRUCTIONS[agent]["label"]
+    if requested is None:
+        # Nessun percorso letto su questa macchina: il setup non tocca la home
+        # alla cieca. Resta un gesto da collaudare sul computer del cliente.
+        result.external_effects.append(
+            f"Istruzioni globali {label}: DA COLLAUDARE sulla macchina cliente "
+            f"({_user_instructions_spec(agent)['default_path']} non indicato)."
+        )
+        return
+    path, merged, changed = _prepare_user_instructions(agent, target, requested, context)
+    if changed and not dry_run:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(merged, encoding="utf-8")
+    state = "aggiornate" if changed else "gia' corrette"
+    result.external_effects.append(f"Istruzioni globali {label} {state}: {path}")
+
+
 def _agent_specific_rules(agent: str) -> list[install_contract.TemplateRule]:
     return [
         install_contract.TemplateRule(
@@ -953,6 +1047,8 @@ def _inspect_and_align(
     result: InstallResult,
     agent: str,
     claude_user_settings_path: Path | None,
+    claude_user_instructions_path: Path | None = None,
+    codex_user_instructions_path: Path | None = None,
 ):
     import ecosistema_inspector
 
@@ -960,6 +1056,8 @@ def _inspect_and_align(
         result.target,
         agent=agent,
         claude_user_settings_path=claude_user_settings_path,
+        claude_user_instructions_path=claude_user_instructions_path,
+        codex_user_instructions_path=codex_user_instructions_path,
     )
     result.target_verdict = inspection.verdict
     result.inspection_codes = [item.code for item in inspection.findings]
@@ -980,6 +1078,8 @@ def _finalize_blocked_target(
     stamp: str,
     dry_run: bool,
     claude_user_settings_path: Path | None,
+    claude_user_instructions_path: Path | None = None,
+    codex_user_instructions_path: Path | None = None,
 ) -> InstallResult:
     if not result.target.is_dir() or dry_run:
         result.target_verdict = "NON PASSA"
@@ -996,6 +1096,8 @@ def _finalize_blocked_target(
         result,
         agent,
         claude_user_settings_path,
+        claude_user_instructions_path,
+        codex_user_instructions_path,
     )
     event_key = _event_key(result, agent)
     ensure_event_log(
@@ -1018,6 +1120,8 @@ def run_setup(
     dry_run: bool = False,
     *,
     claude_user_settings_path: Path | None = None,
+    claude_user_instructions_path: Path | None = None,
+    codex_user_instructions_path: Path | None = None,
     migrate_agent: bool = False,
 ) -> InstallResult:
     if agent not in SUPPORTED_AGENTS:
@@ -1040,6 +1144,7 @@ def run_setup(
         "date": today,
         "agent": agent,
         "version": STANDARD_VERSION,
+        "house_path": _portable_machine_path(target),
     }
     result = InstallResult(target=target)
     effects = install_contract.external_effects(CONTRACT, agent)
@@ -1061,7 +1166,34 @@ def run_setup(
                 stamp,
                 dry_run,
                 settings_path,
+                claude_user_instructions_path,
+                codex_user_instructions_path,
             )
+
+    for instructions_agent, instructions_path in (
+        ("claude", claude_user_instructions_path),
+        ("codex", codex_user_instructions_path),
+    ):
+        if (
+            USER_INSTRUCTIONS[instructions_agent]["effect"] in effects
+            and instructions_path is not None
+        ):
+            try:
+                _prepare_user_instructions(
+                    instructions_agent, target, instructions_path, context
+                )
+            except ValueError as exc:
+                result.blockers.append(str(exc))
+                return _finalize_blocked_target(
+                    result,
+                    client,
+                    agent,
+                    stamp,
+                    dry_run,
+                    settings_path,
+                    claude_user_instructions_path,
+                    codex_user_instructions_path,
+                )
 
     installed_version = _installed_version(target) if target.exists() else None
     if installed_version is not None and installed_version != STANDARD_VERSION:
@@ -1076,6 +1208,8 @@ def run_setup(
             stamp,
             dry_run,
             settings_path,
+            claude_user_instructions_path,
+            codex_user_instructions_path,
         )
 
     try:
@@ -1094,6 +1228,8 @@ def run_setup(
             stamp,
             dry_run,
             settings_path,
+            claude_user_instructions_path,
+            codex_user_instructions_path,
         )
 
     rules = install_contract.template_rules(CONTRACT, agent)
@@ -1121,6 +1257,8 @@ def run_setup(
             stamp,
             dry_run,
             settings_path,
+            claude_user_instructions_path,
+            codex_user_instructions_path,
         )
 
     ensure_dir(target, result, dry_run)
@@ -1194,6 +1332,20 @@ def run_setup(
             dry_run,
         )
 
+    for instructions_agent, instructions_path in (
+        ("claude", claude_user_instructions_path),
+        ("codex", codex_user_instructions_path),
+    ):
+        if USER_INSTRUCTIONS[instructions_agent]["effect"] in effects:
+            ensure_user_instructions(
+                instructions_agent,
+                target,
+                instructions_path,
+                context,
+                result,
+                dry_run,
+            )
+
     changes_detected = bool(result.created or result.updated or result.removed)
     external_changed = any("aggiornate" in item for item in result.external_effects)
     event_needed = new_install or changes_detected or bool(
@@ -1231,6 +1383,8 @@ def run_setup(
         result,
         agent,
         settings_path,
+        claude_user_instructions_path,
+        codex_user_instructions_path,
     )
 
     return result
@@ -1251,6 +1405,20 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Percorso user settings Claude letto su questa macchina. "
             "Default: ~/.claude/settings.json."
+        ),
+    )
+    parser.add_argument(
+        "--claude-user-instructions",
+        help=(
+            "Percorso delle istruzioni utente Claude Code letto su questa macchina "
+            "(di norma ~/.claude/CLAUDE.md). Senza questo valore il setup non tocca la home."
+        ),
+    )
+    parser.add_argument(
+        "--codex-user-instructions",
+        help=(
+            "Percorso dell'AGENTS.md globale di Codex letto su questa macchina "
+            "(di norma ~/.codex/AGENTS.md). Senza questo valore il setup non tocca la home."
         ),
     )
     parser.add_argument(
@@ -1278,6 +1446,16 @@ def main() -> int:
             claude_user_settings_path=(
                 Path(args.claude_user_settings)
                 if args.claude_user_settings
+                else None
+            ),
+            claude_user_instructions_path=(
+                Path(args.claude_user_instructions)
+                if args.claude_user_instructions
+                else None
+            ),
+            codex_user_instructions_path=(
+                Path(args.codex_user_instructions)
+                if args.codex_user_instructions
                 else None
             ),
             migrate_agent=args.migrate_agent,
