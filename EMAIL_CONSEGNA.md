@@ -23,10 +23,10 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 La prova pubblica completata riguarda la versione `0.6.11` e il commit
 immutabile
-`70dd2fab43b6b24f765d9d119f62b87bdada2862`. L'archivio scaricato senza
+`73b0bafd89b769288846d0a59fa6d94fc7600f0f`. L'archivio scaricato senza
 credenziali ha SHA256
-`899709291ab62635f337a2478e0d48ed61c54079722b50921a9ce125724d5b28`;
-la sola copia estratta ha superato `329` test e le procedure
+`e78545c431bf9bd934d3d9942bbdf8c7f1f6c16bcc4519b34e79737b6c78a968`;
+la sola copia estratta ha superato `332` test e le procedure
 `INSTALLA_CON_AI.md` e `CHECKUP.md` hanno risposto `HTTP 200`.
 
 ## Controlli prima dell'invio
