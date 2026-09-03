@@ -65,6 +65,9 @@ stanze e non trasforma una casa diversa dal telaio cliente in un errore.
 6-bis. Censisci i soggetti giuridici che il proprietario governa da questa casa
    in `ecosistema/SOGGETTI.md`, una riga per soggetto. Le stanze seguono le
    funzioni, non i soggetti: piu' societa' non fanno piu' case ne' piu' stanze.
+6-ter. Leggi `- Fase del percorso: N` nella mappa madre. Sotto il 3 nessuna
+   stanza di lavoro: una stanza registrata con fase 1 o 2 e' `ROOM_BEFORE_STEP_3`
+   e blocca il verdetto. La riga la alza solo la missione che chiude il passo.
 7. Ogni vera stanza deve essere raggiungibile dalla mappa madre e avere
    `AGENTS.md` + `CLAUDE.md`, con `CLAUDE.md` uguale a `@AGENTS.md`.
    La cartella madre dichiara il `Boss dell'Ecosistema`; ogni ramo organizzativo

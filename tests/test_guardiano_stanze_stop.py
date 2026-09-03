@@ -18,7 +18,24 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def set_phase(self, target: Path, phase: int, label: str = "Prima stanza") -> None:
+        """La riga della fase nella mappa madre: sotto il 3 nessuna stanza."""
+        agents = target / "AGENTS.md"
+        content = agents.read_text(encoding="utf-8")
+        import re as _re
+        updated, count = _re.subn(
+            r"^- Fase del percorso: [1-4] \([^)]*\)\.",
+            f"- Fase del percorso: {phase} ({label}).",
+            content,
+            count=1,
+            flags=_re.M,
+        )
+        self.assertEqual(count, 1)
+        agents.write_text(updated, encoding="utf-8")
+
     def register_root_room(self, target: Path, name: str) -> None:
+        # Una stanza registrata significa che il percorso e' arrivato al passo 3.
+        self.set_phase(target, 3)
         self.insert_before(
             target / "AGENTS.md",
             "La prima cella di ogni stanza usa il formato",
@@ -716,6 +733,48 @@ class GuardianoStanzeStopTest(unittest.TestCase):
 
             self.assertEqual(result.target_verdict, "NON PASSA")
             self.assertEqual(codex_path.read_text(encoding="utf-8"), original)
+
+
+    def test_room_before_step_3_is_blocked(self):
+        """Caso Pastore 03/09/2026: il Claude della cliente propone stanze il
+        giorno dell'installazione. Con la fase a 1 il guardiano le ferma."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            self.register_room(target)
+            self.set_phase(target, 1, "Cervello")
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("marketing - stanza creata prima del passo 3", result.stderr)
+
+    def test_room_at_step_3_passes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            self.register_room(target)
+
+            result = self.run_guard(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_house_without_phase_line_is_not_gated_by_phase(self):
+        """Casa nata prima di questo standard: senza la riga nessun blocco di fase."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            self.register_room(target)
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                "\n".join(
+                    line for line in agents.read_text(encoding="utf-8").splitlines()
+                    if not line.startswith("- Fase del percorso:")
+                    and not line.startswith("  missione LeaderAI che chiude il passo")
+                ) + "\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_guard(target)
+
+            self.assertNotIn("prima del passo 3", result.stderr)
 
 
 if __name__ == "__main__":

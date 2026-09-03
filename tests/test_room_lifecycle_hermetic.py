@@ -48,6 +48,8 @@ class RoomLifecycleHermeticTest(unittest.TestCase):
         root = Path(context.name)
         target = root / "EcosistemaAI-Test"
         shutil.copytree(self._seed_target, target, symlinks=True)
+        # Le prove ermetiche registrano stanze: il percorso e' al passo 3.
+        existing_inspector_tests.EcosistemaInspectorTest.set_phase(self, target, 3)
         # Home finta della copia: istruzioni globali che portano nella casa copiata.
         context_values = {
             "client_name": "Cliente Test",

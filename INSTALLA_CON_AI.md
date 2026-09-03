@@ -345,6 +345,12 @@ proprietaria. Un residuo vuoto o inutile creato dall'agente nello stesso
 lavoro viene rimosso prima del commit; contenuti preesistenti si spostano,
 fondono o eliminano solo dopo conferma.
 
+La mappa madre nasce con `- Fase del percorso: 1 (Cervello)`. Non alzarla in
+questa missione: la alza la missione LeaderAI che chiude ogni passo, di uno
+alla volta (2 Censimento, 3 Prima stanza, 4 Ispettore e consegna). Sotto il
+passo 3 il guardiano blocca ogni stanza di lavoro: oggi si censisce, non si
+costruisce.
+
 In `AGENTS.md` aggiungi una sezione "Regole [NOME CLIENTE]" con le mie regole reali:
 - chi sono e cosa faccio [AZIENDA];
 - rispondi in italiano, chiaro e operativo;

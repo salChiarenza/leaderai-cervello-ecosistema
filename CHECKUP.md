@@ -379,6 +379,13 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    risposta deve essere `FUORI DAL CERVELLO` senza scritture. Finding
    macchina: `USER_INSTRUCTIONS_MISSING`, `USER_INSTRUCTIONS_WITHOUT_HOUSE`
    (bloccanti), `USER_INSTRUCTIONS_WITHOUT_GATE` (attenzione).
+1-ter. **Fase del percorso** — la mappa madre porta la riga `- Fase del percorso:
+   N (nome)`: 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e consegna.
+   La alza soltanto la missione LeaderAI che chiude il passo, di uno alla volta.
+   Sotto il 3 nessuna stanza di lavoro: il guardiano di chiusura blocca ogni
+   stanza registrata prima del passo 3 e l'Ispettore emette
+   `ROOM_BEFORE_STEP_3`. Riga assente in una casa nata prima di questo standard:
+   aggiungila con il passo reale, provato dai fatti (stanze vive = almeno 3).
 2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
 3. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
@@ -519,6 +526,8 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   oppure la prova da cartella estranea non risponde `FUORI DAL CERVELLO`;
 - manca `ecosistema/SOGGETTI.md` oppure un soggetto giuridico nominato dal
   proprietario non ha la sua riga nell'anagrafe;
+- una stanza di lavoro esiste mentre la mappa madre dichiara `Fase del
+  percorso` 1 o 2 (`ROOM_BEFORE_STEP_3`);
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
 - una prova di processo o di fonte e' circolare, inventata durante il checkup
@@ -959,6 +968,7 @@ Memoria                 OK / RIPARATO / DA FARE - ...
 Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Istruzioni globali      OK / RIPARATO / NON PASSA - file utente, casa nominata, gate provato da fuori...
 Soggetti giuridici      OK / RIPARATO / DA CENSIRE - anagrafe ecosistema/SOGGETTI.md, stanze per funzione...
+Fase del percorso       OK / RIPARATO / NON PASSA - riga nella mappa madre, stanze coerenti con il passo...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...
 Connettori/MCP          OK / RIPARATO / DA COLLEGARE - ...

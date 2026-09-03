@@ -535,6 +535,11 @@ else
     done < <(find "$ROOT/ecosistema" -mindepth 1 -maxdepth 1 -print0 2>/dev/null)
 fi
 
+# Fase del percorso guidato (mappa madre, riga "- Fase del percorso: N"):
+# sotto il passo 3 nessuna stanza di lavoro. Riga assente = casa senza percorso
+# guidato dichiarato: nessun blocco.
+PHASE="$(sed 's/\r$//' "$ROOT/AGENTS.md" 2>/dev/null | sed -n 's/^- Fase del percorso: \([1-4]\).*/\1/p' | head -n 1)"
+
 # Ogni elemento visibile nella cartella madre ha un proprietario dichiarato.
 while IFS= read -r -d '' item; do
     rel="$(relative_path "$item")"
@@ -550,6 +555,9 @@ while IFS= read -r -d '' item; do
         fi
         if ! room_registered_at_root "$ROOT/AGENTS.md" "$rel"; then
             add_issue "$rel - stanza non registrata nella mappa madre"
+        fi
+        if [ -n "$PHASE" ] && [ "$PHASE" -lt 3 ] && [ "$rel" != "ecosystem-check" ]; then
+            add_issue "$rel - stanza creata prima del passo 3 del percorso (Fase del percorso: $PHASE)"
         fi
         if [ "$CONSOLIDATED" = false ]; then
             validate_room_map "$item" "$rel"

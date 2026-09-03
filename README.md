@@ -153,6 +153,8 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/SOGGETTI.md` anagrafe dei soggetti giuridici: piu' soggetti, una casa
+- riga `Fase del percorso: N` nella mappa madre: sotto il passo 3 il guardiano
+  blocca ogni stanza di lavoro, la fase sale solo con la missione che chiude il passo
 - `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
 - `ecosistema/STANZA_FONTE.md` come calco della loro fonte operativa
 

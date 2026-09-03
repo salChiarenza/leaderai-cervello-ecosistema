@@ -69,6 +69,9 @@ la sola copia estratta ha superato `318` test e le procedure
     l'ho fatto. Tutto completato e funzionante.` e contiene le prove essenziali
     della missione. Con `PASSA CON ATTENZIONE` niente conferma: resta nella
     casa e, se serve un gesto umano, parte soltanto `SERVE UN TUO PASSAGGIO`.
+15. La missione dichiara `Fase del percorso: N di 4` coerente con la scheda del
+    cliente (stessa fase o la successiva) e non chiede azioni di passi
+    successivi; il guardiano email della casa LeaderAI blocca altrimenti.
 14. Verifica che la missione chieda le istruzioni globali dell'agente attivo
     (blocco `LEADERAI-CASA` in `~/.claude/CLAUDE.md` o `~/.codex/AGENTS.md`)
     e, quando il proprietario governa piu' soggetti, l'anagrafe
@@ -94,6 +97,11 @@ l'ambiente di [NOME].</strong></p>
 <p>Tipo missione: <strong>[INSTALLA / CHECKUP]</strong>.</p>
 
 <p>ID missione: <strong>[ID MISSIONE]</strong>.</p>
+
+<p>Fase del percorso: <strong>[N di 4]</strong> ([1 Cervello / 2 Censimento / 3 Prima
+stanza / 4 Ispettore e consegna]). Questa missione chiude questo passo e non
+anticipa i successivi; a passo chiuso aggiorna la riga <code>Fase del
+percorso</code> nella mappa madre.</p>
 
 <h3>Chiusura locale</h3>
 <ul>
@@ -218,6 +226,10 @@ Questa missione operativa e' per l'agente AI che gestisce l'ambiente di [NOME].
 Tipo missione: [INSTALLA / CHECKUP].
 
 ID missione: [ID MISSIONE].
+
+Fase del percorso: [N di 4] ([1 Cervello / 2 Censimento / 3 Prima stanza / 4
+Ispettore e consegna]). Questa missione chiude questo passo e non anticipa i
+successivi; a passo chiuso aggiorna la riga Fase del percorso nella mappa madre.
 
 CHIUSURA LOCALE
 - L'email della missione e' l'unico messaggio del ciclo ordinario.

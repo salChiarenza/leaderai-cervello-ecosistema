@@ -1077,6 +1077,18 @@ def _user_instructions_findings(
     return findings
 
 
+PHASE_LINE_RE = re.compile(r"^- Fase del percorso: ([1-4])\b", re.MULTILINE)
+
+
+def _declared_phase(agents_text: str) -> int | None:
+    """Fase del percorso guidato dichiarata nella mappa madre (1-4), se c'e'.
+
+    Casa nata prima di questo standard: riga assente, nessun vincolo di fase.
+    """
+    match = PHASE_LINE_RE.search(agents_text)
+    return int(match.group(1)) if match else None
+
+
 def _is_inside_home(path: Path) -> bool:
     """Il percorso sta dentro la home dell'utente corrente?
 
@@ -2468,6 +2480,7 @@ def inspect_ecosystem(
             )
     findings.extend(_memory_merge_reference_findings(target, canonical_memory))
     rooms = parse_room_registry(active_agents_text)
+    declared_phase = _declared_phase(active_agents_text)
 
     seen_paths: set[str] = set()
     seen_names: set[str] = set()
@@ -2520,6 +2533,24 @@ def inspect_ecosystem(
                     room.path,
                     "Un elemento del telaio standard non puo' diventare una "
                     "stanza business.",
+                )
+            )
+
+        if (
+            declared_phase is not None
+            and declared_phase < 3
+            and _normalized(room.path) not in standard_room_paths
+        ):
+            # Caso Pastore 03/09/2026: sei stanze proposte il giorno
+            # dell'installazione. Sotto il passo 3 la casa censisce, non costruisce.
+            findings.append(
+                Finding(
+                    "ROOM_BEFORE_STEP_3",
+                    "BLOCKER",
+                    room.path,
+                    f"Stanza registrata con Fase del percorso {declared_phase}: "
+                    "sotto il passo 3 nessuna stanza di lavoro. La fase la alza "
+                    "solo la missione LeaderAI che chiude il passo.",
                 )
             )
 

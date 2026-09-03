@@ -49,7 +49,22 @@ class EcosistemaInspectorTest(unittest.TestCase):
             codex_user_instructions_path=self.codex_user_instructions,
         )
 
+    def set_phase(self, target: Path, phase: int, label: str = "Prima stanza") -> None:
+        agents = target / "AGENTS.md"
+        import re as _re
+        updated, count = _re.subn(
+            r"^- Fase del percorso: [1-4] \([^)]*\)\.",
+            f"- Fase del percorso: {phase} ({label}).",
+            agents.read_text(encoding="utf-8"),
+            count=1,
+            flags=_re.M,
+        )
+        self.assertEqual(count, 1)
+        agents.write_text(updated, encoding="utf-8")
+
     def add_room_to_registry(self, target: Path, row: str = ROOM_ROW) -> None:
+        # Una stanza registrata significa che il percorso e' al passo 3.
+        self.set_phase(target, 3)
         agents = target / "AGENTS.md"
         text = agents.read_text(encoding="utf-8")
         placeholder = (
@@ -1544,6 +1559,49 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = self.inspect(target)
 
             self.assertIn("USER_INSTRUCTIONS_MISSING", self.codes(inspection))
+
+
+    def test_room_registered_before_step_3_blocks_pass(self):
+        """Caso Pastore 03/09/2026: stanze proposte il giorno dell'installazione."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+            self.set_phase(target, 1, "Cervello")
+
+            inspection = self.inspect(target)
+
+            self.assertIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
+            self.assertEqual(inspection.verdict, "NON PASSA")
+
+    def test_room_registered_at_step_3_is_not_flagged_for_phase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+
+            inspection = self.inspect(target)
+
+            self.assertNotIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
+
+    def test_house_without_phase_line_is_not_gated_by_phase(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+            agents = target / "AGENTS.md"
+            agents.write_text(
+                "\n".join(
+                    line for line in agents.read_text(encoding="utf-8").splitlines()
+                    if not line.startswith("- Fase del percorso:")
+                    and not line.startswith("  missione LeaderAI che chiude il passo")
+                ) + "\n",
+                encoding="utf-8",
+            )
+
+            inspection = self.inspect(target)
+
+            self.assertNotIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
 
 
 if __name__ == "__main__":

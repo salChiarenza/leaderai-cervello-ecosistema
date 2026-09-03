@@ -66,6 +66,10 @@ Restano stabili in ogni installazione:
   sessione nata altrove;
 - anagrafe dei soggetti giuridici in `ecosistema/SOGGETTI.md`: piu' soggetti,
   una casa, stanze per funzione;
+- fase del percorso guidato dichiarata nella mappa madre (`Fase del percorso:
+  N`): 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e consegna; sale
+  di un passo alla volta con la missione che chiude il passo e sotto il 3 il
+  guardiano blocca ogni stanza di lavoro;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
 - versione del metodo applicato e prove di collaudo.
 

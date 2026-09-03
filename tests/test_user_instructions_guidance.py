@@ -112,6 +112,22 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
         self.assertIn("poi registri e calchi nuovi", checkup)
         self.assertIn("un guardiano vecchio blocca i file nuovi", skill)
 
+    def test_guided_path_phase_is_declared_and_enforced(self):
+        template = _flat(ROOT / "templates" / "AGENTS.md")
+        self.assertIn("Fase del percorso: 1 (Cervello)", template)
+        self.assertIn("sotto il 3 nessuna stanza di lavoro", template)
+        for name, phrase in {
+            "CHECKUP.md": "ROOM_BEFORE_STEP_3",
+            "templates/ISPETTORE_SKILL.md": "ROOM_BEFORE_STEP_3",
+            "INSTALLA_CON_AI.md": "Fase del percorso: 1 (Cervello)",
+            "EMAIL_CONSEGNA.md": "Fase del percorso: [N di 4]",
+            "MANIFEST.md": "fase del percorso guidato dichiarata nella mappa madre",
+        }.items():
+            with self.subTest(surface=name):
+                self.assertIn(phrase, _flat(ROOT / name))
+        guardian = (ROOT / "templates" / "GUARDIANO_STANZE.sh").read_text(encoding="utf-8")
+        self.assertIn("stanza creata prima del passo 3", guardian)
+
     def test_windows_backslash_lesson_is_in_the_install_guide(self):
         text = _flat(ROOT / "INSTALLA_CON_AI.md")
         self.assertIn("backslash siano intatti", text)

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.9 - 03/09/2026
+
+- Fase del percorso guidato dichiarata nella mappa madre: `- Fase del percorso:
+  N (nome)` con 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e
+  consegna. Il calco nasce a 1; la riga la alza soltanto la missione LeaderAI
+  che chiude il passo, di uno alla volta. Il guardiano di chiusura blocca ogni
+  stanza di lavoro registrata con fase 1 o 2; l'Ispettore emette
+  `ROOM_BEFORE_STEP_3`. Caso reale 03/09/2026: il Claude della cliente ha
+  proposto sei stanze il giorno dell'installazione e nessuno, ne' la missione
+  ne' il consulente, sapeva a che passo fosse la casa.
+- Il modello dell'email di consegna porta la riga `Fase del percorso: N di 4`,
+  e nella casa LeaderAI il guardiano email blocca le missioni senza fase o con
+  fase piu' avanti di un passo rispetto alla scheda del cliente.
+- Definizione dei quattro passi con test di uscita in `FASI.md` della casa
+  LeaderAI; il checkup li applica al Passo 1-bis (punto 1-ter).
+
+
 ## 0.6.8 - 03/09/2026
 
 - Ordine dell'aggiornamento nel checkup: prima i file gestiti dallo standard
