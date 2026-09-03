@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.8 - 03/09/2026
+
+- Ordine dell'aggiornamento nel checkup: prima i file gestiti dallo standard
+  (guardiano di chiusura e variante Windows, ruoli di Ecosystem Check, skill
+  dell'Ispettore), sostituiti con le copie della release e riprovati; poi i
+  registri e i calchi nuovi. Un guardiano della versione precedente non conosce
+  i file resi obbligatori dalla versione nuova e li blocca (caso reale
+  03/09/2026: anagrafe dei soggetti con il guardiano 0.6.6). Regola in
+  `CHECKUP.md` Passo 0 e nella skill dell'Ispettore, con test.
+
+
 ## 0.6.7 - 03/09/2026
 
 - Istruzioni globali dell'agente attivo (caso reale Pastore, 03/09/2026: casa

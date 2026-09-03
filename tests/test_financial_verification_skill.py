@@ -107,7 +107,7 @@ class FinancialVerificationContractTest(unittest.TestCase):
             )
 
     def test_versions_and_public_contract_are_updated(self):
-        self.assertEqual((ROOT / "VERSION").read_text().strip(), "0.6.7")
+        self.assertEqual((ROOT / "VERSION").read_text().strip(), "0.6.8")
         self.assertEqual((MODULE / "VERSION").read_text().strip(), "0.3.0")
         self.assertIn(
             "VERIFICA_FINANZIARIA.md",

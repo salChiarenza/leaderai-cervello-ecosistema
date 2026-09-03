@@ -133,6 +133,15 @@ Registra il confronto `installata -> standard vivo`, applica tutte le lezioni
 compatibili emerse dopo la versione installata e aggiorna `AGENTS.md` soltanto
 dopo aver ripetuto i collaudi.
 
+Ordine obbligatorio dell'aggiornamento: **prima i file gestiti dallo standard**
+(guardiano di chiusura `.agent/hooks/guardiano_stanze.sh` con la variante
+Windows, ruoli di `ecosystem-check/`, skill dell'Ispettore), sostituiti con le
+copie della release e riprovati (casa pulita -> silenzio, file fuori posto ->
+blocco); poi registri e calchi nuovi. Il guardiano della versione precedente
+non conosce i file che la versione nuova rende obbligatori e li blocca: caso
+reale del 03/09/2026, anagrafe dei soggetti con il guardiano 0.6.6 ancora
+installato.
+
 Se non riesci a leggere il `VERSION` corrente della repo ufficiale, se non
 riesci a determinare la versione installata o se i due valori non coincidono,
 il gate e' `NON PASSA`. Non si puo' certificare una 0.3.0 contro se stessa

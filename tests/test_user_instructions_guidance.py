@@ -105,6 +105,13 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
                 self.assertIn("LEADERAI-CASA", text)
                 self.assertIn("parte cieco", text)
 
+    def test_checkup_updates_managed_files_before_new_registries(self):
+        checkup = _flat(ROOT / "CHECKUP.md")
+        skill = _flat(ROOT / "templates" / "ISPETTORE_SKILL.md")
+        self.assertIn("prima i file gestiti dallo standard", checkup)
+        self.assertIn("poi registri e calchi nuovi", checkup)
+        self.assertIn("un guardiano vecchio blocca i file nuovi", skill)
+
     def test_windows_backslash_lesson_is_in_the_install_guide(self):
         text = _flat(ROOT / "INSTALLA_CON_AI.md")
         self.assertIn("backslash siano intatti", text)

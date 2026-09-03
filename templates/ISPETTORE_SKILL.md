@@ -58,7 +58,10 @@ stanze e non trasforma una casa diversa dal telaio cliente in un errore.
 5. Esegui l'Ispettore completo descritto in `CHECKUP.md`: censimento,
    classificazione, riparazioni sicure, prove di instradamento e verdetto.
 6. Confronta la versione installata con il `VERSION` vivo. Senza lettura o con
-   valori diversi il verdetto e' `NON PASSA`.
+   valori diversi il verdetto e' `NON PASSA`. Se la casa e' indietro, aggiorna
+   per primi i file gestiti dallo standard (guardiano di chiusura e variante
+   Windows, ruoli di Ecosystem Check, questa skill) e riprovali, poi i registri
+   e i calchi nuovi: un guardiano vecchio blocca i file nuovi.
 6-bis. Censisci i soggetti giuridici che il proprietario governa da questa casa
    in `ecosistema/SOGGETTI.md`, una riga per soggetto. Le stanze seguono le
    funzioni, non i soggetti: piu' societa' non fanno piu' case ne' piu' stanze.
