@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.6.11 - 03/09/2026
+
+- Nasce il **Manutentore** (`manutentore-ecosistema`, skill installata accanto
+  all'Ispettore per Claude e Codex): il manager della manutenzione continua.
+  Ogni giorno misura la casa con `guardiano_stanze.sh --misura`, ripara da solo
+  solo il meccanico e reversibile (sezioni datate vecchie negli archivi
+  `<nome>_archivio_<data>.md`, chat di gruppo oltre 48 ore, percorsi nascosti,
+  skill gemelle), rimisura e lascia cinque righe in `ecosystem-check/STATO.md`.
+  Mai eliminazioni, mai riscritture, mai invii: cartelle vuote, copie parallele
+  e mappe gonfie restano decisioni del proprietario.
+- Il guardiano di chiusura ha la modalita' `--misura`: elenca i problemi senza
+  bloccare; la variante Windows inoltra gli argomenti.
+- Nuovo registro `ecosystem-check/CONTROLLI.md`: una riga per ogni cosa che
+  nasce (chi controlla, quando, cosa misura, dove scrive, stato `ATTIVO` o
+  `MANCA` con data). Legge di Sal 03/09/2026: niente nasce senza il suo
+  controllo, con parametri suoi; il Manutentore ripete i `MANCA` ogni giorno.
+- L'installazione crea l'automazione giornaliera `manutenzione-ecosistema`
+  (07:45, modello leggero); il checkup verifica skill e automazione.
+
 ## 0.6.10 - 03/09/2026
 
 - Il guardiano di chiusura misura anche i documenti vivi: un Markdown oltre 800

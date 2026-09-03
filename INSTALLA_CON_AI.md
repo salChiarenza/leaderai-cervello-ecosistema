@@ -183,6 +183,7 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/STANZA_AGENTS.md`
    - `templates/STANZA_FONTE.md`
    - `templates/ISPETTORE_SKILL.md`
+   - `templates/MANUTENTORE_SKILL.md`
    - `templates/MEMORY.md`
    - `templates/ASSET.md`
    - `templates/GITIGNORE.txt`
@@ -240,6 +241,15 @@ Fase 4 - monta localmente il Cervello
      `.agents/skills/ispettore-ecosistema/SKILL.md`
    - modalita' both -> entrambe le skill, identiche e puntate allo stesso
      `CHECKUP.md`
+   - allo stesso modo `templates/MANUTENTORE_SKILL.md` in
+     `.claude/skills/manutentore-ecosistema/SKILL.md` (Claude) e/o
+     `.agents/skills/manutentore-ecosistema/SKILL.md` (Codex): il Manutentore
+     misura la casa ogni giorno con `guardiano_stanze.sh --misura`, ripara il
+     meccanico (archivi datati, chat oltre 48 ore, skill gemelle) e riporta
+   - crea l'automazione giornaliera `manutenzione-ecosistema` (07:45 locali,
+     modello leggero) che invoca la skill `manutentore-ecosistema`: per Claude
+     Code un task programmato, per Codex un'automazione; una sola sessione che
+     chiude da sola
 3. Crea SEMPRE `CLAUDE.md` dal template: e' il ponte di una riga (`@AGENTS.md`)
    che fa leggere la mappa anche a Claude Code, qualunque agente sia in uso
    oggi (Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`). Poi la
@@ -493,9 +503,10 @@ Fase 6 - collaudo
    dichiari il proprio Amministratore di settore subordinato al Boss.
    `.claude/README.md` esiste solo in modalita' Claude o both;
    `.codex/README.md` esiste solo in modalita' Codex o both.
-   Verifica anche la skill `ispettore-ecosistema` nel percorso dell'agente
-   attivo: `.claude/skills/` per Claude Code, `.agents/skills/` per Codex,
-   entrambe in modalita' both.
+   Verifica anche le skill `ispettore-ecosistema` e `manutentore-ecosistema`
+   nel percorso dell'agente attivo: `.claude/skills/` per Claude Code,
+   `.agents/skills/` per Codex, entrambe in modalita' both; e l'automazione
+   giornaliera `manutenzione-ecosistema` attiva.
    Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
    del workspace e `/memory` sulla memoria canonica.
    Verifica su ogni computer le istruzioni globali dell'agente attivo

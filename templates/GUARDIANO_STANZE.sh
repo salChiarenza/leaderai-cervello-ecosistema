@@ -6,7 +6,15 @@
 set -u
 export LC_ALL=C
 
-HOOK_INPUT="$(cat 2>/dev/null || printf '{}')"
+# Modalita' misura: `guardiano_stanze.sh --misura` elenca i problemi su stdout ed esce 0.
+# La usa il Manutentore (skill `manutentore-ecosistema`) per misurare senza bloccare.
+MISURA=false
+if [ "${1:-}" = "--misura" ]; then
+    MISURA=true
+    HOOK_INPUT='{}'
+else
+    HOOK_INPUT="$(cat 2>/dev/null || printf '{}')"
+fi
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" 2>/dev/null && pwd)"
 ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/../.." 2>/dev/null && pwd)"
 
@@ -664,6 +672,13 @@ done < <(
         \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
         -type d -empty -print0 2>/dev/null
 )
+
+if [ "$MISURA" = true ]; then
+    if [ -s "$ISSUES_FILE" ]; then
+        cat "$ISSUES_FILE"
+    fi
+    exit 0
+fi
 
 if [ ! -s "$ISSUES_FILE" ]; then
     exit 0

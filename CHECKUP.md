@@ -135,7 +135,7 @@ dopo aver ripetuto i collaudi.
 
 Ordine obbligatorio dell'aggiornamento: **prima i file gestiti dallo standard**
 (guardiano di chiusura `.agent/hooks/guardiano_stanze.sh` con la variante
-Windows, ruoli di `ecosystem-check/`, skill dell'Ispettore), sostituiti con le
+Windows, ruoli di `ecosystem-check/`, skill dell'Ispettore e del Manutentore), sostituiti con le
 copie della release e riprovati (casa pulita -> silenzio, file fuori posto ->
 blocco); poi registri e calchi nuovi. Il guardiano della versione precedente
 non conosce i file che la versione nuova rende obbligatori e li blocca: caso

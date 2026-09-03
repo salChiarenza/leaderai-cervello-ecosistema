@@ -332,6 +332,7 @@ Per Claude Code:
 
 - `.claude/README.md`
 - `.claude/skills/ispettore-ecosistema/SKILL.md`
+- `.claude/skills/manutentore-ecosistema/SKILL.md`
 - `autoMemoryDirectory` nelle user settings di ogni computer
   (`~/.claude/settings.json`), **in forma portabile `~/`** verso la memoria
   canonica dichiarata nella mappa madre, con prova `/memory` su ogni postazione
@@ -343,6 +344,7 @@ Per Codex:
 
 - `.codex/README.md`
 - `.agents/skills/ispettore-ecosistema/SKILL.md`
+- `.agents/skills/manutentore-ecosistema/SKILL.md`
 - Codex Desktop con cartella madre come progetto locale primario oppure Codex
   CLI avviato con la cartella madre come `-C`/directory corrente
 - blocco `LEADERAI-CASA` in `~/.codex/AGENTS.md` (o `AGENTS.override.md` se

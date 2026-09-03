@@ -147,7 +147,7 @@ stabile con stato e decisioni propri, riconosciuta dal proprietario.
 
 | Stanza | Scopo | A monte | A valle | Fonti | Output | Capacita' | Mappa locale | Amministratore | Riporta al |
 |---|---|---|---|---|---|---|---|---|---|
-| [Ecosystem Check](ecosystem-check/) | Mantenere ordinato, verificabile e funzionante il Cervello + Ecosistema. | Boss dell'Ecosistema e standard ufficiale. | Tutte le stanze e gli elementi della casa. | Mappa madre, mappe e fonti operative delle stanze, standard ufficiale. | `STATO.md` e `REGISTRO_CONTROLLI.md`. | Orchestratore, controllori, intervento, verifica finale, Ispettore. | `ecosystem-check/AGENTS.md` | Amministratore di settore Ecosystem Check | Boss dell'Ecosistema |
+| [Ecosystem Check](ecosystem-check/) | Mantenere ordinato, verificabile e funzionante il Cervello + Ecosistema. | Boss dell'Ecosistema e standard ufficiale. | Tutte le stanze e gli elementi della casa. | Mappa madre, mappe e fonti operative delle stanze, standard ufficiale. | `STATO.md`, `REGISTRO_CONTROLLI.md` e `CONTROLLI.md`. | Orchestratore, controllori, intervento, verifica finale, Ispettore, Manutentore. | `ecosystem-check/AGENTS.md` | Amministratore di settore Ecosystem Check | Boss dell'Ecosistema |
 | Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | Da assegnare | Boss dell'Ecosistema |
 
 La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.

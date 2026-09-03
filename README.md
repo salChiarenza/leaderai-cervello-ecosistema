@@ -142,7 +142,9 @@ Nel target scelto crea solo i pezzi standard mancanti:
   `~/.codex/AGENTS.md`) con il blocco `LEADERAI-CASA`: nominano la cartella
   madre e fanno rispondere `FUORI DAL CERVELLO` a una sessione nata altrove
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
+- `.agents/skills/manutentore-ecosistema/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
+- `.claude/skills/manutentore-ecosistema/SKILL.md` se richiesto Claude Code
 - `.agent/hooks/guardiano_stanze.sh` e adattatore Windows: prima della chiusura
   intercettano file fuori posto, cartelle incomplete, copie e mappe gonfie
 - `memory/MEMORY.md`

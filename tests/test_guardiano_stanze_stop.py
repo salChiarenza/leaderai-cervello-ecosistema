@@ -508,6 +508,32 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             self.assertIn("AGENT_CHAT.md", result.stderr)
             self.assertIn("2 note piu' vecchie di 48 ore", result.stderr)
 
+    def test_misura_mode_lists_issues_without_blocking(self):
+        """Break caught: the Manutentore needs the list, not a block."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            (target / "AGENT_CHAT.md").write_text("# Riga\n" * 351, encoding="utf-8")
+
+            result = subprocess.run(
+                ["bash", str(target / ".agent" / "hooks" / "guardiano_stanze.sh"), "--misura"],
+                capture_output=True, text=True, check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("AGENT_CHAT.md", result.stdout)
+
+    def test_misura_mode_on_clean_house_prints_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+
+            result = subprocess.run(
+                ["bash", str(target / ".agent" / "hooks" / "guardiano_stanze.sh"), "--misura"],
+                capture_output=True, text=True, check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stdout.strip(), "")
+
     def test_registered_root_owned_capability_is_not_forced_into_a_room(self):
         """Break caught: the guard must preserve legitimate root-owned capabilities."""
         with tempfile.TemporaryDirectory() as tmp:

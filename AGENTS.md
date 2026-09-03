@@ -45,7 +45,7 @@ Monta in una cartella cliente lo standard minimo LeaderAI:
   i JSON vengono uniti senza cancellare configurazioni del cliente
 - user settings Claude Code (`~/.claude/settings.json`) con
   `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
-- skill `ispettore-ecosistema` nel percorso dell'agente attivo
+- skill `ispettore-ecosistema` e `manutentore-ecosistema` nel percorso dell'agente attivo
 - `memory/MEMORY.md`
 - `AGENT_CHAT.md`
 - `logs/install-log.md`

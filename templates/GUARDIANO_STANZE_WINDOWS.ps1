@@ -44,7 +44,7 @@ if (-not $bashPath) {
     exit 2
 }
 
-$hookInput | & $bashPath $guardScript
+$hookInput | & $bashPath $guardScript @args
 if ($LASTEXITCODE -ne 0) {
     exit 2
 }

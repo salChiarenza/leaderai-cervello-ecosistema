@@ -318,6 +318,11 @@ def _generated_agent_file_is_safe(
             "name: ispettore-ecosistema" in current
             and "Creato da LeaderAI Cervello + Ecosistema il " in current
         )
+    if rule.template == "MANUTENTORE_SKILL.md":
+        return (
+            "name: manutentore-ecosistema" in current
+            and "Creato da LeaderAI Cervello + Ecosistema il " in current
+        )
     return False
 
 

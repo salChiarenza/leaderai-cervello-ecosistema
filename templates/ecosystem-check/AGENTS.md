@@ -40,7 +40,7 @@ dei controlli e governa le decisioni su interventi e chiusure.
 
 ## Output
 
-- `STATO.md` e `REGISTRO_CONTROLLI.md`.
+- `STATO.md`, `REGISTRO_CONTROLLI.md` e `CONTROLLI.md`.
 
 ## Fonte operativa
 
@@ -56,7 +56,7 @@ Mantiene in testa `Stato corrente`, `Prossimo passo`, `Decisioni` e
 
 ## Capacita
 
-- Orchestratore, controllori, intervento, verifica finale, Ispettore.
+- Orchestratore, controllori, intervento, verifica finale, Ispettore, Manutentore.
 
 ## A monte
 
@@ -71,6 +71,7 @@ Mantiene in testa `Stato corrente`, `Prossimo passo`, `Decisioni` e
 - Stato e incarichi aperti in `STATO.md`.
 - Criteri stabili in `STANDARD_REPARTO.md`.
 - Un solo riepilogo per controllo concluso in `REGISTRO_CONTROLLI.md`.
+- Una riga per ogni cosa che nasce in `CONTROLLI.md`; il Manutentore ripete i `MANCA` finche' non si chiudono.
 - I dettagli tecnici restano nella fonte proprietaria del problema; non si
   copiano qui interi rapporti o contenuti delle altre stanze.
 

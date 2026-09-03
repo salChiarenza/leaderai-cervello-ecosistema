@@ -1,3 +1,4 @@
+import json
 import unittest
 from pathlib import Path
 
@@ -192,6 +193,26 @@ class CrossAgentContractTest(unittest.TestCase):
             "install_contract.json",
             self.read("templates/ISPETTORE_SKILL.md"),
         )
+
+    def test_manutentore_skill_repairs_only_reversible_things(self):
+        skill = self.read("templates/MANUTENTORE_SKILL.md")
+        self.assertIn("name: manutentore-ecosistema", skill)
+        self.assertIn("guardiano_stanze.sh --misura", skill)
+        self.assertIn("_archivio_", skill)
+        self.assertIn("48 ore", skill)
+        self.assertIn("Vietato, sempre: eliminare", skill)
+        self.assertIn("ecosystem-check/CONTROLLI.md", skill)
+        self.assertIn("manutenzione-ecosistema", skill)
+        registry = self.read("templates/ecosystem-check/CONTROLLI.md")
+        for column in ("Chi controlla", "Quando", "Cosa misura", "Dove scrive", "Stato"):
+            self.assertIn(column, registry)
+        contract = json.loads(self.read("install_contract.json"))
+        for agent, path in (
+            ("claude", ".claude/skills/manutentore-ecosistema/SKILL.md"),
+            ("codex", ".agents/skills/manutentore-ecosistema/SKILL.md"),
+        ):
+            self.assertIn(path, contract["agents"][agent]["required"])
+        self.assertIn("ecosystem-check/CONTROLLI.md", contract["common"]["required"])
 
     def test_remote_push_requires_explicit_command(self):
         install = self.read("INSTALLA_CON_AI.md")

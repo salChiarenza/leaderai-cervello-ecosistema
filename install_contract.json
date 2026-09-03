@@ -295,6 +295,11 @@
         "strategy": "managed_text"
       },
       {
+        "template": "ecosystem-check/CONTROLLI.md",
+        "destination": "ecosystem-check/CONTROLLI.md",
+        "strategy": "create"
+      },
+      {
         "template": "ecosystem-check/ruoli/ORCHESTRATORE.md",
         "destination": "ecosystem-check/ruoli/ORCHESTRATORE.md",
         "strategy": "managed_text"
@@ -358,6 +363,7 @@
       "ecosystem-check/STATO.md",
       "ecosystem-check/REGISTRO_CONTROLLI.md",
       "ecosystem-check/STANDARD_REPARTO.md",
+      "ecosystem-check/CONTROLLI.md",
       "ecosystem-check/ruoli/ORCHESTRATORE.md",
       "ecosystem-check/ruoli/CONTROLLO_STRUTTURA.md",
       "ecosystem-check/ruoli/CONTROLLO_ISTRUZIONI.md",
@@ -395,6 +401,11 @@
           "strategy": "create"
         },
         {
+          "template": "MANUTENTORE_SKILL.md",
+          "destination": ".agents/skills/manutentore-ecosistema/SKILL.md",
+          "strategy": "create"
+        },
+        {
           "template": "CODEX_HOOKS.json",
           "destination": ".codex/hooks.json",
           "strategy": "merge_hooks_json"
@@ -403,11 +414,13 @@
       "required": [
         ".codex/README.md",
         ".agents/skills/ispettore-ecosistema/SKILL.md",
+        ".agents/skills/manutentore-ecosistema/SKILL.md",
         ".codex/hooks.json"
       ],
       "forbidden": [
         ".claude/README.md",
-        ".claude/skills/ispettore-ecosistema/SKILL.md"
+        ".claude/skills/ispettore-ecosistema/SKILL.md",
+        ".claude/skills/manutentore-ecosistema/SKILL.md"
       ],
       "external_effects": [
         "codex_user_instructions"
@@ -426,6 +439,11 @@
           "strategy": "create"
         },
         {
+          "template": "MANUTENTORE_SKILL.md",
+          "destination": ".claude/skills/manutentore-ecosistema/SKILL.md",
+          "strategy": "create"
+        },
+        {
           "template": "CLAUDE_SETTINGS.json",
           "destination": ".claude/settings.json",
           "strategy": "merge_hooks_json"
@@ -434,11 +452,13 @@
       "required": [
         ".claude/README.md",
         ".claude/skills/ispettore-ecosistema/SKILL.md",
+        ".claude/skills/manutentore-ecosistema/SKILL.md",
         ".claude/settings.json"
       ],
       "forbidden": [
         ".codex/README.md",
-        ".agents/skills/ispettore-ecosistema/SKILL.md"
+        ".agents/skills/ispettore-ecosistema/SKILL.md",
+        ".agents/skills/manutentore-ecosistema/SKILL.md"
       ],
       "external_effects": [
         "claude_user_settings",

@@ -69,6 +69,10 @@ write(
     render("ecosystem-check/STANDARD_REPARTO.md"),
 )
 write(
+    "ecosystem-check/CONTROLLI.md",
+    render("ecosystem-check/CONTROLLI.md"),
+)
+write(
     "ecosystem-check/ruoli/ORCHESTRATORE.md",
     render("ecosystem-check/ruoli/ORCHESTRATORE.md"),
 )
@@ -116,12 +120,20 @@ if mode in ("codex", "both"):
         ".agents/skills/ispettore-ecosistema/SKILL.md",
         render("ISPETTORE_SKILL.md"),
     )
+    write(
+        ".agents/skills/manutentore-ecosistema/SKILL.md",
+        render("MANUTENTORE_SKILL.md"),
+    )
 if mode in ("claude", "both"):
     write(".claude/README.md", render("CLAUDE_README.md"))
     write(".claude/settings.json", render("CLAUDE_SETTINGS.json"))
     write(
         ".claude/skills/ispettore-ecosistema/SKILL.md",
         render("ISPETTORE_SKILL.md"),
+    )
+    write(
+        ".claude/skills/manutentore-ecosistema/SKILL.md",
+        render("MANUTENTORE_SKILL.md"),
     )
 
 subprocess.run(["git", "init"], cwd=target, check=True, capture_output=True)
