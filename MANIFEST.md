@@ -30,7 +30,7 @@ L'agente non deve fare un esame al cliente.
 
 Deve:
 
-1. leggere questa repo;
+1. leggere l'Ecosistema Base corrente;
 2. montare i pezzi standard mancanti;
 3. non sovrascrivere cio' che esiste;
 4. collaudare;
@@ -74,7 +74,7 @@ Restano stabili in ogni installazione:
 - versione del metodo applicato e prove di collaudo.
 
 La versione installata vive nell'`AGENTS.md` della cartella madre. Ogni
-Ispettore legge anche il `VERSION` della repo ufficiale aggiornata e blocca il
+Ispettore legge anche il `VERSION` dell'Ecosistema Base aggiornato e blocca il
 verdetto se non puo' confrontare i due valori o se non coincidono.
 
 Per Claude Code esiste una sola memoria. `autoMemoryDirectory` viene impostato
@@ -242,17 +242,15 @@ Ogni installazione e checkup registra la versione letta da `VERSION`. Un errore
 osservato sul cliente viene riparato nello stesso turno quando e' sicuro e
 diventa una `LEZIONE CANDIDATA` in `ecosistema/PROCESSI.md`: caso, causa, riparazione, regola
 generale e prova che avrebbe intercettato l'errore. LeaderAI valida la lezione,
-aggiorna questa repo con regola e test e la rende disponibile ai checkup
+aggiorna la copia di lavoro con regola e test, la promuove nel Base e la rende disponibile ai checkup
 successivi. In questo modo i problemi quotidiani gia' incontrati entrano nel
 metro; un problema nuovo non viene finto come noto in anticipo.
 
 ## Contratto di consegna sicura
 
-Per una nuova installazione l'agente usa la repo ufficiale come fonte di sola
-lettura e applica i template nella cartella madre locale. Il clone della repo e
-l'esecuzione di `leaderai_setup.py` richiedono una autorizzazione esplicita e
-separata; non sono il percorso predefinito e non si attivano automaticamente se
-la lettura web incontra un blocco.
+Per una nuova installazione l'agente usa l'Ecosistema Base come fonte di sola
+lettura e applica i template nella cartella madre locale. GitHub non entra nel
+percorso cliente e non vengono creati cloni tecnici.
 
 Installazione manuale e setup tecnico devono produrre lo stesso telaio per la
 stessa modalita'. Il rilascio lo prova in una cartella vuota con percorso

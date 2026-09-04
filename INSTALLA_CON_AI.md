@@ -1,14 +1,12 @@
 # Autoconfigurazione sicura - Cervello + Ecosistema
 
-Questa e' la procedura unica per una nuova installazione cliente. La repo
-ufficiale resta lo standard LeaderAI verificabile; l'agente del cliente la
+Questa e' la procedura unica per una nuova installazione cliente. L'Ecosistema
+Base su Google Drive e' lo standard LeaderAI corrente; l'agente del cliente lo
 legge in sola lettura e applica localmente i file nella cartella madre.
 
-Percorso predefinito: lettura della repo ufficiale, creazione locale e
-collaudo. Il clone della repo e l'esecuzione di `leaderai_setup.py` sono un
-percorso tecnico opzionale: si usano solo dopo una richiesta separata e una
-autorizzazione esplicita del proprietario.
-Il percorso standard non richiede clone della repo.
+Percorso predefinito: lettura del Base, creazione locale e collaudo. GitHub non
+e' una fonte del cliente e non serve alcun clone. `leaderai_setup.py` resta un
+attrezzo LeaderAI utilizzabile soltanto nella copia di lavoro locale.
 
 REGOLA PER CHI CONSEGNA (LeaderAI): l'email di consegna e' corta e punta a
 questa procedura. L'agente crea e prova tutto nella casa del cliente, promuove
@@ -75,7 +73,7 @@ personalizzazione, fonti reali e prove macchina.
    verifica da `/hooks` che l'origine sia `Project`. La prova diretta dello
    script dimostra il controllo; soltanto questa verifica nella nuova sessione
    dimostra che l'agente lo ha realmente caricato.
-11. Il nucleo passa solo con repository pulito e nessun file della repo tecnica
+11. Il nucleo passa solo con repository locale pulito e nessun file della copia di lavoro
    copiato nella casa.
 
 <!-- END_NUCLEO_INSTALLAZIONE -->
@@ -83,14 +81,14 @@ personalizzazione, fonti reali e prove macchina.
 ## Missione operativa letta dall'agente
 
 ```text
-Voglio configurare il mio Cervello + Ecosistema LeaderAI usando la repo
-ufficiale come standard di sola lettura.
+Voglio configurare il mio Cervello + Ecosistema LeaderAI usando l'Ecosistema
+Base su Google Drive come standard di sola lettura.
 
-Repo da usare:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema
+Ecosistema Base da usare:
+https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6
 
 Procedura da aprire:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/main/INSTALLA_CON_AI.md
+https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view
 
 Obiettivo finale:
 creare o aggiornare UNA cartella madre (il cervello) sul mio computer. Dove
@@ -174,8 +172,8 @@ Fase 2 - prepara la cartella madre e Git locale
 3. Prima di aggiungere file, controlla cosa esiste gia'. Integra i pezzi mancanti
    e conserva il contenuto vivo del cliente.
 
-Fase 3 - leggi lo standard ufficiale in sola lettura
-1. Apri dalla repo GitHub ufficiale questi file, tutti dal branch `main`:
+Fase 3 - leggi lo standard corrente in sola lettura
+1. Apri dall'Ecosistema Base su Google Drive questi file:
    - `VERSION`
    - `install_contract.json`
    - `MANIFEST.md`
@@ -204,15 +202,15 @@ Fase 3 - leggi lo standard ufficiale in sola lettura
    - `templates/CLAUDE_SETTINGS.json`
 2. Registra nel log tecnico la versione letta. Se un file non e' leggibile, chiedi
    soltanto l'autorizzazione per l'accesso web di sola lettura e riprova.
-3. Il percorso predefinito termina qui per la repo: niente clone e niente
-   esecuzione di codice scaricato.
+3. Il percorso predefinito termina qui per la fonte: niente GitHub, niente clone
+   e niente esecuzione di codice scaricato.
 
 Fase 4 - monta localmente il Cervello
 1. Crea le cartelle `memory/`, `logs/` ed `ecosistema/` nella cartella madre.
 2. Usa `install_contract.json` come lista macchina unica dei template, dei file
    obbligatori e del ramo agente. Applica localmente i template, sostituendo
    `{{client_name}}`, `{{date}}`, `{{agent}}` e `{{version}}` con i dati reali
-   letti dalla repo:
+   letti dal Base:
    - `templates/AGENTS.md` -> `AGENTS.md`
    - `templates/MEMORY.md` -> `memory/MEMORY.md`
    - `templates/ASSET.md` -> `ecosistema/ASSET.md`
@@ -660,7 +658,7 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - `SITUAZIONE IN BREVE` in apertura, con `Cosa funziona`, `Cosa
   completiamo`, `Cosa serve da te` e `Quando si chiude` in parole semplici;
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
-- standard applicato: repo ufficiale + versione letta;
+- standard applicato: Ecosistema Base + versione letta;
 - versione metodo registrata e versione precedente trovata, se esiste;
 - modalita' accesso standard: sola lettura / percorso tecnico autorizzato;
 - modalita' scelta: claude / codex / both;

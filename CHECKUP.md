@@ -12,10 +12,10 @@ percorso, ripara i difetti sicuri, prova gli instradamenti e blocca la chiusura
 finche' restano cartelle senza proprietario, stanze senza mappa, doppioni,
 residui tecnici o percorsi che l'agente non sa seguire.
 
-Nota per chi mantiene LeaderAI: questo `CHECKUP.md` versionato e' la fonte
-unica della procedura. Nel workspace interno
+Nota per chi mantiene LeaderAI: questo `CHECKUP.md` versionato viene promosso
+nell'Ecosistema Base, fonte corrente della procedura. Nel workspace interno
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` resta soltanto un
-puntatore a questa versione pubblicata.
+puntatore alla versione Drive corrente.
 
 ## Scelta del controllo
 
@@ -34,8 +34,9 @@ puo' essere usato per dichiarare conforme l'intera casa.
 
 ## Regola madre - standard contro caso reale
 
-La repo GitHub `salChiarenza/leaderai-cervello-ecosistema` e' lo standard
-LeaderAI. La cartella viva del cliente e' il caso reale.
+L'Ecosistema Base su Google Drive e' lo standard LeaderAI corrente. La
+cartella viva del cliente e' il caso reale. GitHub conserva soltanto il backup
+e non entra nel checkup.
 
 Regola breve: non riparare a sentimento. `CHECKUP.md` non ripara a sentimento:
 
@@ -44,12 +45,12 @@ Regola breve: non riparare a sentimento. `CHECKUP.md` non ripara a sentimento:
   cliente;
 - `templates/STANZA_AGENTS.md` e' il contratto locale di ogni vera stanza;
 - `templates/STANZA_FONTE.md` e' il calco della sua fonte operativa nominata;
-- `AGENTS.md` e `README.md` spiegano come usare la repo;
+- `AGENTS.md` e `README.md` spiegano come usare il Base;
 - la documentazione ufficiale viva Claude/Codex verifica solo la parte tecnica,
   non sostituisce lo standard LeaderAI.
 
 Ogni diagnosi deve quindi dire: cosa c'e' nella cartella viva, cosa chiede lo
-standard della repo, cosa ho riparato, cosa resta fuori standard e perche'.
+standard del Base, cosa ho riparato, cosa resta fuori standard e perche'.
 Non basta trovare file rotti: devi portare il caso reale allo standard
 LeaderAI, salvo blocchi umani veri.
 
@@ -67,16 +68,13 @@ Quando si chiude: dopo il collaudo completo dell'ambiente e del processo reale.
 ISTRUZIONI PER L'AGENTE
 Questa missione e' per l'agente AI che lavora sull'ambiente del cliente.
 
-Usa la repo GitHub `salChiarenza/leaderai-cervello-ecosistema`.
-Se la repo e' gia' presente sul computer, aggiornala e apri `CHECKUP.md`.
-Se la repo locale non e' presente, usa GitHub come riferimento di lettura per
-`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+Usa l'Ecosistema Base collegato dal corso `LeaderAI Ecosystem` su Systeme.io.
+Apri da Google Drive `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
 `templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
-`templates/ISPETTORE_SKILL.md`. Crea un clone
-tecnico temporaneo solo dopo conferma esplicita.
+`templates/ISPETTORE_SKILL.md`. Non usare GitHub e non creare cloni tecnici.
 
 Usa `MANIFEST.md` come standard di conformita'. La cartella viva del cliente e'
-il caso reale: confrontala con lo standard della repo e con
+il caso reale: confrontala con lo standard del Base e con
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e
 `templates/STANZA_FONTE.md`.
 
@@ -115,15 +113,9 @@ segnala e si propone.
 
 ## Passo 0 — Usa lo standard LeaderAI aggiornato
 
-Se la repo standard `salChiarenza/leaderai-cervello-ecosistema` e' gia'
-presente sul computer, entra nella cartella e aggiorna:
-
-```
-git pull --ff-only
-```
-
-Se `git pull` porta modifiche, **rileggi questo file dall'inizio**: potresti
-star leggendo una versione superata.
+Apri l'Ecosistema Base collegato dal corso e rileggi `CHECKUP.md` direttamente
+da Google Drive. Non usare una copia GitHub o una vecchia cartella tecnica come
+metro: potrebbero essere arretrate rispetto al Base.
 
 Leggi davvero `VERSION` e `CHANGELOG.md`. La versione installata si legge prima
 dall'`AGENTS.md` della cartella viva e poi dal solo `logs/install-log.md`.
@@ -142,24 +134,22 @@ non conosce i file che la versione nuova rende obbligatori e li blocca: caso
 reale del 03/09/2026, anagrafe dei soggetti con il guardiano 0.6.6 ancora
 installato.
 
-Se non riesci a leggere il `VERSION` corrente della repo ufficiale, se non
+Se non riesci a leggere il `VERSION` corrente dell'Ecosistema Base, se non
 riesci a determinare la versione installata o se i due valori non coincidono,
 il gate e' `NON PASSA`. Non si puo' certificare una 0.3.0 contro se stessa
 quando lo standard vivo e' gia' successivo.
 
-Se la repo locale non e' presente, usa GitHub come riferimento di lettura per i
-file standard (`CHECKUP.md`, `install_contract.json`, `MANIFEST.md`,
-`templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
+Leggi dal Base i file standard (`CHECKUP.md`, `install_contract.json`,
+`MANIFEST.md`, `templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
 `templates/STANZA_FONTE.md`, `templates/ISPETTORE_SKILL.md`, `AGENTS.md`,
-`README.md`) tramite WebFetch/browser o strumento equivalente. Se non puoi
-leggerli online, chiedi una sola conferma per creare un clone tecnico
-temporaneo in cartella temporanea di sistema. Il checkup di un ambiente gia'
-installato parte dalla cartella viva del cliente, non dalla creazione di nuove
+`README.md`) tramite browser o collegamento Drive equivalente. Se non puoi
+leggerli, chiedi un solo passaggio per ottenere l'accesso al Base e riprova.
+Il checkup parte dalla cartella viva del cliente, non dalla creazione di
 cartelle tecniche.
 
 ## Passo 0-bis - Apri il metro di giudizio
 
-Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
+Prima di diagnosticare la cartella viva, apri nell'Ecosistema Base aggiornato:
 
 - `install_contract.json`, inclusa la lista macchina `official_sources`;
 - `MANIFEST.md`;
@@ -173,8 +163,8 @@ Prima di diagnosticare la cartella viva, apri nella repo aggiornata:
 - `README.md`.
 
 Da questo momento il lavoro non e' "controllare un po' di file". Il lavoro e':
-confrontare la cartella viva del cliente contro lo standard LeaderAI scritto in
-questa repo. File obbligatori e rami dell'agente si ricavano dal contratto
+confrontare la cartella viva del cliente contro lo standard LeaderAI scritto
+nell'Ecosistema Base. File obbligatori e rami dell'agente si ricavano dal contratto
 macchina; le liste narrative lo spiegano e non lo sostituiscono.
 
 ## Passo 0-ter — Trova la cartella viva prima di giudicare
@@ -497,7 +487,7 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   non collega la regola ufficiale allo stato osservato e alla prova;
 - una guida operativa e' stata usata come specifica tecnica per creare o
   modificare file senza una pagina tecnica ufficiale che sostenga la modifica;
-- il `VERSION` corrente della repo ufficiale non e' stato letto, la versione
+- il `VERSION` corrente dell'Ecosistema Base non e' stato letto, la versione
   installata non e' determinabile o le due versioni non coincidono;
 - manca `AGENTS.md`;
 - la task/sessione non e' nata dalla cartella madre, il progetto primario/CWD
@@ -662,7 +652,7 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
    proprio amministratore.
 4. Verifica che ogni stanza sia raggiungibile dall'`AGENTS.md` della cartella
    madre e abbia un prefabbricato completo costruito o integrato da
-   `ecosistema/STANZA_AGENTS.md` (calco locale installato dalla fonte repo
+   `ecosistema/STANZA_AGENTS.md` (calco locale installato dall'Ecosistema Base
    `templates/STANZA_AGENTS.md`) e `ecosistema/STANZA_FONTE.md`: mappa locale,
    ponte `CLAUDE.md`, fonte operativa nominata e completa, riga alla radice e
    prova. La mappa dichiara ogni sottocartella diretta. La fonte porta in testa
@@ -689,12 +679,12 @@ Tabella obbligatoria del censimento:
 
 `percorso | classe | responsabilita business | amministratore | riporta al | mappa locale | collegamento radice | azione | prova`
 
-Se la repo ufficiale e' gia' presente localmente e il proprietario autorizza
+Se la copia di lavoro e' gia' presente localmente e il proprietario autorizza
 l'esecuzione del controllo tecnico, `ecosistema_inspector.py --target
 <cartella-viva>` fornisce il preflight deterministico. Il preflight non
 sostituisce il giudizio dell'agente sui processi e non cancella dati. Se la
-repo non e' locale, esegui gli stessi controlli con gli strumenti file
-disponibili senza creare un clone automatico.
+copia di lavoro non e' locale, esegui gli stessi controlli con gli strumenti
+file disponibili senza creare un clone.
 
 La fonte macchina di questi blocchi e'
 `install_contract.json -> inspection_policies -> room_lifecycle`.

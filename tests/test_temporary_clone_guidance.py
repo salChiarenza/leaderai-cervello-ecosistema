@@ -15,13 +15,13 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         text = compact(raw)
 
         required = [
-            "repo ufficiale resta lo standard LeaderAI verificabile",
+            "Ecosistema Base su Google Drive e' lo standard LeaderAI corrente",
             "legge in sola lettura",
-            "Il percorso standard non richiede clone della repo",
+            "GitHub non e' una fonte del cliente",
             "Python non serve nel percorso standard",
-            "niente clone e niente esecuzione di codice scaricato",
+            "niente GitHub, niente clone e niente esecuzione di codice scaricato",
             "leaderai_setup.py` resta un attrezzo LeaderAI",
-            "solo dopo la sua autorizzazione esplicita",
+            "copia di lavoro locale",
         ]
 
         for phrase in required:
@@ -90,10 +90,10 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         text = compact(raw)
 
         required = [
-            "Se la repo e' gia' presente sul computer",
-            "aggiornala",
-            "usa GitHub come riferimento di lettura",
-            "Crea un clone tecnico temporaneo solo dopo conferma esplicita",
+            "Ecosistema Base collegato dal corso",
+            "rileggi `CHECKUP.md` direttamente da Google Drive",
+            "Non usare una copia GitHub",
+            "non creare cloni tecnici",
         ]
 
         for phrase in required:
@@ -103,6 +103,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         forbidden = [
             "Aggiorna o clona la repo",
             "Se il clone non esiste ancora, clonalo",
+            "usa GitHub come riferimento di lettura",
         ]
 
         for phrase in forbidden:

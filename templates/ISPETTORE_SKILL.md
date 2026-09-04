@@ -5,8 +5,9 @@ description: Usa quando l'utente dice lancia l'Ispettore, controlla la casa, ver
 
 # Ispettore Ecosistema
 
-La fonte unica della procedura e' `CHECKUP.md` nella repo ufficiale
-`salChiarenza/leaderai-cervello-ecosistema`.
+La fonte unica della procedura e' `CHECKUP.md` nell'Ecosistema Base su Google
+Drive, collegato dal corso `LeaderAI Ecosystem` su Systeme.io. GitHub conserva
+soltanto il backup e non entra nel checkup.
 
 ## Avvio senza doppio consenso
 

@@ -1,6 +1,8 @@
 # LeaderAI Cervello + Ecosistema
 
-Repo operativa per montare un ambiente AI cliente secondo lo standard LeaderAI.
+Copia di lavoro del prodotto che monta un ambiente AI cliente secondo lo
+standard LeaderAI. La versione corrente vive nell'Ecosistema Base su Google
+Drive; GitHub conserva soltanto il backup successivo alla prova Drive.
 
 E' una repo operativa: installa quando manca tutto, fa checkup e riparazione
 quando l'ambiente esiste gia', aggiorna le fonti della casa e chiude con una
@@ -19,8 +21,8 @@ allo stato osservato, alle riparazioni e alle prove. Le pagine tecniche
 stabiliscono la conformita'; `Codex per il lavoro` orienta la pratica operativa
 e non sostituisce le specifiche tecniche.
 
-Regola madre: questa repo e' lo standard, la cartella viva del cliente e' il
-caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
+Regola madre: l'Ecosistema Base su Drive e' lo standard corrente, la cartella
+viva del cliente e' il caso reale. `CHECKUP.md` confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md` e
 `templates/STANZA_FONTE.md` e `templates/ecosystem-check/`, ripara gli scostamenti
 riparabili, prova, salva i fatti nelle fonti proprietarie e chiude localmente.
@@ -51,7 +53,7 @@ INSTALLA_CON_AI.md
 Il testo della prima email di consegna vive soltanto in `EMAIL_CONSEGNA.md`.
 La procedura non ne mantiene una seconda copia.
 
-L'agente legge questa repo ufficiale in sola lettura, trova o crea la cartella
+L'agente legge l'Ecosistema Base in sola lettura, trova o crea la cartella
 madre nella posizione scelta col cliente e applica localmente i template dello
 standard. Il percorso cliente predefinito non clona la repo e non esegue codice
 scaricato.
@@ -272,9 +274,9 @@ python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
 
 ## Stato
 
-Versione applicabile via lettura della repo ufficiale. Prima di usarla con un
+Versione applicabile via lettura dell'Ecosistema Base. Prima di usarla con un
 cliente, leggere `AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita'
-Claude/Codex e verificare `VERSION` e stato GitHub.
+Claude/Codex e verificare `VERSION` direttamente su Drive.
 La cartella madre deve essere anche il punto di ingresso reale dell'agente:
 progetto locale primario in Codex Desktop, `-C`/directory corrente in Codex
 CLI, directory corrente in Claude Code. Dopo un cambio di cartella si apre una

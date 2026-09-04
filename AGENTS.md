@@ -1,13 +1,15 @@
 # LeaderAI Cervello + Ecosistema
 
-Repo installabile per creare la cartella madre AI di un cliente.
+Copia di lavoro del prodotto installabile per creare la cartella madre AI di un cliente.
 
 Questa repo e' letta sia da Claude Code sia da Codex. `AGENTS.md` e'
 la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
 `@AGENTS.md`. Una copia indipendente crea drift.
 
-Regola madre: questa repo e' lo standard LeaderAI, la cartella viva del cliente
-e' il caso reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
+Regola madre: l'Ecosistema Base su Google Drive e' lo standard LeaderAI
+corrente; questa cartella serve per modifiche e test e GitHub conserva soltanto
+il backup successivo alla prova Drive. La cartella viva del cliente e' il caso
+reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
 `templates/STANZA_FONTE.md`, `templates/ecosystem-check/` e le istruzioni operative
 della repo; poi ripara, prova e riporta gli scostamenti.
@@ -82,12 +84,12 @@ chiude solo dopo un collaudo reale.
 
 ## Collaudo dell'Ispettore sulla casa LeaderAI
 
-La repo e' la fonte del prodotto; `/Users/sal/leaderai` e' la prima casa viva
-su cui provarlo. Ogni modifica all'Ispettore nasce qui, supera i test della
-repo, viene resa richiamabile in LeaderAI per Claude Code e Codex e viene poi
-eseguita sulla casa reale. I difetti osservati in LeaderAI tornano in questa
-repo come regola e regressione prima del rilascio ai clienti. I test della repo
-provano il contratto; il collaudo reale avviene in LeaderAI.
+L'Ecosistema Base su Drive e' la fonte corrente del prodotto;
+`/Users/sal/leaderai` e' la prima casa viva su cui provarlo. Ogni modifica
+all'Ispettore nasce in questa copia di lavoro, supera i test, viene resa
+richiamabile in LeaderAI per Claude Code e Codex e viene poi eseguita sulla
+casa reale. Dopo la prova viene caricata e riletta dal Base; soltanto allora
+GitHub riceve il backup.
 
 ## Telaio comune e scelta agente
 
@@ -185,11 +187,11 @@ su Drive/OneDrive/server e si leggono via connettore; non entrano nella repo.
 
 ## Uso cliente
 
-Il file da consegnare e':
+Il file da consegnare dal modulo Systeme.io e dall'Ecosistema Base e':
 
 - `INSTALLA_CON_AI.md`
 
-L'agente apre quel file dalla repo ufficiale in sola lettura, legge `VERSION`,
+L'agente apre quel file dall'Ecosistema Base in sola lettura, legge `VERSION`,
 `MANIFEST.md` e i template indicati, poi applica lo standard localmente. La
 procedura predefinita non richiede clone della repo ne' esecuzione di codice
 scaricato. `leaderai_setup.py` resta un attrezzo tecnico opzionale, utilizzabile
@@ -209,18 +211,17 @@ non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
 anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
 `leder ai`, `cervello`, `_leaderai`, `install`, `setup`, `repo`, `clone`) e
 classifica ogni risultato sospetto. La fonte unica del metodo e' il
-`CHECKUP.md` versionato in questa repo; nel workspace LeaderAI resta soltanto
-un puntatore alla versione pubblicata.
+`CHECKUP.md` versionato nell'Ecosistema Base; nel workspace LeaderAI resta
+soltanto un puntatore alla versione corrente.
 
-Nel checkup di un ambiente gia' installato, l'agente usa la repo locale se gia'
-presente e la aggiorna; se manca, legge GitHub come riferimento di sola lettura
-per `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
+Nel checkup di un ambiente gia' installato, l'agente apre dal Base
+`CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
 `templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
-`templates/ISPETTORE_SKILL.md`. Crea un clone
-tecnico temporaneo solo con conferma esplicita.
+`templates/ISPETTORE_SKILL.md`. Non usa GitHub come fonte e non crea cloni
+tecnici.
 
-Nella nuova installazione, invece, parte sempre dalla lettura web della repo e
-dal montaggio locale dei template. Il clone non e' un ripiego automatico.
+Nella nuova installazione parte dalla lettura del Base e dal montaggio locale
+dei template.
 
 Il modello unico dell'email di prima consegna vive in `EMAIL_CONSEGNA.md`.
 `INSTALLA_CON_AI.md` contiene soltanto la procedura esecutiva: niente copie
@@ -305,10 +306,11 @@ esplicitamente; non e' il percorso cliente predefinito.
    critico.
 2. Esegui i test.
 3. Per un rilascio esegui il gate completo: autenticazione mancante, timeout,
-   test saltati o prova live fallita bloccano commit e push.
-4. Commit e push su GitHub: la base cliente e' la repo ufficiale, non copie o
-   fork paralleli.
-5. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.
+   test saltati o prova live fallita bloccano il caricamento.
+4. Carica l'Ecosistema Base su Drive e rileggilo dal collegamento; soltanto
+   `PASSA` rende corrente la modifica.
+5. Dopo la prova Drive, commit e push su GitHub come copia di sicurezza.
+6. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.
 Ogni collaudo parte da una nuova task/sessione con la cartella madre come
 progetto primario/CWD. Una task aperta fuori root non vede il Cervello:
 percorso corrente, `AGENTS.md` caricato e tre regole mostrate sono prove

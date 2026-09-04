@@ -1,14 +1,22 @@
 # Changelog
 
+## 0.6.13 - 04/09/2026
+
+- Chiarito l'ordine di autorita': Systeme.io e' ingresso e programma,
+  l'Ecosistema Base su Google Drive contiene la versione corrente, la cartella
+  locale serve per modifiche e test, GitHub conserva soltanto il backup.
+- Installazione e checkup non leggono piu' GitHub e non creano cloni tecnici:
+  aprono i file correnti dal Base. Un rilascio aggiorna e rilegge Drive prima
+  del commit e del push di sicurezza.
+
 ## 0.6.12 - 04/09/2026
 
 - L'email di consegna non manda piu' il cliente su GitHub: i fogli dello
   standard si aprono dall'**Ecosistema Base su Google Drive** (cartella
   leggibile con il solo link: VERSION, MANIFEST, INSTALLA_CON_AI, CHECKUP e i
   calchi) e il proprietario segue lo stesso passo nel corso privato **LeaderAI
-  Ecosystem** su Systeme.io (un modulo per passo). La repo resta motore dietro
-  le quinte: numero di versione, test, prova pubblica; nell'email compare solo
-  come riferimento immutabile e impronta dell'archivio.
+  Ecosystem** su Systeme.io. Questa formulazione e' stata superata dalla 0.6.13:
+  GitHub conserva soltanto il backup successivo alla prova Drive.
 - Controllo prima dell'invio: si verifica dal livello di accesso del
   destinatario, senza login Google, che cartella e fogli si aprano dai link.
 - Decisione di Sal del 04/09/2026: "spostiamo tutto su Google e Systeme.io,

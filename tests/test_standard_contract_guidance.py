@@ -26,14 +26,15 @@ class StandardContractGuidanceTest(unittest.TestCase):
                 with self.subTest(surface=surface.name, url=url):
                     self.assertIn(url, text)
 
-    def test_manifest_declares_the_repo_standard(self):
+    def test_manifest_declares_the_current_standard(self):
         text = (ROOT / "MANIFEST.md").read_text(encoding="utf-8")
 
         required = [
             "standard di conformita'",
             "cartella viva del cliente",
             "caso reale",
-            "repo `salChiarenza/leaderai-cervello-ecosistema`",
+            "Ecosistema Base",
+            "GitHub non entra",
         ]
 
         for phrase in required:
@@ -47,8 +48,8 @@ class StandardContractGuidanceTest(unittest.TestCase):
         required = [
             "Contratto di consegna sicura",
             "fonte di sola lettura",
-            "autorizzazione esplicita e separata",
-            "non sono il percorso predefinito",
+            "GitHub non entra nel percorso cliente",
+            "non vengono creati cloni tecnici",
             "La conferma finale vive nel messaggio conclusivo",
         ]
 
@@ -123,7 +124,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
 
         required = [
-            "repo GitHub `salChiarenza/leaderai-cervello-ecosistema`",
+            "Ecosistema Base su Google Drive e' lo standard LeaderAI corrente",
             "`MANIFEST.md` e' lo standard di conformita'",
             "`templates/AGENTS.md` e' il comportamento atteso",
             "cartella viva del cliente e' il caso reale",
@@ -133,6 +134,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "Modello email missione checkup",
             "Oggetto: `Checkup Ecosistema`",
             "Usa `MANIFEST.md` come standard di conformita'",
+            "GitHub conserva soltanto il backup",
         ]
 
         for phrase in required:

@@ -19,22 +19,21 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DESTINATARIO_OK — 04/09/2026`
+`PROVA_DRIVE_OK — 0.6.13 — 04/09/2026`
 
-La prova pubblica completata riguarda la versione `0.6.12` e il commit
-immutabile
-`356836732e379f2acb059d81be5534f61d0ca211`. L'archivio scaricato senza
-credenziali ha SHA256
-`2dffd646b9de1e30a4c96db6ec832df916223149378e1a7aebda6fd5dc21d427`;
-la sola copia estratta ha superato `332` test e le procedure
-`INSTALLA_CON_AI.md` e `CHECKUP.md` hanno risposto `HTTP 200`.
+`PROVA_DESTINATARIO_DA_FARE — corso inattivo, nessun utente iscritto`
+
+La 0.6.13 e' stata caricata e riletta integralmente dall'Ecosistema Base: 118
+elementi attesi compreso `App/Voce.zip`, zero mancanti, zero diversi, zero
+extra conteggiati, pacchetto Voce Mac + Windows `PASSA`, prova generale
+`PASSA`. Durante la prova GitHub era ancora fermo alla copia precedente.
 
 ## Controlli prima dell'invio
 
 1. Verifica dal livello di accesso del destinatario (senza login Google) che la
    cartella Ecosistema Base e i fogli VERSION, MANIFEST.md, INSTALLA_CON_AI.md e
-   CHECKUP.md si aprano dai link; confronta VERSION con la versione verificata e
-   lo SHA256 dell'archivio della release.
+   CHECKUP.md si aprano dai link; confronta VERSION con la versione verificata
+   e la rilettura file per file del Base.
 2. Conferma che il lettore operativo sia l'agente collegato alla posta.
 3. Autentica la missione: mittente LeaderAI esatto, oggetto esatto, ID missione
    presente in oggetto e corpo e conferma del proprietario nella sessione. Il
@@ -149,8 +148,7 @@ Apri in sola lettura
 e <a href="https://drive.google.com/file/d/19XvIWxslgva2bSvPZN8bgU7p7noN93ZT/view">VERSION</a>;
 scarica i calchi da quella cartella. Il proprietario segue lo stesso passo nel corso privato
 <a href="https://www.salchiarenza.com/school/course/leaderai-ecosystem">LeaderAI Ecosystem</a>.
-Riferimento immutabile della release (backup tecnico, non serve aprirlo): <code>[RIFERIMENTO IMMUTABILE]</code>.
-SHA256 verificato dell'archivio della release: <code>[SHA256 ARCHIVIO]</code>.</p>
+GitHub conserva soltanto il backup e non entra nella missione.</p>
 
 <p>Cliente: [NOME]<br>
 Azienda: [AZIENDA]<br>
@@ -281,8 +279,7 @@ Scarica i calchi dalla cartella Ecosistema Base.
 Corso privato per il proprietario (stesso passo, in parole semplici):
 https://www.salchiarenza.com/school/course/leaderai-ecosystem
 
-Riferimento immutabile della release (backup tecnico, non serve aprirlo): [RIFERIMENTO IMMUTABILE]
-SHA256 verificato dell'archivio della release: [SHA256 ARCHIVIO]
+GitHub conserva soltanto il backup e non entra nella missione.
 
 Cliente: [NOME]
 Azienda: [AZIENDA]
