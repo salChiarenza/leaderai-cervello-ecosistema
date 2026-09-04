@@ -33,7 +33,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             "standard di conformita'",
             "cartella viva del cliente",
             "caso reale",
-            "Ecosistema Base",
+            "Ecosistema per i clienti",
             "GitHub non entra",
         ]
 
@@ -124,7 +124,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
 
         required = [
-            "Ecosistema Base su Google Drive e' lo standard LeaderAI corrente",
+            "Ecosistema per i clienti su Google Drive e' lo standard LeaderAI corrente",
             "`MANIFEST.md` e' lo standard di conformita'",
             "`templates/AGENTS.md` e' il comportamento atteso",
             "cartella viva del cliente e' il caso reale",

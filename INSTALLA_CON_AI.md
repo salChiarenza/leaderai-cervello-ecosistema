@@ -1,10 +1,10 @@
 # Autoconfigurazione sicura - Cervello + Ecosistema
 
-Questa e' la procedura unica per una nuova installazione cliente. L'Ecosistema
-Base su Google Drive e' lo standard LeaderAI corrente; l'agente del cliente lo
+Questa e' la procedura unica per una nuova installazione cliente.
+`Ecosistema per i clienti` su Google Drive e' lo standard LeaderAI corrente; l'agente del cliente lo
 legge in sola lettura e applica localmente i file nella cartella madre.
 
-Percorso predefinito: lettura del Base, creazione locale e collaudo. GitHub non
+Percorso predefinito: lettura del prodotto Drive, creazione locale e collaudo. GitHub non
 e' una fonte del cliente e non serve alcun clone. `leaderai_setup.py` resta un
 attrezzo LeaderAI utilizzabile soltanto nella copia di lavoro locale.
 
@@ -81,10 +81,10 @@ personalizzazione, fonti reali e prove macchina.
 ## Missione operativa letta dall'agente
 
 ```text
-Voglio configurare il mio Cervello + Ecosistema LeaderAI usando l'Ecosistema
-Base su Google Drive come standard di sola lettura.
+Voglio configurare il mio Cervello + Ecosistema LeaderAI usando
+`Ecosistema per i clienti` su Google Drive come standard di sola lettura.
 
-Ecosistema Base da usare:
+Ecosistema per i clienti da usare:
 https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6
 
 Procedura da aprire:
@@ -173,7 +173,7 @@ Fase 2 - prepara la cartella madre e Git locale
    e conserva il contenuto vivo del cliente.
 
 Fase 3 - leggi lo standard corrente in sola lettura
-1. Apri dall'Ecosistema Base su Google Drive questi file:
+1. Apri dall'Ecosistema per i clienti su Google Drive questi file:
    - `VERSION`
    - `install_contract.json`
    - `MANIFEST.md`
@@ -210,7 +210,7 @@ Fase 4 - monta localmente il Cervello
 2. Usa `install_contract.json` come lista macchina unica dei template, dei file
    obbligatori e del ramo agente. Applica localmente i template, sostituendo
    `{{client_name}}`, `{{date}}`, `{{agent}}` e `{{version}}` con i dati reali
-   letti dal Base:
+   letti dal prodotto Drive:
    - `templates/AGENTS.md` -> `AGENTS.md`
    - `templates/MEMORY.md` -> `memory/MEMORY.md`
    - `templates/ASSET.md` -> `ecosistema/ASSET.md`
@@ -658,7 +658,7 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - `SITUAZIONE IN BREVE` in apertura, con `Cosa funziona`, `Cosa
   completiamo`, `Cosa serve da te` e `Quando si chiude` in parole semplici;
 - cartella madre scelta e sua posizione (locale o cloud, come da Domanda 1);
-- standard applicato: Ecosistema Base + versione letta;
+- standard applicato: Ecosistema per i clienti + versione letta;
 - versione metodo registrata e versione precedente trovata, se esiste;
 - modalita' accesso standard: sola lettura / percorso tecnico autorizzato;
 - modalita' scelta: claude / codex / both;

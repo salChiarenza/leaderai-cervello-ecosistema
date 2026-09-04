@@ -1,18 +1,27 @@
 # Changelog
 
+## 0.6.14 - 04/09/2026
+
+- Il nome visibile `Ecosistema Base` diventa **Ecosistema per i clienti**: dice
+  subito che contiene il prodotto pulito, distinto dal lavoro privato di Sal.
+- La cartella madre Drive ora contiene anche `Ecosistema di Sal`, con tutte le
+  aree operative, App e Agenti, e `Backup automatico`. Il corso continua a
+  collegare gli stessi file del prodotto e resta inattivo fino alla fine della
+  Challenge.
+
 ## 0.6.13 - 04/09/2026
 
 - Chiarito l'ordine di autorita': Systeme.io e' ingresso e programma,
-  l'Ecosistema Base su Google Drive contiene la versione corrente, la cartella
+  l'Ecosistema per i clienti su Google Drive contiene la versione corrente, la cartella
   locale serve per modifiche e test, GitHub conserva soltanto il backup.
 - Installazione e checkup non leggono piu' GitHub e non creano cloni tecnici:
-  aprono i file correnti dal Base. Un rilascio aggiorna e rilegge Drive prima
+  aprono i file correnti dal prodotto. Un rilascio aggiorna e rilegge Drive prima
   del commit e del push di sicurezza.
 
 ## 0.6.12 - 04/09/2026
 
 - L'email di consegna non manda piu' il cliente su GitHub: i fogli dello
-  standard si aprono dall'**Ecosistema Base su Google Drive** (cartella
+  standard si aprono dall'**Ecosistema per i clienti su Google Drive** (cartella
   leggibile con il solo link: VERSION, MANIFEST, INSTALLA_CON_AI, CHECKUP e i
   calchi) e il proprietario segue lo stesso passo nel corso privato **LeaderAI
   Ecosystem** su Systeme.io. Questa formulazione e' stata superata dalla 0.6.13:
@@ -142,7 +151,7 @@
   contratto e accetta i registri canonici.
 - Nuovi finding `CONSOLIDATED_CHAT_MISSING`, `CONSOLIDATED_GUARDIAN_MISSING`,
   `CONSOLIDATED_GUARDIAN_NOT_HOOKED`; test dedicati per Ispettore e guardiano.
-- Casa del prodotto: Ecosistema Base su Google Drive (cartella madre "LeaderAI
+- Casa del prodotto: Ecosistema per i clienti su Google Drive (cartella madre "LeaderAI
   Ecosystem", accanto a "Ecosistema di Sal"); la repo resta backup tecnico e
   numerazione delle versioni. La release viene ricostruita dal Drive file per
   file (`leaderai-ecosistema/tools/ecosistema_base_drive.py` nella casa LeaderAI).

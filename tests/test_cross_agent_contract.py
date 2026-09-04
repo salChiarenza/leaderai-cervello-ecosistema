@@ -122,7 +122,7 @@ class CrossAgentContractTest(unittest.TestCase):
         install = self.read("INSTALLA_CON_AI.md")
 
         self.assertIn("Modello unico e versionabile", email)
-        # Dal 04/09/2026 il cliente riceve l'Ecosistema Base su Drive e il corso
+        # Dal 04/09/2026 il cliente riceve l'Ecosistema per i clienti su Drive e il corso
         # privato; GitHub conserva soltanto il backup e non entra nella missione.
         self.assertIn(
             "https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6",
@@ -135,7 +135,7 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertNotIn("[RIFERIMENTO IMMUTABILE]", email)
         self.assertNotIn("[SHA256 ARCHIVIO]", email)
         self.assertIn("GitHub conserva soltanto il backup", email)
-        self.assertIn("rilettura file per file del Base", email)
+        self.assertIn("rilettura file per file del prodotto", email)
         self.assertNotIn("/blob/main/", email)
         self.assertIn("autorizzazione esplicita", email)
         self.assertIn("zero aggiornamenti intermedi", email)

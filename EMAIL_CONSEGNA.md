@@ -19,21 +19,22 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DRIVE_OK — 0.6.13 — 04/09/2026`
+`PROVA_DRIVE_OK — 0.6.14 — 04/09/2026`
 
 `PROVA_DESTINATARIO_DA_FARE — corso inattivo, nessun utente iscritto`
 
-La 0.6.13 e' stata caricata e riletta integralmente dall'Ecosistema Base: 118
-elementi attesi compreso `App/Voce.zip`, zero mancanti, zero diversi, zero
-extra conteggiati, pacchetto Voce Mac + Windows `PASSA`, prova generale
-`PASSA`. Durante la prova GitHub era ancora fermo alla copia precedente.
+La 0.6.14 e' stata caricata e riletta integralmente da Drive: 118 elementi
+attesi, zero mancanti, zero diversi, zero extra conteggiati e pacchetto Voce
+Mac + Windows `PASSA`. La cartella visibile e' stata rinominata senza cambiare
+i collegamenti ai file. GitHub conservava ancora la copia precedente durante
+la prova ed e' stato aggiornato soltanto dopo il suo esito `PASSA`.
 
 ## Controlli prima dell'invio
 
 1. Verifica dal livello di accesso del destinatario (senza login Google) che la
-   cartella Ecosistema Base e i fogli VERSION, MANIFEST.md, INSTALLA_CON_AI.md e
+   cartella Ecosistema per i clienti e i fogli VERSION, MANIFEST.md, INSTALLA_CON_AI.md e
    CHECKUP.md si aprano dai link; confronta VERSION con la versione verificata
-   e la rilettura file per file del Base.
+   e la rilettura file per file del prodotto.
 2. Conferma che il lettore operativo sia l'agente collegato alla posta.
 3. Autentica la missione: mittente LeaderAI esatto, oggetto esatto, ID missione
    presente in oggetto e corpo e conferma del proprietario nella sessione. Il
@@ -138,8 +139,8 @@ SULLA MACCHINA]</strong>. Quando il
 percorso deve essere creato, chiedi a [NOME] di autorizzare la cartella padre
 concordata e di confermare l'eventuale richiesta nativa di accesso.</p>
 
-<p>I fogli dello standard stanno nell'<strong>Ecosistema Base</strong> su Google Drive, leggibile con il solo link:
-<a href="https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6">cartella Ecosistema Base</a>.
+<p>I fogli dello standard stanno nell'<strong>Ecosistema per i clienti</strong> su Google Drive, leggibile con il solo link:
+<a href="https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6">cartella Ecosistema per i clienti</a>.
 Apri in sola lettura
 <a href="https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view">INSTALLA_CON_AI.md</a>
 (procedura ufficiale LeaderAI [VERSIONE VERIFICATA]),
@@ -266,7 +267,7 @@ MACCHINA]. Quando il percorso deve essere
 creato, chiedi a [NOME] di autorizzare la cartella padre concordata e di
 confermare l'eventuale richiesta nativa di accesso.
 
-Ecosistema Base (i fogli dello standard, leggibili con il solo link):
+Ecosistema per i clienti (i fogli dello standard, leggibili con il solo link):
 https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6
 
 Procedura ufficiale LeaderAI [VERSIONE VERIFICATA] (INSTALLA_CON_AI.md):
@@ -274,7 +275,7 @@ https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view
 CHECKUP.md: https://drive.google.com/file/d/1LQOa3iY7MwZxg4AiNeadAzhhdKMPZFOR/view
 MANIFEST.md: https://drive.google.com/file/d/1PYKRDvMBCjuCFQDBuis0qePth4NtBmox/view
 VERSION: https://drive.google.com/file/d/19XvIWxslgva2bSvPZN8bgU7p7noN93ZT/view
-Scarica i calchi dalla cartella Ecosistema Base.
+Scarica i calchi dalla cartella Ecosistema per i clienti.
 
 Corso privato per il proprietario (stesso passo, in parole semplici):
 https://www.salchiarenza.com/school/course/leaderai-ecosystem

@@ -6,7 +6,7 @@ Questa repo e' letta sia da Claude Code sia da Codex. `AGENTS.md` e'
 la fonte unica comune; `CLAUDE.md` e' sempre presente e contiene soltanto
 `@AGENTS.md`. Una copia indipendente crea drift.
 
-Regola madre: l'Ecosistema Base su Google Drive e' lo standard LeaderAI
+Regola madre: l'Ecosistema per i clienti su Google Drive e' lo standard LeaderAI
 corrente; questa cartella serve per modifiche e test e GitHub conserva soltanto
 il backup successivo alla prova Drive. La cartella viva del cliente e' il caso
 reale. Ogni checkup confronta il caso reale con `MANIFEST.md`,
@@ -84,11 +84,11 @@ chiude solo dopo un collaudo reale.
 
 ## Collaudo dell'Ispettore sulla casa LeaderAI
 
-L'Ecosistema Base su Drive e' la fonte corrente del prodotto;
+L'Ecosistema per i clienti su Drive e' la fonte corrente del prodotto;
 `/Users/sal/leaderai` e' la prima casa viva su cui provarlo. Ogni modifica
 all'Ispettore nasce in questa copia di lavoro, supera i test, viene resa
 richiamabile in LeaderAI per Claude Code e Codex e viene poi eseguita sulla
-casa reale. Dopo la prova viene caricata e riletta dal Base; soltanto allora
+casa reale. Dopo la prova viene caricata e riletta dal prodotto Drive; soltanto allora
 GitHub riceve il backup.
 
 ## Telaio comune e scelta agente
@@ -187,11 +187,11 @@ su Drive/OneDrive/server e si leggono via connettore; non entrano nella repo.
 
 ## Uso cliente
 
-Il file da consegnare dal modulo Systeme.io e dall'Ecosistema Base e':
+Il file da consegnare dal modulo Systeme.io e dall'Ecosistema per i clienti e':
 
 - `INSTALLA_CON_AI.md`
 
-L'agente apre quel file dall'Ecosistema Base in sola lettura, legge `VERSION`,
+L'agente apre quel file dall'Ecosistema per i clienti in sola lettura, legge `VERSION`,
 `MANIFEST.md` e i template indicati, poi applica lo standard localmente. La
 procedura predefinita non richiede clone della repo ne' esecuzione di codice
 scaricato. `leaderai_setup.py` resta un attrezzo tecnico opzionale, utilizzabile
@@ -211,16 +211,16 @@ non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
 anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
 `leder ai`, `cervello`, `_leaderai`, `install`, `setup`, `repo`, `clone`) e
 classifica ogni risultato sospetto. La fonte unica del metodo e' il
-`CHECKUP.md` versionato nell'Ecosistema Base; nel workspace LeaderAI resta
+`CHECKUP.md` versionato nell'Ecosistema per i clienti; nel workspace LeaderAI resta
 soltanto un puntatore alla versione corrente.
 
-Nel checkup di un ambiente gia' installato, l'agente apre dal Base
+Nel checkup di un ambiente gia' installato, l'agente apre dal prodotto Drive
 `CHECKUP.md`, `MANIFEST.md`, `templates/AGENTS.md`,
 `templates/STANZA_AGENTS.md`, `templates/STANZA_FONTE.md` e
 `templates/ISPETTORE_SKILL.md`. Non usa GitHub come fonte e non crea cloni
 tecnici.
 
-Nella nuova installazione parte dalla lettura del Base e dal montaggio locale
+Nella nuova installazione parte dalla lettura del prodotto Drive e dal montaggio locale
 dei template.
 
 Il modello unico dell'email di prima consegna vive in `EMAIL_CONSEGNA.md`.
@@ -307,7 +307,7 @@ esplicitamente; non e' il percorso cliente predefinito.
 2. Esegui i test.
 3. Per un rilascio esegui il gate completo: autenticazione mancante, timeout,
    test saltati o prova live fallita bloccano il caricamento.
-4. Carica l'Ecosistema Base su Drive e rileggilo dal collegamento; soltanto
+4. Carica l'Ecosistema per i clienti su Drive e rileggilo dal collegamento; soltanto
    `PASSA` rende corrente la modifica.
 5. Dopo la prova Drive, commit e push su GitHub come copia di sicurezza.
 6. Aggiorna l'anagrafe LeaderAI in `leaderai/memory/reference_mcp_attivi.md`.

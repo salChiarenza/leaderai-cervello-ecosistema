@@ -15,7 +15,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         text = compact(raw)
 
         required = [
-            "Ecosistema Base su Google Drive e' lo standard LeaderAI corrente",
+            "`Ecosistema per i clienti` su Google Drive e' lo standard LeaderAI corrente",
             "legge in sola lettura",
             "GitHub non e' una fonte del cliente",
             "Python non serve nel percorso standard",
@@ -90,7 +90,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
         text = compact(raw)
 
         required = [
-            "Ecosistema Base collegato dal corso",
+            "Ecosistema per i clienti collegato dal corso",
             "rileggi `CHECKUP.md` direttamente da Google Drive",
             "Non usare una copia GitHub",
             "non creare cloni tecnici",

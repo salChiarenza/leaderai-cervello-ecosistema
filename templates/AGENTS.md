@@ -242,7 +242,7 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 
 - Leggi l'email nella posta del proprietario; il copia-incolla vale solo al
   primo contatto quando la posta non e' ancora collegata.
-- Se la missione punta a `CHECKUP.md`, usa l'Ecosistema Base su Drive come standard e
+- Se la missione punta a `CHECKUP.md`, usa l'Ecosistema per i clienti su Drive come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
 - L'email della missione apre con `SITUAZIONE IN BREVE`: `Cosa funziona`,

@@ -5,7 +5,7 @@ description: Usa quando l'utente dice lancia l'Ispettore, controlla la casa, ver
 
 # Ispettore Ecosistema
 
-La fonte unica della procedura e' `CHECKUP.md` nell'Ecosistema Base su Google
+La fonte unica della procedura e' `CHECKUP.md` nell'Ecosistema per i clienti su Google
 Drive, collegato dal corso `LeaderAI Ecosystem` su Systeme.io. GitHub conserva
 soltanto il backup e non entra nel checkup.
 
