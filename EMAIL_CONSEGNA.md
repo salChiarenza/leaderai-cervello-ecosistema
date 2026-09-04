@@ -21,7 +21,7 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 `PROVA_DESTINATARIO_OK — 03/09/2026`
 
-La prova pubblica completata riguarda la versione `0.6.11` e il commit
+La prova pubblica completata riguarda la versione `0.6.12` e il commit
 immutabile
 `73b0bafd89b769288846d0a59fa6d94fc7600f0f`. L'archivio scaricato senza
 credenziali ha SHA256
@@ -31,8 +31,10 @@ la sola copia estratta ha superato `332` test e le procedure
 
 ## Controlli prima dell'invio
 
-1. Verifica dal livello di accesso del destinatario che riferimento immutabile, archivio e
-   procedura immutabili siano pubblici e leggibili; confronta lo SHA256.
+1. Verifica dal livello di accesso del destinatario (senza login Google) che la
+   cartella Ecosistema Base e i fogli VERSION, MANIFEST.md, INSTALLA_CON_AI.md e
+   CHECKUP.md si aprano dai link; confronta VERSION con la versione verificata e
+   lo SHA256 dell'archivio della release.
 2. Conferma che il lettore operativo sia l'agente collegato alla posta.
 3. Autentica la missione: mittente LeaderAI esatto, oggetto esatto, ID missione
    presente in oggetto e corpo e conferma del proprietario nella sessione. Il
@@ -137,13 +139,18 @@ SULLA MACCHINA]</strong>. Quando il
 percorso deve essere creato, chiedi a [NOME] di autorizzare la cartella padre
 concordata e di confermare l'eventuale richiesta nativa di accesso.</p>
 
-<p>Apri in sola lettura la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md">procedura ufficiale LeaderAI [VERSIONE VERIFICATA]</a>
-e usa la
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/[RIFERIMENTO IMMUTABILE]">release ufficiale immutabile</a>
-come standard. Archivio:
-<a href="https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/[RIFERIMENTO IMMUTABILE].tar.gz">archivio [VERSIONE VERIFICATA]</a>.
-SHA256 verificato: <code>[SHA256 ARCHIVIO]</code>.</p>
+<p>I fogli dello standard stanno nell'<strong>Ecosistema Base</strong> su Google Drive, leggibile con il solo link:
+<a href="https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6">cartella Ecosistema Base</a>.
+Apri in sola lettura
+<a href="https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view">INSTALLA_CON_AI.md</a>
+(procedura ufficiale LeaderAI [VERSIONE VERIFICATA]),
+<a href="https://drive.google.com/file/d/1LQOa3iY7MwZxg4AiNeadAzhhdKMPZFOR/view">CHECKUP.md</a>,
+<a href="https://drive.google.com/file/d/1PYKRDvMBCjuCFQDBuis0qePth4NtBmox/view">MANIFEST.md</a>
+e <a href="https://drive.google.com/file/d/19XvIWxslgva2bSvPZN8bgU7p7noN93ZT/view">VERSION</a>;
+scarica i calchi da quella cartella. Il proprietario segue lo stesso passo nel corso privato
+<a href="https://www.salchiarenza.com/school/course/leaderai-ecosystem">LeaderAI Ecosystem</a>.
+Riferimento immutabile della release (backup tecnico, non serve aprirlo): <code>[RIFERIMENTO IMMUTABILE]</code>.
+SHA256 verificato dell'archivio della release: <code>[SHA256 ARCHIVIO]</code>.</p>
 
 <p>Cliente: [NOME]<br>
 Azienda: [AZIENDA]<br>
@@ -261,16 +268,21 @@ MACCHINA]. Quando il percorso deve essere
 creato, chiedi a [NOME] di autorizzare la cartella padre concordata e di
 confermare l'eventuale richiesta nativa di accesso.
 
-Procedura ufficiale:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md
+Ecosistema Base (i fogli dello standard, leggibili con il solo link):
+https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6
 
-Release ufficiale:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/tree/[RIFERIMENTO IMMUTABILE]
+Procedura ufficiale LeaderAI [VERSIONE VERIFICATA] (INSTALLA_CON_AI.md):
+https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view
+CHECKUP.md: https://drive.google.com/file/d/1LQOa3iY7MwZxg4AiNeadAzhhdKMPZFOR/view
+MANIFEST.md: https://drive.google.com/file/d/1PYKRDvMBCjuCFQDBuis0qePth4NtBmox/view
+VERSION: https://drive.google.com/file/d/19XvIWxslgva2bSvPZN8bgU7p7noN93ZT/view
+Scarica i calchi dalla cartella Ecosistema Base.
 
-Archivio:
-https://github.com/salChiarenza/leaderai-cervello-ecosistema/archive/[RIFERIMENTO IMMUTABILE].tar.gz
+Corso privato per il proprietario (stesso passo, in parole semplici):
+https://www.salchiarenza.com/school/course/leaderai-ecosystem
 
-SHA256 verificato: [SHA256 ARCHIVIO]
+Riferimento immutabile della release (backup tecnico, non serve aprirlo): [RIFERIMENTO IMMUTABILE]
+SHA256 verificato dell'archivio della release: [SHA256 ARCHIVIO]
 
 Cliente: [NOME]
 Azienda: [AZIENDA]

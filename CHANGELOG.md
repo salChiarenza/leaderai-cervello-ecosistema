@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.12 - 04/09/2026
+
+- L'email di consegna non manda piu' il cliente su GitHub: i fogli dello
+  standard si aprono dall'**Ecosistema Base su Google Drive** (cartella
+  leggibile con il solo link: VERSION, MANIFEST, INSTALLA_CON_AI, CHECKUP e i
+  calchi) e il proprietario segue lo stesso passo nel corso privato **LeaderAI
+  Ecosystem** su Systeme.io (un modulo per passo). La repo resta motore dietro
+  le quinte: numero di versione, test, prova pubblica; nell'email compare solo
+  come riferimento immutabile e impronta dell'archivio.
+- Controllo prima dell'invio: si verifica dal livello di accesso del
+  destinatario, senza login Google, che cartella e fogli si aprano dai link.
+- Decisione di Sal del 04/09/2026: "spostiamo tutto su Google e Systeme.io,
+  senza doppie copie".
+
 ## 0.6.11 - 03/09/2026
 
 - Nasce il **Manutentore** (`manutentore-ecosistema`, skill installata accanto

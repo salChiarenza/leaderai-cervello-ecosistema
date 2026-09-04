@@ -122,19 +122,17 @@ class CrossAgentContractTest(unittest.TestCase):
         install = self.read("INSTALLA_CON_AI.md")
 
         self.assertIn("Modello unico e versionabile", email)
+        # Dal 04/09/2026 (0.6.12) il cliente riceve l'Ecosistema Base su Drive e il
+        # corso privato; la repo GitHub resta backup tecnico e non entra nell'email.
         self.assertIn(
-            "https://github.com/salChiarenza/leaderai-cervello-ecosistema",
+            "https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6",
             email,
         )
-        self.assertIn(
-            "https://github.com/salChiarenza/leaderai-cervello-ecosistema/"
-            "blob/[RIFERIMENTO IMMUTABILE]/INSTALLA_CON_AI.md",
-            email,
-        )
-        self.assertIn(
-            "archive/[RIFERIMENTO IMMUTABILE].tar.gz",
-            email,
-        )
+        self.assertIn("INSTALLA_CON_AI.md", email)
+        self.assertIn("https://www.salchiarenza.com/school/course/leaderai-ecosystem", email)
+        self.assertIn("[RIFERIMENTO IMMUTABILE]", email)
+        self.assertNotIn("github.com/salChiarenza/leaderai-cervello-ecosistema/blob/", email)
+        self.assertNotIn("archive/[RIFERIMENTO IMMUTABILE].tar.gz", email)
         self.assertIn("SHA256 verificato", email)
         self.assertNotIn("/blob/main/", email)
         self.assertIn("autorizzazione esplicita", email)
