@@ -145,8 +145,10 @@ Nel target scelto crea solo i pezzi standard mancanti:
   madre e fanno rispondere `FUORI DAL CERVELLO` a una sessione nata altrove
 - `.agents/skills/ispettore-ecosistema/SKILL.md` se richiesto Codex
 - `.agents/skills/manutentore-ecosistema/SKILL.md` se richiesto Codex
+- `.agents/skills/censitore-processi/SKILL.md` se richiesto Codex
 - `.claude/skills/ispettore-ecosistema/SKILL.md` se richiesto Claude Code
 - `.claude/skills/manutentore-ecosistema/SKILL.md` se richiesto Claude Code
+- `.claude/skills/censitore-processi/SKILL.md` se richiesto Claude Code
 - `.agent/hooks/guardiano_stanze.sh` e adattatore Windows: prima della chiusura
   intercettano file fuori posto, cartelle incomplete, copie e mappe gonfie
 - `memory/MEMORY.md`
@@ -206,6 +208,13 @@ Modulo specifico gia' disponibile:
   L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
   la cartella madre o la stanza proprietaria e integra il modulo senza creare
   una stanza concorrente.
+
+Ruolo opzionale gia' disponibile nel catalogo `Agenti`:
+
+- `Agenti/Agente Commercialista/` - installazione guidata, fonte fiscale
+  unica, procedura e adattatori per Claude Code e Codex. Si integra nella
+  stanza amministrativa emersa dal lavoro reale; non contiene dati personali
+  e non sostituisce il professionista abilitato.
 
 Il Cervello include anche la **mappa comunicazione**: stato business nel file
 proprietario della stanza, storia tecnica nel solo `logs/install-log.md`, asset

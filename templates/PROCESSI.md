@@ -9,6 +9,46 @@ Processi osservati o candidati.
 
 ## Fase 2 - Ecosistema
 
+### Panoramica del censimento (Passo 2)
+
+Compilata dall'Agente Censitore (`censitore-processi`) in sola lettura. Ogni
+riga porta almeno una prova e un livello di certezza: `OSSERVATO` quando ogni
+passaggio ha una prova diretta e nessun anello e' dedotto, `DEDUCIBILE` quando
+un collegamento e' dedotto o un passaggio non ha prova, `DA CONFERMARE` senza
+prove dirette. La colonna prova porta un puntatore, mai una copia del
+contenuto.
+
+| processo candidato | innesco | sequenza | fonti/strumenti | output | frequenza osservata | attrito | prova | certezza | stato |
+|---|---|---|---|---|---|---|---|---|---|
+| Da censire | - | - | - | - | - | - | - | DA CONFERMARE | in attesa |
+
+Stati ammessi: `in attesa`, `confermato`, `corretto`, `scartato`,
+`scelto come primo`.
+
+### Schede dei candidati scelti
+
+Una scheda per ogni candidato che il proprietario porta avanti.
+
+#### <nome del processo>
+
+- Che cosa succede oggi:
+- Quale prova lo dimostra:
+- Che cosa resta sconosciuto:
+- Che cosa puo' essere solo supportato dall'AI:
+- Che cosa potrebbe essere automatizzato dopo una prova:
+- Che cosa deve restare umano:
+- Decisione del proprietario:
+
+### Che cosa il censimento non ha guardato
+
+Perimetro escluso, zone sensibili segnalate e non aperte, fonti non collegate,
+lavoro fuori dal computer (telefonate, incontri, attivita' su altri
+dispositivi). Un processo che vive solo qui resta `DA CONFERMARE`.
+
+### Processi in esercizio
+
+Compilata dal Passo 3 in poi, quando un processo ha una stanza proprietaria.
+
 | Processo | Stanza proprietaria | A monte | A valle | Fonte/input | Output atteso | Frequenza | Collaudo |
 |---|---|---|---|---|---|---|---|
 | Da osservare | da censire | - | - | da collegare | da definire | da definire | da definire |

@@ -323,6 +323,11 @@ def _generated_agent_file_is_safe(
             "name: manutentore-ecosistema" in current
             and "Creato da LeaderAI Cervello + Ecosistema il " in current
         )
+    if rule.template == "CENSITORE_PROCESSI_SKILL.md":
+        return (
+            "name: censitore-processi" in current
+            and "Creato da LeaderAI Cervello + Ecosistema il " in current
+        )
     return False
 
 

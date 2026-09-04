@@ -154,6 +154,195 @@
       "rule": "adoption_rule.py -> classify_adoption",
       "scope": "uso reale degli strumenti; spesa e consumo restano al prodotto Il Consigliere"
     },
+    "process_census": {
+      "agent_name": "Agente Censitore",
+      "skill_name": "censitore-processi",
+      "phase_served": 2,
+      "phase_label": "Censimento",
+      "next_phase": 3,
+      "category": "Agenti",
+      "activation": "a chiamata",
+      "trigger_commands": [
+        "censisci i miei processi"
+      ],
+      "read_only": true,
+      "forbidden_actions": [
+        "invio",
+        "cancellazione",
+        "spostamento",
+        "rinomina",
+        "modifica",
+        "automazione",
+        "nuova stanza"
+      ],
+      "certainty_levels": [
+        "OSSERVATO",
+        "DEDUCIBILE",
+        "DA CONFERMARE"
+      ],
+      "certainty_rules": {
+        "OSSERVATO": "ogni passaggio della sequenza ha almeno una prova diretta con puntatore a una fonte ammessa dentro il perimetro; nessun anello dedotto",
+        "DEDUCIBILE": "esistono prove dirette ma almeno un collegamento fra i passaggi e' dedotto e dichiarato come tale",
+        "DA CONFERMARE": "nessuna prova diretta, tracce insufficienti o soltanto indizi indiretti"
+      },
+      "path_classes": [
+        "AMMESSO",
+        "FUORI PERIMETRO",
+        "ESCLUSO",
+        "ZONA SENSIBILE"
+      ],
+      "allowed_sources": [
+        "albero",
+        "metadati",
+        "documenti",
+        "email",
+        "calendario",
+        "cronologie",
+        "registri"
+      ],
+      "allowed_sources_glossario": {
+        "albero": "albero di cartelle e nomi dei file",
+        "metadati": "metadati utili, collegamenti e cronologia dei file",
+        "documenti": "documenti operativi selezionati nella casa",
+        "email": "email, soltanto con collegamento gia' attivo e incluso nel perimetro dal proprietario",
+        "calendario": "calendario, soltanto con collegamento gia' attivo e incluso nel perimetro dal proprietario",
+        "cronologie": "cronologie locali gia' disponibili, fonte opzionale dichiarata",
+        "registri": "registri esistenti FONTI, ASSET, PROCESSI, LIMITI, stato e log"
+      },
+      "consent_required_sources": [
+        "email",
+        "calendario",
+        "cronologie"
+      ],
+      "always_excluded_dirs": [
+        ".secrets",
+        ".ssh",
+        ".gnupg",
+        ".aws",
+        "Keychains",
+        "Cookies"
+      ],
+      "always_excluded_terms": [
+        "password",
+        "passwd",
+        "credential",
+        "credenzial",
+        "secret",
+        "segreto",
+        "token",
+        "apikey",
+        "api_key",
+        "api-key",
+        "keychain",
+        "portachiavi",
+        "chiave privata",
+        "private key",
+        "iban",
+        "passaporto",
+        "patente",
+        "carta d'identita",
+        "carta di identita",
+        "codice fiscale",
+        "tessera sanitaria"
+      ],
+      "sensitive_zone_terms": [
+        "personale",
+        "privato",
+        "famiglia",
+        "sanitar",
+        "medic",
+        "salute",
+        "legale",
+        "avvocat",
+        "tribunale",
+        "cedolin",
+        "busta paga",
+        "separazione",
+        "divorzio"
+      ],
+      "sensitive_zone_rule": "un elemento con tratti personali, sanitari o legali dentro una cartella autorizzata non si apre e non si cita nel dettaglio: si segnala soltanto la zona e si chiede se includerla per uno scopo preciso",
+      "scan_policy": {
+        "structure_before_content": true,
+        "content_only_for_candidates_in_perimeter": true,
+        "aggregate_threshold_items": 2000,
+        "volume_reference_items": 50000,
+        "max_sample_files_per_candidate": 5,
+        "max_duration_minutes": 30,
+        "aggregation_axes": [
+          "cartella",
+          "tipo",
+          "periodo",
+          "gruppo di nomi"
+        ]
+      },
+      "episode_identity": "campo episode esplicito; in mancanza, coppia (soggetto normalizzato, data). Due tracce dello stesso episodio contano uno e non diventano due processi; due episodi distinti contano due anche con lo stesso soggetto.",
+      "flow_steps": [
+        "dichiara il perimetro",
+        "censisce",
+        "raggruppa gli episodi",
+        "propone i processi candidati",
+        "classifica la certezza",
+        "chiede il minimo",
+        "scrive la panoramica",
+        "propone la priorita'",
+        "passa al primo processo"
+      ],
+      "confirmation_questions": [
+        "abituale/eccezione",
+        "ordine corretto",
+        "responsabile",
+        "risultato vero"
+      ],
+      "table_columns": [
+        "processo candidato",
+        "innesco",
+        "sequenza",
+        "fonti/strumenti",
+        "output",
+        "frequenza osservata",
+        "attrito",
+        "prova",
+        "certezza",
+        "stato"
+      ],
+      "card_fields": [
+        "che cosa succede oggi",
+        "quale prova lo dimostra",
+        "che cosa resta sconosciuto",
+        "che cosa puo' essere solo supportato dall'AI",
+        "che cosa potrebbe essere automatizzato dopo una prova",
+        "che cosa deve restare umano",
+        "decisione del proprietario"
+      ],
+      "owner_decisions": [
+        "in attesa",
+        "confermato",
+        "corretto",
+        "scartato",
+        "scelto come primo"
+      ],
+      "priority_criteria": [
+        "ripetizione",
+        "attrito",
+        "chiarezza dell'output",
+        "rischio"
+      ],
+      "priority_forbidden_estimates": [
+        "ore",
+        "costi",
+        "ritorni economici"
+      ],
+      "output_registries": [
+        "ecosistema/PROCESSI.md",
+        "ecosistema/FONTI.md",
+        "ecosistema/ASSET.md",
+        "ecosistema/LIMITI.md"
+      ],
+      "room_status_after_census": "DA DECIDERE IN CALL",
+      "handoff": "un solo candidato scelto dal proprietario passa al Passo 3",
+      "agent_parity": "stessi candidati, stesse prove e stessa certezza su Claude e Codex; puo' cambiare solo il testo",
+      "rule": "census_rule.py -> classify_path, classify_certainty, dedupe_candidates, plan_scan, prioritize, report_is_clean, run_census"
+    },
     "markdown_hygiene": {
       "router_names": [
         "AGENTS.md",
@@ -409,18 +598,25 @@
           "template": "CODEX_HOOKS.json",
           "destination": ".codex/hooks.json",
           "strategy": "merge_hooks_json"
+        },
+        {
+          "template": "CENSITORE_PROCESSI_SKILL.md",
+          "destination": ".agents/skills/censitore-processi/SKILL.md",
+          "strategy": "create"
         }
       ],
       "required": [
         ".codex/README.md",
         ".agents/skills/ispettore-ecosistema/SKILL.md",
         ".agents/skills/manutentore-ecosistema/SKILL.md",
-        ".codex/hooks.json"
+        ".codex/hooks.json",
+        ".agents/skills/censitore-processi/SKILL.md"
       ],
       "forbidden": [
         ".claude/README.md",
         ".claude/skills/ispettore-ecosistema/SKILL.md",
-        ".claude/skills/manutentore-ecosistema/SKILL.md"
+        ".claude/skills/manutentore-ecosistema/SKILL.md",
+        ".claude/skills/censitore-processi/SKILL.md"
       ],
       "external_effects": [
         "codex_user_instructions"
@@ -447,18 +643,25 @@
           "template": "CLAUDE_SETTINGS.json",
           "destination": ".claude/settings.json",
           "strategy": "merge_hooks_json"
+        },
+        {
+          "template": "CENSITORE_PROCESSI_SKILL.md",
+          "destination": ".claude/skills/censitore-processi/SKILL.md",
+          "strategy": "create"
         }
       ],
       "required": [
         ".claude/README.md",
         ".claude/skills/ispettore-ecosistema/SKILL.md",
         ".claude/skills/manutentore-ecosistema/SKILL.md",
-        ".claude/settings.json"
+        ".claude/settings.json",
+        ".claude/skills/censitore-processi/SKILL.md"
       ],
       "forbidden": [
         ".codex/README.md",
         ".agents/skills/ispettore-ecosistema/SKILL.md",
-        ".agents/skills/manutentore-ecosistema/SKILL.md"
+        ".agents/skills/manutentore-ecosistema/SKILL.md",
+        ".agents/skills/censitore-processi/SKILL.md"
       ],
       "external_effects": [
         "claude_user_settings",

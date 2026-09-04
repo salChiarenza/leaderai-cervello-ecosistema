@@ -142,6 +142,41 @@ class RoomLifecyclePolicy:
     standard_room_paths: tuple[str, ...] = ()
 
 
+@dataclass(frozen=True)
+class ProcessCensusPolicy:
+    """Contratto dell'Agente Censitore dei processi (Passo 2 - Censimento).
+
+    Il dettaglio vive in ``install_contract.json -> inspection_policies ->
+    process_census``; qui restano i campi che il codice e i test riferiscono.
+    La regola deterministica e' ``census_rule.py``."""
+
+    agent_name: str
+    skill_name: str
+    phase_served: int
+    next_phase: int
+    trigger_commands: tuple[str, ...]
+    read_only: bool
+    forbidden_actions: tuple[str, ...]
+    certainty_levels: tuple[str, ...]
+    path_classes: tuple[str, ...]
+    allowed_sources: tuple[str, ...]
+    consent_required_sources: tuple[str, ...]
+    always_excluded_dirs: tuple[str, ...]
+    always_excluded_terms: tuple[str, ...]
+    sensitive_zone_terms: tuple[str, ...]
+    aggregate_threshold_items: int
+    volume_reference_items: int
+    max_sample_files_per_candidate: int
+    max_duration_minutes: int
+    aggregation_axes: tuple[str, ...]
+    table_columns: tuple[str, ...]
+    card_fields: tuple[str, ...]
+    owner_decisions: tuple[str, ...]
+    priority_criteria: tuple[str, ...]
+    output_registries: tuple[str, ...]
+    room_status_after_census: str
+
+
 def _safe_relative(raw: str, label: str) -> str:
     value = raw.strip()
     parts = value.split("/") if value else []
@@ -181,6 +216,7 @@ def load_contract(path: Path = CONTRACT_PATH) -> dict[str, Any]:
     organization_policy(data)
     room_lifecycle_policy(data)
     markdown_hygiene_policy(data)
+    process_census_policy(data)
     for agent in supported:
         if not isinstance(data["agents"].get(agent), dict):
             raise ValueError(f"Contratto agente mancante: {agent}.")
@@ -590,6 +626,145 @@ def detected_agents(contract: dict[str, Any], target: Path) -> set[str]:
         if any((target / rel).exists() for rel in agent_required):
             active.add(agent)
     return active
+
+
+def _string_tuple(raw: Any, label: str, *, allow_empty: bool = False) -> tuple[str, ...]:
+    if not isinstance(raw, list) or any(
+        not isinstance(item, str) or not item.strip() for item in raw
+    ):
+        raise ValueError(f"{label} deve essere una lista di testi non vuoti.")
+    values = tuple(item.strip() for item in raw)
+    if not values and not allow_empty:
+        raise ValueError(f"{label} non puo' essere vuota.")
+    if len(set(values)) != len(values):
+        raise ValueError(f"{label} contiene duplicati.")
+    return values
+
+
+def _positive_int(raw: Any, label: str) -> int:
+    if not isinstance(raw, int) or isinstance(raw, bool) or raw <= 0:
+        raise ValueError(f"{label} deve essere un intero positivo.")
+    return raw
+
+
+def process_census_policy(contract: dict[str, Any]) -> ProcessCensusPolicy:
+    """Legge e valida il contratto dell'Agente Censitore (Passo 2).
+
+    Nessun default locale: un campo mancante o incoerente blocca il contratto,
+    cosi' l'agente non censisce mai con regole implicite."""
+
+    policies = contract.get("inspection_policies")
+    if not isinstance(policies, dict):
+        raise ValueError("Contratto privo delle policy di ispezione.")
+    raw = policies.get("process_census")
+    if not isinstance(raw, dict):
+        raise ValueError("Contratto privo della policy process_census.")
+
+    agent_name = str(raw.get("agent_name", "")).strip()
+    skill_name = str(raw.get("skill_name", "")).strip()
+    if not agent_name or not skill_name:
+        raise ValueError("process_census richiede agent_name e skill_name.")
+    phase_served = _positive_int(raw.get("phase_served"), "phase_served")
+    next_phase = _positive_int(raw.get("next_phase"), "next_phase")
+    if next_phase != phase_served + 1:
+        raise ValueError("Il Censitore consegna soltanto al passo successivo.")
+    if raw.get("read_only") is not True:
+        raise ValueError("Il Censitore deve dichiarare read_only true.")
+
+    certainty_levels = _string_tuple(raw.get("certainty_levels"), "certainty_levels")
+    rules = raw.get("certainty_rules")
+    if not isinstance(rules, dict) or set(rules) != set(certainty_levels):
+        raise ValueError(
+            "certainty_rules deve descrivere esattamente ogni livello di certezza."
+        )
+    allowed_sources = _string_tuple(raw.get("allowed_sources"), "allowed_sources")
+    glossario = raw.get("allowed_sources_glossario")
+    if not isinstance(glossario, dict) or set(glossario) != set(allowed_sources):
+        raise ValueError(
+            "allowed_sources_glossario deve descrivere esattamente ogni fonte ammessa."
+        )
+    consent_sources = _string_tuple(
+        raw.get("consent_required_sources"), "consent_required_sources"
+    )
+    if set(consent_sources) - set(allowed_sources):
+        raise ValueError("consent_required_sources deve essere dentro allowed_sources.")
+
+    scan = raw.get("scan_policy")
+    if not isinstance(scan, dict):
+        raise ValueError("process_census richiede scan_policy.")
+    if scan.get("structure_before_content") is not True:
+        raise ValueError("scan_policy deve leggere la struttura prima del contenuto.")
+    if scan.get("content_only_for_candidates_in_perimeter") is not True:
+        raise ValueError(
+            "scan_policy deve aprire contenuti solo per candidati nel perimetro."
+        )
+    threshold = _positive_int(
+        scan.get("aggregate_threshold_items"), "aggregate_threshold_items"
+    )
+    reference = _positive_int(
+        scan.get("volume_reference_items"), "volume_reference_items"
+    )
+    if threshold >= reference:
+        raise ValueError(
+            "La soglia degli aggregati deve stare sotto il volume di riferimento."
+        )
+
+    table_columns = _string_tuple(raw.get("table_columns"), "table_columns")
+    if len(table_columns) != 10:
+        raise ValueError("La tabella del censimento ha dieci colonne fisse.")
+    if "certezza" not in table_columns or "prova" not in table_columns:
+        raise ValueError("La tabella del censimento deve portare prova e certezza.")
+    owner_decisions = _string_tuple(raw.get("owner_decisions"), "owner_decisions")
+    priority_criteria = _string_tuple(raw.get("priority_criteria"), "priority_criteria")
+    forbidden_estimates = _string_tuple(
+        raw.get("priority_forbidden_estimates"), "priority_forbidden_estimates"
+    )
+    if set(priority_criteria) & set(forbidden_estimates):
+        raise ValueError("La priorita' non puo' usare stime vietate.")
+    registries = _string_tuple(raw.get("output_registries"), "output_registries")
+    for registry in registries:
+        _safe_relative(registry, "Registro del censimento")
+    room_status = str(raw.get("room_status_after_census", "")).strip()
+    if not room_status:
+        raise ValueError("process_census richiede room_status_after_census.")
+
+    return ProcessCensusPolicy(
+        agent_name=agent_name,
+        skill_name=skill_name,
+        phase_served=phase_served,
+        next_phase=next_phase,
+        trigger_commands=_string_tuple(raw.get("trigger_commands"), "trigger_commands"),
+        read_only=True,
+        forbidden_actions=_string_tuple(raw.get("forbidden_actions"), "forbidden_actions"),
+        certainty_levels=certainty_levels,
+        path_classes=_string_tuple(raw.get("path_classes"), "path_classes"),
+        allowed_sources=allowed_sources,
+        consent_required_sources=consent_sources,
+        always_excluded_dirs=_string_tuple(
+            raw.get("always_excluded_dirs"), "always_excluded_dirs"
+        ),
+        always_excluded_terms=_string_tuple(
+            raw.get("always_excluded_terms"), "always_excluded_terms"
+        ),
+        sensitive_zone_terms=_string_tuple(
+            raw.get("sensitive_zone_terms"), "sensitive_zone_terms"
+        ),
+        aggregate_threshold_items=threshold,
+        volume_reference_items=reference,
+        max_sample_files_per_candidate=_positive_int(
+            scan.get("max_sample_files_per_candidate"), "max_sample_files_per_candidate"
+        ),
+        max_duration_minutes=_positive_int(
+            scan.get("max_duration_minutes"), "max_duration_minutes"
+        ),
+        aggregation_axes=_string_tuple(scan.get("aggregation_axes"), "aggregation_axes"),
+        table_columns=table_columns,
+        card_fields=_string_tuple(raw.get("card_fields"), "card_fields"),
+        owner_decisions=owner_decisions,
+        priority_criteria=priority_criteria,
+        output_registries=registries,
+        room_status_after_census=room_status,
+    )
 
 
 CONTRACT = load_contract()

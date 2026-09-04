@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.6.15 - 04/09/2026
+
+- Il catalogo `Agenti` contiene ora **Agente Commercialista**, pacchetto
+  opzionale installabile nella stanza amministrativa gia' esistente. Include
+  fonte unica, procedura e adattatori sottili per Claude Code e Codex, senza
+  dati fiscali personali o norme hardcoded.
+- Il ruolo parte con `Lancia l'Agente Commercialista`, cerca i documenti prima
+  di chiederli, distingue regole generali e posizione provata, arriva
+  all'ultimo clic e si ferma per accesso, firma, pagamento, invio o giudizio
+  professionale. La routine fiscale riusa il Manutentore della casa.
+- Tre prove del pacchetto e gate completo: 401 test verdi.
+
+### Agente Censitore - fase 2
+
+- Nasce `census_collector.py`: raccolta metadati deterministica in sola lettura
+  del perimetro autorizzato. Non apre contenuti, non segue collegamenti
+  simbolici, salta ambienti tecnici e rumore di sistema, e sopra la soglia del
+  contratto consegna al modello soltanto aggregati per cartella, tipo, periodo,
+  gruppi di nomi e radici di lavoro, con campioni mirati.
+- La **radice del lavoro** affianca il gruppo di nomi: `Fattura 12 Rossi`,
+  `fattura-13-bianchi` e `Fattura 14 Verdi` sono tre episodi di un processo, non
+  tre lavori. Senza questo la ripetizione si spezzava per cliente e i processi
+  ricorrenti restavano invisibili.
+- Skill gemella `censitore-processi` (`templates/CENSITORE_PROCESSI_SKILL.md`)
+  installata per Claude e Codex dal contratto; `templates/PROCESSI.md` porta la
+  panoramica del censimento, le schede dei candidati e cio' che non e' stato
+  guardato.
+- Collaudi 1-6 del piano verdi su una casa finta volutamente disordinata
+  (Desktop e Download mescolati, omonimi, versioni, episodio duplicato,
+  cartella segreta, cartella personale): 40 test nuovi, gate 398 verdi.
+- Correzioni trovate dal collaudo: la zona sensibile di una cartella e' la
+  cartella stessa, e i marcatori di versione dopo underscore (`_v2`) ora si
+  vedono.
+
+### Agente Censitore - fase 1
+
+- Nasce il contratto testabile dell'**Agente Censitore dei processi** (Passo 2):
+  policy `process_census` in `install_contract.json`, accessor validante in
+  `install_contract.py`, regola deterministica `census_rule.py` e test con
+  fixture (casa disordinata, tracce insufficienti, perimetro con esclusioni).
+- Certezza calcolata e mai ambigua: `OSSERVATO`, `DEDUCIBILE`, `DA CONFERMARE`;
+  esclusioni che vincono anche dentro il perimetro; zona sensibile segnalata
+  senza aprire il file; deduplica per episodio; aggregati oltre soglia con
+  durata massima dichiarata; rapporto controllato contro segreti.
+- Nessuna skill, raccolta metadati o calco registri: sono la fase 2 del piano
+  in `docs/ecosistema_cantiere.md` della casa LeaderAI.
+
 ## 0.6.14 - 04/09/2026
 
 - Il nome visibile `Ecosistema Base` diventa **Ecosistema per i clienti**: dice

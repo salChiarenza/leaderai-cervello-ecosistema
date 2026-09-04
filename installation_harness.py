@@ -56,6 +56,7 @@ STANDARD_FILES = (
     "templates/INSTALL_LOG.md",
     "templates/ISPETTORE_SKILL.md",
     "templates/MANUTENTORE_SKILL.md",
+    "templates/CENSITORE_PROCESSI_SKILL.md",
     "templates/LIMITI.md",
     "templates/MEMORY.md",
     "templates/PROCESSI.md",

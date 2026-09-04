@@ -124,6 +124,10 @@ if mode in ("codex", "both"):
         ".agents/skills/manutentore-ecosistema/SKILL.md",
         render("MANUTENTORE_SKILL.md"),
     )
+    write(
+        ".agents/skills/censitore-processi/SKILL.md",
+        render("CENSITORE_PROCESSI_SKILL.md"),
+    )
 if mode in ("claude", "both"):
     write(".claude/README.md", render("CLAUDE_README.md"))
     write(".claude/settings.json", render("CLAUDE_SETTINGS.json"))
@@ -134,6 +138,10 @@ if mode in ("claude", "both"):
     write(
         ".claude/skills/manutentore-ecosistema/SKILL.md",
         render("MANUTENTORE_SKILL.md"),
+    )
+    write(
+        ".claude/skills/censitore-processi/SKILL.md",
+        render("CENSITORE_PROCESSI_SKILL.md"),
     )
 
 subprocess.run(["git", "init"], cwd=target, check=True, capture_output=True)

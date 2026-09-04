@@ -182,6 +182,7 @@ Fase 3 - leggi lo standard corrente in sola lettura
    - `templates/STANZA_FONTE.md`
    - `templates/ISPETTORE_SKILL.md`
    - `templates/MANUTENTORE_SKILL.md`
+   - `templates/CENSITORE_PROCESSI_SKILL.md`
    - `templates/MEMORY.md`
    - `templates/ASSET.md`
    - `templates/GITIGNORE.txt`
@@ -244,6 +245,12 @@ Fase 4 - monta localmente il Cervello
      `.agents/skills/manutentore-ecosistema/SKILL.md` (Codex): il Manutentore
      misura la casa ogni giorno con `guardiano_stanze.sh --misura`, ripara il
      meccanico (archivi datati, chat oltre 48 ore, skill gemelle) e riporta
+   - allo stesso modo `templates/CENSITORE_PROCESSI_SKILL.md` in
+     `.claude/skills/censitore-processi/SKILL.md` (Claude) e/o
+     `.agents/skills/censitore-processi/SKILL.md` (Codex): l'Agente Censitore
+     serve il Passo 2, parte a chiamata con `censisci i miei processi`, legge
+     in sola lettura il perimetro autorizzato e scrive la panoramica in
+     `ecosistema/PROCESSI.md`. Nessuna automazione: non entra in routine
    - crea l'automazione giornaliera `manutenzione-ecosistema` (07:45 locali,
      modello leggero) che invoca la skill `manutentore-ecosistema`: per Claude
      Code un task programmato, per Codex un'automazione; una sola sessione che
@@ -501,7 +508,8 @@ Fase 6 - collaudo
    dichiari il proprio Amministratore di settore subordinato al Boss.
    `.claude/README.md` esiste solo in modalita' Claude o both;
    `.codex/README.md` esiste solo in modalita' Codex o both.
-   Verifica anche le skill `ispettore-ecosistema` e `manutentore-ecosistema`
+   Verifica anche le skill `ispettore-ecosistema`, `manutentore-ecosistema` e
+   `censitore-processi`
    nel percorso dell'agente attivo: `.claude/skills/` per Claude Code,
    `.agents/skills/` per Codex, entrambe in modalita' both; e l'automazione
    giornaliera `manutenzione-ecosistema` attiva.

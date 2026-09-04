@@ -1,0 +1,26 @@
+{
+  "descrizione": "Prova privacy: perimetro con esclusioni del proprietario e fonti a consenso. Atteso: zero prove accettate da percorsi esclusi, email rifiutata senza consenso, accettata con consenso.",
+  "perimeter": {
+    "roots": ["C:\\Utenti\\demo\\Lavoro"],
+    "consented_sources": [],
+    "extra_exclusions": ["C:\\Utenti\\demo\\Lavoro\\Contabilita riservata"]
+  },
+  "perimeter_with_email": {
+    "roots": ["C:\\Utenti\\demo\\Lavoro"],
+    "consented_sources": ["email"],
+    "extra_exclusions": ["C:\\Utenti\\demo\\Lavoro\\Contabilita riservata"]
+  },
+  "paths": {
+    "C:\\Utenti\\demo\\Lavoro\\Clienti\\ordine.xlsx": "AMMESSO",
+    "C:\\Utenti\\demo\\Lavoro\\Contabilita riservata\\bilancio.xlsx": "ESCLUSO",
+    "C:\\Utenti\\demo\\Lavoro\\Clienti\\token_api.json": "ESCLUSO",
+    "C:\\Utenti\\demo\\Lavoro\\Clienti\\IBAN_fornitori.xlsx": "ESCLUSO",
+    "C:\\Utenti\\demo\\Lavoro\\Legale\\causa.pdf": "ZONA SENSIBILE",
+    "C:\\Utenti\\demo\\Lavoro\\Clienti\\cedolino_marzo.pdf": "ZONA SENSIBILE",
+    "C:\\Utenti\\demo\\Desktop\\nota.txt": "FUORI PERIMETRO"
+  },
+  "sensitive_zone_of": {
+    "C:\\Utenti\\demo\\Lavoro\\Legale\\causa.pdf": "C:/Utenti/demo/Lavoro/Legale",
+    "C:\\Utenti\\demo\\Lavoro\\Clienti\\cedolino_marzo.pdf": "C:/Utenti/demo/Lavoro/Clienti"
+  }
+}

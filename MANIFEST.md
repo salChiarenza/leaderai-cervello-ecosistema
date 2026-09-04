@@ -376,11 +376,69 @@ Comando unico:
 python3 -m tests.gate --release --agents codex,claude
 ```
 
+## Agente Censitore dei processi (Passo 2)
+
+L'Agente Censitore analizza in sola lettura il lavoro presente nel computer e
+costruisce una prima panoramica dei processi candidati, indicando che cosa ha
+osservato, che cosa ha dedotto e che cosa deve essere confermato. Serve il
+Passo 2 `Censimento`, parte a chiamata (`censisci i miei processi`) e consegna
+un solo candidato scelto dal proprietario al Passo 3. Non e' la mappa
+definitiva dell'azienda, non stima ore, costi o ritorni e non autorizza
+automazioni.
+
+Il contratto vive in `install_contract.json -> inspection_policies ->
+process_census` ed e' applicato da `census_rule.py`:
+
+- perimetro dichiarato e approvato prima della lettura; esclusioni assolute
+  (segreti, credenziali, portachiavi, dati bancari e di identita') che vincono
+  anche dentro il perimetro; zona sensibile segnalata come cartella, mai come
+  file, con consenso mirato prima di aprirla;
+- fonti ammesse in prima versione: albero, metadati, documenti selezionati,
+  registri esistenti; email, calendario e cronologie soltanto se gia' collegati
+  e inclusi dal proprietario;
+- certezza calcolata, non dichiarata: `OSSERVATO` solo con ogni passaggio
+  provato e nessun anello dedotto, `DEDUCIBILE` con un collegamento dedotto o
+  un passaggio senza prova, `DA CONFERMARE` senza prove dirette; una
+  dichiarazione diversa dal calcolo e' un errore, non una sfumatura;
+- tracce dello stesso episodio contano uno; due candidati sugli stessi episodi
+  sono un solo processo; due episodi distinti restano due;
+- sopra la soglia di aggregazione il modello riceve aggregati per cartella,
+  tipo, periodo e gruppi di nomi con campioni mirati, entro la durata massima
+  dichiarata;
+- uscita nei registri gia' esistenti (`PROCESSI`, `FONTI`, `ASSET`, `LIMITI`)
+  con la tabella a dieci colonne fissa; le stanze restano `DA DECIDERE IN CALL`;
+- stessi candidati, prove e certezza su Claude e Codex.
+
+La raccolta dei metadati, la skill gemella `censitore-processi` e il calco
+esteso di `PROCESSI.md` arrivano con la fase 2 del piano; l'osservatore
+continuo e' una App successiva, non parte di questo agente.
+
 ## Moduli professionali
 
 I moduli entrano nel target soltanto quando LeaderAI li assegna al cliente.
 `MODULO_CALENDARIO_OPERATIVO.md` e il Sistema Portafogli sono capacita'
 opzionali: non fanno parte del telaio minimo.
+
+## Agenti opzionali
+
+I pacchetti in `Agenti/` entrano nella casa soltanto quando un processo reale
+li richiede. Non fanno parte del telaio minimo e non creano automaticamente
+una stanza o una routine separata.
+
+### Agente Commercialista
+
+Sorgente: `Agenti/Agente Commercialista/`.
+
+Il pacchetto passa quando:
+
+- trova la stanza che possiede amministrazione e fiscalita' prima di creare;
+- mantiene un solo `SCADENZARIO_FISCALE.md` come fonte operativa;
+- cerca documenti e prove disponibili prima di chiedere al titolare;
+- distingue regola pubblica e posizione personale autenticata;
+- si ferma per accessi, firma, pagamento, dichiarazione, invio e giudizio
+  professionale;
+- si aggancia a un Manutentore esistente e resta silenzioso senza novita';
+- non contiene dati personali del caso da cui e' stato generalizzato.
 
 ### Sistema Portafogli Core-Satellite
 

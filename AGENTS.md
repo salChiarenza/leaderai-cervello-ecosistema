@@ -71,6 +71,13 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
+Agenti opzionali installabili:
+
+- `Agenti/Agente Commercialista/` - ruolo amministrativo-fiscale con una sola
+  fonte operativa, procedura comune e adattatori Claude Code/Codex. Si integra
+  nella stanza proprietaria dopo il censimento; il titolare mantiene accessi e
+  azioni irreversibili, il professionista abilitato mantiene giudizio e firma.
+
 La mappa moduli vive nelle fonti proprietarie della casa e mantiene lo stato per
 PEC/email certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin,
 skill, agenti/ruoli, guardiani/hook, ronde, voce/dettatura e

@@ -19,15 +19,16 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DRIVE_OK — 0.6.14 — 04/09/2026`
+`PROVA_DRIVE_OK — 0.6.15 — 04/09/2026`
 
 `PROVA_DESTINATARIO_DA_FARE — corso inattivo, nessun utente iscritto`
 
-La 0.6.14 e' stata caricata e riletta integralmente da Drive: 118 elementi
-attesi, zero mancanti, zero diversi, zero extra conteggiati e pacchetto Voce
-Mac + Windows `PASSA`. La cartella visibile e' stata rinominata senza cambiare
-i collegamenti ai file. GitHub conservava ancora la copia precedente durante
-la prova ed e' stato aggiornato soltanto dopo il suo esito `PASSA`.
+La 0.6.15 e' stata caricata e riletta integralmente da Drive: 135 elementi
+attesi, 136 riletti, zero mancanti, zero diversi, zero extra conteggiati e
+pacchetto Voce Mac + Windows `PASSA`. Il catalogo `Agenti` contiene il
+pacchetto completo `Agente Commercialista`; la lezione Systeme.io lo collega
+alla cartella esatta. GitHub conserva soltanto il backup successivo a questa
+prova `PASSA`.
 
 ## Controlli prima dell'invio
 

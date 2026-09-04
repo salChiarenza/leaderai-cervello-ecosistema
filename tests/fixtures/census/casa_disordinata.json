@@ -1,0 +1,105 @@
+{
+  "descrizione": "Casa finta senza registri: Desktop e Download mescolati, nomi ambigui, file omonimi, rumore, un episodio duplicato, una cartella segreta e due processi sepolti. Atteso: due processi, deduplica corretta, rumore DA CONFERMARE, segreto mai aperto.",
+  "perimeter": {
+    "roots": ["/Users/demo/Desktop", "/Users/demo/Downloads"],
+    "consented_sources": [],
+    "extra_exclusions": []
+  },
+  "observed_paths": [
+    "/Users/demo/Desktop/Preventivo Rossi.docx",
+    "/Users/demo/Desktop/preventivo_rossi_v2.docx",
+    "/Users/demo/Downloads/Preventivo Bianchi.pdf",
+    "/Users/demo/Desktop/Fattura 12 Rossi.pdf",
+    "/Users/demo/Downloads/fattura-13-bianchi.pdf",
+    "/Users/demo/Desktop/IMG_4412.jpg",
+    "/Users/demo/Desktop/.secrets/password_gestionale.txt",
+    "/Users/demo/Desktop/Personale/referto_medico.pdf",
+    "/Users/demo/Documenti/altro.txt"
+  ],
+  "candidates": [
+    {
+      "name": "Preventivo al cliente",
+      "trigger": "richiesta del cliente via email",
+      "sequence": ["richiesta", "bozza preventivo", "invio"],
+      "sources": ["Desktop", "Downloads", "Word"],
+      "output": "preventivo PDF inviato",
+      "frequency": "3 episodi in 2 mesi",
+      "friction": "versioni doppie dello stesso preventivo",
+      "evidence": [
+        {"path": "/Users/demo/Desktop/Preventivo Rossi.docx", "source": "albero", "date": "2026-07-10", "step": "bozza preventivo"},
+        {"path": "/Users/demo/Desktop/preventivo_rossi_v2.docx", "source": "metadati", "date": "2026-07-11", "step": "bozza preventivo"},
+        {"path": "/Users/demo/Downloads/Preventivo Bianchi.pdf", "source": "albero", "date": "2026-08-02", "step": "invio"}
+      ],
+      "traces": [
+        {"subject": "Rossi", "date": "2026-07-10", "source": "albero", "path": "/Users/demo/Desktop/Preventivo Rossi.docx"},
+        {"subject": "Rossi", "date": "2026-07-10", "source": "metadati", "path": "/Users/demo/Desktop/preventivo_rossi_v2.docx"},
+        {"subject": "Bianchi", "date": "2026-08-02", "source": "albero", "path": "/Users/demo/Downloads/Preventivo Bianchi.pdf"}
+      ],
+      "inferred_links": ["la richiesta arriva via email: dedotto dal nome del file, email non nel perimetro"]
+    },
+    {
+      "name": "Preventivo cliente",
+      "trigger": "richiesta",
+      "sequence": ["richiesta", "bozza", "invio"],
+      "sources": ["Desktop"],
+      "output": "preventivo",
+      "frequency": "",
+      "friction": "",
+      "evidence": [
+        {"path": "/Users/demo/Desktop/Preventivo Rossi.docx", "source": "albero", "date": "2026-07-10"}
+      ],
+      "traces": [
+        {"subject": "Rossi", "date": "2026-07-10", "source": "albero"},
+        {"subject": "Bianchi", "date": "2026-08-02", "source": "albero"}
+      ]
+    },
+    {
+      "name": "Fattura dopo il lavoro",
+      "trigger": "lavoro concluso",
+      "sequence": ["chiusura lavoro", "emissione fattura"],
+      "sources": ["Desktop", "Downloads"],
+      "output": "fattura PDF",
+      "frequency": "2 episodi",
+      "friction": "",
+      "evidence": [
+        {"path": "/Users/demo/Desktop/Fattura 12 Rossi.pdf", "source": "albero", "date": "2026-07-20", "step": "emissione fattura"},
+        {"path": "/Users/demo/Downloads/fattura-13-bianchi.pdf", "source": "albero", "date": "2026-08-15", "step": "emissione fattura"},
+        {"path": "/Users/demo/Desktop/Fattura 12 Rossi.pdf", "source": "metadati", "date": "2026-07-20", "step": "chiusura lavoro", "note": "data di creazione coincide con la chiusura"}
+      ],
+      "traces": [
+        {"subject": "Rossi", "date": "2026-07-20", "source": "albero"},
+        {"subject": "Bianchi", "date": "2026-08-15", "source": "albero"}
+      ]
+    },
+    {
+      "name": "Foto sul Desktop",
+      "trigger": "",
+      "sequence": [],
+      "sources": ["Desktop"],
+      "output": "",
+      "frequency": "",
+      "friction": "",
+      "evidence": [
+        {"path": "/Users/demo/Desktop/IMG_4412.jpg", "source": "albero", "direct": false}
+      ],
+      "traces": []
+    }
+  ],
+  "expected": {
+    "kept": ["Preventivo al cliente", "Fattura dopo il lavoro", "Foto sul Desktop"],
+    "merged": [["Preventivo al cliente", "Preventivo cliente"]],
+    "levels": {
+      "Preventivo al cliente": "DEDUCIBILE",
+      "Fattura dopo il lavoro": "OSSERVATO",
+      "Foto sul Desktop": "DA CONFERMARE"
+    },
+    "priority_first": "Preventivo al cliente",
+    "sensitive_zones": ["Users/demo/Desktop/Personale"],
+    "path_classes": {
+      "/Users/demo/Desktop/.secrets/password_gestionale.txt": "ESCLUSO",
+      "/Users/demo/Desktop/Personale/referto_medico.pdf": "ZONA SENSIBILE",
+      "/Users/demo/Documenti/altro.txt": "FUORI PERIMETRO",
+      "/Users/demo/Desktop/Preventivo Rossi.docx": "AMMESSO"
+    }
+  }
+}

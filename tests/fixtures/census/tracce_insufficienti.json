@@ -1,0 +1,18 @@
+{
+  "descrizione": "Prova errore: tracce insufficienti. Atteso: DA CONFERMARE, nessun processo dichiarato certo.",
+  "perimeter": {"roots": ["/Users/demo/Lavoro"], "consented_sources": [], "extra_exclusions": []},
+  "candidates": [
+    {
+      "name": "Forse una newsletter",
+      "trigger": "",
+      "sequence": ["scrittura", "invio"],
+      "sources": ["Lavoro"],
+      "output": "",
+      "evidence": [
+        {"path": "/Users/demo/Lavoro/bozza.txt", "source": "albero", "direct": false, "note": "un solo file, nessuna ripetizione"}
+      ],
+      "traces": []
+    }
+  ],
+  "expected": {"levels": ["DA CONFERMARE"], "certain_count": 0}
+}
