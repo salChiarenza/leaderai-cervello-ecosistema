@@ -19,8 +19,12 @@ def test_product_explains_common_infrastructure_and_optional_growth():
         assert phrase in text
 
 
-def test_visible_path_contains_exactly_five_generated_files():
-    assert sorted(path.name for path in (ROOT / "Percorso Ecosistema").glob("*.md")) == [
+def test_visible_path_exists_only_in_the_published_copy():
+    view = ROOT / "Percorso Ecosistema"
+    if (ROOT / ".git").exists():
+        assert not view.exists()
+        return
+    assert sorted(path.name for path in view.glob("*.md")) == [
         "01 - Cervello.md",
         "02 - Censimento.md",
         "03 - Primo processo.md",

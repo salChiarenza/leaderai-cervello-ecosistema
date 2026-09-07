@@ -14,6 +14,9 @@
   `LeaderAI Ecosystem/Agenti` continua a vivere separato dal prodotto.
 - Collaudo completo: 403 test e 506 sottoprove verdi; copia Drive riletta con
   135 elementi attesi, 139 presenti e zero differenze o extra non consentiti.
+- Correzione anti-doppione: `Percorso Ecosistema` esiste nella copia pubblicata
+  su Drive e viene generato durante il caricamento; il checkout tecnico non ne
+  conserva una seconda copia persistente.
 
 ## 0.6.16 - 07/09/2026
 
