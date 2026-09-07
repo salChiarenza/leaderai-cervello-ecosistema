@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.6.17 - 07/09/2026
+
+- Nasce `Percorso Ecosistema/`, vista leggibile in cinque file generata dalla
+  definizione unica: i primi quattro passi chiudono la consegna iniziale; il
+  quinto, `Evoluzione quando serve`, si apre soltanto davanti a un nuovo
+  processo reale.
+- Il Passo 1 dichiara la stessa infrastruttura funzionale per la casa di Sal e
+  per le case cliente: stessi compiti, controlli e prova finale, con contenuti,
+  reparti e dati sempre su misura.
+- App, skill e prodotti-agente restano opzionali: si installa soltanto la
+  capacita' richiesta dal lavoro. La radice Drive resta invariata e il catalogo
+  `LeaderAI Ecosystem/Agenti` continua a vivere separato dal prodotto.
+- Collaudo completo: 403 test e 506 sottoprove verdi; copia Drive riletta con
+  135 elementi attesi, 139 presenti e zero differenze o extra non consentiti.
+
+## 0.6.16 - 07/09/2026
+
+- I prodotti-agente escono dalla release dell'Ecosistema: la casa corrente e'
+  il catalogo separato `LeaderAI Ecosystem/Agenti`, collegato dalla lezione `Agenti` del
+  corso senza duplicare i pacchetti.
+- `Agente Commercialista` resta installabile nella stanza amministrativa, ma
+  si consegna dalla propria cartella nel catalogo; la directory tecnica locale
+  e' esclusa meccanicamente dal caricamento di `Ecosistema per i clienti`.
+- Una skill semplice resta una capacita' interna e non diventa da sola un
+  prodotto-agente.
+
 ## 0.6.15 - 04/09/2026
 
 - Il catalogo `Agenti` contiene ora **Agente Commercialista**, pacchetto

@@ -18,6 +18,10 @@ della repo; poi ripara, prova e riporta gli scostamenti.
 setup tecnico, Ispettore e harness di rilascio. Vietato mantenere una seconda
 lista di file obbligatori o rami agente.
 
+`Percorso Ecosistema/` e' la vista generata: Passi 1-4 per la consegna, Passo 5
+per nuovi processi reali. Il Passo 1 monta la stessa infrastruttura funzionale
+per Sal e clienti; contenuti e capacita' opzionali restano su misura.
+
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. Installa una sola stanza
 comune, `Ecosystem Check`, che governa controlli e manutenzione della casa AI.
@@ -71,12 +75,15 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
-Agenti opzionali installabili:
+Prodotti-agente opzionali installabili, consegnati dal catalogo separato
+`LeaderAI Ecosystem/Agenti` e non inclusi nella release dell'Ecosistema:
 
-- `Agenti/Agente Commercialista/` - ruolo amministrativo-fiscale con una sola
+- `Agente Commercialista` - ruolo amministrativo-fiscale con una sola
   fonte operativa, procedura comune e adattatori Claude Code/Codex. Si integra
   nella stanza proprietaria dopo il censimento; il titolare mantiene accessi e
   azioni irreversibili, il professionista abilitato mantiene giudizio e firma.
+  La sorgente tecnica storica e' `Agenti/Agente Commercialista/`, esclusa dal
+  caricamento dell'Ecosistema e sincronizzata nella propria cartella Drive.
 
 La mappa moduli vive nelle fonti proprietarie della casa e mantiene lo stato per
 PEC/email certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin,

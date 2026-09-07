@@ -26,8 +26,8 @@ Versione standard applicata: `{{version}}`.
   aprire la cartella madre come progetto. Dopo il gesto si parte da una nuova
   task o sessione, cosi' le istruzioni vengono rilette.
 - Prima leggere questa mappa.
-- Fase del percorso: 1 (Cervello). Sale di un passo alla volta, soltanto con la
-  missione LeaderAI che chiude il passo; sotto il 3 nessuna stanza di lavoro.
+- Fase del percorso: 1 (Cervello). Sale solo a passo chiuso; sotto il 3 nessuna stanza di lavoro.
+  Passo 5 - Evoluzione quando serve: dopo la consegna aggiunge solo cio' che serve.
 - Memoria canonica: `memory/`.
 - La memoria condivisa vive in `memory/MEMORY.md`.
 - Per Claude Code `autoMemoryDirectory` punta alla stessa memoria canonica: due

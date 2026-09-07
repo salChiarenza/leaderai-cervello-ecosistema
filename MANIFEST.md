@@ -41,6 +41,11 @@ Deve:
 La repo insegna **come leggere e governare** un Ecosistema. Il nome e il numero
 delle stanze nascono dal lavoro reale del proprietario.
 
+La Fase 1 monta la stessa infrastruttura comune nella casa di Sal e in ogni
+casa cliente: stessi compiti, stessi controlli e stessa prova finale. La casa
+di Sal resta completa della propria attivita'; quella del cliente riceve
+contenuto su misura e nessun dato personale di Sal.
+
 ### Telaio universale
 
 Restano stabili in ogni installazione:
@@ -70,6 +75,9 @@ Restano stabili in ogni installazione:
   N`): 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e consegna; sale
   di un passo alla volta con la missione che chiude il passo e sotto il 3 il
   guardiano blocca ogni stanza di lavoro;
+- Passo 5 `Evoluzione quando serve`: dopo la consegna ripete censimento e
+  costruzione su un nuovo lavoro reale e aggiunge soltanto la capacita'
+  necessaria; non rende incompleta una casa gia' consegnata;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
 - versione del metodo applicato e prove di collaudo.
 
@@ -421,13 +429,17 @@ opzionali: non fanno parte del telaio minimo.
 
 ## Agenti opzionali
 
-I pacchetti in `Agenti/` entrano nella casa soltanto quando un processo reale
-li richiede. Non fanno parte del telaio minimo e non creano automaticamente
-una stanza o una routine separata.
+I prodotti-agente vivono nel catalogo separato `LeaderAI Ecosystem/Agenti` e entrano nella
+casa soltanto quando un processo reale li richiede. Non fanno parte della
+release dell'Ecosistema, non fanno parte del telaio minimo e non creano
+automaticamente una stanza o una routine separata. Una skill semplice e' una
+capacita' interna, non un prodotto del catalogo.
 
 ### Agente Commercialista
 
-Sorgente: `Agenti/Agente Commercialista/`.
+Casa di consegna: `LeaderAI Ecosystem/Agenti/Agente Commercialista`.
+Sorgente tecnica storica: `Agenti/Agente Commercialista/`, esclusa dalla
+release dell'Ecosistema.
 
 Il pacchetto passa quando:
 

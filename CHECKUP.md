@@ -17,6 +17,11 @@ nell'Ecosistema per i clienti, fonte corrente della procedura. Nel workspace int
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` resta soltanto un
 puntatore alla versione Drive corrente.
 
+La cartella `Percorso Ecosistema` rende visibili le cinque fasi. I primi quattro
+passi chiudono l'installazione guidata; `Evoluzione quando serve` e' il Passo 5
+continuo, usato per aggiungere un solo nuovo processo o una sola capacita'
+necessaria e poi ripetere questo controllo.
+
 ## Scelta del controllo
 
 - **Checkup completo.** Si usa su un Cervello + Ecosistema cliente gia'

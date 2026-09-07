@@ -4,6 +4,12 @@ Questa e' la procedura unica per una nuova installazione cliente.
 `Ecosistema per i clienti` su Google Drive e' lo standard LeaderAI corrente; l'agente del cliente lo
 legge in sola lettura e applica localmente i file nella cartella madre.
 
+La vista `Percorso Ecosistema` mostra le cinque fasi. Durante la Fase 1 monta
+la stessa infrastruttura comune verificata nella casa di Sal, adattata
+all'agente e alla casa reali. Nelle fasi successive non installare tutto il
+catalogo: reparti, collegamenti, app, skill e agenti entrano soltanto quando un
+processo osservato li richiede.
+
 Percorso predefinito: lettura del prodotto Drive, creazione locale e collaudo. GitHub non
 e' una fonte del cliente e non serve alcun clone. `leaderai_setup.py` resta un
 attrezzo LeaderAI utilizzabile soltanto nella copia di lavoro locale.

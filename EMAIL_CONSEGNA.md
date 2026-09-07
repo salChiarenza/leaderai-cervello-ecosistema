@@ -5,6 +5,10 @@ controllo di una casa esistente `CHECKUP`. Questa email e
 `INSTALLA_CON_AI.md` sono le due fonti proprietarie del percorso: messaggio e
 procedura.
 
+La cartella `Percorso Ecosistema` su Drive mostra le cinque fasi: le prime
+quattro chiudono la consegna iniziale; la quinta governa l'evoluzione successiva
+senza rendere incompleta la casa consegnata.
+
 Modo corrente: `AGENTE_CON_POSTA`.
 
 Il corpo viene letto ed eseguito direttamente dall'agente collegato alla
@@ -19,23 +23,23 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 ## Stato prova destinatario
 
-`PROVA_DRIVE_OK — 0.6.15 — 04/09/2026`
+`PROVA_DRIVE_OK — 0.6.17 — 07/09/2026`
 
 `PROVA_DESTINATARIO_DA_FARE — corso inattivo, nessun utente iscritto`
 
-La 0.6.15 e' stata caricata e riletta integralmente da Drive: 135 elementi
-attesi, 136 riletti, zero mancanti, zero diversi, zero extra conteggiati e
-pacchetto Voce Mac + Windows `PASSA`. Il catalogo `Agenti` contiene il
-pacchetto completo `Agente Commercialista`; la lezione Systeme.io lo collega
-alla cartella esatta. GitHub conserva soltanto il backup successivo a questa
-prova `PASSA`.
+La 0.6.17 e' stata caricata e riletta integralmente da Drive: 135 elementi
+attesi, 139 riletti, zero mancanti, zero diversi, zero extra non consentiti e
+pacchetto Voce Mac + Windows `PASSA`. Il catalogo separato `LeaderAI Ecosystem/Agenti`
+contiene il pacchetto completo `Agente Commercialista`; la lezione Systeme.io
+lo collega senza duplicarlo dentro l'Ecosistema. GitHub conserva soltanto il
+backup successivo a questa prova `PASSA`.
 
 ## Controlli prima dell'invio
 
 1. Verifica dal livello di accesso del destinatario (senza login Google) che la
-   cartella Ecosistema per i clienti e i fogli VERSION, MANIFEST.md, INSTALLA_CON_AI.md e
-   CHECKUP.md si aprano dai link; confronta VERSION con la versione verificata
-   e la rilettura file per file del prodotto.
+   cartella Ecosistema per i clienti, `Percorso Ecosistema` e i fogli VERSION,
+   MANIFEST.md, INSTALLA_CON_AI.md e CHECKUP.md si aprano dai link; confronta
+   VERSION con la versione verificata e la rilettura file per file del prodotto.
 2. Conferma che il lettore operativo sia l'agente collegato alla posta.
 3. Autentica la missione: mittente LeaderAI esatto, oggetto esatto, ID missione
    presente in oggetto e corpo e conferma del proprietario nella sessione. Il

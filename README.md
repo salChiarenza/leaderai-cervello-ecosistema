@@ -8,6 +8,12 @@ E' una repo operativa: installa quando manca tutto, fa checkup e riparazione
 quando l'ambiente esiste gia', aggiorna le fonti della casa e chiude con una
 conferma unica.
 
+La cartella `Percorso Ecosistema` mostra le cinque fasi in ordine. La prima
+monta la stessa infrastruttura comune usata da LeaderAI; le case condividono
+funzioni e controlli, mentre ognuna conserva contenuto su misura. Le prime
+quattro fasi chiudono la consegna iniziale; la quinta aggiunge nuovi processi
+soltanto quando servono.
+
 ## Fonti ufficiali vive del checkup
 
 - [Claude Code - panoramica ufficiale](https://code.claude.com/docs/en/overview)
@@ -209,12 +215,14 @@ Modulo specifico gia' disponibile:
   la cartella madre o la stanza proprietaria e integra il modulo senza creare
   una stanza concorrente.
 
-Ruolo opzionale gia' disponibile nel catalogo `Agenti`:
+Prodotto-agente opzionale gia' disponibile nel catalogo separato
+`LeaderAI Ecosystem/Agenti`:
 
-- `Agenti/Agente Commercialista/` - installazione guidata, fonte fiscale
+- `Agente Commercialista` - installazione guidata, fonte fiscale
   unica, procedura e adattatori per Claude Code e Codex. Si integra nella
   stanza amministrativa emersa dal lavoro reale; non contiene dati personali
-  e non sostituisce il professionista abilitato.
+  e non sostituisce il professionista abilitato. Non fa parte della release
+  dell'Ecosistema; la cartella tecnica locale resta soltanto l'officina.
 
 Il Cervello include anche la **mappa comunicazione**: stato business nel file
 proprietario della stanza, storia tecnica nel solo `logs/install-log.md`, asset
