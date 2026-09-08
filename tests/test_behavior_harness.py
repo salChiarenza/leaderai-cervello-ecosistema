@@ -1,4 +1,5 @@
 import json
+import shutil
 import stat
 import tempfile
 import textwrap
@@ -382,6 +383,37 @@ class BehaviorHarnessTest(unittest.TestCase):
             self.assertFalse(checks["output_nel_percorso_proprietario"])
             self.assertFalse(checks["nessun_output_in_root_o_cartelle_generiche"])
             self.assertFalse(checks["fonti_standard_inalterate"])
+
+    def test_oracle_ignores_historical_markers_only_inside_archive_disclaimer(self):
+        """Caso reale 08/09: la frase 'la bozza in archivio non e' stata usata' non e' un uso del doppione."""
+        scenario = behavior_harness.SCENARIOS["operazioni_consegna"]
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "casa"
+            shutil.copytree(behavior_harness.DEFAULT_FIXTURE, target)
+            before = behavior_harness.build_manifest(target)
+            output = target / scenario.expected_output
+            output.parent.mkdir(parents=True)
+            canonical = (
+                "Ordine ORD-042, responsabile Giulia R., scadenza 07/08/2026, "
+                "blocco: approvazione legale della clausola privacy.\n\n"
+            )
+
+            def checks_for(text: str) -> dict[str, bool]:
+                output.write_text(canonical + text, encoding="utf-8")
+                after = behavior_harness.build_manifest(target)
+                oracle = behavior_harness.evaluate_oracle(
+                    target, scenario, before, after,
+                    behavior_harness.diff_manifests(before, after),
+                )
+                return {item["name"]: item["passed"] for item in oracle["checks"]}
+
+            disclaimer = (
+                "La bozza in `operazioni/archivio/ordine-042-bozza.md` (responsabile diverso, nessun blocco,\n"
+                "stato \"pronto\") e' materiale storico e non e' stata usata.\n"
+            )
+            self.assertTrue(checks_for(disclaimer)["doppione_storico_non_usato"])
+            self.assertFalse(checks_for("| Blocco corrente | Nessun blocco |\n")["doppione_storico_non_usato"])
+            self.assertFalse(checks_for("Responsabile: Marco T.\n\n" + disclaimer)["doppione_storico_non_usato"])
 
     def test_context_comparison_uses_two_clean_sessions_and_classifies_one_block(self):
         with tempfile.TemporaryDirectory() as tmp:

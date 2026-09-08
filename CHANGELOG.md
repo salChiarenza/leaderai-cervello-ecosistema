@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.6.19 - 08/09/2026
+
+- Python 3 (dal 3.8) dichiarato requisito del guardiano di chiusura e
+  dell'Ispettore in `INSTALLA_CON_AI.md` (Fase 2 e verifica finale), in
+  `MANIFEST.md` e in `CHECKUP.md`: la 0.6.18 lo richiedeva senza dirlo.
+- Guardiano: Python provato davvero prima dell'uso (`python3`, `python`, `py`),
+  cosi' un alias Windows che non risponde non passa per motore presente;
+  due rilievi distinti e leggibili per motore assente e Python mancante.
+- Collaudo comportamentale: il controllo «doppione storico non usato» ignora
+  le sole frasi che citano l'archivio; una sessione che spiega di non aver
+  usato la bozza non viene piu' bocciata (falso positivo del rilascio 0.6.19).
+- Origine: revisione critica del 08/09 sulla 0.6.18, registrata in LeaderAI
+  (`docs/ecosistema_cantiere.md`). Nessuna modifica alle esenzioni degli
+  archivi, alle firme, alle fonti Word o ai file di radice.
+
 ## 0.6.18 - 08/09/2026
 
 - Corretto il controllo degli archivi di fascicoli: dichiarazione esplicita,

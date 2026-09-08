@@ -81,7 +81,7 @@ class GuardianoStanzeStopTest(unittest.TestCase):
         )
         return target
 
-    def run_guard(self, target: Path, *, active: bool = False) -> subprocess.CompletedProcess[str]:
+    def run_guard(self, target: Path, *, active: bool = False, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
         payload = {
             "hook_event_name": "Stop",
             "stop_hook_active": active,
@@ -94,7 +94,29 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             text=True,
             capture_output=True,
             check=False,
+            env=env,
         )
+
+    def test_missing_engine_or_python_blocks_with_a_readable_reason(self):
+        """Break caught: senza motore o senza Python la casa non passa in silenzio."""
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            self.assertEqual(self.run_guard(target).returncode, 0)
+            fake_bin = Path(tmp) / "fake-bin"
+            fake_bin.mkdir()
+            for name in ("python3", "python", "py"):
+                stub = fake_bin / name
+                stub.write_text("#!/bin/sh\nexit 9\n")
+                stub.chmod(0o755)
+            env = dict(os.environ, PATH=f"{fake_bin}{os.pathsep}{os.environ.get('PATH', '')}")
+            result = self.run_guard(target, env=env)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertIn("Python 3", result.stderr)
+            self.assertIn("INSTALLA_CON_AI.md", result.stderr)
+            (target / ".agent" / "hooks" / "archive_policy.py").unlink()
+            result = self.run_guard(target)
+            self.assertEqual(result.returncode, 2, result.stderr)
+            self.assertIn("motore del controllo assente", result.stderr)
 
     def register_room(self, target: Path, name: str = "marketing") -> Path:
         room = target / name

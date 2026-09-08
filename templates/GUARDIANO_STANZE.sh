@@ -46,9 +46,20 @@ add_issue() {
 
 # Un solo censimento nativo: stesso parser dell'Ispettore, archivi validati
 # prima della potatura. La mancanza del motore non equivale a una casa pulita.
-GUARD_PYTHON="$(command -v python3 || command -v python || true)"
-if [ -z "$GUARD_PYTHON" ] || [ ! -f "$SCRIPT_DIR/archive_policy.py" ]; then
-    add_issue ".agent/hooks/archive_policy.py - motore del controllo assente o Python non disponibile"
+# Python 3 (dal 3.8) e' un requisito dichiarato in INSTALLA_CON_AI.md, Fase 2:
+# si prova davvero, perche' su Windows un alias puo' esistere senza funzionare.
+GUARD_PYTHON=""
+for guard_candidate in python3 python py; do
+    if command -v "$guard_candidate" >/dev/null 2>&1 \
+        && "$guard_candidate" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 8) else 1)' >/dev/null 2>&1; then
+        GUARD_PYTHON="$guard_candidate"
+        break
+    fi
+done
+if [ ! -f "$SCRIPT_DIR/archive_policy.py" ]; then
+    add_issue ".agent/hooks/archive_policy.py - motore del controllo assente: reinstalla il file dal prodotto (templates/ARCHIVE_POLICY.py) insieme al guardiano"
+elif [ -z "$GUARD_PYTHON" ]; then
+    add_issue ".agent/hooks/archive_policy.py - Python 3 (dal 3.8) non risponde dal terminale degli hook: installalo o aggiungilo al PATH (Git Bash su Windows); requisito in INSTALLA_CON_AI.md, Fase 2"
 elif ! PYTHONUTF8=1 "$GUARD_PYTHON" "$SCRIPT_DIR/archive_policy.py" --scan "$ROOT" --archive-list "$ARCHIVES_FILE" >> "$ISSUES_FILE"; then
     add_issue ".agent/hooks/archive_policy.py - scansione non completata: riparare il motore prima di chiudere"
 fi

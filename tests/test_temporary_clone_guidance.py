@@ -19,6 +19,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
             "legge in sola lettura",
             "GitHub non e' una fonte del cliente",
             "Python non serve nel percorso standard",
+            "Python 3 (dal 3.8) al guardiano di chiusura",
             "niente GitHub, niente clone e niente esecuzione di codice scaricato",
             "leaderai_setup.py` resta un attrezzo LeaderAI",
             "copia di lavoro locale",

@@ -279,6 +279,10 @@ Il guardiano installa `archive_policy.py` accanto agli ingressi Bash/Windows:
 una sola camminata per le misure strutturali, senza processi separati per
 ogni file. Il tempo si misura sulla postazione destinataria; il limite del
 controllo non si aumenta per nascondere un rallentamento.
+Python 3 (dal 3.8) deve rispondere dal terminale che esegue gli hook: e' un
+requisito d'installazione dichiarato in `INSTALLA_CON_AI.md`, Fase 2, e
+verificato alla chiusura. Se manca, il guardiano si ferma e lo dice, senza
+degradare a un controllo parziale.
 I file di radice con un punto iniziale sono registrabili come gli altri,
 con proprietario e dettaglio: per esempio `.gitattributes` necessario a Windows.
 

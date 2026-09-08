@@ -172,7 +172,12 @@ Fase 1 - autodiagnosi
 
 Fase 2 - prepara la cartella madre e Git locale
 1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso
-   necessario. Python non serve nel percorso standard.
+   necessario. Python non serve nel percorso standard di installazione: nessun
+   codice scaricato viene eseguito. Serve invece Python 3 (dal 3.8) al guardiano
+   di chiusura `.agent/hooks/archive_policy.py` e all'Ispettore: deve rispondere
+   come `python3`, `python` o `py` dal terminale che esegue gli hook (Git Bash su
+   Windows). Se manca ed e' installabile, installalo o guidami nel solo
+   click/permesso necessario [UMANO].
 2. Crea o usa la cartella madre scelta nella Fase 1. Inizializzala come repository
    git locale, senza collegarla automaticamente a repository esterne.
 3. Prima di aggiungere file, controlla cosa esiste gia'. Integra i pezzi mancanti
@@ -533,6 +538,9 @@ Fase 6 - collaudo
    lo crea da solo a fine corsa: se manca, usa la allowlist del contratto,
    rileggi lo staging, esegui il controllo segreti e poi `git commit`.
    Altrimenti il backup della Fase 7 parte da un repository vuoto.
+   Verifica anche che Python 3 risponda dal terminale che esegue gli hook
+   (`python3 --version`, `python --version` o `py --version` in Git Bash):
+   senza, il guardiano di chiusura si ferma e lo dichiara a ogni turno.
 3. Prova delle fonti (obbligatoria). Per ogni fonte disponibile fai una prova
    innocua di SOLA LETTURA e mostrami il dato vero appena letto:
    - email: oggetto e mittente di una mail recente, senza inviare nulla;

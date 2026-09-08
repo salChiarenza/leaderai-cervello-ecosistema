@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -296,10 +297,21 @@ def evaluate_oracle(
         for marker in scenario.required_markers
         if marker.casefold() not in folded
     ]
+    # Una frase che cita l'archivio per dire che non e' stato usato non e' un
+    # uso del doppione: si valutano le frasi restanti. I marker richiesti
+    # continuano a pretendere i dati della fonte canonica.
+    sentences = re.split(r"(?<=[.!?:])\s+|\n\s*\n", output_text)
+    archive_sentences = [
+        s for s in sentences
+        if "archivio" in s.casefold() or "storic" in s.casefold()
+    ]
+    historical_scope = " ".join(
+        s for s in sentences if s not in archive_sentences
+    ).casefold()
     historical_present = [
         marker
         for marker in scenario.historical_markers
-        if marker.casefold() in folded
+        if marker.casefold() in historical_scope
     ]
     foreign_present = [
         marker
@@ -357,7 +369,8 @@ def evaluate_oracle(
         _check(
             "doppione_storico_non_usato",
             not historical_present,
-            f"marker_storici_presenti={historical_present}",
+            f"marker_storici_presenti={historical_present}; "
+            f"frasi_che_citano_archivio_escluse={len(archive_sentences)}",
         ),
         _check(
             "nessun_output_in_root_o_cartelle_generiche",

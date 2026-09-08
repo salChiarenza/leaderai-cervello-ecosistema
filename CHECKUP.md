@@ -587,8 +587,10 @@ Il checkup non verifica solo file tecnici. Costruisce la mappa del sistema reale
 Gli archivi di fascicoli dichiarati in `Dentro` seguono `MANIFEST.md`, sezione
 «Archivi di fascicoli e fonti Word». Verifica la protezione prima di escluderli
 dalla misura strutturale; non spostare firme dei sottoscrittori per far sparire
-un rilievo. Il guardiano richiede anche `.agent/hooks/archive_policy.py`:
-aggiornare i due file insieme e misurare una chiusura sulla postazione reale.
+un rilievo. Il guardiano richiede anche `.agent/hooks/archive_policy.py` e
+Python 3 (dal 3.8) che risponda dal terminale degli hook: aggiornare i due file
+insieme, verificare Python e misurare una chiusura sulla postazione reale.
+Python mancante e' un passaggio umano [UMANO], non una deroga al controllo.
 La fonte business Word puo' essere dichiarata con `@/` dalla cartella madre.
 
 1. Censisci gli elementi rilevanti e classificali come `STANZA`, `FONTE`,
