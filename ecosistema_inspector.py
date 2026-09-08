@@ -9,10 +9,13 @@ import re
 import stat
 import subprocess
 import unicodedata
+import zipfile
+import xml.etree.ElementTree as ET
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import install_contract
+from templates import ARCHIVE_POLICY as archive_policy
 
 
 ROOT = Path(__file__).resolve().parent
@@ -302,6 +305,7 @@ def _guardiano_findings(target: Path, mode: str) -> list[Finding]:
     findings: list[Finding] = []
     managed_scripts = {
         ".agent/hooks/guardiano_stanze.sh": "GUARDIANO_STANZE.sh",
+        ".agent/hooks/archive_policy.py": "ARCHIVE_POLICY.py",
         ".agent/hooks/guardiano_stanze_windows.ps1": (
             "GUARDIANO_STANZE_WINDOWS.ps1"
         ),
@@ -752,6 +756,9 @@ def _apply_consolidated_contract(
                 continue
             if finding.path.startswith(".agent/hooks/guardiano_stanze") and guardian_hooked:
                 continue
+            if (finding.path == ".agent/hooks/archive_policy.py" and guardian_hooked
+                    and guardian not in {".agent/hooks/guardiano_stanze.sh", ".agent/hooks/guardiano_stanze_windows.ps1"}):
+                continue  # dipendenza del guardiano canonico, non di quello proprio della casa
         if finding.code == "GUARDIAN_HOOK_MISSING" and guardian_hooked:
             continue
         kept.append(finding)
@@ -1152,26 +1159,25 @@ def _git_history_paths(target: Path) -> set[str]:
     }
 
 
-def _iter_files(target: Path, *, include_protected: bool = False):
-    for path in target.rglob("*"):
-        try:
-            rel = path.relative_to(target)
-        except ValueError:
-            continue
-        if ".git" in rel.parts:
-            continue
-        if not include_protected and ".secrets" in rel.parts:
-            continue
-        if path.is_symlink() or not path.is_file():
-            continue
-        if _inside_technical_env(target, rel):
-            continue
-        yield rel, path
+def _iter_files(target: Path, *, include_protected: bool = False, archives=()):
+    # Potatura prima della discesa: rglob attraversava anche Git e gli ambienti.
+    # archives e' passato solo alle misure strutturali, mai a credenziali/asset.
+    for parent, dirs, files in os.walk(target, followlinks=False):
+        parent = Path(parent)
+        dirs[:] = [name for name in dirs if name != ".git"
+                   and (include_protected or name != ".secrets")
+                   and not (parent / name).is_symlink()
+                   and not _is_technical_env_dir(parent / name)
+                   and not archive_policy.inside(parent / name, archives)]
+        for name in files:
+            path = parent / name
+            if not path.is_symlink() and path.is_file():
+                yield path.relative_to(target), path
 
 
-def _markdown_hygiene_findings(target: Path) -> list[Finding]:
+def _markdown_hygiene_findings(target: Path, archives=()) -> list[Finding]:
     findings: list[Finding] = []
-    for rel, path in _iter_files(target):
+    for rel, path in _iter_files(target, archives=archives):
         if rel.suffix.casefold() != ".md":
             continue
         try:
@@ -1271,10 +1277,20 @@ def _hardcoded_business_string(path: Path, text: str) -> bool:
             tree = ast.parse(text)
         except SyntaxError:
             return False
+        docstrings = {
+            id(node.body[0].value)
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.body
+            and isinstance(node.body[0], ast.Expr)
+            and isinstance(node.body[0].value, ast.Constant)
+            and isinstance(node.body[0].value.value, str)
+        }
         strings = [
             node.value
             for node in ast.walk(tree)
             if isinstance(node, ast.Constant) and isinstance(node.value, str)
+            and id(node) not in docstrings
         ]
     else:
         strings = re.findall(r"""(?s)(?:"([^"\n]{60,})"|'([^'\n]{60,})')""", text)
@@ -1358,11 +1374,11 @@ def _declared_path_bullets(section: str) -> list[str]:
     return declared
 
 
-def _room_operating_source_paths(room_path: Path) -> set[str]:
+def _room_operating_source_paths(room_path: Path, archives=()) -> set[str]:
     """Trova le fonti operative reali, anche se una copia non e' dichiarata."""
     candidates: set[str] = set()
     try:
-        paths = tuple(room_path.rglob("*"))
+        paths = tuple(path for _, path in _iter_files(room_path, archives=archives))
     except OSError:
         return candidates
     for path in paths:
@@ -1420,15 +1436,31 @@ def _business_source_declaration(content: str) -> tuple[str, Path | None]:
     return ("file", candidate)
 
 
-def _business_source_file_issue(room_path: Path, candidate: Path) -> str | None:
-    if _symlink_component(room_path, candidate) is not None:
+def _business_source_file_issue(room_path: Path, candidate: Path, target: Path | None = None) -> str | None:
+    base = room_path
+    if candidate.parts[0] == "@":
+        if target is None or len(candidate.parts) < 2:
+            return "missing"
+        base, candidate = target, Path(*candidate.parts[1:])
+    if _symlink_component(base, candidate) is not None:
         return "symlink"
-    source = room_path / candidate
+    source = base / candidate
     if not source.is_file():
         return "missing"
     try:
-        text = source.read_text(encoding="utf-8")
-    except (OSError, UnicodeError):
+        if source.suffix.casefold() == ".docx":
+            with zipfile.ZipFile(source) as document:
+                info = document.getinfo("word/document.xml")
+                if info.file_size > 10 * 1024 * 1024:
+                    return "unreadable"
+                xml = document.read(info)
+                if b"<!DOCTYPE" in xml.upper() or b"<!ENTITY" in xml.upper():
+                    return "unreadable"
+                root = ET.fromstring(xml)
+                text = " ".join(root.itertext())
+        else:
+            text = source.read_text(encoding="utf-8")
+    except (OSError, UnicodeError, zipfile.BadZipFile, KeyError, ET.ParseError, RuntimeError):
         return "unreadable"
     if not text.strip():
         return "empty"
@@ -1437,9 +1469,9 @@ def _business_source_file_issue(room_path: Path, candidate: Path) -> str | None:
     return None
 
 
-def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
+def _business_source_findings(target: Path, room_path: Path, archives=()) -> list[Finding]:
     generator_files: list[tuple[Path, str]] = []
-    for rel, path in _iter_files(room_path):
+    for rel, path in _iter_files(room_path, archives=archives):
         if rel.suffix.casefold() not in SOURCE_CODE_SUFFIXES:
             continue
         if _is_credential_candidate(rel):
@@ -1472,7 +1504,7 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
             )
         )
     else:
-        issue = _business_source_file_issue(room_path, source_candidate)
+        issue = _business_source_file_issue(room_path, source_candidate, target)
         issue_details = {
             "symlink": (
                 "BUSINESS_SOURCE_SYMLINK",
@@ -1485,7 +1517,7 @@ def _business_source_findings(target: Path, room_path: Path) -> list[Finding]:
             ),
             "unreadable": (
                 "BUSINESS_SOURCE_UNREADABLE",
-                "La fonte business non e' leggibile come testo UTF-8.",
+                "La fonte business non e' un testo UTF-8 o un documento Word leggibile.",
             ),
             "empty": (
                 "BUSINESS_SOURCE_EMPTY",
@@ -1643,6 +1675,7 @@ def _room_prefab_findings(
     room_path: Path,
     content: str,
     room_name: str,
+    archives=(),
 ) -> list[Finding]:
     findings: list[Finding] = []
     room_rel = room_path.relative_to(target).as_posix()
@@ -1668,7 +1701,7 @@ def _room_prefab_findings(
         source_candidate
         and source_candidate.name.casefold() not in ROOM_FILE_NAMES
     )
-    physical_sources = _room_operating_source_paths(room_path)
+    physical_sources = _room_operating_source_paths(room_path, archives)
     if len(source_declarations) > 1 or len(physical_sources) > 1:
         findings.append(
             Finding(
@@ -1835,7 +1868,7 @@ def _room_prefab_findings(
             )
         )
     elif business_declaration == "file" and business_candidate is not None:
-        issue = _business_source_file_issue(room_path, business_candidate)
+        issue = _business_source_file_issue(room_path, business_candidate, target)
         issue_codes = {
             "symlink": "ROOM_BUSINESS_SOURCE_SYMLINK",
             "missing": "ROOM_BUSINESS_SOURCE_MISSING",
@@ -1846,7 +1879,7 @@ def _room_prefab_findings(
         issue_details = {
             "symlink": "La fonte business deve essere un file locale.",
             "missing": "La fonte business dichiarata non esiste.",
-            "unreadable": "La fonte business non e' leggibile come testo UTF-8.",
+            "unreadable": "La fonte business non e' un testo UTF-8 o un documento Word leggibile.",
             "empty": "La fonte business dichiarata e' vuota.",
             "placeholder": "La fonte business conserva campi non compilati.",
         }
@@ -1875,6 +1908,7 @@ def _room_prefab_findings(
             )
 
     contents = _markdown_section(content, ROOM_LIFECYCLE.contents_section)
+    archive_declarations = {raw.rstrip("/") for raw, _ in archive_policy.declarations(content)}
     declared_children: dict[str, str] = {}
     invalid_child_declarations: list[str] = []
     for raw in re.findall(r"`([^`]+)`", contents):
@@ -1883,6 +1917,10 @@ def _room_prefab_findings(
             continue
         canonical = _canonical_relative_path(normalized_path)
         candidate = Path(canonical) if canonical else None
+        if candidate is not None and normalized_path.rstrip("/") in archive_declarations:
+            if len(candidate.parts) == 1:
+                declared_children[candidate.parts[0].casefold()] = candidate.parts[0]
+            continue
         if candidate is None or len(candidate.parts) != 1:
             invalid_child_declarations.append(raw)
             continue
@@ -2001,6 +2039,8 @@ def _room_prefab_findings(
                     seen_symlinks.add(rel_text)
                 continue
             if not child.is_dir():
+                continue
+            if archive_policy.inside(child, archives):
                 continue
             child_depth = depth + 1
             if child_depth > ROOM_LIFECYCLE.scan_depth:
@@ -2178,6 +2218,8 @@ def inspect_ecosystem(
             ],
         )
 
+    archives, archive_issues = archive_policy.collect(target)
+    findings.extend(Finding(code, "BLOCKER", path, detail) for code, path, detail in archive_issues)
     agents_path = target / "AGENTS.md"
     agents_text = ""
     if agents_path.is_file() and not agents_path.is_symlink():
@@ -2901,6 +2943,7 @@ def inspect_ecosystem(
                         room_path,
                         raw_content,
                         room.name,
+                        archives,
                     )
                 )
         if room_claude.is_symlink():
@@ -2993,7 +3036,7 @@ def inspect_ecosystem(
     valid_root_owned_paths: set[str] = set()
     for path, row in sorted(root_owned.items()):
         classification_key = _normalized(row.classification).strip()
-        direct_path = len(Path(path).parts) == 1 and not path.startswith(".")
+        direct_path = len(Path(path).parts) == 1
         if not direct_path:
             findings.append(
                 Finding(
@@ -3183,7 +3226,7 @@ def inspect_ecosystem(
             # fonte, capacita' o output della madre: non e' una stanza e non
             # deve avere una mappa con la fonte business editabile.
             continue
-        findings.extend(_business_source_findings(target, child))
+        findings.extend(_business_source_findings(target, child, archives))
 
     for child in sorted(target.iterdir(), key=lambda item: item.name.casefold()):
         if not child.is_file() or child.name in IGNORED_OS_ENTRIES:
@@ -3458,6 +3501,8 @@ def inspect_ecosystem(
         term = _sensitive_asset_term(rel)
         if term is None:
             continue
+        if term == "firma" and archive_policy.family_signature(_path, archives):
+            continue
         if ".secrets" not in rel.parts:
             findings.append(
                 Finding(
@@ -3479,7 +3524,7 @@ def inspect_ecosystem(
                 )
             )
 
-    for rel, path in _iter_files(target):
+    for rel, path in _iter_files(target, archives=archives):
         if rel.name.casefold() != "progetto.md":
             continue
         try:
@@ -3504,7 +3549,7 @@ def inspect_ecosystem(
                 )
             )
 
-    findings.extend(_markdown_hygiene_findings(target))
+    findings.extend(_markdown_hygiene_findings(target, archives))
     findings = _apply_consolidated_contract(target, agents_text, findings)
 
     return Inspection(

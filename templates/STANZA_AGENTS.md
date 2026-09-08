@@ -37,6 +37,12 @@ non dimostra una stanza.
 - Ogni sottocartella diretta usa il formato: percorso tra apici inversi,
   seguito dalla sua funzione.
 - Se non esistono sottocartelle, scrivere NESSUNA SOTTOCARTELLA.
+- Un archivio di fascicoli puo' essere annidato: dichiarare il percorso locale
+  seguito da ARCHIVIO PROTETTO: e dalla funzione; dichiarare anche la sua
+  sottocartella diretta antenata. Tutti gli elementi devono
+  essere esclusi da Git, assenti da indice e storia e senza collegamenti simbolici.
+  Aggiungere FIRME SOTTOSCRITTORI solo per firme raccolte nei fascicoli, mai
+  per firma, timbro o sigillo riutilizzabili dell'organizzazione.
 
 ## Fonti
 
@@ -59,6 +65,9 @@ non dimostra una stanza.
 - {{room_business_source}}
 - Se la stanza non genera documenti da contenuti business, scrivere
   `NON APPLICABILE` e motivare in una riga.
+- La fonte puo' essere testo UTF-8 o Word .docx. Il percorso parte dalla stanza;
+  il prefisso @/ parte dalla cartella madre. Deve restare nella stessa casa,
+  senza collegamenti simbolici. Un generatore deve dichiarare la fonte reale.
 
 ## Capacita
 

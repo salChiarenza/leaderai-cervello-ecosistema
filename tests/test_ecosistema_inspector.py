@@ -4,6 +4,7 @@ import stat
 import subprocess
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 import ecosistema_inspector
@@ -149,6 +150,153 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
     def codes(self, inspection: ecosistema_inspector.Inspection) -> set[str]:
         return {item.code for item in inspection.findings}
+
+    def make_family_archive(self, target: Path) -> Path:
+        self.create_valid_room(target)
+        self.add_room_to_registry(target)
+        archive = target / "app-iscrizioni" / "dati" / "pratiche"
+        family = archive / "iscrizione-uno"
+        family.mkdir(parents=True)
+        (family / "firma.png").write_bytes(b"synthetic signature")
+        (family / "iscrizione-firmata.pdf").write_bytes(b"%PDF synthetic")
+        path = target / "app-iscrizioni" / "AGENTS.md"
+        path.write_text(path.read_text().replace("NESSUNA SOTTOCARTELLA", "`dati/` — Dati della scuola.\n- `dati/pratiche/` — ARCHIVIO PROTETTO: fascicoli delle famiglie; FIRME SOTTOSCRITTORI", 1))
+        ignore = target / ".gitignore"
+        ignore.write_text(ignore.read_text() + "\n/app-iscrizioni/dati/pratiche/\n")
+        return archive
+
+    def test_new_enrolment_in_declared_archive_does_not_add_structural_errors(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            archive = self.make_family_archive(target)
+            for number in (1, 2):
+                with self.subTest(enrolments=number):
+                    issues = [f for f in self.inspect(target).findings if f.code.startswith("ROOM_CHILD") or f.code.startswith("SENSITIVE_ASSET") or f.code.startswith("PROTECTED_ARCHIVE")]
+                    self.assertEqual(issues, [])
+                    extra = archive / "iscrizione-due"
+                    extra.mkdir(exist_ok=True)
+                    (extra / "firma.png").write_bytes(b"synthetic")
+                    (extra / "iscrizione.pdf").write_bytes(b"%PDF synthetic")
+
+    def test_archive_does_not_hide_credentials_or_reusable_assets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            archive = self.make_family_archive(target)
+            (archive / "token.json").write_text("{}")
+            (archive / "timbro.png").write_bytes(b"synthetic")
+            (archive / "firma_scuola.png").write_bytes(b"synthetic")
+            findings = self.inspect(target).findings
+            sensitive = {f.path for f in findings if f.code == "SENSITIVE_ASSET_OUTSIDE_PROTECTED"}
+            self.assertIn("app-iscrizioni/dati/pratiche/timbro.png", sensitive)
+            self.assertIn("app-iscrizioni/dati/pratiche/firma_scuola.png", sensitive)
+            self.assertTrue(any(f.code.startswith("CREDENTIAL") and f.path.endswith("token.json") for f in findings))
+
+    def test_archive_protection_requires_ignore_no_tracked_files_and_local_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            archive = self.make_family_archive(target)
+            ignore = target / ".gitignore"
+            saved = ignore.read_text()
+            ignore.write_text(saved.replace("/app-iscrizioni/dati/pratiche/", ""))
+            self.assertIn("PROTECTED_ARCHIVE_UNPROTECTED", self.codes(self.inspect(target)))
+            ignore.write_text(saved)
+            subprocess.run(["git", "add", "-f", "--", str(archive / "iscrizione-uno" / "firma.png")], cwd=target, check=True, capture_output=True)
+            self.assertIn("PROTECTED_ARCHIVE_TRACKED", self.codes(self.inspect(target)))
+            (archive / "collegamento").symlink_to(Path(tmp), target_is_directory=True)
+            self.assertIn("PROTECTED_ARCHIVE_SYMLINK", self.codes(self.inspect(target)))
+
+    def test_family_signature_requires_explicit_role_and_local_pdf(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            archive = self.make_family_archive(target)
+            family = archive / "iscrizione-uno"
+            (family / "iscrizione-firmata.pdf").unlink()
+            self.assertIn("SENSITIVE_ASSET_OUTSIDE_PROTECTED", self.codes(self.inspect(target)))
+            (family / "iscrizione.pdf").write_bytes(b"%PDF synthetic")
+            path = target / "app-iscrizioni" / "AGENTS.md"
+            path.write_text(path.read_text().replace("; FIRME SOTTOSCRITTORI", ""))
+            self.assertIn("SENSITIVE_ASSET_OUTSIDE_PROTECTED", self.codes(self.inspect(target)))
+
+    def test_invalid_archive_paths_do_not_grant_an_exemption(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.make_family_archive(target)
+            path = target / "app-iscrizioni/AGENTS.md"
+            original = path.read_text()
+            for raw in ("../documenti/", "/tmp/", "dati/../pratiche/", "dati\\pratiche/", "C:/pratiche/"):
+                with self.subTest(path=raw):
+                    path.write_text(original.replace("`dati/pratiche/`", f"`{raw}`"))
+                    codes = self.codes(self.inspect(target))
+                    self.assertIn("PROTECTED_ARCHIVE_INVALID", codes)
+                    self.assertIn("SENSITIVE_ASSET_OUTSIDE_PROTECTED", codes)
+
+    def test_archive_helper_drift_cannot_disable_the_guard_silently(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            helper = target / ".agent/hooks/archive_policy.py"
+            helper.write_text("pass\n")
+            self.assertIn("GUARDIAN_SCRIPT_DRIFT", self.codes(self.inspect(target)))
+            helper.unlink()
+            self.assertIn("MISSING_STANDARD_FILE", self.codes(self.inspect(target)))
+
+    def test_nested_archive_still_requires_its_direct_parent_in_the_map(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.make_family_archive(target)
+            path = target / "app-iscrizioni/AGENTS.md"
+            path.write_text(path.read_text().replace("- `dati/` — Dati della scuola.\n", ""))
+            self.assertIn("ROOM_CHILD_UNDECLARED", self.codes(self.inspect(target)))
+
+    def test_family_guide_can_be_a_word_source_elsewhere_in_the_house(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+            room = target / "app-iscrizioni"
+            guide = target / "documenti" / "Guida famiglie.docx"
+            guide.parent.mkdir()
+            with zipfile.ZipFile(guide, "w") as doc:
+                doc.writestr("word/document.xml", '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Guida delle famiglie approvata dalla scuola.</w:t></w:r></w:p></w:body></w:document>')
+            (room / "scheda_pdf.py").write_text("import docx\n", encoding="utf-8")
+            map_path = room / "AGENTS.md"
+            map_path.write_text(map_path.read_text().replace("NON APPLICABILE: nessun generatore", "`@/documenti/Guida famiglie.docx`"))
+            issues = [f for f in self.inspect(target).findings if "BUSINESS_SOURCE" in f.code]
+            self.assertEqual(issues, [])
+            guide.write_bytes(b"not a Word document")
+            self.assertIn("BUSINESS_SOURCE_UNREADABLE", self.codes(self.inspect(target)))
+
+    def test_business_source_cannot_leave_house_or_follow_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+            room = target / "app-iscrizioni"
+            (room / "scheda_pdf.py").write_text("import docx\n")
+            external = Path(tmp) / "esterna.md"
+            external.write_text("Fonte fuori dalla casa")
+            (target / "collegamento.md").symlink_to(external)
+            path = room / "AGENTS.md"
+            original = path.read_text()
+            for declaration, expected in [("@/../esterna.md", "BUSINESS_SOURCE_UNDECLARED"), ("@/collegamento.md", "BUSINESS_SOURCE_SYMLINK")]:
+                with self.subTest(declaration=declaration):
+                    path.write_text(original.replace("NON APPLICABILE: nessun generatore", f"`{declaration}`"))
+                    self.assertIn(expected, self.codes(self.inspect(target)))
+
+    def test_documentation_strings_are_not_business_content(self):
+        explanation = "Questa funzione prepara i documenti di prova e descrive il comportamento del programma senza contenere clausole per le famiglie."
+        code = repr(explanation) + "\nclass Test:\n    " + repr(explanation) + "\n    def render(self):\n        " + repr(explanation) + "\n        return 1\n"
+        self.assertFalse(ecosistema_inspector._hardcoded_business_string(Path("scheda_pdf.py"), code))
+        self.assertTrue(ecosistema_inspector._hardcoded_business_string(Path("scheda_pdf.py"), code + '\nCLAUSOLA = "Il genitore si impegna a consegnare la documentazione richiesta dalla scuola entro il 30 settembre."\n'))
+
+    def test_registered_root_dotfile_is_allowed_but_still_requires_detail(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            (target / ".gitattributes").write_text("*.sh text eol=lf\n")
+            self.register_root_owned(target, ".gitattributes", "INFRASTRUTTURA", "ecosistema/ASSET.md")
+            self.assertIn("ROOT_OWNED_DETAIL_MISSING", self.codes(self.inspect(target)))
+            self.register_asset_detail(target, ".gitattributes")
+            relevant = [f for f in self.inspect(target).findings if f.path == ".gitattributes" or f.code == "ROOT_OWNED_DETAIL_MISSING"]
+            self.assertEqual(relevant, [])
 
     def test_fresh_install_passes_mechanical_inspection(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1289,7 +1437,8 @@ class EcosistemaInspectorTest(unittest.TestCase):
             registry = target / "memory" / "anagrafe.md"
             registry.write_text("# Anagrafe\n\n| Percorso | Classe |\n|---|---|\n| `docs` | FONTE |\n", encoding="utf-8")
             for rel in ("ecosistema/FONTI.md", "ecosistema/ASSET.md", "AGENT_CHAT.md",
-                        ".agent/hooks/guardiano_stanze.sh", ".agent/hooks/guardiano_stanze_windows.ps1"):
+                        ".agent/hooks/guardiano_stanze.sh", ".agent/hooks/guardiano_stanze_windows.ps1",
+                        ".agent/hooks/archive_policy.py"):
                 (target / rel).unlink()
             agents = target / "AGENTS.md"
             agents.write_text(

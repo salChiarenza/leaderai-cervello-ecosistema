@@ -204,6 +204,7 @@ Fase 3 - leggi lo standard corrente in sola lettura
    - `templates/INSTALL_LOG.md`
    - `templates/AGENT_CHAT.md`
    - `templates/GUARDIANO_STANZE.sh`
+   - `templates/ARCHIVE_POLICY.py`
    - `templates/GUARDIANO_STANZE_WINDOWS.ps1`
    - `templates/CODEX_HOOKS.json`
    - `templates/CLAUDE_SETTINGS.json`
@@ -234,6 +235,7 @@ Fase 4 - monta localmente il Cervello
      comune di tutti gli agenti della casa, regole d'uso dentro al file)
    - `templates/GUARDIANO_STANZE.sh` ->
      `.agent/hooks/guardiano_stanze.sh`
+   - `templates/ARCHIVE_POLICY.py` -> `.agent/hooks/archive_policy.py`
    - `templates/GUARDIANO_STANZE_WINDOWS.ps1` ->
      `.agent/hooks/guardiano_stanze_windows.ps1`
    - modalita' Claude -> unisci `templates/CLAUDE_SETTINGS.json` a

@@ -22,6 +22,11 @@ un output o una fonte non bastano.
 7. Una sola fonte per ogni dato, stato o procedura.
 8. Capacita' e collegamenti provati, non soltanto dichiarati.
 
+Gli archivi di fascicoli si dichiarano in `Dentro` come ARCHIVIO PROTETTO,
+seguendo il contratto in `MANIFEST.md`: la misura strutturale li salta solo
+dopo la verifica della protezione. Credenziali e asset riutilizzabili restano
+controllati. Una fonte business puo' essere Word e usare @/ dalla cartella madre.
+
 ## Dove deve vivere
 
 - Un reparto vive al primo livello della cartella madre oppure dentro il reparto

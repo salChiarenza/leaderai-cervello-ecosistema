@@ -36,11 +36,22 @@ ISSUES_FILE="$(mktemp "${TMPDIR:-/tmp}/leaderai-guardiano.XXXXXX" 2>/dev/null)" 
     printf '%s\n' "BLOCCO STRUTTURA: controllo finale non avviato." >&2
     exit 2
 }
-trap 'rm -f -- "$ISSUES_FILE"' EXIT HUP INT TERM
+ARCHIVES_FILE="${ISSUES_FILE}.archives"
+: > "$ARCHIVES_FILE"
+trap 'rm -f -- "$ISSUES_FILE" "$ARCHIVES_FILE"' EXIT HUP INT TERM
 
 add_issue() {
     printf '%s\n' "$1" >> "$ISSUES_FILE"
 }
+
+# Un solo censimento nativo: stesso parser dell'Ispettore, archivi validati
+# prima della potatura. La mancanza del motore non equivale a una casa pulita.
+GUARD_PYTHON="$(command -v python3 || command -v python || true)"
+if [ -z "$GUARD_PYTHON" ] || [ ! -f "$SCRIPT_DIR/archive_policy.py" ]; then
+    add_issue ".agent/hooks/archive_policy.py - motore del controllo assente o Python non disponibile"
+elif ! PYTHONUTF8=1 "$GUARD_PYTHON" "$SCRIPT_DIR/archive_policy.py" --scan "$ROOT" --archive-list "$ARCHIVES_FILE" >> "$ISSUES_FILE"; then
+    add_issue ".agent/hooks/archive_policy.py - scansione non completata: riparare il motore prima di chiudere"
+fi
 
 # Casa consolidata: la mappa madre dichiara `- Contratto di stanza: consolidato`
 # e uno o piu' `- Registro di dettaglio canonico: \`percorso.md\``. Le stanze
@@ -492,6 +503,9 @@ validate_room_map() {
 
     while IFS= read -r declared_child; do
         declared_child="${declared_child%/}"
+        if grep -Fxq -- "$rel/$declared_child" "$ARCHIVES_FILE"; then
+            continue
+        fi
         if ! portable_relative_path "$declared_child" || [[ "$declared_child" == */* ]]; then
             add_issue "$rel/AGENTS.md - percorso Dentro non valido: $declared_child"
         elif [ ! -d "$room/$declared_child" ] || [ -L "$room/$declared_child" ]; then
@@ -505,11 +519,13 @@ validate_room_map() {
         \`*\`*)
             business_path="${business_value#\`}"
             business_path="${business_path%%\`*}"
-            if ! portable_relative_path "$business_path" || path_has_symlink_component "$room" "$business_path"; then
+            business_base="$room"
+            case "$business_path" in @/*) business_base="$ROOT"; business_path="${business_path#@/}" ;; esac
+            if ! portable_relative_path "$business_path" || path_has_symlink_component "$business_base" "$business_path"; then
                 add_issue "$rel/$business_path - fonte business non locale o collegata"
-            elif [ ! -f "$room/$business_path" ]; then
+            elif [ ! -f "$business_base/$business_path" ]; then
                 add_issue "$rel/$business_path - fonte business dichiarata ma assente"
-            elif [ ! -s "$room/$business_path" ] || grep -Fq -- '{{' "$room/$business_path"; then
+            elif [ ! -s "$business_base/$business_path" ] || grep -Fq -- '{{' "$business_base/$business_path"; then
                 add_issue "$rel/$business_path - fonte business vuota o non compilata"
             fi
             ;;
@@ -578,100 +594,7 @@ while IFS= read -r -d '' item; do
     fi
 done < <(find "$ROOT" -mindepth 1 -maxdepth 1 ! -name '.*' -print0 2>/dev/null)
 
-# Nessun percorso della casa puo' essere invisibile al proprietario
-# (macOS `chflags hidden`, Windows attributo Hidden). Dotfile esclusi.
-is_hidden_from_owner() {
-    local path="$1"
-    local flags
-    if flags="$(stat -f '%Sf' -- "$path" 2>/dev/null)"; then
-        case ",$flags," in *,hidden,*) return 0 ;; esac
-        return 1
-    fi
-    if command -v attrib >/dev/null 2>&1; then
-        case "$(attrib "$path" 2>/dev/null | cut -c1-12)" in *H*) return 0 ;; esac
-    fi
-    return 1
-}
-
-while IFS= read -r -d '' visible_item; do
-    if is_hidden_from_owner "$visible_item"; then
-        add_issue "$(relative_path "$visible_item") - nascosto al proprietario: togliere il flag (chflags nohidden / attrib -h)"
-    fi
-done < <(
-    find "$ROOT" -mindepth 1 -maxdepth 2 \
-        \( -type d \( -name '.*' -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name vendor \) -prune \) -o \
-        ! -name '.*' -print0 2>/dev/null
-)
-
-# Le mappe corte non possono diventare archivi paralleli.
-while IFS= read -r -d '' router; do
-    lines="$(wc -l < "$router" | tr -d '[:space:]')"
-    bytes="$(wc -c < "$router" | tr -d '[:space:]')"
-    if [ "$lines" -gt 350 ] || [ "$bytes" -gt 24576 ]; then
-        add_issue "$(relative_path "$router") - mappa oltre il limite di 350 righe o 24 KiB"
-    fi
-done < <(
-    find "$ROOT" \
-        \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
-        -type f \( -name AGENTS.md -o -name MEMORY.md -o -name AGENT_CHAT.md \) -print0 2>/dev/null
-)
-
-# Un documento vivo non e' un archivio: oltre 800 righe o 80 KiB si spezza o si archivia.
-# Gli archivi datati (`*_archivio_*.md`, cartelle `_archivio`/`_storico`) non si misurano.
-while IFS= read -r -d '' document; do
-    case "$(basename -- "$document")" in
-        AGENTS.md|MEMORY.md|AGENT_CHAT.md|CLAUDE.md) continue ;;
-        *_archivio_*|*_storico_*) continue ;;
-    esac
-    lines="$(wc -l < "$document" | tr -d '[:space:]')"
-    bytes="$(wc -c < "$document" | tr -d '[:space:]')"
-    if [ "$lines" -gt 800 ] || [ "$bytes" -gt 81920 ]; then
-        add_issue "$(relative_path "$document") - documento oltre 800 righe o 80 KiB: sposta la parte vecchia in <nome>_archivio_<data>.md nella stessa stanza o spezza per responsabilita'"
-    fi
-done < <(
-    find "$ROOT" \
-        \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor -o -name _archivio -o -name _storico -o -name archivio \) -prune \) -o \
-        -type f -name '*.md' -print0 2>/dev/null
-)
-
-# La chat di gruppo vive 48 ore: le note piu' vecchie si promuovono nel file giusto e si tolgono.
-chat_cutoff="$(date -v-2d +%Y%m%d 2>/dev/null || date -d '2 days ago' +%Y%m%d 2>/dev/null || printf '')"
-if [ -n "$chat_cutoff" ]; then
-    while IFS= read -r -d '' chat; do
-        stale="$(sed 's/\r$//' "$chat" | awk -v cutoff="$chat_cutoff" '
-            /^## +[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9]/ { split($2, p, "/"); if (p[3] p[2] p[1] < cutoff) n++ }
-            /^## +[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/ { d = substr($2, 1, 10); gsub(/-/, "", d); if (d < cutoff) n++ }
-            END { print n + 0 }')"
-        if [ "${stale:-0}" -gt 0 ]; then
-            add_issue "$(relative_path "$chat") - $stale note piu' vecchie di 48 ore: promuovi nel file proprietario o in <nome>_archivio_<data>.md e togli dalla chat"
-        fi
-    done < <(
-        find "$ROOT" \
-            \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
-            -type f -name AGENT_CHAT.md -print0 2>/dev/null
-    )
-fi
-
-# Copie e nomi di versione non possono diventare nuove fonti vive.
-while IFS= read -r -d '' candidate; do
-    name="$(basename -- "$candidate" | tr '[:upper:]' '[:lower:]')"
-    if printf '%s\n' "$name" | grep -Eq '(^|[_ .-])(v[0-9]+|finale?|copy|copia|\([0-9]+\))(\.[^.]+)?$'; then
-        add_issue "$(relative_path "$candidate") - possibile copia o versione parallela"
-    fi
-done < <(
-    find "$ROOT" \
-        \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
-        -type f -print0 2>/dev/null
-)
-
-# Una cartella organizzativa vuota non regge una responsabilita reale.
-while IFS= read -r -d '' empty_dir; do
-    add_issue "$(relative_path "$empty_dir")/ - cartella vuota"
-done < <(
-    find "$ROOT" -mindepth 1 \
-        \( -type d \( -name .git -o -name .agent -o -name .agents -o -name .codex -o -name .claude -o -name .venv -o -name venv -o -name node_modules -o -name __pycache__ -o -name .secrets -o -name vendor \) -prune \) -o \
-        -type d -empty -print0 2>/dev/null
-)
+# Igiene, copie, percorsi nascosti e cartelle vuote: misurati dal motore condiviso all'avvio.
 
 if [ "$MISURA" = true ]; then
     if [ -s "$ISSUES_FILE" ]; then

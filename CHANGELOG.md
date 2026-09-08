@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.18 - 08/09/2026
+
+- Corretto il controllo degli archivi di fascicoli: dichiarazione esplicita,
+  percorsi locali e protezione Git verificata prima dell'esclusione dalle
+  sole misure strutturali. Credenziali e asset riutilizzabili restano controllati.
+- Firme dei sottoscrittori riconoscibili nei fascicoli con PDF locale, ruolo
+  dichiarato e archivio protetto; timbri e firme dell'organizzazione restano separati.
+- Fonti Word .docx ammesse nella stessa casa, anche dalla cartella madre con
+  prefisso @/. Restano i controlli di esistenza, contenuto e collegamenti.
+- File di radice con punto iniziale registrabili; docstring Python escluse
+  dall'allarme sui testi business, clausole nel programma ancora rilevate.
+- Guardiano: una camminata strutturale in Python al posto delle sei ricerche
+  shell e dei processi per singolo file. Nuovo componente canonico
+  `.agent/hooks/archive_policy.py`, incluso nel contratto e nelle prove di integrita'.
+- Origine: rapporto cliente dell'08/09 e verifica indipendente registrata in
+  LeaderAI. Nessun dato cliente incluso nei test. Tempo Windows e collaudo
+  della casa originaria restano da misurare, distinti dal collaudo del prodotto.
+- Specifiche degli ingressi rilette l'08/09: [Claude Code](https://code.claude.com/docs/en/hooks)
+  e [Codex](https://learn.chatgpt.com/docs/hooks); soglie timeout preservate.
+
 ## 0.6.17 - 07/09/2026
 
 - Nasce `Percorso Ecosistema/`, vista leggibile in cinque file generata dalla

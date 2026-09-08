@@ -244,6 +244,44 @@ da approvare.
   soli metadati e limiti in `ecosistema/ASSET.md`, uso sul singolo documento
   soltanto con conferma umana.
 
+### Archivi di fascicoli e fonti Word
+
+La sezione `Dentro` della stanza puo' dichiarare un archivio anche annidato:
+
+```markdown
+- `dati/` — Dati della stanza.
+- `dati/pratiche/` — ARCHIVIO PROTETTO: fascicoli delle famiglie; FIRME SOTTOSCRITTORI
+```
+
+Il percorso deve essere locale e relativo alla stanza, senza `..`, assoluti o
+collegamenti simbolici, anche interni. L'archivio intero e ciascun elemento
+devono risultare ignorati da Git; indice e storia devono essere privi dei suoi
+dati. In assenza di una prova la dichiarazione resta bloccata.
+Solo gli archivi validi escono dalla misura di profondita', dalla ricerca di
+fonti operative/generatori e dall'igiene strutturale; credenziali, storia Git
+e asset riutilizzabili restano controllati. La protezione Git non certifica
+permessi del sistema operativo, backup o conformita' del trattamento.
+
+La dichiarazione `FIRME SOTTOSCRITTORI` ammette soltanto `firma.png` dentro
+un fascicolo con un PDF locale accanto. E' un'indicazione del ruolo, non una
+verifica della validita' della firma o dell'associazione giuridica al PDF.
+Firma della scuola, timbro e sigillo riutilizzabili conservano la regola
+precedente; non si rinominano per ottenere un'esenzione.
+
+La fonte business puo' essere il Word originale: per esempio
+`@/documenti/Guida famiglie.docx`, dove `@/` indica la cartella madre.
+Restano vietati uscita dalla casa, collegamenti simbolici, file vuoti,
+illeggibili o segnaposto. `NON APPLICABILE` non esenta un generatore.
+Le docstring Python sono documentazione; le clausole assegnate nel programma
+continuano a produrre un rilievo da verificare.
+
+Il guardiano installa `archive_policy.py` accanto agli ingressi Bash/Windows:
+una sola camminata per le misure strutturali, senza processi separati per
+ogni file. Il tempo si misura sulla postazione destinataria; il limite del
+controllo non si aumenta per nascondere un rallentamento.
+I file di radice con un punto iniziale sono registrabili come gli altri,
+con proprietario e dettaglio: per esempio `.gitattributes` necessario a Windows.
+
 ### Ciclo di apprendimento
 
 Ogni installazione e checkup registra la versione letta da `VERSION`. Un errore

@@ -97,6 +97,7 @@ write(
     render("ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md"),
 )
 write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
+write(".agent/hooks/archive_policy.py", render("ARCHIVE_POLICY.py"))
 write(
     ".agent/hooks/guardiano_stanze_windows.ps1",
     render("GUARDIANO_STANZE_WINDOWS.ps1"),
@@ -489,7 +490,7 @@ class InstallationHarnessTest(unittest.TestCase):
             )
             files = set(manifest["files"])
             self.assertNotIn("leaderai_setup.py", files)
-            self.assertFalse(any(path.endswith(".py") for path in files))
+            self.assertEqual({path for path in files if path.endswith(".py")}, {"templates/ARCHIVE_POLICY.py"})
             self.assertFalse(any(path.startswith(".git/") for path in files))
 
     def test_missing_cli_is_a_failure_with_complete_evidence(self):

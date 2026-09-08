@@ -519,6 +519,11 @@
         "strategy": "managed_text"
       },
       {
+        "template": "ARCHIVE_POLICY.py",
+        "destination": ".agent/hooks/archive_policy.py",
+        "strategy": "managed_text"
+      },
+      {
         "template": "GUARDIANO_STANZE.sh",
         "destination": ".agent/hooks/guardiano_stanze.sh",
         "strategy": "managed_text"
@@ -560,6 +565,7 @@
       "ecosystem-check/ruoli/INTERVENTO.md",
       "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
       ".agent/hooks/guardiano_stanze.sh",
+      ".agent/hooks/archive_policy.py",
       ".agent/hooks/guardiano_stanze_windows.ps1"
     ],
     "forbidden": [],

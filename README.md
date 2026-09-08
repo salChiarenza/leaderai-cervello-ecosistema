@@ -157,6 +157,9 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `.claude/skills/censitore-processi/SKILL.md` se richiesto Claude Code
 - `.agent/hooks/guardiano_stanze.sh` e adattatore Windows: prima della chiusura
   intercettano file fuori posto, cartelle incomplete, copie e mappe gonfie
+- `.agent/hooks/archive_policy.py`: parser condiviso degli archivi protetti e
+  misura strutturale in una camminata; dettagli in `MANIFEST.md`, sezione
+  «Archivi di fascicoli e fonti Word»
 - `memory/MEMORY.md`
 - `AGENT_CHAT.md`
 - `logs/install-log.md`

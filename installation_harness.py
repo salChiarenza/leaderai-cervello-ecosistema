@@ -52,6 +52,7 @@ STANDARD_FILES = (
     "templates/FONTI.md",
     "templates/GITIGNORE.txt",
     "templates/GUARDIANO_STANZE.sh",
+    "templates/ARCHIVE_POLICY.py",
     "templates/GUARDIANO_STANZE_WINDOWS.ps1",
     "templates/INSTALL_LOG.md",
     "templates/ISPETTORE_SKILL.md",
@@ -569,6 +570,7 @@ def _guardiano_oracle_issues(target: Path, snapshot: Path, mode: str) -> list[st
     issues: list[str] = []
     managed = {
         ".agent/hooks/guardiano_stanze.sh": "GUARDIANO_STANZE.sh",
+        ".agent/hooks/archive_policy.py": "ARCHIVE_POLICY.py",
         ".agent/hooks/guardiano_stanze_windows.ps1": (
             "GUARDIANO_STANZE_WINDOWS.ps1"
         ),
@@ -815,8 +817,15 @@ def evaluate_oracle(
             matches = False
         if not matches:
             room_template_issues.append(f"{rule.destination}:contenuto")
+    # Il motore canonico del guardiano e' previsto dal contratto e viene
+    # confrontato byte per byte nell'oracolo; altro codice resta vietato.
+    allowed_python = {
+        rule.destination for rule in install_contract.template_rules(install_contract.CONTRACT, mode)
+        if rule.destination.endswith(".py") and rule.strategy == "managed_text"
+    }
     python_files = sorted(
         relative for relative in present_files if relative.casefold().endswith(".py")
+        and relative not in allowed_python
     )
     clone_markers = sorted(
         relative

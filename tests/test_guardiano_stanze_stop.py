@@ -135,6 +135,25 @@ class GuardianoStanzeStopTest(unittest.TestCase):
         self.register_root_room(target, name)
         return room
 
+    def test_declared_archive_is_not_scanned_as_live_documents(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.install(tmp)
+            room = self.register_room(target, "iscrizioni")
+            archive = room / "dati" / "pratiche"
+            family = archive / "famiglia"
+            family.mkdir(parents=True)
+            (family / "relazione_finale.md").write_text("Documento storico\n" * 900)
+            path = room / "AGENTS.md"
+            path.write_text(path.read_text().replace("NESSUNA SOTTOCARTELLA", "`dati/` — Dati.\n- `dati/pratiche/` — ARCHIVIO PROTETTO: fascicoli delle famiglie", 1))
+            ignore = target / ".gitignore"
+            ignore.write_text(ignore.read_text() + "\n/iscrizioni/dati/pratiche/\n")
+            result = self.run_guard(target)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            ignore.write_text(ignore.read_text().replace("/iscrizioni/dati/pratiche/", ""))
+            result = self.run_guard(target)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("esclusi da Git", result.stderr)
+
     def test_clean_house_can_close(self):
         """Break caught: the installed guard must not block a conforming house."""
         with tempfile.TemporaryDirectory() as tmp:
