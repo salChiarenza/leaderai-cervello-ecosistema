@@ -151,6 +151,55 @@ class EcosistemaInspectorTest(unittest.TestCase):
     def codes(self, inspection: ecosistema_inspector.Inspection) -> set[str]:
         return {item.code for item in inspection.findings}
 
+    def test_person_status_separates_technical_findings_from_real_work_block(self):
+        working = ecosistema_inspector.Inspection(
+            target="/tmp/ecosistema",
+            rooms=[],
+            findings=[],
+        )
+        to_review = ecosistema_inspector.Inspection(
+            target="/tmp/ecosistema",
+            rooms=[],
+            findings=[
+                ecosistema_inspector.Finding(
+                    "STANDARD_VERSION_OUTDATED",
+                    "BLOCKER",
+                    "VERSION",
+                    "La versione installata e' precedente allo standard vivo.",
+                )
+            ],
+        )
+
+        self.assertEqual(working.person_status(), "TUTTO FUNZIONA")
+        self.assertEqual(
+            to_review.person_status(),
+            "FUNZIONA, CON ALCUNE COSE DA VALUTARE",
+        )
+        self.assertEqual(to_review.verdict, "NON PASSA")
+        self.assertNotIn("NON PASSA", to_review.person_status())
+        self.assertEqual(
+            to_review.person_status("apertura della casa operativa"),
+            "C'E' UN PROBLEMA CHE BLOCCA: apertura della casa operativa",
+        )
+
+        report = ecosistema_inspector._markdown(to_review)
+        self.assertIn(
+            "- Situazione per la persona: **FUNZIONA, CON ALCUNE COSE DA VALUTARE**",
+            report,
+        )
+        self.assertIn("- Stato tecnico interno: **NON PASSA**", report)
+        self.assertNotIn("- Verdetto: **NON PASSA**", report)
+
+        blocked_report = ecosistema_inspector._markdown(
+            to_review,
+            blocked_function="apertura della casa operativa",
+        )
+        self.assertIn(
+            "- Situazione per la persona: **C'E' UN PROBLEMA CHE BLOCCA: "
+            "apertura della casa operativa**",
+            blocked_report,
+        )
+
     def make_family_archive(self, target: Path) -> Path:
         self.create_valid_room(target)
         self.add_room_to_registry(target)

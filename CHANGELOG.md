@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.20 - 09/09/2026
+
+- Separato lo stato visibile alla persona dal verdetto tecnico di conformita':
+  il riepilogo ora usa `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA
+  VALUTARE` oppure nomina la sola funzione realmente bloccata e provata.
+- `NON PASSA` resta disponibile come codice tecnico interno per gate, log ed
+  exit status, ma non compare piu' come giudizio nelle chat, nelle email o nel
+  riepilogo dell'Ispettore.
+- Aggiornati `CHECKUP.md`, il modello email, le istruzioni installate e la skill
+  dell'Ispettore; aggiunte prove automatiche sulla traduzione e sul testo
+  distribuito ai clienti.
+- Origine: risposta del checkup cliente del 09/09/2026, in cui un rilievo di
+  conformita' e' stato comunicato come se l'intero lavoro non funzionasse.
+
 ## 0.6.19 - 08/09/2026
 
 - Python 3 (dal 3.8) dichiarato requisito del guardiano di chiusura e

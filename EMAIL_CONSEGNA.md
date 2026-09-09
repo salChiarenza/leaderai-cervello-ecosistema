@@ -18,6 +18,14 @@ L'AGENTE` tutti i verbi parlano allo stesso lettore. Il proprietario interviene
 nei gesti umani che l'agente gli presenta. Le classificazioni tecniche restano
 nelle fonti della casa e non compaiono nell'email.
 
+L'esito visibile non e' il verdetto tecnico. Usa `TUTTO FUNZIONA` se tutto e'
+completato e provato; `FUNZIONA, CON ALCUNE COSE DA VALUTARE` se il sistema e'
+utilizzabile ma restano miglioramenti, verifiche o decisioni non bloccanti;
+`C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto se una prova reale mostra
+che quella funzione e' ferma o restituisce un risultato errato. Nelle email e
+nelle risposte alla persona non riportare il verdetto tecnico negativo: resta
+interno. Un rilievo strutturale da solo non dimostra un blocco del lavoro.
+
 Il ciclo produce zero aggiornamenti intermedi. Quando Sal richiede la conferma
 finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
@@ -92,6 +100,7 @@ Oggetto: `[INSTALLA / CHECKUP] - Cervello + Ecosistema - [AZIENDA]`
 
 ```html
 <h2>Situazione in breve</h2>
+<p><strong>Stato:</strong> [TUTTO FUNZIONA / FUNZIONA, CON ALCUNE COSE DA VALUTARE / C'E' UN PROBLEMA CHE BLOCCA: [funzione]]</p>
 <p><strong>Cosa funziona:</strong> [COSA E' GIA' CONCLUSA E PROVATA]</p>
 <p><strong>Cosa completiamo:</strong> [LAVORO CHE L'AGENTE PORTA A TERMINE]</p>
 <p><strong>Cosa serve da te:</strong> [UN SOLO GESTO RICHIESTO OPPURE TUTTO GESTITO DALL'AGENTE]</p>
@@ -226,6 +235,7 @@ del proprietario scrivi soltanto <code>SERVE UN TUO PASSAGGIO</code>.</p>
 
 ```text
 SITUAZIONE IN BREVE
+Stato: [TUTTO FUNZIONA / FUNZIONA, CON ALCUNE COSE DA VALUTARE / C'E' UN PROBLEMA CHE BLOCCA: [funzione]]
 Cosa funziona: [COSA E' GIA' CONCLUSA E PROVATA]
 Cosa completiamo: [LAVORO CHE L'AGENTE PORTA A TERMINE]
 Cosa serve da te: [UN SOLO GESTO RICHIESTO OPPURE TUTTO GESTITO DALL'AGENTE]

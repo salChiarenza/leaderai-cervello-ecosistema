@@ -248,10 +248,24 @@ class Inspection:
             return "PASSA CON ATTENZIONE"
         return "PASSA"
 
-    def to_dict(self) -> dict:
+    def person_status(self, blocked_function: str | None = None) -> str:
+        """Traduce il controllo tecnico in una situazione comprensibile.
+
+        Un rilievo strutturale, anche bloccante per la certificazione, non prova
+        da solo che il lavoro della persona sia fermo. Il messaggio grave nasce
+        soltanto quando e' stata identificata la funzione realmente bloccata.
+        """
+        if blocked_function:
+            return f"C'E' UN PROBLEMA CHE BLOCCA: {blocked_function}"
+        if self.findings:
+            return "FUNZIONA, CON ALCUNE COSE DA VALUTARE"
+        return "TUTTO FUNZIONA"
+
+    def to_dict(self, blocked_function: str | None = None) -> dict:
         return {
             "target": self.target,
             "verdict": self.verdict,
+            "person_status": self.person_status(blocked_function),
             "standard_version": self.standard_version,
             "installed_version": self.installed_version,
             "rooms": [asdict(room) for room in self.rooms],
@@ -3560,14 +3574,18 @@ def inspect_ecosystem(
     )
 
 
-def _markdown(inspection: Inspection) -> str:
+def _markdown(
+    inspection: Inspection,
+    blocked_function: str | None = None,
+) -> str:
     lines = [
         "# Ispettore Ecosistema",
         "",
         f"- Cartella viva: `{inspection.target}`",
         f"- Standard vivo: `{inspection.standard_version}`",
         f"- Versione installata: `{inspection.installed_version or 'NON TROVATA'}`",
-        f"- Verdetto: **{inspection.verdict}**",
+        f"- Situazione per la persona: **{inspection.person_status(blocked_function)}**",
+        f"- Stato tecnico interno: **{inspection.verdict}**",
         "",
         "| Gravita | Codice | Percorso | Evidenza |",
         "|---|---|---|---|",
@@ -3614,6 +3632,13 @@ def parse_args() -> argparse.Namespace:
             "Default: ~/.codex/AGENTS.override.md se esiste, altrimenti ~/.codex/AGENTS.md."
         ),
     )
+    parser.add_argument(
+        "--blocked-function",
+        help=(
+            "Nome comprensibile della funzione realmente bloccata, da usare "
+            "solo dopo una prova operativa fallita."
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Emette JSON.")
     return parser.parse_args()
 
@@ -3640,9 +3665,15 @@ def main() -> int:
         ),
     )
     if args.json:
-        print(json.dumps(inspection.to_dict(), ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                inspection.to_dict(args.blocked_function),
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
     else:
-        print(_markdown(inspection), end="")
+        print(_markdown(inspection, args.blocked_function), end="")
     return 0 if inspection.verdict == "PASSA" else 1
 
 

@@ -131,7 +131,11 @@ e la tabella delle fonti vive:
 `fonte | ruolo | regola/capacita' confrontata | stato osservato | scostamento/riparazione | prova | data`
 
 Salva il verdetto tecnico `PASSA`, `PASSA CON ATTENZIONE` o `NON PASSA` nella
-fonte proprietaria. Nel messaggio visibile alla persona indica soltanto:
+fonte proprietaria. Nel messaggio visibile alla persona non scrivere `NON
+PASSA`: usa `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA VALUTARE` oppure
+`C'E' UN PROBLEMA CHE BLOCCA: [funzione]`. La terza formula e' ammessa soltanto
+quando una prova reale mostra che la funzione e' ferma o produce un risultato
+errato; un rilievo strutturale non basta. Poi indica:
 
 - `Cosa funziona`;
 - `Cosa completiamo`;

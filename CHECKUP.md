@@ -37,6 +37,24 @@ necessaria e poi ripetere questo controllo.
 Il controllo focalizzato dichiara sempre il proprio perimetro nell'uscita. Non
 puo' essere usato per dichiarare conforme l'intera casa.
 
+## Esito visibile: stato del lavoro, non voto tecnico
+
+Il verdetto `PASSA / PASSA CON ATTENZIONE / NON PASSA` serve soltanto alla
+macchina e resta nei dettagli tecnici della fonte proprietaria. Nel riepilogo,
+nella chat e nelle email usa una sola di queste formule:
+
+- `TUTTO FUNZIONA` quando il lavoro e' completato e provato;
+- `FUNZIONA, CON ALCUNE COSE DA VALUTARE` quando il lavoro e' utilizzabile e
+  restano miglioramenti, verifiche o decisioni che non lo fermano;
+- `C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto quando una prova reale
+  dimostra che quella funzione non si puo' usare o produce un risultato errato.
+
+Nel testo visibile non scrivere `NON PASSA`: confonde la conformita' interna
+con il valore del lavoro e fa sembrare perso un sistema che sta funzionando.
+Un rilievo strutturale, una versione arretrata o una cosa da completare non
+sono da soli prova di blocco. Se usi la terza formula, nomina sempre la funzione
+ferma, la prova osservata e la prossima azione.
+
 ## Regola madre - standard contro caso reale
 
 L'Ecosistema per i clienti su Google Drive e' lo standard LeaderAI corrente. La
@@ -935,6 +953,8 @@ modifica distruttiva ai file vivi avviene senza approvazione del proprietario.
 
 ```text
 SITUAZIONE IN BREVE
+Stato per la persona: TUTTO FUNZIONA / FUNZIONA, CON ALCUNE COSE DA VALUTARE /
+  C'E' UN PROBLEMA CHE BLOCCA: [funzione]
 Cosa funziona: [cosa e' stato concluso e provato]
 Cosa completiamo: [lavoro che l'agente porta a termine]
 Cosa serve da te: [un solo gesto richiesto oppure tutto gestito dall'agente]

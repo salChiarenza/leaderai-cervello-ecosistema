@@ -96,6 +96,8 @@ Ogni email operativa agente-agente, in entrambe le direzioni, apre con:
 
 ```text
 SITUAZIONE IN BREVE
+Stato: TUTTO FUNZIONA / FUNZIONA, CON ALCUNE COSE DA VALUTARE /
+  C'E' UN PROBLEMA CHE BLOCCA: [funzione]
 Cosa funziona: ...
 Cosa completiamo: ...
 Cosa serve da te: ...
@@ -103,6 +105,8 @@ Quando si chiude: ...
 ```
 
 Solo dopo vengono `ISTRUZIONI PER L'AGENTE` o i dettagli tecnici.
+Nel testo visibile non scrivere `NON PASSA`: e' uno stato tecnico interno. La
+formula grave richiede la prova di una funzione realmente ferma o errata.
 
 ## Chiusura ambiente
 

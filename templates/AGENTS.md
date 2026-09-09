@@ -245,9 +245,9 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
 - Se la missione punta a `CHECKUP.md`, usa l'Ecosistema per i clienti su Drive come standard e
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
-- L'email della missione apre con `SITUAZIONE IN BREVE`: `Cosa funziona`,
-  `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`. Le
-  classificazioni e i dettagli tecnici restano nelle fonti della casa.
+- L'email apre con `SITUAZIONE IN BREVE` e lo stato visibile `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA VALUTARE` oppure `C'E' UN PROBLEMA CHE BLOCCA: [funzione]`.
+  La formula grave richiede la prova della funzione ferma o errata; un rilievo strutturale non basta. Nella chat e nelle email alla persona non scrivere `NON PASSA`.
+  Poi indica `Cosa funziona`, `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`; classificazioni e dettagli tecnici restano nelle fonti della casa.
 - Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
   proprietarie.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte

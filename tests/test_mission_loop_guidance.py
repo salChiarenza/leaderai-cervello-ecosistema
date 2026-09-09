@@ -6,6 +6,30 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class MissionLoopGuidanceTest(unittest.TestCase):
+    def test_person_visible_checkup_status_uses_plain_language_scale(self):
+        sources = [
+            ROOT / "CHECKUP.md",
+            ROOT / "EMAIL_CONSEGNA.md",
+            ROOT / "templates" / "AGENTS.md",
+            ROOT / "templates" / "ISPETTORE_SKILL.md",
+        ]
+        required = [
+            "TUTTO FUNZIONA",
+            "FUNZIONA, CON ALCUNE COSE DA VALUTARE",
+            "C'E' UN PROBLEMA CHE BLOCCA: [funzione]",
+        ]
+
+        for source in sources:
+            text = " ".join(source.read_text(encoding="utf-8").split())
+            for phrase in required:
+                with self.subTest(source=source.name, phrase=phrase):
+                    self.assertIn(phrase, text)
+
+        for source in [sources[0], sources[2], sources[3]]:
+            text = " ".join(source.read_text(encoding="utf-8").split())
+            with self.subTest(source=source.name, phrase="internal_only"):
+                self.assertIn("non scrivere `NON PASSA`", text)
+
     def test_checkup_contains_closed_mission_loop(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
 
