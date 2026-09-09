@@ -21,10 +21,11 @@ nelle fonti della casa e non compaiono nell'email.
 L'esito visibile non e' il verdetto tecnico. Usa `TUTTO FUNZIONA` se tutto e'
 completato e provato; `FUNZIONA, CON ALCUNE COSE DA VALUTARE` se il sistema e'
 utilizzabile ma restano miglioramenti, verifiche o decisioni non bloccanti;
-`C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto se una prova reale mostra
-che quella funzione e' ferma o restituisce un risultato errato. Nelle email e
-nelle risposte alla persona non riportare il verdetto tecnico negativo: resta
-interno. Un rilievo strutturale da solo non dimostra un blocco del lavoro.
+`C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto se riguarda una funzione
+essenziale, il guasto e' riprodotto nell'uso reale, i tentativi di riparazione
+sono esauriti e non esiste un'alternativa praticabile. Nelle email e nelle
+risposte alla persona il verdetto tecnico negativo resta interno. Un rilievo
+strutturale da solo non dimostra un blocco del lavoro.
 
 Il ciclo produce zero aggiornamenti intermedi. Quando Sal richiede la conferma
 finale prevista dalla missione, ne parte una sola dopo il collaudo completo.

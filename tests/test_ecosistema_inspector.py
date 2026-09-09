@@ -177,8 +177,24 @@ class EcosistemaInspectorTest(unittest.TestCase):
         )
         self.assertEqual(to_review.verdict, "NON PASSA")
         self.assertNotIn("NON PASSA", to_review.person_status())
+        incomplete_block = ecosistema_inspector.OperationalBlock(
+            function="apertura della casa operativa",
+            real_use_failed=True,
+        )
         self.assertEqual(
-            to_review.person_status("apertura della casa operativa"),
+            to_review.person_status(incomplete_block),
+            "FUNZIONA, CON ALCUNE COSE DA VALUTARE",
+        )
+
+        proven_block = ecosistema_inspector.OperationalBlock(
+            function="apertura della casa operativa",
+            real_use_failed=True,
+            essential_function=True,
+            repair_attempts_exhausted=True,
+            no_practical_workaround=True,
+        )
+        self.assertEqual(
+            to_review.person_status(proven_block),
             "C'E' UN PROBLEMA CHE BLOCCA: apertura della casa operativa",
         )
 
@@ -192,13 +208,62 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
         blocked_report = ecosistema_inspector._markdown(
             to_review,
-            blocked_function="apertura della casa operativa",
+            operational_block=proven_block,
         )
         self.assertIn(
             "- Situazione per la persona: **C'E' UN PROBLEMA CHE BLOCCA: "
             "apertura della casa operativa**",
             blocked_report,
         )
+
+    def test_untracked_credentials_and_hardcoded_business_text_are_review_items(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = self.make_target(tmp)
+            self.create_valid_room(target)
+            self.add_room_to_registry(target)
+            room = target / "app-iscrizioni"
+            room_map = room / "AGENTS.md"
+            room_map.write_text(
+                room_map.read_text(encoding="utf-8").replace(
+                    "NON APPLICABILE: nessun generatore",
+                    "`TESTI_EMAIL.md`",
+                ),
+                encoding="utf-8",
+            )
+            (room / "TESTI_EMAIL.md").write_text(
+                "# Testi email\n\nConferma iscrizione approvata.\n",
+                encoding="utf-8",
+            )
+            (room / "genera_documento.js").write_text(
+                "const testo = "
+                + repr(
+                    "Gentile cliente, confermiamo la tua iscrizione e ti "
+                    "invieremo tutte le informazioni necessarie per partecipare."
+                )
+                + ";\n",
+                encoding="utf-8",
+            )
+            (room / "google-token.json").write_text("{}\n", encoding="utf-8")
+
+            inspection = self.inspect(target)
+            relevant = {
+                finding.code: finding.severity
+                for finding in inspection.findings
+                if finding.code
+                in {
+                    "BUSINESS_CONTENT_HARDCODED_RISK",
+                    "CREDENTIAL_FILE_OUTSIDE_SECRETS",
+                }
+            }
+
+            self.assertEqual(
+                relevant,
+                {
+                    "BUSINESS_CONTENT_HARDCODED_RISK": "ATTENZIONE",
+                    "CREDENTIAL_FILE_OUTSIDE_SECRETS": "ATTENZIONE",
+                },
+            )
+            self.assertEqual(inspection.verdict, "PASSA CON ATTENZIONE")
 
     def make_family_archive(self, target: Path) -> Path:
         self.create_valid_room(target)

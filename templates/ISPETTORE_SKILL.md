@@ -134,8 +134,9 @@ Salva il verdetto tecnico `PASSA`, `PASSA CON ATTENZIONE` o `NON PASSA` nella
 fonte proprietaria. Nel messaggio visibile alla persona non scrivere `NON
 PASSA`: usa `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA VALUTARE` oppure
 `C'E' UN PROBLEMA CHE BLOCCA: [funzione]`. La terza formula e' ammessa soltanto
-quando una prova reale mostra che la funzione e' ferma o produce un risultato
-errato; un rilievo strutturale non basta. Poi indica:
+quando riguarda una funzione essenziale, il guasto e' riprodotto nell'uso reale,
+i tentativi di riparazione sono esauriti e non esiste un'alternativa praticabile;
+un rilievo strutturale non basta. Poi indica:
 
 - `Cosa funziona`;
 - `Cosa completiamo`;

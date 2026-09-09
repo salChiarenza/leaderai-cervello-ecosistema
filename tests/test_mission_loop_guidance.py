@@ -17,6 +17,10 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "TUTTO FUNZIONA",
             "FUNZIONA, CON ALCUNE COSE DA VALUTARE",
             "C'E' UN PROBLEMA CHE BLOCCA: [funzione]",
+            "funzione essenziale",
+            "uso reale",
+            "tentativi di riparazione",
+            "alternativa praticabile",
         ]
 
         for source in sources:

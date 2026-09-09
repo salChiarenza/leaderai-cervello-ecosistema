@@ -246,7 +246,7 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
   questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
 - L'email apre con `SITUAZIONE IN BREVE` e lo stato visibile `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA VALUTARE` oppure `C'E' UN PROBLEMA CHE BLOCCA: [funzione]`.
-  La formula grave richiede la prova della funzione ferma o errata; un rilievo strutturale non basta. Nella chat e nelle email alla persona non scrivere `NON PASSA`.
+  La formula grave richiede insieme: funzione essenziale, guasto riprodotto nell'uso reale, tentativi di riparazione esauriti e nessuna alternativa praticabile. Un rilievo strutturale non basta. Nella chat e nelle email alla persona non scrivere `NON PASSA`.
   Poi indica `Cosa funziona`, `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`; classificazioni e dettagli tecnici restano nelle fonti della casa.
 - Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
   proprietarie.

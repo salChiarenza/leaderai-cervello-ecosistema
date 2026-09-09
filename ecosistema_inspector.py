@@ -232,6 +232,26 @@ class Finding:
     detail: str
 
 
+@dataclass(frozen=True)
+class OperationalBlock:
+    function: str
+    real_use_failed: bool = False
+    essential_function: bool = False
+    repair_attempts_exhausted: bool = False
+    no_practical_workaround: bool = False
+
+    @property
+    def proven(self) -> bool:
+        return bool(self.function.strip()) and all(
+            (
+                self.real_use_failed,
+                self.essential_function,
+                self.repair_attempts_exhausted,
+                self.no_practical_workaround,
+            )
+        )
+
+
 @dataclass
 class Inspection:
     target: str
@@ -248,24 +268,27 @@ class Inspection:
             return "PASSA CON ATTENZIONE"
         return "PASSA"
 
-    def person_status(self, blocked_function: str | None = None) -> str:
+    def person_status(self, operational_block: OperationalBlock | None = None) -> str:
         """Traduce il controllo tecnico in una situazione comprensibile.
 
         Un rilievo strutturale, anche bloccante per la certificazione, non prova
         da solo che il lavoro della persona sia fermo. Il messaggio grave nasce
-        soltanto quando e' stata identificata la funzione realmente bloccata.
+        soltanto da un blocco operativo completo e provato.
         """
-        if blocked_function:
-            return f"C'E' UN PROBLEMA CHE BLOCCA: {blocked_function}"
+        if operational_block is not None and operational_block.proven:
+            return (
+                "C'E' UN PROBLEMA CHE BLOCCA: "
+                f"{operational_block.function.strip()}"
+            )
         if self.findings:
             return "FUNZIONA, CON ALCUNE COSE DA VALUTARE"
         return "TUTTO FUNZIONA"
 
-    def to_dict(self, blocked_function: str | None = None) -> dict:
+    def to_dict(self, operational_block: OperationalBlock | None = None) -> dict:
         return {
             "target": self.target,
             "verdict": self.verdict,
-            "person_status": self.person_status(blocked_function),
+            "person_status": self.person_status(operational_block),
             "standard_version": self.standard_version,
             "installed_version": self.installed_version,
             "rooms": [asdict(room) for room in self.rooms],
@@ -1558,7 +1581,7 @@ def _business_source_findings(target: Path, room_path: Path, archives=()) -> lis
             findings.append(
                 Finding(
                     "BUSINESS_CONTENT_HARDCODED_RISK",
-                    "BLOCKER",
+                    "ATTENZIONE",
                     path.relative_to(target).as_posix(),
                     "Il generatore contiene testo umano esteso nel codice: "
                     "portarlo nella fonte business dichiarata e mantenere PDF/Word "
@@ -3453,7 +3476,7 @@ def inspect_ecosystem(
                 findings.append(
                     Finding(
                         "CREDENTIAL_FILE_OUTSIDE_SECRETS",
-                        "BLOCKER",
+                        "ATTENZIONE",
                         rel.as_posix(),
                         "Configurazione credenziali fuori .secrets/. La history "
                         "del percorso non mostra commit; spostare e riprovare.",
@@ -3576,7 +3599,7 @@ def inspect_ecosystem(
 
 def _markdown(
     inspection: Inspection,
-    blocked_function: str | None = None,
+    operational_block: OperationalBlock | None = None,
 ) -> str:
     lines = [
         "# Ispettore Ecosistema",
@@ -3584,7 +3607,7 @@ def _markdown(
         f"- Cartella viva: `{inspection.target}`",
         f"- Standard vivo: `{inspection.standard_version}`",
         f"- Versione installata: `{inspection.installed_version or 'NON TROVATA'}`",
-        f"- Situazione per la persona: **{inspection.person_status(blocked_function)}**",
+        f"- Situazione per la persona: **{inspection.person_status(operational_block)}**",
         f"- Stato tecnico interno: **{inspection.verdict}**",
         "",
         "| Gravita | Codice | Percorso | Evidenza |",
@@ -3635,8 +3658,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--blocked-function",
         help=(
-            "Nome comprensibile della funzione realmente bloccata, da usare "
-            "solo dopo una prova operativa fallita."
+            "Candidato blocco operativo. Il solo nome non produce la formula "
+            "grave: servono tutte le prove previste dal modello."
         ),
     )
     parser.add_argument("--json", action="store_true", help="Emette JSON.")
@@ -3664,16 +3687,21 @@ def main() -> int:
             else None
         ),
     )
+    operational_block = (
+        OperationalBlock(function=args.blocked_function)
+        if args.blocked_function
+        else None
+    )
     if args.json:
         print(
             json.dumps(
-                inspection.to_dict(args.blocked_function),
+                inspection.to_dict(operational_block),
                 ensure_ascii=False,
                 indent=2,
             )
         )
     else:
-        print(_markdown(inspection, args.blocked_function), end="")
+        print(_markdown(inspection, operational_block), end="")
     return 0 if inspection.verdict == "PASSA" else 1
 
 

@@ -46,14 +46,17 @@ nella chat e nelle email usa una sola di queste formule:
 - `TUTTO FUNZIONA` quando il lavoro e' completato e provato;
 - `FUNZIONA, CON ALCUNE COSE DA VALUTARE` quando il lavoro e' utilizzabile e
   restano miglioramenti, verifiche o decisioni che non lo fermano;
-- `C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto quando una prova reale
-  dimostra che quella funzione non si puo' usare o produce un risultato errato.
+- `C'E' UN PROBLEMA CHE BLOCCA: [funzione]` soltanto quando sono vere insieme
+  quattro condizioni: riguarda una funzione essenziale; il guasto e' riprodotto
+  nell'uso reale; i tentativi di riparazione sono esauriti; non esiste
+  un'alternativa praticabile.
 
 Nel testo visibile non scrivere `NON PASSA`: confonde la conformita' interna
 con il valore del lavoro e fa sembrare perso un sistema che sta funzionando.
-Un rilievo strutturale, una versione arretrata o una cosa da completare non
-sono da soli prova di blocco. Se usi la terza formula, nomina sempre la funzione
-ferma, la prova osservata e la prossima azione.
+Un rilievo strutturale, una versione arretrata, testo business nel codice, un
+file locale fuori `.secrets/` ma mai entrato nella storia Git o una cosa da
+completare non sono da soli prova di blocco. Se usi la terza formula, nomina
+sempre la funzione ferma, la prova osservata e la prossima azione.
 
 ## Regola madre - standard contro caso reale
 
@@ -749,14 +752,16 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
 4. **Contenuto business.** Cerca testi o regole editabili duplicati tra Word,
    Markdown, database e codice. La fonte modificabile vive fuori dal codice,
    e' registrata nella stanza e viene letta dall'app; PDF e Word generati sono
-   derivati. Se la fonte manca o non e' valida, l'app fallisce in modo visibile
-   e non usa una copia hardcoded.
+   derivati. Testo umano esteso nel codice e' un elemento da valutare, non un
+   blocco: si sposta solo con collaudo dell'app. Se la fonte manca o non e'
+   valida, l'app fallisce in modo visibile e non usa una copia hardcoded.
 5. **Credenziali per percorso, non per contenuto.** Individua dai soli nomi e
    metadati configurazioni di posta, PEC, SMTP, OAuth, token e app password
    fuori `.secrets/`; non aprirle. Controlla `git ls-files` e la history del
    solo percorso. Se l'esposizione non puo' essere esclusa, blocca l'uso e
-   proponi rotazione; altrimenti sposta la configurazione, aggiorna il puntatore
-   dell'app e riprova.
+   proponi rotazione; se invece il percorso non e' mai entrato in Git,
+   registralo come elemento da valutare e spostalo soltanto insieme alla
+   modifica e alla prova dell'app.
 6. **Asset ad alto rischio.** Firma, timbro e sigillo vivono in `.secrets/` o
    altra casa protetta fuori Git. In `ecosistema/ASSET.md` registra soltanto
    metadati, casa protetta, uso e limite; ogni applicazione o invio richiede

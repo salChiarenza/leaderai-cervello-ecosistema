@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.21 - 09/09/2026
+
+- La formula visibile `C'E' UN PROBLEMA CHE BLOCCA` richiede ora quattro prove
+  insieme: funzione essenziale, guasto riprodotto nell'uso reale, tentativi di
+  riparazione esauriti e nessuna alternativa praticabile. Il solo nome di una
+  funzione non puo' piu' produrre l'allarme grave.
+- Testo business dentro un'app funzionante e file di accesso locali mai entrati
+  nella storia Git restano elementi da valutare e collaudare, non blocchi. Una
+  credenziale presente o passata da Git resta invece un blocco di sicurezza.
+- Origine: rilettura del checkup Vedere Meglio del 09/09/2026. Le 26 voci sui
+  testi delle app, i due file Google gia' esclusi da Git e gli otto documenti
+  lunghi non dimostravano alcuna funzione ferma.
+
 ## 0.6.20 - 09/09/2026
 
 - Separato lo stato visibile alla persona dal verdetto tecnico di conformita':
