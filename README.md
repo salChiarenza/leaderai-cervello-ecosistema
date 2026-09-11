@@ -41,7 +41,7 @@ la stessa lista di file obbligatori e rami agente. Browser, launcher e backup
 remoto sono controlli della macchina cliente dichiarati nello stesso contratto
 e restano `DA COLLAUDARE` nel gate anonimo.
 
-Il prodotto fornisce un telaio minimo, la stanza standard `Ecosystem Check` e un
+La repo fornisce un telaio minimo, la stanza standard `Ecosystem Check` e un
 metodo adattivo. Il telaio rende stabile il Cervello; Ecosystem Check governa
 controlli, interventi e storico; il metodo censisce il lavoro reale, riconosce
 le stanze business gia' vive e le collega alla mappa madre. La cartella madre e ogni vera stanza hanno sempre

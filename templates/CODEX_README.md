@@ -31,4 +31,4 @@ parte cieco. L'Ispettore lo verifica e lo ripara.
 
 Per il controllo completo il proprietario puo' dire `lancia l'Ispettore` o
 richiamare `$ispettore-ecosistema`. La skill apre la procedura unica
-`CHECKUP.md` del prodotto `Ecosistema per i clienti` su Google Drive.
+`CHECKUP.md` della repo `salChiarenza/leaderai-cervello-ecosistema`.

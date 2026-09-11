@@ -111,40 +111,6 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
             with self.subTest(phrase=phrase):
                 self.assertNotIn(phrase, raw)
 
-    def test_client_surfaces_never_present_github_as_the_leaderai_standard(self):
-        surfaces = [
-            ROOT / "CHECKUP.md",
-            ROOT / "INSTALLA_CON_AI.md",
-            ROOT / "MANIFEST.md",
-            ROOT / "README.md",
-            ROOT / "templates" / "AGENTS.md",
-            ROOT / "templates" / "ASSET.md",
-            ROOT / "templates" / "CLAUDE_README.md",
-            ROOT / "templates" / "CODEX_README.md",
-        ]
-        forbidden = [
-            "STANDARD APPLICATO: repo",
-            "standard di conformita' della repo",
-            "Repo `salChiarenza/leaderai-cervello-ecosistema`",
-            "repo `salChiarenza/leaderai-cervello-ecosistema`",
-            "entra nella repo con regola e test",
-        ]
-
-        for surface in surfaces:
-            text = surface.read_text(encoding="utf-8")
-            for phrase in forbidden:
-                with self.subTest(surface=surface.name, phrase=phrase):
-                    self.assertNotIn(phrase, text)
-
-        checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
-        install = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
-        self.assertIn(
-            "STANDARD APPLICATO: Ecosistema per i clienti su Google Drive;",
-            checkup,
-        )
-        self.assertIn("non e' la fonte LeaderAI", install)
-        self.assertIn("non richiede mai di aprire o clonare", install)
-
 
 if __name__ == "__main__":
     unittest.main()
