@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.22 - 11/09/2026
+
+- Eliminati dai fogli letti dal cliente i riferimenti che presentavano la repo
+  tecnica come standard o destinazione delle lezioni: lo standard applicato e'
+  ora sempre `Ecosistema per i clienti` su Google Drive.
+- Chiarito che un eventuale GitHub della fase backup appartiene soltanto al
+  cliente e non richiede mai la repo tecnica LeaderAI.
+- Allineati checkup, manifest, ingressi Claude/Codex, registro asset e modulo
+  Portafogli; una prova automatica impedisce che GitHub torni a essere descritto
+  come fonte LeaderAI nelle superfici del cliente.
+- Origine: controllo della missione Pastore dell'11/09/2026, dove il modello
+  finale del checkup contraddiceva la regola Drive-first dichiarata in testa.
+
 ## 0.6.21 - 09/09/2026
 
 - La formula visibile `C'E' UN PROBLEMA CHE BLOCCA` richiede ora quattro prove

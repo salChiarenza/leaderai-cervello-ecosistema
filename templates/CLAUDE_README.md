@@ -26,7 +26,7 @@ L'Ispettore lo verifica e lo ripara.
 
 Per il controllo completo il proprietario puo' dire `lancia l'Ispettore` o
 usare `/ispettore-ecosistema`. La skill apre la procedura unica `CHECKUP.md`
-della repo `salChiarenza/leaderai-cervello-ecosistema`.
+del prodotto `Ecosistema per i clienti` su Google Drive.
 
 La memoria canonica e' dichiarata nell'`AGENTS.md` radice. Su ogni computer,
 `~/.claude/settings.json` deve impostare `autoMemoryDirectory` con forma `~/...`

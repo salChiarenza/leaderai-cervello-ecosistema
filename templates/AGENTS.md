@@ -228,7 +228,7 @@ per ogni compito, insieme all'Autoprova.
 - **Materie esperte:** verifica e cita la fonte ufficiale.
 - **Lezioni in file:** promuovi la correzione in una fonte stabile e segnala nel
   report la `LEZIONE CANDIDATA` con caso, causa, riparazione, regola e prova;
-  ogni problema ripetibile torna a LeaderAI e diventa controllo della repo.
+  ogni problema ripetibile torna a LeaderAI e diventa controllo del prodotto corrente su Drive.
 - **Solo bisogno vero:** nuovi pezzi con problema osservato, collaudo e, per
   costruzioni grandi, approvazione del proprietario.
 - **Occhio laterale:** segnala doppioni, dati sensibili e file fuori posto;

@@ -832,7 +832,7 @@ nasce da una riga letta e citata.
 
 Il perimetro di questo passo e' l'uso: quali strumenti entrano nelle giornate e
 quali restano fermi. La misura della spesa e del consumo appartiene al prodotto
-`Il Consigliere` (repo `salChiarenza/il-consigliere`).
+`Il Consigliere`, nella fonte corrente indicata dal catalogo LeaderAI su Drive.
 
 ## Passo 2 — Ecosistema (solo se il Passo 1 passa)
 
@@ -970,7 +970,7 @@ CHECKUP LEADERAI — [data]
 Doc ufficiale letta: [pagine aperte oggi]
 FONTI UFFICIALI CONFRONTATE
 fonte | ruolo | regola/capacita' confrontata | stato osservato | scostamento/riparazione | prova | data
-STANDARD APPLICATO: repo salChiarenza/leaderai-cervello-ecosistema;
+STANDARD APPLICATO: Ecosistema per i clienti su Google Drive;
 MANIFEST.md; templates/AGENTS.md; templates/STANZA_AGENTS.md;
 templates/STANZA_FONTE.md; templates/ISPETTORE_SKILL.md; docs ufficiali vive
 per la parte tecnica.
@@ -1045,8 +1045,8 @@ RIPARATO OGGI: per ogni voce — cosa era rotto → cosa ho fatto → prova.
 RESTA ALL'UMANO: solo permessi/accessi/scelte, col gesto preciso richiesto.
 LEZIONE CANDIDATA: nessuna oppure caso -> causa -> riparazione -> regola
 generale -> prova che avrebbe intercettato l'errore. Ogni problema ripetibile
-va restituito a LeaderAI: dopo validazione entra nella repo con regola e test e
-diventa un controllo dei checkup successivi.
+va restituito a LeaderAI: dopo validazione entra nel prodotto corrente su Drive
+con regola e test e diventa un controllo dei checkup successivi.
 ```
 
 Se l'ambiente e' quasi vuoto, non dare una pagella piena di rossi: proponi di

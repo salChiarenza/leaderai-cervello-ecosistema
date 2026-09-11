@@ -593,6 +593,9 @@ gia' uso.
    esclude i segreti. Se manca, crealo prima di proseguire. Questo vale sempre.
 2. DOMANDA 2 - come fare il backup. [UMANO]
    Presentami le due opzioni e fammi scegliere:
+   L'eventuale GitHub di questa fase e' soltanto il backup privato della casa
+   del cliente: non e' la fonte LeaderAI e non richiede mai di aprire o clonare
+   una repository LeaderAI.
    - GitHub privato: copia su una repo privata. Sicuro, ma serve un account
      GitHub. Una volta configurato, l'agente salva localmente a fine sessione
      e propone il push quando esistono commit da pubblicare. Il push parte

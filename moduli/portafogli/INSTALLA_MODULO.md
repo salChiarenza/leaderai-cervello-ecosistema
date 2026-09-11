@@ -2,13 +2,13 @@
 
 ## Missione
 
-Lavora sulla cartella viva del proprietario. Usa questa repo come standard e
-la cartella viva come caso reale.
+Lavora sulla cartella viva del proprietario. Usa il prodotto corrente su Drive
+come standard e la cartella viva come caso reale.
 
 1. Individua la cartella viva dai segnali di attività: istruzioni, memoria,
    fonti, report, file recenti e connettori provati.
-2. Verifica che il Cervello passi il `CHECKUP.md` della repo. Ripara gli
-   scostamenti tecnici riparabili e registra gli interventi.
+2. Verifica che il Cervello passi il `CHECKUP.md` del prodotto corrente su
+   Drive. Ripara gli scostamenti tecnici riparabili e registra gli interventi.
 3. Censisci le cartelle e le capacita' Portafogli gia' presenti. Classifica
    stanze, fonti, output, skill, script e archivi. Individua la stanza che
    possiede davvero la responsabilita' business, lo stato e le decisioni del

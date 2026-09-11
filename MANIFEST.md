@@ -9,13 +9,14 @@ Portare una cartella cliente a uno standard minimo operativo:
 
 ## Ruolo del Manifest
 
-Questo file e' lo standard di conformita' della repo `salChiarenza/leaderai-cervello-ecosistema`.
+Questo file e' lo standard di conformita' del prodotto `Ecosistema per i clienti`
+su Google Drive.
 
 La cartella viva del cliente e' il caso reale. Il checkup non giudica a
 sensazione: confronta il caso reale con questo Manifest, con
 `templates/AGENTS.md`, `templates/STANZA_AGENTS.md`,
 `templates/STANZA_FONTE.md` e con le istruzioni
-operative della repo. Se qualcosa manca, e' fuori standard: l'agente lo ripara,
+operative del prodotto. Se qualcosa manca, e' fuori standard: l'agente lo ripara,
 lo prova e aggiorna la fonte proprietaria.
 
 `install_contract.json` traduce questo standard nel contratto macchina del
@@ -38,7 +39,7 @@ Deve:
 
 ## Contratto architetturale adattivo
 
-La repo insegna **come leggere e governare** un Ecosistema. Il nome e il numero
+Il prodotto insegna **come leggere e governare** un Ecosistema. Il nome e il numero
 delle stanze nascono dal lavoro reale del proprietario.
 
 La Fase 1 monta la stessa infrastruttura comune nella casa di Sal e in ogni
@@ -342,7 +343,7 @@ README e Manifest lo richiamano senza duplicarne il corpo.
 
 ## Modalita' agente
 
-La repo resta unica. La cartella madre e ogni vera stanza mantengono sempre il
+Il prodotto resta unico. La cartella madre e ogni vera stanza mantengono sempre il
 telaio comune `AGENTS.md` + `CLAUDE.md`. La modalita' seleziona soltanto la
 configurazione specifica dell'agente reale del cliente:
 
