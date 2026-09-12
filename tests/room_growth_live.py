@@ -37,6 +37,21 @@ def quotes_reconciled(text):
     return found == expected
 
 
+def notes_reconciled(room, before_paths, original_date):
+    """La soglia verde non basta: il caso duplicato resta nella stessa fonte."""
+    paths = {p.relative_to(room).as_posix() for p in room.rglob("*.md")}
+    notes = room / "appunti.md"
+    text = notes.read_text() if notes.is_file() else ""
+    dates = {original_date, date.fromisoformat(original_date).strftime("%d/%m/%Y")}
+    return {
+        "manutenzione_senza_nuovi_file_md": paths == before_paths,
+        "appunti_informazione_conservata": "Appunto operativo datato da conservare." in text
+            and any(day in text for day in dates) and "801" in text,
+        "appunti_duplicati_accorpati": text.count("Appunto operativo datato da conservare.") == 1
+            and len(text.splitlines()) < 100,
+    }
+
+
 
 def native_session_matches(agent, transcript, receipt):
     """Incrocia il callback con la sessione osservata e i suoi comandi.
@@ -160,7 +175,9 @@ def run_growth(agent, evidence_dir, timeout=300):
             checks["nessun_agente_aggiunto"] = all((root / p).read_bytes() == data for p, data in protected.items()) and set(protected) == {
                 p.relative_to(root).as_posix() for base in (".agents/skills", ".claude/skills") for p in (root / base).rglob("SKILL.md")}
             big = room / "appunti.md"
-            big.write_text("# Appunti\n\n## " + (date.today() - timedelta(days=14)).isoformat() + " — Prova storica\n\n" + "Appunto operativo datato da conservare.\n" * 801)
+            history_date = (date.today() - timedelta(days=14)).isoformat()
+            big.write_text("# Appunti\n\n## " + history_date + " — Prova storica\n\n" + "Appunto operativo datato da conservare.\n" * 801)
+            before_notes_paths = {p.relative_to(room).as_posix() for p in room.rglob("*.md")}
             config = json.loads(config_path.read_text())
             config["hooks"]["Stop"] = []
             config_path.write_text(json.dumps(config, indent=2))
@@ -168,6 +185,7 @@ def run_growth(agent, evidence_dir, timeout=300):
             (evidence_dir / "difetti-iniettati.txt").write_text("\n".join(measured))
             checks["misura_due_difetti"] = any("appunti.md" in x for x in measured) and any(config_path.name in x for x in measured)
             turn("manutenzione", "Esegui la manutenzione della casa e registra gli esiti nelle fonti previste.")
+            checks.update(notes_reconciled(room, before_notes_paths, history_date))
             evidence_text = "\n".join(p.read_text(errors="replace") for p in root.rglob("*.md")
                 if p.name not in {"AGENTS.md", "SKILL.md", "CLAUDE.md", "appunti.md"} and ".git" not in p.parts)
             checks["difetto_md_preso_in_carico"] = "appunti.md" in evidence_text

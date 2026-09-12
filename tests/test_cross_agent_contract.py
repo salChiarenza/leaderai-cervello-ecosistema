@@ -198,7 +198,8 @@ class CrossAgentContractTest(unittest.TestCase):
         skill = self.read("templates/MANUTENTORE_SKILL.md")
         self.assertIn("name: manutentore-ecosistema", skill)
         self.assertIn("guardiano_stanze.sh --misura", skill)
-        self.assertIn("_archivio_", skill)
+        # Il nome di un archivio non prova manutenzione: la prova nativa
+        # controlla accorpamento nella fonte, conservazione e assenza di copie.
         self.assertIn("48 ore", skill)
         self.assertIn("Vietato, sempre: eliminare", skill)
         self.assertIn("ecosystem-check/CONTROLLI.md", skill)

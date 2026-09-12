@@ -221,10 +221,11 @@ moduli restano capacita' collegate alla cartella madre o alla stanza
 proprietaria. Una nuova stanza viene proposta solo quando emerge una
 responsabilita' business autonoma con stato e decisioni propri.
 
-Riparazioni meccaniche come ponti rotti, puntatori mancanti e registri non
-allineati possono essere applicate e provate. Spostamenti, fusioni, nuove
-stanze, eliminazioni e cambi di proprieta' restano una `PROPOSTA STRUTTURALE`
-da approvare.
+Riparazioni meccaniche e riconciliazione dei contenuti verificati possono
+essere applicate e provate secondo `ecosystem-check/STANDARD_REPARTO.md`,
+sezione Igiene dei file. Accorpare testo nella sua fonte non crea una stanza.
+Spostamenti o fusioni di stanze, eliminazioni di file e cambi di proprieta'
+restano una `PROPOSTA STRUTTURALE` da approvare.
 
 ### Unicita' delle fonti e ciclo di vita
 

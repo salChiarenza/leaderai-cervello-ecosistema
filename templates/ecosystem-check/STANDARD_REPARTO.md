@@ -46,12 +46,37 @@ controllati. Una fonte business puo' essere Word e usare @/ dalla cartella madre
 
 ## Igiene dei file
 
-- `AGENTS.md`, `MEMORY.md` e `AGENT_CHAT.md`: massimo 350 righe o 24 KiB.
-- Gli altri Markdown entrano in revisione oltre 800 righe o 80 KiB.
-- Un file grande si accorcia quando mescola responsabilita', duplica fonti o
-  contiene dettagli che appartengono a una procedura o a un reparto.
-- Non si spezza un file solo per il numero di righe: prima si identifica la
-  responsabilita' che non gli appartiene.
+Il criterio e' utilita' e correttezza, anche sotto soglia. L'agente che modifica
+e il Manutentore al giro esistente rileggono il reparto: funzioni da servire,
+istruzioni, memoria, stato, file e collegamenti. La dimensione e' solo un segnale
+(guide 350 righe/24 KiB; altri Markdown 800 righe/80 KiB), non il collaudo.
+
+Nella manutenzione gia autorizzata:
+1. Apri la fonte proprietaria e le prove attuali; identifica cosa serve ancora.
+   Recenza e mancato uso, da soli, non provano correttezza o inutilita'.
+2. Aggiorna la voce esistente: unisci doppioni, sostituisci la regola superata,
+   conserva eccezioni e decisioni valide. Ripetizioni identiche senza eventi
+   distinti si accorpano nella stessa fonte: conserva testo, data e numero di
+   occorrenze, non tutte le copie. Un obbligo reale di conservazione integrale
+   resta protetto; nel dubbio lascia la fonte intatta e il problema aperto.
+   Correggi indice, richiami e utilizzatori. `CLAUDE.md` resta un ponte.
+3. Lo stato vivo contiene solo situazione corrente, prossima azione e problemi
+   aperti. I cicli conclusi si riassumono nel registro storico gia esistente,
+   con data, esito e prova; non si crea un archivio per ogni passaggio.
+4. Togli testo o collegamenti interni ridondanti solo dopo aver provato la fonte
+   che li sostituisce e controllato chi li usa. File interi, connessioni esterne,
+   permessi, obblighi di conservazione e scelte business non si eliminano per
+   anzianita': se la destinazione o il mandato non sono certi, resta una
+   decisione motivata nella fonte esistente, non un nuovo documento.
+5. Ripeti un percorso reale dalla richiesta al risultato e il richiamo della
+   memoria interessata. Un verificatore distinto confronta prima/dopo:
+   obblighi, prove e problemi aperti conservati, duplicati risolti, collegamenti
+   validi. Un secondo giro sullo stesso fatto non crea copie o nuovi incarichi.
+
+Gli Esiti esistenti riportano fonte confrontata, cosa resta/cambia/esce,
+misura prima/dopo e prova. Non basta contare righe tolte o spostarle altrove.
+Se la contraddizione non e' risolta dalle prove, conserva le due indicazioni
+come dubbio e assegna il responsabile; non scegliere la piu recente a caso.
 
 ## Sequenza di creazione
 

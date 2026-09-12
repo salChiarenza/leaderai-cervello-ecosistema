@@ -98,6 +98,23 @@ class RoomMaintenanceTest(unittest.TestCase):
         self.assertFalse(quotes_reconciled(text.replace("100 | 0 | pagata", "90 | 10 | pagata")))
         self.assertFalse(quotes_reconciled(text + "\n| PRATICA-A | 100 | 0 | 100 |"))
 
+    def test_native_maintenance_oracle_rejects_moving_duplicates_to_a_new_archive(self):
+        from tests.room_growth_live import notes_reconciled
+        notes = self.room / "appunti.md"
+        original = "# Appunti\n\n## 29/08/2026\n\n" + "Appunto operativo datato da conservare.\n" * 801
+        notes.write_text(original)
+        before = {p.relative_to(self.room).as_posix() for p in self.room.rglob("*.md")}
+        self.assertFalse(all(notes_reconciled(self.room, before, "2026-08-29").values()))
+        notes.write_text("# Appunti\nVedi appunti_archivio.md.\n")
+        archive = self.room / "appunti_archivio.md"
+        archive.write_text(original)
+        self.assertFalse(all(notes_reconciled(self.room, before, "2026-08-29").values()))
+        archive.unlink()
+        notes.write_text("# Appunti\n\n## 29/08/2026\n\nAppunto operativo datato da conservare.\n\nAccorpate 801 occorrenze identiche.\n")
+        self.assertTrue(all(notes_reconciled(self.room, before, "2026-08-29").values()))
+        notes.write_text("# Appunti\n\nNessun appunto.\n")
+        self.assertFalse(all(notes_reconciled(self.room, before, "2026-08-29").values()))
+
     def test_receipt_requires_independent_native_session_and_no_manual_writer(self):
         from tests.room_growth_live import native_session_matches
         receipt = {"sessione": "native-1"}

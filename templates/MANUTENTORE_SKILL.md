@@ -1,6 +1,6 @@
 ---
 name: manutentore-ecosistema
-description: Usa quando l'utente dice fai manutenzione, lancia il Manutentore, pulisci la casa, i file sono troppo grandi, archivia il vecchio, oppure quando l'automazione giornaliera di manutenzione parte. Misura tutta la casa con il guardiano, ripara da solo le cose meccaniche e reversibili, riporta al proprietario il resto.
+description: Usa quando l'utente dice fai manutenzione, lancia il Manutentore, pulisci la casa, i file sono troppo grandi, archivia il vecchio, oppure quando l'automazione giornaliera di manutenzione parte. Riconcilia e snellisce le fonti esistenti, ripara i collegamenti verificati e riporta al proprietario le eccezioni.
 ---
 
 # Manutentore Ecosistema
@@ -39,44 +39,34 @@ reversibili e restano nella casa.
    non aspettare il giorno dopo. Il guardiano Stop ferma una nascita incompleta.
    Per cambi realizzati fuori dall'agente, la misura giornaliera recupera i difetti.
 
-## 2. Ripara (solo queste cose, per ogni stanza)
+## 2. Ripara e semplifica
 
-Ammesso, senza chiedere:
+Applica `ecosystem-check/STANDARD_REPARTO.md`, sezione «Igiene dei file»:
+e' la fonte comune per manutenzione di contenuti, memoria e collegamenti.
+Fa parte del mandato anche correggere e accorpare testi sulla base delle
+prove, preservando obblighi, eccezioni, problemi aperti e storico utile.
+Il precedente divieto generale di riscrivere contenuti e' sostituito da
+questo criterio: dubbi non risolti dalle fonti vanno al responsabile.
 
-- **Gancio standard mancante o scollegato**: confronta lo script e la
-  configurazione della versione gia installata, poi ripristina soltanto quel
-  componente e il suo collegamento. Preserva gli altri hook e impostazioni.
-  Ripeti il controllo e verifica la ricevuta del successivo evento Stop;
-  non attribuire un guasto di codice sconosciuto a una semplice configurazione.
-  Se la piattaforma richiede fiducia o un permesso nuovo, registra quel gesto
-  umano; non inventare un'avvenuta attivazione. Nessuna routine aggiuntiva.
+Riusa fonti, registri, controlli e routine esistenti. Un nuovo guasto si
+corregge prima nel componente che gia svolge quella funzione. Non aggiungere
+un'altra regola o un altro guardiano per evitare di ripararlo.
 
-- **Documento oltre 800 righe o 80 KiB** (file diverso da mappe e chat): sposta
-  le sezioni datate (`## gg/mm/aaaa ...` o `## aaaa-mm-gg ...`) piu' vecchie di
-  7 giorni in `<nome>_archivio_<aaaa-mm-gg>.md` nella stessa cartella, in cima
-  al file di archivio, con una riga di intestazione che dice da dove vengono e
-  quando. Nel file vivo lascia una riga `> Archivio: <nome file>`. Se il file
-  non ha sezioni datate, non toccarlo: segnalalo al proprietario.
-- **Mappa oltre 350 righe** (`AGENTS.md`, `MEMORY.md`): non tagliare. Segnala
-  al proprietario con il numero di righe: una mappa si accorpa con giudizio.
-- **`AGENT_CHAT.md` oltre 350 righe o con note piu' vecchie di 48 ore**: sposta
-  le note vecchie in `AGENT_CHAT_archivio_<aaaa-mm-gg>.md` accanto, lasciando
-  in chat le note delle ultime 48 ore e la riga `> Note piu' vecchie: <file>`.
-- **Percorso nascosto al proprietario**: rendilo visibile (`chflags nohidden`
-  su Mac, `attrib -h` su Windows).
-- **Skill gemelle diverse** (`.claude/skills/X/SKILL.md` e
-  `.agents/skills/X/SKILL.md`): confronta la fonte comune e correggi solo
-  divergenze accertate, preservando gli adattamenti nativi; il file piu recente
-  non e automaticamente quello giusto.
+Restano ammesse le riparazioni meccaniche:
+- gancio scollegato: ripristina il collegamento alla fonte installata, preserva
+  gli altri ganci e verifica l'evento successivo; non inventare permessi;
+- skill gemelle: confronta la fonte comune, preserva differenze native;
+- percorso nascosto: rendilo visibile al proprietario;
+- chat oltre 48 ore: promuovi le decisioni valide e riassumi nello storico
+  esistente. Non creare un archivio o un altro stato per far rientrare una soglia;
+  spostare tutto altrove non e' snellimento. Il contenuto dubbio resta nella
+  sua fonte e il problema resta aperto, senza una copia aggiuntiva.
 
-Vietato, sempre: eliminare file o cartelle, riscrivere contenuti, spostare
-file fuori dalla loro stanza, toccare `.secrets/`, `.git/`, `logs/`, inviare
-email o messaggi, creare copie `_v2`/`_finale`, creare nuove stanze. Cartelle
-vuote, copie parallele e classi ambigue richiedono una decisione del
-responsabile. Per una stanza gia richiesta, completare i pezzi mancanti
-rientra nel mandato originario: non serve un secondo consenso.
-Contraddizioni non risolvibili dalle fonti restano aperte con le due righe
-in conflitto e il responsabile; non riscrivere alla cieca.
+Vietato, sempre: eliminare file o cartelle senza un mandato specifico;
+modifiche business, accessi a segreti, invii o disattivazioni esterne non sono
+impliciti nella pulizia.
+`.secrets/`, `.git/` e prove tecniche originali restano protetti.
+L'Ispettore verifica la semplificazione e ripete il passaggio reale.
 
 ## 3. Rimisura
 
@@ -89,13 +79,13 @@ riuscite; quelle rimaste sono per il proprietario.
   riscontro, correzione, prova riletta e residui con responsabile. Per nascita
   registra il primo passaggio richiesta -> fonte -> output -> reparto a valle;
   una connessione esterna e attiva solo dopo una lettura riuscita autorizzata.
-- In `ecosystem-check/STATO.md`, sezione `## Manutenzione giornaliera`, in cima:
+- In `ecosystem-check/STATO.md`, sezione `## Misure giornaliere`, in cima:
   data, quante cose trovate, quante riparate (cosa e dove), quante restano e a
   chi. Massimo 5 righe, massimo 7 giornate conservate: le piu' vecchie si
   tolgono.
 - Se hai riparato almeno una cosa, una riga in
   `ecosystem-check/REGISTRO_CONTROLLI.md` con data, perimetro, trovati,
-  chiusi, aperti, esito `MANUTENZIONE`, prova (il file di archivio creato).
+  chiusi, aperti, esito `MANUTENZIONE`, prova nella fonte esistente.
 - Rileggi `ecosystem-check/CONTROLLI.md`: ogni riga `MANCA` va ripetuta al
   proprietario finche' non diventa `ATTIVO`.
 

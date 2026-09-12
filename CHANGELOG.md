@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.24 - 12/09/2026
+
+- Il Manutentore riconcilia istruzioni, memoria e stato anche sotto soglia:
+  aggiorna e accorpa nella fonte esistente, conservando obblighi e prove.
+- Tolto il divieto generale di riscrivere contenuti; dubbi, eliminazione di
+  file e azioni esterne mantengono i loro limiti. Nessun nuovo guardiano o timer.
+- Stato corrente distinto dai cicli conclusi; verifica del prima/dopo e del
+  secondo giro senza duplicati nello standard unico del reparto.
+- La prova di manutenzione respinge anche la falsa riduzione ottenuta
+  spostando i duplicati in un nuovo archivio; conserva testo, data e occorrenze.
+
 ## 0.6.23 - 12/09/2026
 
 - Ogni reparto nasce con responsabile, inneschi e controlli di manutenzione,
