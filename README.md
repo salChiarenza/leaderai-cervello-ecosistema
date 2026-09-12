@@ -218,14 +218,18 @@ Modulo specifico gia' disponibile:
   la cartella madre o la stanza proprietaria e integra il modulo senza creare
   una stanza concorrente.
 
-Prodotto-agente opzionale gia' disponibile nel catalogo separato
-`LeaderAI Ecosystem/Agenti`:
+Prodotti-agente opzionali gia' disponibili nel catalogo
+`LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti`:
 
 - `Agente Commercialista` - installazione guidata, fonte fiscale
   unica, procedura e adattatori per Claude Code e Codex. Si integra nella
   stanza amministrativa emersa dal lavoro reale; non contiene dati personali
   e non sostituisce il professionista abilitato. Non fa parte della release
   dell'Ecosistema; la cartella tecnica locale resta soltanto l'officina.
+- `Ispettore del Bando` - installazione Claude guidata, matrice unica della
+  pratica, indice analitico delle coppie fattura-pagamento, verifica di prove e
+  firme, report e ricevuta. Il titolare conserva accessi e azioni irreversibili;
+  il pacchetto non contiene fascicoli o dati cliente.
 
 Il Cervello include anche la **mappa comunicazione**: stato business nel file
 proprietario della stanza, storia tecnica nel solo `logs/install-log.md`, asset

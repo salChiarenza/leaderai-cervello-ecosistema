@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.6.22 - 12/09/2026
+
+- Nasce `Ispettore del Bando`, prodotto-agente installabile per Claude: legge
+  fonti ufficiali e fascicolo locale, completa il lavoro reversibile e usa i
+  soli verdetti `PRONTO`, `BLOCCATO` e `IN ATTESA`.
+- Il verificatore legge ogni riga dell'indice spese, controlla unicita,
+  percorsi, impronte, date, importi e totali; una quadratura dichiarata o una
+  prova modificata non apre firma o invio.
+- Firma CAdES, pagamento e invio sono sequenziali: dopo la firma servono file
+  `.p7m`, firmatario e ricevuta di validazione provati; `PRESENTATA` richiede
+  ricevuta o protocollo finale integro.
+- Il caso Villa ha guidato il perimetro, ma il pacchetto non contiene dati o
+  documenti del cliente. Sessantasette prove automatiche e collaudo indipendente
+  sotto pressione coprono i confini principali, compresi i tentativi di
+  restringere cartelle o tipi di file dell'inventario, nascondere file dietro
+  collegamenti simbolici, usare lo stesso contenuto come fattura e pagamento,
+  firmare il file sbagliato, perdere la continuita con l'originale, usare date
+  fittizie o future, invertire l'ordine temporale, mostrare un pagamento senza
+  avviso completo o con importi non monetari, riusare file firmati, avvisi,
+  riepiloghi o ricevute tra i sette ruoli critici, collegare il protocollo a
+  una pratica diversa, usare fonti datate nel futuro o saltare il pagamento
+  prima dell'invio.
+
 ## 0.6.21 - 09/09/2026
 
 - La formula visibile `C'E' UN PROBLEMA CHE BLOCCA` richiede ora quattro prove

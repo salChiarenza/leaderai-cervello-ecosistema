@@ -75,8 +75,9 @@ Moduli professionali versionati:
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
 
-Prodotti-agente opzionali installabili, consegnati dal catalogo separato
-`LeaderAI Ecosystem/Agenti` e non inclusi nella release dell'Ecosistema:
+Prodotti-agente opzionali installabili, consegnati dal catalogo
+`LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti` e non inclusi nella
+release dell'Ecosistema:
 
 - `Agente Commercialista` - ruolo amministrativo-fiscale con una sola
   fonte operativa, procedura comune e adattatori Claude Code/Codex. Si integra
@@ -84,6 +85,11 @@ Prodotti-agente opzionali installabili, consegnati dal catalogo separato
   azioni irreversibili, il professionista abilitato mantiene giudizio e firma.
   La sorgente tecnica storica e' `Agenti/Agente Commercialista/`, esclusa dal
   caricamento dell'Ecosistema e sincronizzata nella propria cartella Drive.
+- `Ispettore del Bando` - ruolo per domande di bando, voucher e contributi:
+  lavora sulle fonti ufficiali e sul fascicolo locale, controlla ogni coppia di
+  spesa, blocca prove incoerenti e lascia al titolare accesso, firma,
+  dichiarazioni, pagamento e invio finale. La sorgente e'
+  `Agenti/Ispettore del Bando/`, senza dati del caso Villa.
 
 La mappa moduli vive nelle fonti proprietarie della casa e mantiene lo stato per
 PEC/email certificata, email/calendario, Drive/cartelle, CRM/gestionale, plugin,

@@ -1,0 +1,1 @@
+coppia_id,fattura_path,fattura_sha256,pagamento_path,pagamento_sha256,fornitore_id,numero_fattura,data_fattura,data_pagamento,riferimento_pagamento,importo_eur,stato,attesa_controllo_id

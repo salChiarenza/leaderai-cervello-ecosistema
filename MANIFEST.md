@@ -471,15 +471,16 @@ opzionali: non fanno parte del telaio minimo.
 
 ## Agenti opzionali
 
-I prodotti-agente vivono nel catalogo separato `LeaderAI Ecosystem/Agenti` e entrano nella
-casa soltanto quando un processo reale li richiede. Non fanno parte della
+I prodotti-agente vivono nel catalogo
+`LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti` e entrano nella casa
+soltanto quando un processo reale li richiede. Non fanno parte della
 release dell'Ecosistema, non fanno parte del telaio minimo e non creano
 automaticamente una stanza o una routine separata. Una skill semplice e' una
 capacita' interna, non un prodotto del catalogo.
 
 ### Agente Commercialista
 
-Casa di consegna: `LeaderAI Ecosystem/Agenti/Agente Commercialista`.
+Casa di consegna: `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti/Agente Commercialista`.
 Sorgente tecnica storica: `Agenti/Agente Commercialista/`, esclusa dalla
 release dell'Ecosistema.
 
@@ -493,6 +494,23 @@ Il pacchetto passa quando:
   professionale;
 - si aggancia a un Manutentore esistente e resta silenzioso senza novita';
 - non contiene dati personali del caso da cui e' stato generalizzato.
+
+### Ispettore del Bando
+
+Casa di consegna: `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti/Ispettore del Bando`.
+Sorgente: `Agenti/Ispettore del Bando/`, esclusa dalla release dell'Ecosistema.
+
+Il pacchetto passa quando:
+
+- trova la cartella viva della pratica e continua la missione esistente;
+- rilegge fonti ufficiali, modulistica e portale dell'edizione corrente;
+- collega ogni requisito a un'evidenza integra e non accetta checklist dichiarate;
+- legge ogni riga dell'indice spese e verifica file, impronte, unicita, date,
+  importi, stati e totali;
+- usa soltanto `PRONTO`, `BLOCCATO` e `IN ATTESA` e mostra un gesto umano per volta;
+- apre pagamento o invio soltanto dopo la validazione della firma digitale;
+- considera la pratica presentata soltanto con ricevuta o protocollo finale;
+- non contiene dati, documenti o percorsi del caso Villa.
 
 ### Sistema Portafogli Core-Satellite
 

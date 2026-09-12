@@ -38,8 +38,9 @@ finale prevista dalla missione, ne parte una sola dopo il collaudo completo.
 
 La 0.6.17 e' stata caricata e riletta integralmente da Drive: 135 elementi
 attesi, 139 riletti, zero mancanti, zero diversi, zero extra non consentiti e
-pacchetto Voce Mac + Windows `PASSA`. Il catalogo separato `LeaderAI Ecosystem/Agenti`
-contiene il pacchetto completo `Agente Commercialista`; la lezione Systeme.io
+pacchetto Voce Mac + Windows `PASSA`. Il catalogo
+`LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti` contiene i pacchetti
+`Agente Commercialista` e `Ispettore del Bando`; la lezione Systeme.io
 lo collega senza duplicarlo dentro l'Ecosistema. GitHub conserva soltanto il
 backup successivo a questa prova `PASSA`.
 

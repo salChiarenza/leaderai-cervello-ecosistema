@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "pratica": {
+    "nome": "Nome della pratica",
+    "ente": "Ente concedente",
+    "edizione": "Edizione corrente",
+    "fase": "preparazione"
+  },
+  "fonti_ufficiali": [
+    {
+      "nome": "Pagina, bando e modulistica ufficiali",
+      "url": "https://ente.example/percorso-ufficiale",
+      "verificata_il": "aaaa-mm-gg",
+      "stato": "BLOCCO",
+      "evidenza_id": "fonte-bando"
+    }
+  ],
+  "evidenze": [
+    {
+      "id": "fonte-bando",
+      "path": "fonti/bando-ufficiale.pdf",
+      "sha256": "calcolare-dopo-la-verifica-del-file"
+    },
+    {
+      "id": "indice-fascicolo",
+      "path": "prove/indice-fascicolo.csv",
+      "sha256": "calcolare-dopo-la-verifica-del-file"
+    },
+    {
+      "id": "indice-spese",
+      "path": "INDICE_SPESE.csv",
+      "sha256": "calcolare-dopo-la-verifica-del-file"
+    },
+    {
+      "id": "output-da-firmare",
+      "path": "output/domanda-finale.pdf",
+      "sha256": "calcolare-dopo-la-verifica-del-file"
+    },
+    {
+      "id": "riepilogo-invio",
+      "path": "output/riepilogo-finale-portale.pdf",
+      "sha256": "calcolare-dopo-la-verifica-del-file"
+    }
+  ],
+  "controlli": [
+    {
+      "id": "requisiti-impresa",
+      "voce": "Requisiti dell'impresa",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Verificare ogni requisito sulla fonte ufficiale e sui documenti intestati."
+    },
+    {
+      "id": "progetto-costi",
+      "voce": "Coerenza tra progetto, fornitori e costi",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Chiudere la matrice progetto-costi con prove."
+    },
+    {
+      "id": "moduli-allegati",
+      "voce": "Moduli e allegati finali",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Riaprire e confrontare tutti i file finali."
+    },
+    {
+      "id": "riepilogo-finale",
+      "voce": "Riepilogo finale verificato",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Generare, rileggere e censire il riepilogo finale esatto."
+    },
+    {
+      "id": "output-da-firmare",
+      "voce": "Documento finale da firmare verificato",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Riaprire e verificare il documento esatto prima della firma."
+    },
+    {
+      "id": "avviso-pagamento",
+      "voce": "Avviso di pagamento verificato",
+      "stato": "BLOCCO",
+      "evidenze": [],
+      "azione": "Verificare avviso, importo e riferimento prima del pagamento."
+    }
+  ],
+  "output_finale": {
+    "da_firmare_evidenza": "output-da-firmare",
+    "riepilogo_invio_evidenza": "riepilogo-invio"
+  },
+  "validazione_firma": {
+    "richiesta": true,
+    "fonte_non_richiesta_evidenza": "",
+    "formato": "CAdES",
+    "firmatario_atteso": "Nome del titolare o delegato",
+    "firmatario_verificato": "",
+    "originale_evidenza": "output-da-firmare",
+    "originale_sha256": "hash-del-contenuto-originale-estratto-dal-file-firmato",
+    "file_firmato_evidenza": "",
+    "ricevuta_evidenza": "",
+    "strumento": "",
+    "verificata_il": "",
+    "esito": ""
+  },
+  "pagamento": {
+    "richiesto": true,
+    "fonte_non_richiesto_evidenza": "",
+    "avviso_evidenza": "",
+    "avviso_sha256": "",
+    "importo_atteso_eur": "0.00",
+    "riferimento_atteso": "",
+    "ricevuta_evidenza": "",
+    "importo_eur": "0.00",
+    "riferimento": "",
+    "eseguito_il": ""
+  },
+  "presentazione": {
+    "riepilogo_evidenza": "riepilogo-invio",
+    "riepilogo_sha256": "hash-del-riepilogo-effettivamente-inviato",
+    "ricevuta_evidenza": "",
+    "pratica_id_atteso": "",
+    "pratica_id_ricevuta": "",
+    "numero_protocollo": "",
+    "presentata_il": "",
+    "portale": ""
+  },
+  "spese": {
+    "richieste": true,
+    "fonte_non_richieste_evidenza": "",
+    "fatture_attese": 0,
+    "fatture_trovate": 0,
+    "pagamenti_trovati": 0,
+    "coppie_verificate": 0,
+    "coppie_irrisolte": 0,
+    "totale_ammesso_eur": "0.00",
+    "totale_escluso_eur": "0.00",
+    "indice_csv": "INDICE_SPESE.csv",
+    "evidenze": ["indice-spese"]
+  }
+}
