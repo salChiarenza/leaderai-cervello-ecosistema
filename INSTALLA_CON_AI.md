@@ -267,7 +267,10 @@ Fase 4 - monta localmente il Cervello
    - crea l'automazione giornaliera `manutenzione-ecosistema` (07:45 locali,
      modello leggero) che invoca la skill `manutentore-ecosistema`: per Claude
      Code un task programmato, per Codex un'automazione; una sola sessione che
-     chiude da sola
+     chiude da sola. Riusa la routine equivalente gia presente: mai due routine
+     per motore o reparto. Il suo elenco nasce dalle mappe correnti e comprende
+     quindi anche ogni stanza aggiunta in futuro. Leggi la sezione Manutenzione
+     del calco e compila la destinazione degli esiti nella fonte esistente.
 3. Crea SEMPRE `CLAUDE.md` dal template: e' il ponte di una riga (`@AGENTS.md`)
    che fa leggere la mappa anche a Claude Code, qualunque agente sia in uso
    oggi (Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`). Poi la
@@ -779,3 +782,19 @@ azione eseguibile dall'agente viene completata e provata prima della chiusura.
 La missione inizia con `SITUAZIONE IN BREVE`; le classificazioni e i dettagli
 tecnici restano nelle fonti della casa.
 ```
+
+### Prova del gancio prima di dichiarare la casa pronta
+
+Dopo il montaggio, il ramo Codex segue anche `.codex/README.md`, sezione
+Attivazione e prova del guardiano. Su ciascun motore installato completa
+una sessione di prova e confronta la ricevuta `.agent/guardiano-ultimo-evento.json`
+con ora, casa e impronte dei file correnti. Un test manuale o una ricevuta
+precedente non sostituiscono l'evento nativo. Fiducia/permessi eventualmente
+richiesti dalla piattaforma restano l'unico gesto del proprietario; l'agente
+prepara e riprende il controllo, senza dichiararlo attivo in anticipo.
+
+La ricevuta del guardiano documenta l'esecuzione, non certifica da sola chi
+l'ha avviata. Per attestare un evento automatico, confronta sessione e ora
+con la cronologia nativa e verifica che l'agente non abbia lanciato o scritto
+manualmente la prova. Senza questa correlazione registra soltanto
+«script eseguito, attivazione nativa da verificare».

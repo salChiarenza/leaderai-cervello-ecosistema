@@ -2257,6 +2257,7 @@ def inspect_ecosystem(
 
     archives, archive_issues = archive_policy.collect(target)
     findings.extend(Finding(code, "BLOCKER", path, detail) for code, path, detail in archive_issues)
+    findings.extend(Finding(code, "BLOCKER", path, detail) for code, path, detail in archive_policy.maintenance_findings(target))
     agents_path = target / "AGENTS.md"
     agents_text = ""
     if agents_path.is_file() and not agents_path.is_symlink():
@@ -2832,6 +2833,9 @@ def inspect_ecosystem(
                     section
                     for section in ROOM_REQUIRED_SECTIONS
                     if section in headings
+                    # La manutenzione contiene istruzioni per stati DA COLLEGARE;
+                    # i suoi campi effettivi sono validati dal motore condiviso.
+                    and section != "manutenzione"
                     and _contains_unproven_value(
                         _markdown_section(raw_content, section)
                     )

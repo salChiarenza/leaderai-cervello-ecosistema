@@ -64,3 +64,33 @@ controllati. Una fonte business puo' essere Word e usare @/ dalla cartella madre
 
 Se uno dei passaggi manca, il reparto resta incompleto e non viene dichiarato
 operativo.
+
+## Manutenzione alla nascita e a ogni modifica
+
+La richiesta autorizzata di un reparto comprende i completamenti necessari:
+mappa, ponte, fonte e riga madre; sezione Manutenzione con responsabile,
+inneschi, controlli e destinazione degli esiti. Il calco corrente del prodotto
+e il controllo comune `.agent/hooks/archive_policy.py` ne sono il contratto.
+Le sottocartelle ereditano: nessun timer o agente residente per ciascuna.
+Alla nascita l'agente prova un percorso richiesta -> fonte -> output ->
+destinatario interno e ne registra i riscontri. Alla modifica ricontrolla il
+perimetro coinvolto: ordine, peso dei MD, duplicazioni, contraddizioni,
+collegamenti tra fonti e reparti, ganci e configurazioni. La macchina verifica
+presenza e collegamento; il contenuto e il risultato si rileggono davvero.
+Ecosystem Check possiede anche infrastruttura condivisa, hook locali/globali,
+memorie, MCP, automazioni e servizi: parte dagli inventari dichiarati nella mappa madre e dalla
+configurazione viva, verificando anche gli elementi esterni al checkout.
+Non leggere segreti per censire un componente. Una configurazione presente
+non certifica un evento nativo eseguito o un accesso esterno riuscito.
+Gli esiti vivono nella fonte dichiarata nella sezione Manutenzione del reparto:
+data, evento, perimetro, difetto, correzione, prova e residui con responsabile.
+Il Manutentore rilegge le mappe a ogni giro e riprende gli incarichi aperti.
+L'Ispettore rilegge le prove e ripete un passaggio, senza autocertificazione.
+
+La ricevuta negli Esiti usa `## Prova stanza: <nome-cartella>` e le righe
+Evento, Processo, Ingresso, Uscita, Destinatario, Verifica. I tre percorsi sono
+relativi alla radice e puntano a file reali non vuoti; ingresso e uscita sono
+distinti. Descrivere processo e riscontro, non soltanto PASSA. Una stanza
+nuova si collauda sul primo processo business. Per i reparti gia esistenti,
+l'adozione del controllo e esplicita e non certifica retroattivamente il
+business; Ecosystem Check e il bootstrap verificato dal collaudo installazione.

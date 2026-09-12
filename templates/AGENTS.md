@@ -102,7 +102,6 @@ posseduti dall'amministratore del settore che li usa.
 ### Ciclo obbligatorio delle cartelle
 
 Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
-
 1. censisci cio' che esiste;
 2. classifica ogni elemento rilevante come `STANZA`, `FONTE`, `OUTPUT`,
    `CAPACITA`, `INFRASTRUTTURA`, `ARCHIVIO` o `SOSPETTA`;
@@ -111,6 +110,8 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
 4. se e' una vera stanza, crea nello stesso salvataggio la mappa dal calco
    `ecosistema/STANZA_AGENTS.md`, il ponte `CLAUDE.md`, una fonte operativa
    nominata dal calco `ecosistema/STANZA_FONTE.md` e la riga nel registro;
+   compila `Manutenzione` e prova richiesta -> fonte -> output -> destinatario,
+   registrandolo negli Esiti: questi completamenti sono gia autorizzati;
 5. se e' una sottocartella ordinaria, dichiarala nella mappa della stanza
    proprietaria senza trasformarla in una nuova stanza;
 6. esegui l'Ispettore: campi incompleti, fonte mancante o sottocartella non
@@ -237,7 +238,6 @@ per ogni compito, insieme all'Autoprova.
 ## Missioni da LeaderAI
 
 Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
-
 `MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
 
 - Leggi l'email nella posta del proprietario; il copia-incolla vale solo al

@@ -66,6 +66,7 @@ CANONICAL_ROOM_SECTIONS = (
     "a valle",
     "dove scrivere",
     "regole",
+    "manutenzione",
 )
 
 CANONICAL_ROOM_TERMS = (

@@ -32,3 +32,25 @@ parte cieco. L'Ispettore lo verifica e lo ripara.
 Per il controllo completo il proprietario puo' dire `lancia l'Ispettore` o
 richiamare `$ispettore-ecosistema`. La skill apre la procedura unica
 `CHECKUP.md` della repo `salChiarenza/leaderai-cervello-ecosistema`.
+
+## Attivazione e prova del guardiano
+
+La configurazione in `.codex/hooks.json` vale nella casa fidata. Dopo
+l'installazione verifica i ganci in `/hooks`: una definizione nuova o cambiata
+puo richiedere la fiducia del proprietario. Le fonti si leggono prima di fidarsi.
+Non cambiare impostazioni globali o aggirare questa scelta nella casa cliente.
+
+Concludi una task di prova nella casa e rileggi
+`.agent/guardiano-ultimo-evento.json`: evento Stop, sessione e ora di quel giro,
+percorso della casa e impronte del guardiano e del motore devono corrispondere
+ai file correnti. La sola presenza del JSON di configurazione o un lancio a
+mano dello script non provano l'attivazione nativa. Senza ricevuta corrente,
+registra il controllo come da attivare e risolvi il caricamento o il gesto di
+fiducia preciso. Completata questa attivazione, nuove stanze usano lo stesso
+controllo senza nuovi permessi o ganci per stanza.
+
+La ricevuta del guardiano documenta l'esecuzione, non certifica da sola chi
+l'ha avviata. Per attestare un evento automatico, confronta sessione e ora
+con la cronologia nativa e verifica che l'agente non abbia lanciato o scritto
+manualmente la prova. Senza questa correlazione registra soltanto
+«script eseguito, attivazione nativa da verificare».

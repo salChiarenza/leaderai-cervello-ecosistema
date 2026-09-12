@@ -111,6 +111,19 @@ class EcosistemaInspectorTest(unittest.TestCase):
             encoding="utf-8",
         )
 
+        evidence = room / "prima_prova.md"
+        evidence.write_text("Esito simulato della prima prova della stanza: dato ricevuto e riscontro prodotto.\n")
+        source_path = room / "STATO_ISCRIZIONI.md"
+        source_path.write_text(source_path.read_text() + (
+            f"\n## Prova stanza: {name}\n\n"
+            "- Evento: nascita della stanza di collaudo\n"
+            "- Processo: dal dato di prova nella fonte al riscontro del reparto.\n"
+            f"- Ingresso: \x60{name}/STATO_ISCRIZIONI.md\x60\n"
+            f"- Uscita: \x60{name}/prima_prova.md\x60\n"
+            f"- Destinatario: \x60{name}/prima_prova.md\x60\n"
+            "- Verifica: fixture isolata, risultato riletto e confrontato con il dato simulato.\n"
+        ))
+
     def append_table_row(self, path: Path, marker: str, row: str) -> None:
         """Aggiunge una riga alla tabella che segue `marker`, subito dopo la riga
         separatrice: l'Ispettore legge solo righe contigue."""
@@ -663,6 +676,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.create_valid_room(target)
             self.add_room_to_registry(target)
             source = target / "app-iscrizioni" / "STATO_ISCRIZIONI.md"
+            proof = source.read_text().split("## Prova stanza:", 1)[1]
             source.unlink()
             room_map = target / "app-iscrizioni" / "AGENTS.md"
             room_map.write_text(
@@ -696,6 +710,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            source.write_text(source.read_text() + "\n## Prova stanza:" + proof)
             repaired = self.inspect(target)
 
             self.assertEqual(repaired.verdict, "PASSA")
@@ -915,6 +930,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
             source = room / "STATO_ISCRIZIONI.md"
             accented = room / "STATO_ATTIVITÀ.md"
             source.rename(accented)
+            accented.write_text(accented.read_text().replace("STATO_ISCRIZIONI.md", "STATO_ATTIVITÀ.md"))
             room_map = room / "AGENTS.md"
             room_map.write_text(
                 room_map.read_text(encoding="utf-8").replace(
@@ -1528,7 +1544,18 @@ class EcosistemaInspectorTest(unittest.TestCase):
             target = self.make_target(tmp)
             room = target / "commerciale"
             room.mkdir()
-            (room / "AGENTS.md").write_text("# Statuto\n\nRegole del reparto.\n", encoding="utf-8")
+            (room / "AGENTS.md").write_text("# Statuto\n\nRegole del reparto.\n" + (leaderai_setup.ROOT / "templates/ecosystem-check/AGENTS.md").read_text().split("## Manutenzione", 1)[1].split("## Regole", 1)[0].join(["\n## Manutenzione", ""]).replace("`STATO.md`", "`@/ecosystem-check/STATO.md`"), encoding="utf-8")
+            report = target / "ecosystem-check/STATO.md"
+            report.write_text(report.read_text() + (
+                "\n## Prova stanza: commerciale\n\n"
+                "- Evento: adozione del controllo nella casa consolidata\n"
+                "- Processo: censimento della mappa e registrazione del reparto gia presente.\n"
+                "- Ingresso: `commerciale/AGENTS.md`\n"
+                "- Uscita: `ecosystem-check/CONTROLLI.md`\n"
+                "- Destinatario: `ecosystem-check/STATO.md`\n"
+                "- Verifica: controllo strutturale della fixture isolata; nessuna prova business dichiarata.\n"
+            ))
+
             (room / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
             deep = room / "clienti" / "rossi" / "proposta"
             deep.mkdir(parents=True)

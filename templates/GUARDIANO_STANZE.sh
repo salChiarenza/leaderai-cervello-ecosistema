@@ -614,6 +614,14 @@ if [ "$MISURA" = true ]; then
     exit 0
 fi
 
+# La ricevuta nasce dal guardiano reale, dopo la misura; nessun handler finto.
+# L'ultimo evento sostituisce il precedente, senza accumulo di log.
+if [ -n "$GUARD_PYTHON" ] && [ -f "$SCRIPT_DIR/archive_policy.py" ]; then
+    if ! printf '%s' "$HOOK_INPUT" | PYTHONUTF8=1 "$GUARD_PYTHON" "$SCRIPT_DIR/archive_policy.py" --record-event "$ROOT" --issues "$ISSUES_FILE"; then
+        add_issue ".agent/guardiano-ultimo-evento.json - ricevuta del controllo non scritta"
+    fi
+fi
+
 if [ ! -s "$ISSUES_FILE" ]; then
     exit 0
 fi

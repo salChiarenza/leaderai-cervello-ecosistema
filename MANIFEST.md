@@ -24,6 +24,13 @@ e il collaudo non mantengono liste concorrenti. Browser, launcher e backup
 remoto sono controlli d'ambiente dichiarati nel contratto: si provano sulla
 macchina cliente e restano `DA COLLAUDARE` nel gate anonimo.
 
+Il ciclo delle stanze comprende la sezione Manutenzione: responsabile,
+inneschi, controlli, esiti e infrastruttura. Il controllo condiviso vive in
+`templates/ARCHIVE_POLICY.py`, caricato sia dal guardiano sia dall'Ispettore.
+La prima prova di processo e il controllo semantico dei contenuti restano
+verifiche dell'agente con riscontri nelle fonti. Per modificare questo ciclo
+il rilascio richiede anche `tests/room_growth_live.py` su entrambi i motori.
+
 ## Regola
 
 L'agente non deve fare un esame al cliente.

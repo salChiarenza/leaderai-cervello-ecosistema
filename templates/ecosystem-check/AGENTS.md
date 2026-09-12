@@ -75,6 +75,19 @@ Mantiene in testa `Stato corrente`, `Prossimo passo`, `Decisioni` e
 - I dettagli tecnici restano nella fonte proprietaria del problema; non si
   copiano qui interi rapporti o contenuti delle altre stanze.
 
+## Manutenzione
+
+- Responsabile: Amministratore del settore Ecosystem Check; eredita il mandato operativo della stanza.
+- Quando: alla nascita e prima di chiudere una modifica a struttura, istruzioni, fonti, capacita o collegamenti; nella misura giornaliera gia presente.
+- Controlli: mappa, fonte unica, smistamento, dimensioni MD, duplicazioni e contraddizioni; ganci, skill, configurazioni e passaggi a monte/a valle. Eseguire il guardiano della casa e verificare nel contenuto i punti che la macchina non puo giudicare.
+- Esiti: `STATO.md`; data, evento, perimetro, difetti, correzioni, prova riletta e residui con responsabile. Conservare un solo stato corrente, storia utile nel diario.
+- Infrastruttura: sottocartelle e strumenti del reparto ereditano questo responsabile; componenti comuni in Ecosystem Check e nei registri della casa. Nessun agente o timer per ogni cartella.
+
+Alla nascita completare anche la prima prova richiesta -> fonte -> lavoro ->
+output -> destinatario interno. Scriverne gli estremi negli Esiti; accessi
+esterni non provati restano DA COLLEGARE. Una mappa compilata da sola non
+certifica il funzionamento. L'Ispettore rilegge la prova e ripete un passaggio.
+
 ## Regole
 
 - L'orchestratore assegna; i controllori osservano; `INTERVENTO` corregge;

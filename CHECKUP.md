@@ -22,6 +22,25 @@ passi chiudono l'installazione guidata; `Evoluzione quando serve` e' il Passo 5
 continuo, usato per aggiungere un solo nuovo processo o una sola capacita'
 necessaria e poi ripetere questo controllo.
 
+## Espansione con manutenzione alla nascita
+
+Una richiesta autorizzata di nuovo reparto comprende mappa, ponte, fonte,
+registrazione, sezione Manutenzione e primo processo provato. Le sottocartelle
+restano del reparto; non creare agenti o routine per ciascuna cartella.
+L'Amministratore controlla ordine, dimensioni, ripetizioni e contraddizioni
+nelle istruzioni, ganci/configurazioni, fonti e collegamenti. La routine esistente
+rilegge le mappe correnti, quindi comprende anche i reparti aggiunti.
+Il guardiano e l'Ispettore condividono il controllo meccanico in
+`templates/ARCHIVE_POLICY.py`: sezione compilata, destinazione degli esiti
+esistente, guardiano presente e collegato in configurazione. Questo controllo
+non certifica la correttezza semantica o l'avvio nativo del gancio.
+L'Ispettore legge gli Esiti, riapre le prove e ripete un passaggio trasversale.
+In una casa gia viva integra la manutenzione nelle mappe esistenti e punta
+agli stati gia presenti, senza creare fonti parallele. Prima di attivare il
+controllo piu stretto completa tutte le mappe: nessun blocco su reparti altrui
+lasciati a meta migrazione. Per banca e servizi esterni servono autorizzazione
+e lettura riuscita; in mancanza resta DA COLLEGARE, non attivo per dichiarazione.
+
 ## Scelta del controllo
 
 - **Checkup completo.** Si usa su un Cervello + Ecosistema cliente gia'
@@ -1120,3 +1139,17 @@ Gli esiti intermedi restano nella casa e alimentano la stessa missione.
    form, preview, login e app temporanee aperte da te. Non chiudere pagine
    personali del proprietario o superfici che deve decidere lui: dichiarale come
    `DA DECIDERE IN CALL` nella fonte proprietaria.
+
+Il guardiano scrive una sola ricevuta `.agent/guardiano-ultimo-evento.json`
+quando riceve Stop con sessione e casa: data, esito e impronte del codice.
+`--misura` non la produce; un lancio manuale con payload puo produrla e non
+prova l'origine automatica. L'Ispettore incrocia sessione e cronologia nativa,
+controlla l'assenza di simulazioni manuali e confronta la ricevuta con
+configurazione e codice attuali e distingue assenza, esito BLOCCO e prova
+eseguita prima dell'ultima modifica; non dichiara un avvio da un file presente.
+
+La ricevuta del guardiano documenta l'esecuzione, non certifica da sola chi
+l'ha avviata. Per attestare un evento automatico, confronta sessione e ora
+con la cronologia nativa e verifica che l'agente non abbia lanciato o scritto
+manualmente la prova. Senza questa correlazione registra soltanto
+«script eseguito, attivazione nativa da verificare».

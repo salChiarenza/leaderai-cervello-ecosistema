@@ -336,3 +336,9 @@ progetto primario/CWD. Una task aperta fuori root non vede il Cervello:
 percorso corrente, `AGENTS.md` caricato e tre regole mostrate sono prove
 obbligatorie. Il gate comportamentale include `Crea la Brand Identity` senza
 indizi tecnici.
+
+Per modifiche al ciclo delle stanze, oltre al gate di rilascio eseguire
+`python3 -m tests.room_growth_live --agent codex --evidence-dir <prove-codex>`
+e lo stesso con `--agent claude` e destinazione distinta. Richiede sessioni
+native, dati simulati, passaggio tra reparti, eredita della sottocartella e
+presa in carico di difetti MD/gancio. Nessun PASSA dal solo testo finale.

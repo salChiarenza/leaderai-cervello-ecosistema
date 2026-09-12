@@ -154,6 +154,18 @@ class GuardianoStanzeStopTest(unittest.TestCase):
         for placeholder, value in source_replacements.items():
             source = source.replace(placeholder, value)
         (room / "STATO.md").write_text(source, encoding="utf-8")
+        evidence = room / "prima_prova.md"
+        evidence.write_text("Esito simulato della prima prova della stanza: dato ricevuto e riscontro prodotto.\n")
+        source_path = room / "STATO.md"
+        source_path.write_text(source_path.read_text() + (
+            f"\n## Prova stanza: {name}\n\n"
+            "- Evento: nascita della stanza di collaudo\n"
+            "- Processo: dal dato di prova nella fonte al riscontro del reparto.\n"
+            f"- Ingresso: \x60{name}/STATO.md\x60\n"
+            f"- Uscita: \x60{name}/prima_prova.md\x60\n"
+            f"- Destinatario: \x60{name}/prima_prova.md\x60\n"
+            "- Verifica: fixture isolata, risultato riletto e confrontato con il dato simulato.\n"
+        ))
         self.register_root_room(target, name)
         return room
 
@@ -210,7 +222,18 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             target = self.install(tmp)
             room = target / "commerciale"
             room.mkdir()
-            (room / "AGENTS.md").write_text("# Statuto commerciale\n\nRegole del reparto.\n", encoding="utf-8")
+            (room / "AGENTS.md").write_text("# Statuto commerciale\n\nRegole del reparto.\n" + (leaderai_setup.ROOT / "templates/ecosystem-check/AGENTS.md").read_text().split("## Manutenzione", 1)[1].split("## Regole", 1)[0].join(["\n## Manutenzione", ""]).replace("`STATO.md`", "`@/ecosystem-check/STATO.md`"), encoding="utf-8")
+            report = target / "ecosystem-check/STATO.md"
+            report.write_text(report.read_text() + (
+                "\n## Prova stanza: commerciale\n\n"
+                "- Evento: adozione del controllo nella casa consolidata\n"
+                "- Processo: censimento della mappa e registrazione del reparto gia presente.\n"
+                "- Ingresso: `commerciale/AGENTS.md`\n"
+                "- Uscita: `ecosystem-check/CONTROLLI.md`\n"
+                "- Destinatario: `ecosystem-check/STATO.md`\n"
+                "- Verifica: controllo strutturale della fixture isolata; nessuna prova business dichiarata.\n"
+            ))
+
             (room / "CLAUDE.md").write_text("@AGENTS.md\n", encoding="utf-8")
             (room / "clienti").mkdir()
             (room / "clienti" / "nota.md").write_text("# cliente\n", encoding="utf-8")

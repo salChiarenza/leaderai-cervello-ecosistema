@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.23 - 12/09/2026
+
+- Ogni reparto nasce con responsabile, inneschi e controlli di manutenzione,
+  fonte degli esiti e prova del primo passaggio tra reparti. Le sottocartelle
+  ereditano, senza moltiplicare agenti o routine.
+- Guardiano e Ispettore condividono la verifica del profilo e del gancio
+  presente/collegato. Il Manutentore rilegge le mappe correnti, controlla
+  contenuti e infrastruttura; l'Ispettore rilegge prove e processi.
+- Collaudo di espansione nativa con incasso simulato, sottocartella ereditata
+  e difetti intenzionali nei MD e nella configurazione del gancio.
+
 ## 0.6.22 - 12/09/2026
 
 - Nasce `Ispettore del Bando`, prodotto-agente installabile per Claude: legge

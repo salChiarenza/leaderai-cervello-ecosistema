@@ -87,6 +87,26 @@ non dimostra una stanza.
 - Le sottocartelle ordinarie appartengono a questa stanza e non diventano
   automaticamente nuove stanze.
 
+## Manutenzione
+
+- Responsabile: Amministratore del settore {{room_name}}; eredita il mandato operativo della stanza.
+- Quando: alla nascita e prima di chiudere una modifica a struttura, istruzioni, fonti, capacita o collegamenti; nella misura giornaliera gia presente.
+- Controlli: mappa, fonte unica, smistamento, dimensioni MD, duplicazioni e contraddizioni; ganci, skill, configurazioni e passaggi a monte/a valle. Eseguire il guardiano della casa e verificare nel contenuto i punti che la macchina non puo giudicare.
+- Esiti: `{{room_operating_source}}`; data, evento, perimetro, difetti, correzioni, prova riletta e residui con responsabile. Conservare un solo stato corrente, storia utile nel diario.
+- Infrastruttura: sottocartelle e strumenti del reparto ereditano questo responsabile; componenti comuni in Ecosystem Check e nei registri della casa. Nessun agente o timer per ogni cartella.
+
+Alla nascita completare anche la prima prova richiesta -> fonte -> lavoro ->
+output -> destinatario interno. Negli Esiti aggiungi `## Prova stanza: <nome-cartella>` con sei righe:
+`Evento`, `Processo`, `Ingresso`, `Uscita`, `Destinatario`, `Verifica`.
+Ingresso/Uscita/Destinatario citano ciascuno un file reale tra apici inversi,
+con percorso dalla radice; ingresso e risultato sono distinti. Processo e
+Verifica descrivono il lavoro fatto e il riscontro riletto (almeno 30 caratteri).
+Mai precompilare un PASSA: una fonte vuota, una ricevuta mancante o file assenti
+fermano la chiusura. Un reparto gia vivo registra l'adozione del controllo,
+che non certifica retroattivamente i suoi processi business. Gli accessi
+esterni non provati restano DA COLLEGARE. Una mappa compilata da sola non
+certifica il funzionamento. L'Ispettore rilegge la prova e ripete un passaggio.
+
 ## Regole
 
 - Prima di creare una cartella, classificarla come `STANZA`, `FONTE`, `OUTPUT`,
@@ -109,3 +129,17 @@ non dimostra una stanza.
 - Una cartella con una pipeline completa di fonti, script, modelli e output
   resta `CAPACITA` se non mantiene stato e decisioni di una funzione business.
 - `CLAUDE.md` in questa stanza contiene soltanto `@AGENTS.md`.
+
+Il guardiano scrive una sola ricevuta `.agent/guardiano-ultimo-evento.json`
+quando riceve Stop con sessione e casa: data, esito e impronte del codice.
+`--misura` non la produce; un lancio manuale con payload puo produrla e non
+prova l'origine automatica. L'Ispettore incrocia sessione e cronologia nativa,
+controlla l'assenza di simulazioni manuali e confronta la ricevuta con
+configurazione e codice attuali e distingue assenza, esito BLOCCO e prova
+eseguita prima dell'ultima modifica; non dichiara un avvio da un file presente.
+
+La ricevuta del guardiano documenta l'esecuzione, non certifica da sola chi
+l'ha avviata. Per attestare un evento automatico, confronta sessione e ora
+con la cronologia nativa e verifica che l'agente non abbia lanciato o scritto
+manualmente la prova. Senza questa correlazione registra soltanto
+«script eseguito, attivazione nativa da verificare».

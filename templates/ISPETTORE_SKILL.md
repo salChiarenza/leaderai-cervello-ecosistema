@@ -25,6 +25,15 @@ Passo 2-ter. Il controllo focalizzato non emette il verdetto complessivo
 PASSA / PASSA CON ATTENZIONE / NON PASSA, non crea, rinomina o rimodella
 stanze e non trasforma una casa diversa dal telaio cliente in un errore.
 
+## Manutenzione verificata
+
+Leggi gli Esiti dei reparti: verifica fonte, data, perimetro, difetto,
+correzione e prova. Non accettare un PASSA scritto dal manutentore come prova.
+Riapri gli artefatti citati e ripeti almeno un passaggio tra reparti pertinente
+alla missione; per un reparto appena nato verifica il primo processo completo.
+Ganci e routine configurati non dimostrano l'esecuzione nativa: conserva i due
+riscontri distinti. Un reparto nuovo entra nella stessa manutenzione della casa.
+
 ## Missione
 
 1. Prima prova l'ingresso reale: nuova task/sessione dalla cartella madre come
