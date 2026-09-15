@@ -1,5 +1,67 @@
 # Changelog
 
+## 0.6.29 - 15/09/2026
+
+- La guida si apre dichiarando la propria provenienza: chi l'ha scritta, cosa
+  contiene `Cervello.zip` (testo e Markdown, niente codice eseguibile), cosa
+  scrive l'agente e cosa fa l'automazione delle 07:45. L'ispezione del
+  pacchetto e' il percorso previsto, non un'alternativa al procedere.
+- Motivo: l'assistente di un partecipante alla Challenge si e' fermato prima
+  di installare, chiedendo al proprietario chi gli avesse mandato il link e se
+  poteva fidarsi. Le informazioni c'erano gia', ma 200 righe piu' in basso.
+
+## 0.6.28 - 14/09/2026
+
+- Aperta la cartella `Prodotti/Skill` nel catalogo: una cartella per skill,
+  pronta da copiare in `.claude/skills/` o `.agents/skills/` della casa.
+  Sorgente nella copia di lavoro: `Skill/`, inclusa nella release.
+- Prima skill: `mente-da-principiante` (esperto con mente da principiante,
+  Jeff Bezos): prima la competenza sul campo, poi lo sguardo nuovo; una
+  costruzione si promuove solo con prova del risultato, di non regressione e
+  del percorso reale. Versione autonoma, senza rimandi alla casa LeaderAI.
+- `00 Inizia qui` e `Prodotti/Leggimi.md` dicono dove stanno le skill e come
+  si installano.
+
+## 0.6.27 - 13/09/2026
+
+- Il percorso ha un solo significato ovunque: cinque passi, con
+  `5 Collaudo e consegna` come chiusura; i prodotti opzionali stanno nella
+  cartella separata `Prodotti` e si aggiungono soltanto dopo la consegna.
+- La guida del Cervello chiama `Operazioni` i propri passaggi interni, cosi'
+  non crea una seconda numerazione di fasi dentro il Passo 1.
+- Il Passo 1 mantiene un solo foglio da eseguire: anche la preparazione per chi
+  usa ancora l'AI nel browser vive nella guida. Il pacchetto tecnico
+  `Cervello.zip` sostituisce l'apertura manuale dei singoli modelli.
+- Allineati Manifest, Checkup, mappa installata e Censitore ai nomi visibili
+  sul Drive.
+- Rimossa anche la vecchia tassonomia interna `Fase 1 / Fase 2` dalle fonti
+  correnti: Cervello ed Ecosistema operativo restano componenti, non una
+  seconda sequenza di fasi.
+
+## 0.6.26 - 13/09/2026
+
+- Il Passo 1 espone un solo documento operativo:
+  `01 - Cervello - installazione e aggiornamento.md`, aggiornato in luogo a
+  ogni release e con versione corrente visibile nel testo.
+- `EMAIL_CONSEGNA.md` resta il modello breve per il primo invio: controlli del
+  mittente e un solo collegamento alla procedura; nessuna missione operativa
+  duplicata nel corpo dell'email.
+- Ritirata la scheda generata `01 - Cervello.md`, che ripeteva il nome del
+  passo senza aggiungere istruzioni.
+
+## 0.6.25 - 13/09/2026
+
+- Mandato comune per tutti i ruoli: l'incarico include intervento, verifica e
+  ripresa; niente secondo consenso per il lavoro gia' autorizzato. Al titolare
+  restano decisioni fuori mandato, accessi e gesti umani reali.
+- Il Manutentore riprende gli incarichi senza esecutore e riconcilia anche la
+  memoria sotto soglia. Assegnato non significa eseguito; un revisore dichiarato
+  indisponibile richiede riscontro, non un'ipotesi.
+- Il gate di rilascio prova anche la ripresa nativa con titolare assente,
+  verifica distinta, conservazione degli originali e vera eccezione economica.
+  Configurazione del timer e funzionamento sulla macchina cliente restano
+  prove separate. Nessuna nuova routine, stanza o gerarchia di agenti.
+
 ## 0.6.24 - 12/09/2026
 
 - Il Manutentore riconcilia istruzioni, memoria e stato anche sotto soglia:
@@ -75,7 +137,7 @@
 ## 0.6.19 - 08/09/2026
 
 - Python 3 (dal 3.8) dichiarato requisito del guardiano di chiusura e
-  dell'Ispettore in `INSTALLA_CON_AI.md` (Fase 2 e verifica finale), in
+  dell'Ispettore in `01 - Cervello - installazione e aggiornamento.md` (Fase 2 e verifica finale), in
   `MANIFEST.md` e in `CHECKUP.md`: la 0.6.18 lo richiedeva senza dirlo.
 - Guardiano: Python provato davvero prima dell'uso (`python3`, `python`, `py`),
   cosi' un alias Windows che non risponde non passa per motore presente;
@@ -675,7 +737,7 @@
   Codex -> Claude Code -> Codex su tre sessioni distinte.
 - L'email operativa distingue `INSTALLA` e `CONTINUA`, usa link di release
   immutabili e verifica mittente, thread e autorizzazione del proprietario.
-- `INSTALLA_CON_AI.md` espone un nucleo deterministico delimitato: il gate
+- `01 - Cervello - installazione e aggiornamento.md` espone un nucleo deterministico delimitato: il gate
   manuale prova il telaio senza consumare l'intera procedura di
   personalizzazione, che resta nello stesso file ufficiale.
 - Aggiunto `install_contract.json`, fonte macchina unica per installazione
