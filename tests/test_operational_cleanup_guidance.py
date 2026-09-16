@@ -29,7 +29,7 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
     def test_checkup_and_installation_report_cleanup_state(self):
         checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
         install = " ".join(
-            (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8").split()
+            (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8").split()
         )
 
         for phrase in [
@@ -48,7 +48,7 @@ class OperationalCleanupGuidanceTest(unittest.TestCase):
             "archivia l'email della missione",
             "chiudi pagine, tab, finestre e strumenti",
         ]:
-            with self.subTest(file="INSTALLA_CON_AI.md", phrase=phrase):
+            with self.subTest(file="01 - Cervello - installazione e aggiornamento.md", phrase=phrase):
                 self.assertIn(phrase.lower(), install.lower())
 
     def test_manifest_includes_operational_cleanup_as_standard(self):

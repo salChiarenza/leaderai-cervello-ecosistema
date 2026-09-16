@@ -20,7 +20,7 @@ decide e firma cio' che la legge gli riserva.
 
 ## Cosa contiene
 
-- `INSTALLA_CON_AI.md`: installazione guidata nella casa esistente.
+- `01 - Cervello - installazione e aggiornamento.md`: installazione guidata nella casa esistente.
 - `SCADENZARIO_FISCALE_TEMPLATE.md`: calco della fonte operativa unica.
 - `PROCEDURA.md`: comportamento comune, senza aliquote o date hardcoded.
 - `SKILL.md`: skill per Codex o agente compatibile.

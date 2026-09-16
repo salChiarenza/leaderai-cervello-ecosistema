@@ -22,10 +22,11 @@ dei controlli e governa le decisioni su interventi e chiusure.
 ## Organigramma
 
 - Ruolo: **Amministratore del settore Ecosystem Check**.
-- Riporta al **Boss dell'Ecosistema** definito nell'`AGENTS.md` della cartella
+- Riporta al Boss dell'Ecosistema definito nell'`AGENTS.md` della cartella
   madre.
-- L'Amministratore assegna controlli separati, impedisce sovrapposizioni e
-  riporta al Boss soltanto risultati provati, problemi aperti e decisioni vere.
+- L'Amministratore assegna controlli separati e impedisce sovrapposizioni;
+  risultati ordinari e problemi tecnici vanno alla regia AI e nella fonte.
+  Al titolare arrivano soltanto eccezioni sostanziali e decisioni fuori mandato.
 - La verifica finale resta separata dall'intervento: chi corregge non certifica
   da solo il proprio lavoro.
 
@@ -92,8 +93,9 @@ certifica il funzionamento. L'Ispettore rilegge la prova e ripete un passaggio.
 
 - L'orchestratore assegna; i controllori osservano; `INTERVENTO` corregge;
   `CONTROLLO_CHIUSURA` riprova senza usare il giudizio di chi ha corretto.
-- I controllori sono in sola lettura. Solo `INTERVENTO` modifica file, entro il
-  perimetro assegnato e senza eliminazioni, fusioni o spostamenti non approvati.
+- I controllori sono in sola lettura e consegnano i difetti a `INTERVENTO`.
+  Il mandato operativo comprende le riparazioni di `STANDARD_REPARTO.md`,
+  Autonomia operativa; le azioni fuori mandato restano decisioni del titolare.
 - Un problema senza percorso, fonte e prova osservabile non viene assegnato.
 - Ogni problema aperto ha un responsabile, una correzione attesa e una prova di
   chiusura.

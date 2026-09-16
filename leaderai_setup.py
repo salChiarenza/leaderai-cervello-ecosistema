@@ -510,11 +510,15 @@ def _managed_guard_commands() -> set[str]:
         template = json.loads(
             (ROOT / "templates" / template_name).read_text(encoding="utf-8")
         )
-        for group in template["hooks"]["Stop"]:
-            for handler in group["hooks"]:
-                command = handler.get("command")
-                if isinstance(command, str):
-                    commands.add(command)
+        # tutti gli eventi, non solo Stop: i controlli LeaderAI vivono anche su
+        # UserPromptSubmit, PreToolUse e PostToolUse. Guardarne uno solo li
+        # rendeva irriconoscibili e ogni reinstallazione li duplicava.
+        for groups in template["hooks"].values():
+            for group in groups:
+                for handler in group["hooks"]:
+                    command = handler.get("command")
+                    if isinstance(command, str):
+                        commands.add(command)
     return commands
 
 

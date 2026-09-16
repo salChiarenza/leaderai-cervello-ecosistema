@@ -98,6 +98,18 @@ write(
 )
 write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
 write(".agent/hooks/archive_policy.py", render("ARCHIVE_POLICY.py"))
+write(".agent/hooks/guardiano_memoria.py", render("GUARDIANO_MEMORIA.py"))
+if mode in ("claude", "both"):
+    write(".claude/skills/impara-dagli-errori/SKILL.md", render("IMPARA_DAGLI_ERRORI_SKILL.md"))
+if mode in ("codex", "both"):
+    write(".agents/skills/impara-dagli-errori/SKILL.md", render("IMPARA_DAGLI_ERRORI_SKILL.md"))
+write(".agent/hooks/guardiano_email_operativa.py", render("GUARDIANO_EMAIL_OPERATIVA.py"))
+write(".agent/hooks/guardiano_doppioni.py", render("GUARDIANO_DOPPIONI.py"))
+write(".agent/hooks/guardiano_dati_verificati.py", render("GUARDIANO_DATI_VERIFICATI.py"))
+write(".agent/hooks/guardiano_note_agenti.py", render("GUARDIANO_NOTE_AGENTI.py"))
+write(".agent/hooks/guardiano_turno.py", render("GUARDIANO_TURNO.py"))
+write(".agent/hooks/salvataggio_automatico.py", render("SALVATAGGIO_AUTOMATICO.py"))
+write(".agent/hooks/chat_aggiornamenti.sh", render("CHAT_AGGIORNAMENTI.sh"))
 write(
     ".agent/hooks/guardiano_stanze_windows.ps1",
     render("GUARDIANO_STANZE_WINDOWS.ps1"),
@@ -173,7 +185,7 @@ class InstallationHarnessTest(unittest.TestCase):
 
     def test_manual_harness_uses_bounded_official_installation_core(self):
         install = (
-            installation_harness.REPO_ROOT / "INSTALLA_CON_AI.md"
+            installation_harness.REPO_ROOT / "01 - Cervello - installazione e aggiornamento.md"
         ).read_text(encoding="utf-8")
         prompt = installation_harness.MISSION_TEMPLATE
 
@@ -265,7 +277,7 @@ class InstallationHarnessTest(unittest.TestCase):
     def test_manual_mission_keeps_source_read_only_but_target_copies_writable(self):
         mission = installation_harness.MISSION_TEMPLATE
         guide = (
-            installation_harness.REPO_ROOT / "INSTALLA_CON_AI.md"
+            installation_harness.REPO_ROOT / "01 - Cervello - installazione e aggiornamento.md"
         ).read_text(encoding="utf-8")
 
         for text in (mission, guide):
@@ -490,7 +502,19 @@ class InstallationHarnessTest(unittest.TestCase):
             )
             files = set(manifest["files"])
             self.assertNotIn("leaderai_setup.py", files)
-            self.assertEqual({path for path in files if path.endswith(".py")}, {"templates/ARCHIVE_POLICY.py"})
+            self.assertEqual(
+                {path for path in files if path.endswith(".py")},
+                {
+                    "templates/ARCHIVE_POLICY.py",
+                    "templates/GUARDIANO_MEMORIA.py",
+                    "templates/GUARDIANO_EMAIL_OPERATIVA.py",
+                    "templates/GUARDIANO_DOPPIONI.py",
+                    "templates/GUARDIANO_DATI_VERIFICATI.py",
+                    "templates/GUARDIANO_NOTE_AGENTI.py",
+                    "templates/GUARDIANO_TURNO.py",
+                    "templates/SALVATAGGIO_AUTOMATICO.py",
+                },
+            )
             self.assertFalse(any(path.startswith(".git/") for path in files))
 
     def test_missing_cli_is_a_failure_with_complete_evidence(self):

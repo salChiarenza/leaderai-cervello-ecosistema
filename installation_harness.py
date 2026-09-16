@@ -3,7 +3,7 @@
 
 Il collaudo parte da una fotografia locale e immutabile dello standard, avvia
 una sessione nuova dell'agente e valuta soltanto effetti osservabili. Il
-percorso provato e' quello di ``INSTALLA_CON_AI.md``: niente clone, niente
+percorso provato e' quello di ``01 - Cervello - installazione e aggiornamento.md``: niente clone, niente
 ``leaderai_setup.py`` e nessun codice Python della repo disponibile all'agente.
 
 Il modulo usa soltanto la standard library. Un modello reale viene avviato
@@ -35,11 +35,20 @@ REPO_ROOT = Path(__file__).resolve().parent
 DEFAULT_TARGET_NAME = "Casa prova - citta d'Artu"
 
 STANDARD_FILES = (
-    "INSTALLA_CON_AI.md",
+    "01 - Cervello - installazione e aggiornamento.md",
     "MANIFEST.md",
     "VERSION",
     "install_contract.json",
     "templates/AGENTS.md",
+    "templates/GUARDIANO_MEMORIA.py",
+    "templates/IMPARA_DAGLI_ERRORI_SKILL.md",
+    "templates/GUARDIANO_EMAIL_OPERATIVA.py",
+    "templates/GUARDIANO_DOPPIONI.py",
+    "templates/GUARDIANO_DATI_VERIFICATI.py",
+    "templates/GUARDIANO_NOTE_AGENTI.py",
+    "templates/GUARDIANO_TURNO.py",
+    "templates/SALVATAGGIO_AUTOMATICO.py",
+    "templates/CHAT_AGGIORNAMENTI.sh",
     "templates/AGENT_CHAT.md",
     "templates/ASSET.md",
     "templates/CLAUDE_SETTINGS.json",
@@ -111,7 +120,7 @@ MODE_FORBIDDEN_PATHS = {
 }
 
 FORBIDDEN_TARGET_PATHS = (
-    "INSTALLA_CON_AI.md",
+    "01 - Cervello - installazione e aggiornamento.md",
     "MANIFEST.md",
     "VERSION",
     "leaderai_setup.py",
@@ -124,7 +133,7 @@ Lavora soltanto dentro questa workspace temporanea. Non usare internet e non
 toccare impostazioni globali, Desktop, browser, email, account o cartelle
 esterne.
 
-Leggi in `standard-snapshot/INSTALLA_CON_AI.md` soltanto la sezione compresa
+Leggi in `standard-snapshot/01 - Cervello - installazione e aggiornamento.md` soltanto la sezione compresa
 tra `START_NUCLEO_INSTALLAZIONE` e `END_NUCLEO_INSTALLAZIONE`. Leggi poi
 `standard-snapshot/VERSION`, `standard-snapshot/install_contract.json` e i
 template dichiarati dal contratto. Applica quel nucleo alla cartella locale vuota

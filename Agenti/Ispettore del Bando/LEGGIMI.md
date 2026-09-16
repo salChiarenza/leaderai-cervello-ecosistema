@@ -19,7 +19,7 @@ e ripete la verifica finche resta soltanto un vero gesto del titolare.
 
 ## Contenuto
 
-- `INSTALLA_CON_AI.md`: installazione guidata da Claude.
+- `01 - Cervello - installazione e aggiornamento.md`: installazione guidata da Claude.
 - `SKILL.md`: ingresso operativo automatico.
 - `PROCEDURA.md`: metodo completo e riutilizzabile.
 - `assets/CONTROLLO_BANDO.template.json`: matrice iniziale.

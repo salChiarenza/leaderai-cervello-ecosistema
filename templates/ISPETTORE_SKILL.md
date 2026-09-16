@@ -14,7 +14,10 @@ soltanto il backup e non entra nel checkup.
 Se l'utente ha gia' detto `lancia l'Ispettore`, `controlla l'Ecosistema`,
 `verifica le strade`, `cerca doppioni` o una formula equivalente, inizia il
 checkup. Non chiedere di nuovo se vuole avviarlo. Chiedi soltanto davanti a un
-gesto umano vero previsto dal `CHECKUP.md`.
+gesto umano vero previsto dal `CHECKUP.md`. Applica il mandato comune
+`ecosystem-check/STANDARD_REPARTO.md`, «Autonomia operativa»: nel ciclo operativo
+passa il difetto a INTERVENTO e verifica la correzione; la sola diagnosi resta
+sola lettura quando e' questo l'incarico ricevuto.
 
 ## Scelta del controllo
 
@@ -75,9 +78,9 @@ riscontri distinti. Un reparto nuovo entra nella stessa manutenzione della casa.
 6-bis. Censisci i soggetti giuridici che il proprietario governa da questa casa
    in `ecosistema/SOGGETTI.md`, una riga per soggetto. Le stanze seguono le
    funzioni, non i soggetti: piu' societa' non fanno piu' case ne' piu' stanze.
-6-ter. Leggi `- Fase del percorso: N` nella mappa madre. Sotto il 3 nessuna
-   stanza di lavoro: una stanza registrata con fase 1 o 2 e' `ROOM_BEFORE_STEP_3`
-   e blocca il verdetto. La riga la alza solo la missione che chiude il passo.
+6-ter. Leggi `- Fase del percorso: N` nella mappa madre: serve a sapere a che
+   punto e' il percorso. Non e' un divieto: una stanza si giudica dalla forma
+   (mappa, ponte, responsabile, registrazione), mai dal numero della fase.
 7. Ogni vera stanza deve essere raggiungibile dalla mappa madre e avere
    `AGENTS.md` + `CLAUDE.md`, con `CLAUDE.md` uguale a `@AGENTS.md`.
    La cartella madre dichiara il `Boss dell'Ecosistema`; ogni ramo organizzativo
@@ -95,7 +98,9 @@ riscontri distinti. Un reparto nuovo entra nella stessa manutenzione della casa.
    risolte o portate al proprietario come decisione precisa.
 9. Ripara da solo file standard, ponti e puntatori mancanti. Elimina soltanto
    residui vuoti o inutili creati dall'agente nella missione corrente. Per
-   spostare, fondere o eliminare contenuti preesistenti chiedi conferma.
+   spostare o eliminare contenuti preesistenti serve un mandato specifico;
+   riconciliare il testo nella stessa fonte, conservandone fatti e obblighi,
+   rientra nella manutenzione gia' autorizzata. Non richiedere il mandato due volte.
 10. Verifica memoria unica, ciclo report/log/stato, fonti business fuori dal
    codice, credenziali per solo percorso/history, asset firma/timbro e ordine
    stato-prossimo-scadenze nei file progetto. Misura inoltre tutti i Markdown

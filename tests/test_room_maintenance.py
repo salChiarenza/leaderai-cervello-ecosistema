@@ -2,6 +2,9 @@
 import json
 import tempfile
 import unittest
+import subprocess
+from types import SimpleNamespace
+from unittest.mock import patch
 from pathlib import Path
 
 from templates import ARCHIVE_POLICY as policy
@@ -134,3 +137,177 @@ class RoomMaintenanceTest(unittest.TestCase):
         p = self.room / "AGENTS.md"
         p.write_text(p.read_text() + "\n<!-- rm -rf / -->\n")
         self.assertEqual(self.findings(), [])
+
+    def test_installed_maintenance_has_no_unresolved_template_marker(self):
+        for folder in (".agents/skills", ".claude/skills"):
+            for path in (self.root / folder).rglob("SKILL.md"):
+                self.assertNotIn("{{", path.read_text(), str(path))
+
+    def test_autonomy_uses_routine_mandate_without_suggesting_the_repairs(self):
+        from tests.room_growth_live import maintenance_prompt
+        prompt = maintenance_prompt()
+        self.assertIn("verificatore distinto", prompt)
+        self.assertIn("limiti del titolare", prompt)
+        for hint in ("AUTO-01", "prima_prova", "verde", "duplicat", "puntator"):
+            self.assertNotIn(hint, prompt)
+
+    def test_growth_runtime_scopes_every_prompt_and_enables_native_review(self):
+        from tests.room_growth_live import run_growth
+        for agent in ("codex", "claude"):
+            calls = []
+            def simulated_agent(command, root, prompt, timeout):
+                calls.append((command, prompt))
+                (root / "amministrazione").mkdir(exist_ok=True)
+                return SimpleNamespace(state="COMPLETED", return_code=0, stdout="", stderr="")
+            with self.subTest(agent=agent), tempfile.TemporaryDirectory() as evidence, patch(
+                    "installation_harness.execute_agent", simulated_agent):
+                run_growth(agent, Path(evidence) / "result")
+                self.assertEqual(len(calls), 4)
+                for command, prompt in calls:
+                    self.assertIn("non usare rete, altre cartelle, account o configurazioni globali", prompt)
+                    if agent == "codex":
+                        self.assertNotIn("--ephemeral", command)
+                        self.assertIn("multi_agent", command)
+                    else:
+                        self.assertIn('{"autoMemoryEnabled":false}', command)
+                        self.assertIn("Agent", command[command.index("--tools") + 1].split(","))
+
+    def test_native_review_requires_own_child_reads_and_completion(self):
+        from tests.room_growth_live import codex_native_review
+        with tempfile.TemporaryDirectory() as logs:
+            path = Path(logs) / "child.jsonl"
+            meta = {"payload": {"id": "child", "cwd": str(self.root),
+                "source": {"subagent": {"thread_spawn": {"parent_thread_id": "parent"}}}}}
+            def command(thread, output):
+                return {"type": "event_msg", "payload": {"thread_id": thread,
+                    "item": {"type": "CommandExecution", "exit_code": 0,
+                        "command": "cat app-iscrizioni/prima_prova.md memory/MEMORY.md app-iscrizioni/STATO_ISCRIZIONI.md", "aggregated_output": output}}}
+            done = {"type": "event_msg", "payload": {"type": "task_complete", "last_agent_message": "Verificato"}}
+            output = "dato ricevuto e riscontro prodotto\nColore aziendale: verde. Fonte: 01/09/2026.\n[Prova della stanza](prima_prova.md)"
+            path.write_text("\n".join(map(json.dumps, [meta, command("parent", output), done])))
+            found = codex_native_review("parent", self.root, logs)
+            self.assertFalse(found[0]["proof_read"])
+            self.assertFalse(found[0]["memory_read"])
+            self.assertEqual(codex_native_review("unrelated", self.root, logs), [])
+            self.assertEqual(codex_native_review("parent", self.room, logs), [])
+            path.write_text("\n".join(map(json.dumps, [meta, command("child", output)])))
+            self.assertIsNone(codex_native_review("parent", self.root, logs)[0]["completed"])
+            path.write_text("\n".join(map(json.dumps, [meta, command("child", output), done])))
+            found = codex_native_review("parent", self.root, logs)[0]
+            self.assertTrue(found["completed"] and found["proof_read"] and found["memory_read"])
+            self.assertTrue(found.get("verified"), "Manca la prova delle tre letture prima della conclusione")
+            argv = command("child", output)
+            argv["payload"]["item"]["command"] = ["/bin/zsh", "-c", argv["payload"]["item"]["command"]]
+            message = {"type": "event_msg", "payload": {"thread_id": "child", "item": {
+                "type": "SubAgentActivity", "kind": "interacted", "agent_thread_id": "parent"}}}
+            path.write_text("\n".join(map(json.dumps, [meta, argv, message, done])))
+            self.assertTrue(codex_native_review("parent", self.root, logs)[0]["verified"])
+            path.write_text("\n".join(map(json.dumps, [meta, done, command("child", output)])))
+            self.assertFalse(codex_native_review("parent", self.root, logs)[0]["verified"])
+
+            mutation = command("child", "")
+            mutation["payload"]["item"]["command"] = "sed -i '' 's/rosso/verde/' memory/MEMORY.md"
+            path.write_text("\n".join(map(json.dumps, [meta, mutation, command("child", output), done])))
+            self.assertFalse(codex_native_review("parent", self.root, logs)[0]["verified"],
+                "Il revisore che modifica via shell non e' indipendente")
+            fake = command("child", output)
+            fake["payload"]["item"]["command"] = "echo 'dato ricevuto e riscontro prodotto'"
+            path.write_text("\n".join(map(json.dumps, [meta, fake, done])))
+            self.assertFalse(codex_native_review("parent", self.root, logs)[0]["verified"])
+
+    def test_review_shell_fails_closed_on_writes_and_unknown_execution(self):
+        from tests.room_growth_live import review_command_readonly
+        for command in ("cat memory/MEMORY.md", "sed -n '1,100p' memory/MEMORY.md",
+                        "/bin/zsh -lc 'git diff -- memory/MEMORY.md'", "cat a.md | head -40",
+                        ["/bin/zsh", "-lc", "cat memory/MEMORY.md"],
+                        "GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1 git diff HEAD",
+                        'TMPDIR="$PWD/.agent" PYTHONDONTWRITEBYTECODE=1 bash .agent/hooks/guardiano_stanze.sh --misura',
+                        'bash .agent/hooks/guardiano_stanze.sh --misura; echo "EXIT_CODE=$?"',
+                        "git log --oneline -10; echo '---'; git diff --stat",
+                        "find . -path './.git' -prune -o -type f -print | sort", "ls .agent 2>&1",
+                        'grep -rn "prima-prova-vecchia" . 2>/dev/null'):
+            self.assertTrue(review_command_readonly(command), command)
+        for command in ("sed -i '' 's/a/b/' a.md", "sed -n '1w backup' a.md",
+                        "cat a.md > a.md", "cat $(touch a.md)",
+                        "grep -rn parola . 2>/dev/null-copy", "grep -rn parola . 2>errori.txt",
+                        "python3 check.py", "rg --pre ./rewrite a.md", "./cat a.md",
+                        "git diff --output=a.md", "cat a.md &", "cat a.md; bash script.sh",
+                        "bash .agent/hooks/guardiano_stanze.sh", "GIT_CONFIG_GLOBAL=other git diff",
+                        "find . -exec touch a.md ';'", "sort a.md -o a.md", "find . -delete",
+                        "printf -v PATH /tmp/programmi; cat a.md",
+                        'TMPDIR="$(touch a.md)" bash .agent/hooks/guardiano_stanze.sh --misura'):
+            self.assertFalse(review_command_readonly(command), command)
+        from tests.room_growth_live import review_reads
+        forged = "cat memory/MEMORY.md; echo 'dato ricevuto e riscontro prodotto' app-iscrizioni/prima_prova.md"
+        self.assertFalse(review_reads(forged, "dato ricevuto e riscontro prodotto", self.root)["proof_read"])
+
+    def autonomy_case(self, variant="valid"):
+        from tests.room_growth_live import run_autonomy
+        baseline = []
+        def simulated_agent(command, root, prompt, timeout):
+            baseline.append(subprocess.run(["git", "status", "--porcelain"], cwd=root,
+                capture_output=True, text=True, check=True).stdout)
+            source = root / "app-iscrizioni/STATO_ISCRIZIONI.md"
+            source.write_text(source.read_text().replace("prima-prova-vecchia.md", "prima_prova.md"))
+            memory = root / "memory/MEMORY.md"
+            memory.write_text("# Memoria\n- Colore aziendale: verde. Fonte: 01/09/2026.\n")
+            work = root / "ecosystem-check/STATO.md"
+            work.write_text(work.read_text().replace("- Stato: ASSEGNATA", "- Stato: CHIUSA"))
+            if variant == "empty_directory":
+                (root / "cartella-inutile").mkdir()
+            def event(block, parent=None):
+                return {"parent_tool_use_id": parent, "message": {"content": [block]}}
+            completed = event({"type": "tool_result", "tool_use_id": "review", "content": "Verificato"})
+            background = variant.startswith("background_")
+            events = [event({"type": "tool_use", "id": "review", "name": "Agent", "input": {"run_in_background": background}})]
+            if background:
+                events.append(event({"type": "tool_result", "tool_use_id": "review", "content": "Async agent launched successfully."}))
+            if variant == "completion_before_reads":
+                events.append(completed)
+            for i, name in enumerate(("app-iscrizioni/STATO_ISCRIZIONI.md", "app-iscrizioni/prima_prova.md", "memory/MEMORY.md")):
+                parent = "unrelated" if variant == "unrelated_child" else "review"
+                content = (root / name).read_text()
+                if variant == "stale_source" and i == 0:
+                    content = content.replace("prima_prova.md", "prima-prova-vecchia.md")
+                if variant == "no_reads":
+                    continue
+                events += [event({"type": "tool_use", "name": "Read", "id": f"read-{i}",
+                    "input": {"file_path": str(root / name)}}, parent),
+                    event({"type": "tool_result", "tool_use_id": f"read-{i}", "content": content}, parent)]
+            if variant == "reviewer_writes":
+                events.append(event({"type": "tool_use", "name": "Edit", "id": "write", "input": {}}, "review"))
+            if variant == "reviewer_shell_writes":
+                events.insert(1, event({"type": "tool_use", "name": "Bash", "id": "write",
+                    "input": {"command": "sed -i '' 's/rosso/verde/' memory/MEMORY.md"}}, "review"))
+            if background and variant != "background_ack_only":
+                events.append({"type": "system", "subtype": "task_notification", "tool_use_id": "review",
+                    "status": "failed" if variant == "background_failed" else "completed", "summary": "Verificato"})
+            elif not background and variant != "completion_before_reads":
+                events.append(completed)
+            return SimpleNamespace(state="COMPLETED", return_code=0, stderr="",
+                stdout="\n".join(map(json.dumps, events)))
+        with tempfile.TemporaryDirectory() as evidence, patch("behavior_harness.execute_agent", simulated_agent):
+            report = run_autonomy("claude", Path(evidence) / "result")
+        return report, baseline
+
+    def test_autonomy_baseline_is_the_ready_case_not_the_installer(self):
+        report, baseline = self.autonomy_case()
+        self.assertEqual(baseline, [""], "Il revisore deve confrontare con il caso pronto, non con il template iniziale")
+        self.assertTrue(report["passed"], report)
+
+    def test_claude_background_review_waits_for_runtime_completion(self):
+        report, _ = self.autonomy_case("background_valid")
+        self.assertTrue(report["checks"]["revisore_distinto_eseguito"], report)
+        for variant in ("background_ack_only", "background_failed"):
+            report, _ = self.autonomy_case(variant)
+            self.assertFalse(report["checks"]["revisore_distinto_eseguito"], report)
+
+    def test_autonomy_rejects_a_new_empty_directory(self):
+        report, _ = self.autonomy_case("empty_directory")
+        self.assertFalse(report["passed"], report)
+
+    def test_claude_review_requires_own_current_reads_before_completion(self):
+        for variant in ("no_reads", "unrelated_child", "stale_source", "completion_before_reads", "reviewer_writes", "reviewer_shell_writes"):
+            with self.subTest(variant=variant):
+                report, _ = self.autonomy_case(variant)
+                self.assertFalse(report["checks"]["revisore_distinto_eseguito"], report)

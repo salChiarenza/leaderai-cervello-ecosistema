@@ -2616,23 +2616,6 @@ def inspect_ecosystem(
                 )
             )
 
-        if (
-            declared_phase is not None
-            and declared_phase < 3
-            and _normalized(room.path) not in standard_room_paths
-        ):
-            # Caso Pastore 03/09/2026: sei stanze proposte il giorno
-            # dell'installazione. Sotto il passo 3 la casa censisce, non costruisce.
-            findings.append(
-                Finding(
-                    "ROOM_BEFORE_STEP_3",
-                    "BLOCKER",
-                    room.path,
-                    f"Stanza registrata con Fase del percorso {declared_phase}: "
-                    "sotto il passo 3 nessuna stanza di lavoro. La fase la alza "
-                    "solo la missione LeaderAI che chiude il passo.",
-                )
-            )
 
         room_name_key = _normalized(room.name).strip()
         if (

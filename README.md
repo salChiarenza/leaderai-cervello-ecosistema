@@ -8,11 +8,12 @@ E' una repo operativa: installa quando manca tutto, fa checkup e riparazione
 quando l'ambiente esiste gia', aggiorna le fonti della casa e chiude con una
 conferma unica.
 
-La cartella `Percorso Ecosistema` mostra le cinque fasi in ordine. La prima
-monta la stessa infrastruttura comune usata da LeaderAI; le case condividono
-funzioni e controlli, mentre ognuna conserva contenuto su misura. Le prime
-quattro fasi chiudono la consegna iniziale; la quinta aggiunge nuovi processi
-soltanto quando servono.
+Le fasi successive restano visibili nel percorso. La prima usa un solo file,
+`01 - Cervello - installazione e aggiornamento.md`, che monta o aggiorna la
+stessa infrastruttura comune usata da LeaderAI; le case condividono
+funzioni e controlli, mentre ognuna conserva contenuto su misura. Il percorso
+guidato termina con `5 Collaudo e consegna`; eventuali nuovi prodotti o
+processi si aggiungono dopo, soltanto quando servono.
 
 ## Fonti ufficiali vive del checkup
 
@@ -50,14 +51,15 @@ delle stanze appartengono al cliente, non al template.
 
 ## Uso rapido
 
-Per installare tramite l'agente del cliente, usare:
+Per installare o aggiornare tramite l'agente del cliente, il file visibile e':
 
 ```text
-INSTALLA_CON_AI.md
+01 - Cervello - installazione e aggiornamento.md
 ```
 
-Il testo della prima email di consegna vive soltanto in `EMAIL_CONSEGNA.md`.
-La procedura non ne mantiene una seconda copia.
+La fonte tecnica del documento e' `01 - Cervello - installazione e aggiornamento.md`. Il testo della prima
+email vive in `EMAIL_CONSEGNA.md` ed e' soltanto un invito breve con il link;
+non contiene una seconda copia della procedura.
 
 L'agente legge l'Ecosistema per i clienti in sola lettura, trova o crea la cartella
 madre nella posizione scelta col cliente e applica localmente i template dello
@@ -109,8 +111,8 @@ dire chiaro: Claude Code, mentre scrive, puo' corrompere o troncare i file su
 cartelle cloud con file on-demand (bug noti); il cliente sceglie se accettare il
 rischio in cambio della comodita'. Il backup si sceglie sempre col cliente
 (GitHub privato a comando oppure copia su Drive/OneDrive). I segreti restano
-sempre fuori dal git (`.gitignore`). Dettaglio in `INSTALLA_CON_AI.md`
-Domande 1, 2, 3 e Fase 7.
+sempre fuori dal git (`.gitignore`). Dettaglio in `01 - Cervello - installazione e aggiornamento.md`
+Domande 1, 2, 3 e Operazione 7.
 
 Uso tecnico opzionale, dopo autorizzazione esplicita:
 
@@ -168,8 +170,8 @@ Nel target scelto crea solo i pezzi standard mancanti:
 - `ecosistema/PROCESSI.md`
 - `ecosistema/LIMITI.md`
 - `ecosistema/SOGGETTI.md` anagrafe dei soggetti giuridici: piu' soggetti, una casa
-- riga `Fase del percorso: N` nella mappa madre: sotto il passo 3 il guardiano
-  blocca ogni stanza di lavoro, la fase sale solo con la missione che chiude il passo
+- riga `Fase del percorso: N` nella mappa madre: dice a che punto sei del
+  percorso e non impedisce di creare stanze, che si giudicano dalla loro forma
 - `ecosistema/STANZA_AGENTS.md` come calco locale per le nuove stanze
 - `ecosistema/STANZA_FONTE.md` come calco della loro fonte operativa
 
@@ -217,6 +219,11 @@ Modulo specifico gia' disponibile:
   L'agente del cliente parte da `moduli/portafogli/INSTALLA_MODULO.md`, sceglie
   la cartella madre o la stanza proprietaria e integra il modulo senza creare
   una stanza concorrente.
+
+Skill opzionali nel catalogo `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti/Skill`
+(sorgente `Skill/`, una cartella per skill con il suo `SKILL.md`): l'agente copia la
+cartella scelta in `.claude/skills/` o `.agents/skills/` della casa. Prima skill:
+`mente-da-principiante`.
 
 Prodotti-agente opzionali gia' disponibili nel catalogo
 `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti`:
@@ -299,7 +306,7 @@ python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
 ## Stato
 
 Versione applicabile via lettura dell'Ecosistema per i clienti. Prima di usarla con un
-cliente, leggere `AGENTS.md` e `INSTALLA_CON_AI.md`, scegliere la modalita'
+cliente, leggere `AGENTS.md` e `01 - Cervello - installazione e aggiornamento.md`, scegliere la modalita'
 Claude/Codex e verificare `VERSION` direttamente su Drive.
 La cartella madre deve essere anche il punto di ingresso reale dell'agente:
 progetto locale primario in Codex Desktop, `-C`/directory corrente in Codex

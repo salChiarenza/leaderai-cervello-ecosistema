@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.31 - 16/09/2026
+
+- Nuovo gancio di fine turno `salvataggio_automatico.py` (Claude Code e
+  Codex, Mac e Windows): se la casa ha modifiche non salvate le mette nel
+  registro git locale con data e ora, lasciando fuori segreti e impostazioni
+  locali. Non blocca mai la chiusura.
+- Motivo: a una cliente l'app mostrava a ogni turno la barra «Conferma
+  modifiche» e le chiedeva di cliccare. Il proprietario non deve mai salvare a
+  mano: la casa lo fa da sola.
+
 ## 0.6.30 - 16/09/2026
 
 - La routine giornaliera `manutenzione-ecosistema` nasce con la cartella madre

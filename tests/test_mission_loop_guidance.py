@@ -9,7 +9,6 @@ class MissionLoopGuidanceTest(unittest.TestCase):
     def test_person_visible_checkup_status_uses_plain_language_scale(self):
         sources = [
             ROOT / "CHECKUP.md",
-            ROOT / "EMAIL_CONSEGNA.md",
             ROOT / "templates" / "AGENTS.md",
             ROOT / "templates" / "ISPETTORE_SKILL.md",
         ]
@@ -29,7 +28,7 @@ class MissionLoopGuidanceTest(unittest.TestCase):
                 with self.subTest(source=source.name, phrase=phrase):
                     self.assertIn(phrase, text)
 
-        for source in [sources[0], sources[2], sources[3]]:
+        for source in sources:
             text = " ".join(source.read_text(encoding="utf-8").split())
             with self.subTest(source=source.name, phrase="internal_only"):
                 self.assertIn("non scrivere `NON PASSA`", text)
@@ -90,9 +89,9 @@ class MissionLoopGuidanceTest(unittest.TestCase):
         self.assertIn("Protocollo missioni LeaderAI", processes)
         self.assertIn("MISSIONE -> ESECUZIONE -> AUTOCONTROLLO", processes)
 
-    def test_delivery_contract_enforces_one_plain_language_human_request(self):
-        email = " ".join(
-            (ROOT / "EMAIL_CONSEGNA.md").read_text(encoding="utf-8").split()
+    def test_operational_contract_enforces_one_plain_language_human_request(self):
+        install = " ".join(
+            (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8").split()
         )
         manifest = " ".join(
             (ROOT / "MANIFEST.md").read_text(encoding="utf-8").split()
@@ -106,8 +105,8 @@ class MissionLoopGuidanceTest(unittest.TestCase):
             "Dopo la risposta riprendi la stessa missione",
             "Perfetto, l'ho fatto. Tutto completato e funzionante.",
         ]:
-            with self.subTest(source="email", phrase=phrase):
-                self.assertIn(phrase, email)
+            with self.subTest(source="install", phrase=phrase):
+                self.assertIn(phrase, install)
 
         for phrase in [
             "Regola dell'unico passaggio umano",

@@ -25,9 +25,11 @@ Versione standard applicata: `{{version}}`.
   `FUORI DAL CERVELLO`, non modificare file e chiedi un solo gesto preciso per
   aprire la cartella madre come progetto. Dopo il gesto si parte da una nuova
   task o sessione, cosi' le istruzioni vengono rilette.
-- Prima leggere questa mappa.
 - Fase del percorso: 1 (Cervello). Sale solo a passo chiuso; sotto il 3 nessuna stanza di lavoro.
-  Passo 5 - Evoluzione quando serve: dopo la consegna aggiunge solo cio' che serve.
+  Passi successivi: 2 Mappa del lavoro, 3 Primo processo, 4 Gestione
+  dell'ecosistema, 5 Collaudo e consegna.
+- Dopo il Passo 5 - Prodotti quando servono: gli extra si aggiungono dalla
+  cartella separata `Prodotti`, senza riaprire il percorso guidato.
 - Memoria canonica: `memory/`.
 - La memoria condivisa vive in `memory/MEMORY.md`.
 - Per Claude Code `autoMemoryDirectory` punta alla stessa memoria canonica: due
@@ -79,6 +81,9 @@ Versione standard applicata: `{{version}}`.
   il percorso di questa cartella: e' cio' che fa rispondere `FUORI DAL
   CERVELLO` a una sessione nata altrove. L'Ispettore lo verifica e lo ripara.
 - Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
+- Tutti i ruoli applicano `ecosystem-check/STANDARD_REPARTO.md`, Autonomia operativa:
+  un incarico gia' autorizzato comprende esecuzione, riparazione, verifica e ripresa;
+  il titolare non approva di nuovo i singoli passaggi ordinari.
 
 ## Architettura adattiva: mappa madre e stanze
 
@@ -87,15 +92,14 @@ stabile; le stanze operative dipendono dal lavoro reale del proprietario.
 
 ### Boss dell'Ecosistema
 
-L'agente che opera dalla cartella madre assume il ruolo di **Boss
-dell'Ecosistema**. Governa l'organigramma: riceve la richiesta, individua il
-ramo competente, consegna il lavoro al suo Amministratore di settore, controlla
-i passaggi tra settori e verifica il risultato finale. Non assorbe nel file
-radice i dettagli dei settori: li raggiunge tramite le mappe locali.
+Il **Boss dell'Ecosistema e' il titolare umano**: decide obiettivi e limiti.
+L'agente della cartella madre e' il **Consigliere**, direzione operativa AI:
+governa l'organigramma, assegna agli Amministratori e verifica il risultato finale.
+I dettagli restano nelle mappe dei settori, non nella radice.
 
 Ogni ramo organizzativo, nuovo o gia' esistente, e' una `STANZA` e ha un
 **Amministratore di settore**. L'amministratore governa fonti, stato, decisioni,
-capacita' e output del proprio settore e riporta al Boss dell'Ecosistema. Skill,
+capacita' e output del settore: rapporti ordinari alla regia AI, decisioni al Boss. Skill,
 script, fonti, output e sottocartelle di supporto non sono rami autonomi: restano
 posseduti dall'amministratore del settore che li usa.
 
@@ -175,9 +179,8 @@ reale compilato e un registro esatto fra `ecosistema/ASSET.md` ed
 Se il proprietario dice `lancia l'Ispettore`, `controlla l'Ecosistema`,
 `verifica le strade`, `cerca doppioni` o formule equivalenti, usa la skill
 `ispettore-ecosistema` dell'agente attivo e applica il `CHECKUP.md` ufficiale.
-Il comando e' gia' autorizzazione ad avviare il checkup: non chiedere una
-seconda volta se partire. La capacita' e' registrata in
-`ecosistema/ASSET.md`.
+Il comando autorizza il checkup: non chiedere una
+seconda volta se partire. Capacita' in `ecosistema/ASSET.md`.
 
 L'Ispettore e' obbligatorio anche dopo un cambiamento strutturale. Prima di
 salvare verifica almeno:
@@ -213,8 +216,7 @@ Senza autoprova il lavoro si dichiara `DA COLLAUDARE`, mai finito.
 
 ## Metodo di lavoro (codice genetico LeaderAI)
 
-Queste regole sono il modo di lavorare LeaderAI: valgono in ogni sessione,
-per ogni compito, insieme all'Autoprova.
+Queste regole valgono in ogni sessione, insieme all'Autoprova.
 
 - **Dati veri:** ogni fatto concreto viene da una fonte aperta e verificata;
   fonte assente = `DA COLLEGARE`.
@@ -291,16 +293,13 @@ quattro tracce: casa/fonte vera, riga in `ecosistema/ASSET.md`, processo o
 limite aggiornato solo se cambia davvero e log tecnico solo per cambi di
 installazione o struttura.
 
-Esempi di asset: PEC, email, banca, auto, gestionale, Drive, WhatsApp,
-fornitore, sito, repo, kit, app o archivio.
-
-## Fase 1 - Cervello
+## Cervello
 
 Il Cervello e' pronto quando mappa, memoria unica, log e aggancio dell'agente
 esistono; Claude Code usa la stessa memoria tramite `autoMemoryDirectory`; una
 nuova chat sa dove leggere e scrivere; versione applicata e log coincidono.
 
-## Fase 2 - Ecosistema
+## Ecosistema operativo
 
 L'Ecosistema e' la mappa delle fonti reali: cartelle operative, documenti
 ricorrenti, email e calendario collegati, gestionali/CRM/fatture esistenti,
@@ -336,8 +335,6 @@ usare una seconda copia hardcoded che diverge in silenzio.
 
 ## Chiusura
 
-Ogni missione aggiorna direttamente le fonti proprietarie. La conferma finale
-esiste soltanto quando la missione la richiede e apre con `Perfetto, l'ho
-fatto. Tutto completato e funzionante.`
+Aggiorna le fonti proprietarie; conferma finale solo se richiesta, secondo `ecosistema/PROCESSI.md`.
 
 Creato da LeaderAI Cervello + Ecosistema il {{date}}.

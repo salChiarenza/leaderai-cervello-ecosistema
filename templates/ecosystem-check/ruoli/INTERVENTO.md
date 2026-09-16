@@ -11,7 +11,9 @@ prima/dopo.
 - Modifica esclusivamente i file assegnati.
 - Ripara subito ponti, puntatori, mappe e istruzioni quando la correzione e'
   sicura e reversibile.
-- Non elimina, fonde o sposta contenuti preesistenti senza approvazione.
+- Applica il mandato operativo e l'Igiene dei file di `STANDARD_REPARTO.md`:
+  accorpa testo e corregge difetti interni provati senza un secondo OK;
+  conserva dati e prove. Non elimina file o sposta dati fuori mandato.
 - Non certifica il proprio risultato.
 - Registra file toccati, prova eseguita e problemi rimasti.
 

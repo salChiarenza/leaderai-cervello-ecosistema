@@ -3,6 +3,62 @@
 Questo e' il metro usato da Ecosystem Check. Vale per ogni reparto e per ogni
 sottoreparto che possiede una responsabilita' autonoma.
 
+## Autonomia operativa: incarico iniziale, risultato verificato
+
+Il titolare decide obiettivi, priorita' e limiti; non dirige i singoli passaggi.
+Un incarico o un mandato continuativo gia' autorizzato comprende esecuzione,
+diagnosi, riparazione interna, verifica e ripresa. Non occorre un secondo OK
+per le azioni comprese. Questa regola vale per tutti i ruoli, anche installatore,
+Consigliere, amministratori, specialisti, controllori e manutentori.
+
+- Il Consigliere prende in carico e segue il risultato nella fonte del reparto.
+  Il controllore verifica e passa il difetto provato a INTERVENTO; non lo lascia
+  in un report al titolare. Il manutentore ripara; CONTROLLO_CHIUSURA riprova.
+- Si correggono file, istruzioni, puntatori, doppioni di testo e difetti dei
+  controlli nell'ambito assegnato, conservando dati, decisioni e prove originali.
+  Il test deriva dal risultato atteso: non si indebolisce per far passare il
+  codice. Permessi e vincoli di sicurezza non si disattivano per chiudere.
+- Ogni lavoro aperto conserva nella fonte esistente: mandato, responsabile,
+  stato, ultima prova, prossimo passo, tentativi e innesco di ripresa.
+  IN ATTESA o BLOCCATA si riprendono solo quando cambia la dipendenza o arriva
+  la decisione, oppure alla riverifica gia' prevista; niente rilanci invariati.
+  ASSEGNATA senza esecutore ancora attivo non significa IN CORSO: si verifica
+  l'ultima ricevuta, si riprende lo stesso incarico, si saltano azioni gia' provate.
+  Non si avviano due scrittori sugli stessi file. Un passaggio a un reparto
+  termina quando il destinatario prende in carico, non quando si scrive il nome.
+- La routine esistente rilegge anche lavori aperti e contenuti sotto soglia;
+  una misura vuota non chiude quei debiti. Le fonti rilette e i residui sono
+  annotati nella stessa ricevuta, non in un altro registro.
+- Massimo due tentativi sullo stesso difetto nello stesso ciclo; poi la regia
+  rivaluta causa, alternativa e prossima verifica. Nessun ciclo infinito o
+  nuovo timer per aggirare il limite. Fine sessione non significa fine lavoro.
+- Al titolare arrivano scelte fuori mandato, accessi personali o problemi
+  sostanziali con tentativi documentati e senza alternativa praticabile.
+  Un'eccezione non ferma gli altri lavori autorizzati. Invii, spese, firme,
+  cancellazioni di dati e ampliamenti di accesso richiedono il mandato specifico
+  del proprietario; quello gia' dato non si richiede a ogni passaggio.
+- CHIUSA richiede prova del risultato, passaggi a valle conclusi e materiali
+  temporanei gestiti. Installato, assegnato e programmato sono stati intermedi.
+  Le operazioni ordinarie restano nelle fonti; niente solleciti al titolare.
+
+L'installatore prova sul motore presente avvio, esecuzione, ripresa e arresto.
+Una routine configurata non certifica una corsa: serve cronologia nativa.
+Mac/app spenti, permessi mancanti o copie cliente non verificate restano limiti
+espliciti, non promesse di autonomia. Una nuova casa eredita il contratto e lo
+collauda sul proprio primo processo, senza duplicare agenti per sottocartella.
+
+Per una verifica distinta usa lo strumento nativo effettivamente esposto
+(`Task`/`Agent` in Claude, `spawn_agent` e attesa in Codex): mandato di sola
+lettura con difetto originale, fonti e risultato da verificare. L'assenza del
+revisore si dichiara solo dopo aver verificato gli strumenti disponibili o un
+avvio fallito, non perche' non c'e' gia' un agente aperto. La regia attende
+il risultato, lo confronta con le fonti e poi chiude lo stesso incarico.
+Il revisore resta sulle correzioni e sui loro utilizzatori, non riapre un audit
+generale. Usa letture esplicite (`Read`, `Grep`, `Glob`, oppure comandi singoli
+come `cat`, `rg`, `git diff`) e il controllo originale gia' presente; niente
+script ad hoc, concatenazioni o scritture durante la verifica. Cosi' le prove
+sono rileggibili dal collaudo. L'avviso di avvio in background non e' l'esito.
+
 ## Quando nasce un reparto
 
 Un reparto nasce soltanto quando mantiene una responsabilita' stabile, uno
@@ -16,7 +72,8 @@ un output o una fonte non bastano.
 2. `CLAUDE.md` con la sola riga `@AGENTS.md`.
 3. Una fonte operativa nominata, con in testa stato corrente, prossimo passo,
    decisioni e scadenze.
-4. Un Amministratore del settore che riporta al Boss dell'Ecosistema.
+4. Un Amministratore del settore: responsabilita' ultima al Boss umano,
+   coordinamento e rapporti ordinari alla regia AI, eccezioni vere al titolare.
 5. Una riga nella mappa madre con un collegamento reale al reparto.
 6. Ogni sottocartella diretta dichiarata in `Dentro` con la sua funzione.
 7. Una sola fonte per ogni dato, stato o procedura.

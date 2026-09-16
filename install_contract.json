@@ -538,6 +538,46 @@
         "template": "INSTALL_LOG.md",
         "destination": "logs/install-log.md",
         "strategy": "event_log"
+      },
+      {
+        "template": "GUARDIANO_MEMORIA.py",
+        "destination": ".agent/hooks/guardiano_memoria.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_DOPPIONI.py",
+        "destination": ".agent/hooks/guardiano_doppioni.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_DATI_VERIFICATI.py",
+        "destination": ".agent/hooks/guardiano_dati_verificati.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_NOTE_AGENTI.py",
+        "destination": ".agent/hooks/guardiano_note_agenti.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_TURNO.py",
+        "destination": ".agent/hooks/guardiano_turno.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "SALVATAGGIO_AUTOMATICO.py",
+        "destination": ".agent/hooks/salvataggio_automatico.py",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "CHAT_AGGIORNAMENTI.sh",
+        "destination": ".agent/hooks/chat_aggiornamenti.sh",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANO_EMAIL_OPERATIVA.py",
+        "destination": ".agent/hooks/guardiano_email_operativa.py",
+        "strategy": "managed_text"
       }
     ],
     "required": [
@@ -567,7 +607,15 @@
       "ecosystem-check/ruoli/CONTROLLO_CHIUSURA.md",
       ".agent/hooks/guardiano_stanze.sh",
       ".agent/hooks/archive_policy.py",
-      ".agent/hooks/guardiano_stanze_windows.ps1"
+      ".agent/hooks/guardiano_stanze_windows.ps1",
+      ".agent/hooks/guardiano_memoria.py",
+      ".agent/hooks/guardiano_doppioni.py",
+      ".agent/hooks/guardiano_dati_verificati.py",
+      ".agent/hooks/guardiano_note_agenti.py",
+      ".agent/hooks/guardiano_turno.py",
+      ".agent/hooks/salvataggio_automatico.py",
+      ".agent/hooks/chat_aggiornamenti.sh",
+      ".agent/hooks/guardiano_email_operativa.py"
     ],
     "forbidden": [],
     "external_effects": [
@@ -610,6 +658,11 @@
           "template": "CENSITORE_PROCESSI_SKILL.md",
           "destination": ".agents/skills/censitore-processi/SKILL.md",
           "strategy": "create"
+        },
+        {
+          "template": "IMPARA_DAGLI_ERRORI_SKILL.md",
+          "destination": ".agents/skills/impara-dagli-errori/SKILL.md",
+          "strategy": "create"
         }
       ],
       "required": [
@@ -617,7 +670,8 @@
         ".agents/skills/ispettore-ecosistema/SKILL.md",
         ".agents/skills/manutentore-ecosistema/SKILL.md",
         ".codex/hooks.json",
-        ".agents/skills/censitore-processi/SKILL.md"
+        ".agents/skills/censitore-processi/SKILL.md",
+        ".agents/skills/impara-dagli-errori/SKILL.md"
       ],
       "forbidden": [
         ".claude/README.md",
@@ -655,6 +709,11 @@
           "template": "CENSITORE_PROCESSI_SKILL.md",
           "destination": ".claude/skills/censitore-processi/SKILL.md",
           "strategy": "create"
+        },
+        {
+          "template": "IMPARA_DAGLI_ERRORI_SKILL.md",
+          "destination": ".claude/skills/impara-dagli-errori/SKILL.md",
+          "strategy": "create"
         }
       ],
       "required": [
@@ -662,7 +721,8 @@
         ".claude/skills/ispettore-ecosistema/SKILL.md",
         ".claude/skills/manutentore-ecosistema/SKILL.md",
         ".claude/settings.json",
-        ".claude/skills/censitore-processi/SKILL.md"
+        ".claude/skills/censitore-processi/SKILL.md",
+        ".claude/skills/impara-dagli-errori/SKILL.md"
       ],
       "forbidden": [
         ".codex/README.md",

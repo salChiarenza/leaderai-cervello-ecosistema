@@ -1,6 +1,6 @@
 ---
 name: censitore-processi
-description: Usa quando l'utente dice censisci i miei processi, quali sono i miei processi, guarda come lavoro, mappa il mio lavoro, non so spiegarti cosa faccio, oppure quando la casa e' al Passo 2 Censimento e serve una panoramica dei lavori ricorrenti. Legge in sola lettura il perimetro autorizzato e propone processi candidati con prove e livello di certezza.
+description: Usa quando l'utente dice censisci i miei processi, quali sono i miei processi, guarda come lavoro, mappa il mio lavoro, non so spiegarti cosa faccio, oppure quando la casa e' al Passo 2 Mappa del lavoro e serve una panoramica dei lavori ricorrenti. Legge in sola lettura il perimetro autorizzato e propone processi candidati con prove e livello di certezza.
 ---
 
 # Agente Censitore dei processi

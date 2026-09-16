@@ -1,6 +1,7 @@
 import io
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -90,9 +91,85 @@ class GateTest(unittest.TestCase):
 
         self.assertEqual(
             [entry["status"] for entry in entries],
-            ["TIMEOUT", "AUTH_FAILURE"],
+            ["TIMEOUT", "AUTH_FAILURE", "PRECONDITION_FAILED"],
         )
         self.assertFalse(any(entry["passed"] for entry in entries))
+
+    def test_release_cannot_pass_with_installation_but_failed_autonomy(self):
+        result = installation_harness.InstallationResult(
+            agent="claude", mode="claude", status="PASS", return_code=0,
+            timed_out=False, executable_found=True, oracle_passed=True,
+            evidence_dir="/tmp/simulated", workspace_dir="$TEMPORARY_WORKSPACE",
+            target_dir="$TEMPORARY_TARGET", duration_seconds=0.1, error=None)
+        with tempfile.TemporaryDirectory() as tmp, mock.patch(
+            "behavior_harness.run_harness", return_value=(Path(tmp), [SimpleNamespace(status="PASS")])
+        ), mock.patch("installation_harness.run_installation", return_value=result), mock.patch(
+            "tests.room_growth_live.run_autonomy", return_value={"passed": False,
+                "checks": {"revisore_distinto_eseguito": False}}
+        ) as autonomy:
+            entries = gate.run_release_live(agents=("claude",), evidence_root=Path(tmp),
+                timeout_seconds=1, executables={"claude": "fake-claude"})
+        self.assertEqual(entries[-1]["kind"], "autonomy")
+        self.assertEqual(entries[-1]["status"], "AUTONOMY_FAILURE")
+        self.assertFalse(entries[-1]["passed"])
+        self.assertEqual(autonomy.call_args.kwargs["executable"], "fake-claude")
+
+    def test_main_accepts_the_complete_six_pass_release_matrix(self):
+        entries = [
+            {
+                "kind": kind,
+                "agent": agent,
+                "status": "PASS",
+                "passed": True,
+            }
+            for agent in ("codex", "claude")
+            for kind in ("behavior", "manual_installation", "autonomy")
+        ]
+        quick = gate.QuickResult(
+            status="PASS", tests_run=1, failures=0, errors=0,
+            skipped=0, successful=True,
+        )
+        with tempfile.TemporaryDirectory() as tmp, mock.patch(
+            "tests.gate.run_quick", return_value=quick
+        ), mock.patch(
+            "tests.gate.run_release_live", return_value=entries
+        ):
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(
+                    gate.main([
+                        "--release", "--agents", "codex,claude",
+                        "--evidence-dir", tmp,
+                    ]),
+                    0,
+                )
+
+    def test_release_matrix_rejects_missing_duplicate_and_invalid_entries(self):
+        entries = [
+            {"kind": kind, "agent": agent, "status": "PASS", "passed": True}
+            for agent in ("codex", "claude")
+            for kind in ("behavior", "manual_installation", "autonomy")
+        ]
+        self.assertTrue(gate.release_matrix_passes(entries))
+
+        cases = {
+            "missing": entries[:-1],
+            "duplicate": entries[:-1] + [entries[0]],
+            "status": [
+                *entries[:-1],
+                {**entries[-1], "status": "TIMEOUT", "passed": False},
+            ],
+            "passed": [{**entry, "passed": False} if index == 0 else entry
+                       for index, entry in enumerate(entries)],
+            "unknown_kind": [
+                *entries[:-1], {**entries[-1], "kind": "unexpected"},
+            ],
+            "unknown_agent": [
+                *entries[:-1], {**entries[-1], "agent": "gemini"},
+            ],
+        }
+        for label, invalid_entries in cases.items():
+            with self.subTest(label=label):
+                self.assertFalse(gate.release_matrix_passes(invalid_entries))
 
 
 if __name__ == "__main__":

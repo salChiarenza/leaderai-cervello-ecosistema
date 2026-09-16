@@ -18,9 +18,12 @@ della repo; poi ripara, prova e riporta gli scostamenti.
 setup tecnico, Ispettore e harness di rilascio. Vietato mantenere una seconda
 lista di file obbligatori o rami agente.
 
-`Percorso Ecosistema/` e' la vista generata: Passi 1-4 per la consegna, Passo 5
-per nuovi processi reali. Il Passo 1 monta la stessa infrastruttura funzionale
-per Sal e clienti; contenuti e capacita' opzionali restano su misura.
+`Percorso Ecosistema/` e' la vista generata dei cinque passi: 1 Cervello,
+2 Mappa del lavoro, 3 Primo processo, 4 Gestione dell'ecosistema e
+5 Collaudo e consegna. I prodotti opzionali si aggiungono soltanto dopo la
+consegna, dalla cartella separata `Prodotti`. Il Passo 1 monta la stessa
+infrastruttura funzionale per Sal e clienti; contenuti e capacita' opzionali
+restano su misura.
 
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. Installa una sola stanza
@@ -74,6 +77,11 @@ Moduli professionali versionati:
   monitoraggio e report cliente con motore deterministico e validazione del
   banker. L'agente sceglie prima la cartella madre o la stanza proprietaria e poi segue
   `moduli/portafogli/INSTALLA_MODULO.md`.
+
+Skill opzionali del catalogo `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti/Skill`
+(sorgente `Skill/`, inclusa nella release; una cartella per skill): si copiano in
+`.claude/skills/` o `.agents/skills/` della casa, non entrano nel Cervello. Prima:
+`mente-da-principiante`.
 
 Prodotti-agente opzionali installabili, consegnati dal catalogo
 `LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti` e non inclusi nella
@@ -188,8 +196,10 @@ Regola posta: dopo aver letto e gestito una email o notifica, archiviala nello
 stesso giro. La Inbox contiene solo blocchi o decisioni immediate ancora attivi;
 lo stato resta nella fonte proprietaria, non nella Inbox.
 
-Non creare automatismi permanenti tra agenti: ogni giro nasce da missione umana
-o risposta esplicita LeaderAI.
+Un mandato continuativo gia' autorizzato avvia e riprende i giri ordinari senza
+una nuova missione umana o risposta LeaderAI. Riusa gli ingressi e la routine
+esistenti; nessuna catena di nuovi agenti. Contratto comune:
+`templates/ecosystem-check/STANDARD_REPARTO.md`, Autonomia operativa.
 
 Dove mettere la cartella madre si decide caso per caso, con domande guidate, non
 con una regola fissa. Le opzioni sono disco locale oppure cartella sincronizzata
@@ -207,11 +217,12 @@ su Drive/OneDrive/server e si leggono via connettore; non entrano nella repo.
 
 ## Uso cliente
 
-Il file da consegnare dal modulo Systeme.io e dall'Ecosistema per i clienti e':
+Il file visibile da consegnare dal modulo Systeme.io e dall'Ecosistema per i clienti e':
 
-- `INSTALLA_CON_AI.md`
+- `01 - Cervello - installazione e aggiornamento.md`
 
-L'agente apre quel file dall'Ecosistema per i clienti in sola lettura, legge `VERSION`,
+La sua fonte tecnica e' `01 - Cervello - installazione e aggiornamento.md`. L'agente apre il file visibile
+dall'Ecosistema per i clienti in sola lettura, legge `VERSION`,
 `MANIFEST.md` e i template indicati, poi applica lo standard localmente. La
 procedura predefinita non richiede clone della repo ne' esecuzione di codice
 scaricato. `leaderai_setup.py` resta un attrezzo tecnico opzionale, utilizzabile
@@ -243,9 +254,10 @@ tecnici.
 Nella nuova installazione parte dalla lettura del prodotto Drive e dal montaggio locale
 dei template.
 
-Il modello unico dell'email di prima consegna vive in `EMAIL_CONSEGNA.md`.
-`INSTALLA_CON_AI.md` contiene soltanto la procedura esecutiva: niente copie
-parallele dell'email.
+Il modello unico dell'email di prima consegna vive in `EMAIL_CONSEGNA.md` ed e'
+un breve messaggio alla persona con un solo link. `01 - Cervello - installazione e aggiornamento.md` contiene
+tutta la procedura esecutiva di installazione e aggiornamento: niente copie
+parallele nelle email o in riepiloghi generati.
 
 ## Divieti
 
@@ -322,11 +334,12 @@ esplicitamente; non e' il percorso cliente predefinito.
 
 ## Quando finisci una modifica
 
-1. Aggiorna `README.md`, `MANIFEST.md` o `INSTALLA_CON_AI.md` se cambia un fatto
+1. Aggiorna `README.md`, `MANIFEST.md` o `01 - Cervello - installazione e aggiornamento.md` se cambia un fatto
    critico.
 2. Esegui i test.
 3. Per un rilascio esegui il gate completo: autenticazione mancante, timeout,
-   test saltati o prova live fallita bloccano il caricamento.
+   test saltati o prova live fallita bloccano il caricamento. Include la ripresa
+   autonoma: installazione verde senza intervento e revisore eseguiti non basta.
 4. Carica l'Ecosistema per i clienti su Drive e rileggilo dal collegamento; soltanto
    `PASSA` rende corrente la modifica.
 5. Dopo la prova Drive, commit e push su GitHub come copia di sicurezza.

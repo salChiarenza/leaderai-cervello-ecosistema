@@ -1851,8 +1851,10 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertIn("USER_INSTRUCTIONS_MISSING", self.codes(inspection))
 
 
-    def test_room_registered_before_step_3_blocks_pass(self):
-        """Caso Pastore 03/09/2026: stanze proposte il giorno dell'installazione."""
+    def test_room_registered_before_step_3_is_allowed(self):
+        """Caso Pastore, chiuso il 14/09/2026: una stanza completa passa anche
+        con la fase a 1. La fase dice a che punto e' il percorso e non vieta di
+        lavorare; il disordine lo fermano i controlli sulla forma della stanza."""
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
             self.create_valid_room(target)
@@ -1861,8 +1863,7 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             inspection = self.inspect(target)
 
-            self.assertIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
-            self.assertEqual(inspection.verdict, "NON PASSA")
+            self.assertNotIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
 
     def test_room_registered_at_step_3_is_not_flagged_for_phase(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -170,7 +170,7 @@ class CheckupGuidanceTest(unittest.TestCase):
         surfaces = [
             ROOT / "MANIFEST.md",
             ROOT / "CHECKUP.md",
-            ROOT / "INSTALLA_CON_AI.md",
+            ROOT / "01 - Cervello - installazione e aggiornamento.md",
             ROOT / "templates" / "AGENTS.md",
             ROOT / "templates" / "ISPETTORE_SKILL.md",
         ]

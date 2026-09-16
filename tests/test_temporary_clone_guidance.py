@@ -11,7 +11,7 @@ def compact(text: str) -> str:
 
 class SafeDeliveryGuidanceTest(unittest.TestCase):
     def test_new_install_reads_standard_without_cloning_by_default(self):
-        raw = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
+        raw = (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8")
         text = compact(raw)
 
         required = [
@@ -40,7 +40,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
                 self.assertNotIn(phrase, raw)
 
     def test_new_install_exposes_readable_static_templates(self):
-        install = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
+        install = (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8")
         required_templates = [
             "GITIGNORE.txt",
             "CODEX_README.md",
@@ -58,7 +58,7 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
                 self.assertIn(f"templates/{name}", install)
 
     def test_mission_is_saved_in_owner_sources_and_closed_locally(self):
-        text = compact((ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8"))
+        text = compact((ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8"))
         required = [
             "Aggiorna direttamente le fonti proprietarie",
             "Salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie",

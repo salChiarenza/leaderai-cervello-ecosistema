@@ -113,7 +113,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
         self.assertIn("proprieta' e' ambigua", text)
 
     def test_installation_email_states_match_the_checkup(self):
-        text = (ROOT / "INSTALLA_CON_AI.md").read_text(encoding="utf-8")
+        text = (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8")
 
         self.assertIn("zero aggiornamenti intermedi", text)
         self.assertIn("archivia l'email della missione", text.lower())

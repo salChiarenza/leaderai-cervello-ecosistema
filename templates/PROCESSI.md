@@ -2,12 +2,12 @@
 
 Processi osservati o candidati.
 
-## Fase 1 - Cervello
+## Cervello
 
 - Verifica lettura istruzioni e memoria
 - Verifica salvataggio nelle fonti proprietarie e chiusura unica
 
-## Fase 2 - Ecosistema
+## Ecosistema operativo
 
 ### Panoramica del censimento (Passo 2)
 
@@ -64,6 +64,11 @@ Pratica vietata, alto rischio o dubbio sostanziale producono `NON PASSA` e
 richiedono approfondimento competente prima della consegna.
 
 ## Protocollo missioni LeaderAI
+
+Tutti i ruoli, dall'installatore agli specialisti, seguono il mandato comune
+di `ecosystem-check/STANDARD_REPARTO.md`, Autonomia operativa. La richiesta
+iniziale comprende i passaggi ordinari fino al risultato e la ripresa dei
+lavori incompleti; non richiede una nuova approvazione per ciascun passaggio.
 
 `MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
 

@@ -2,10 +2,10 @@
 
 ## Obiettivo
 
-Portare una cartella cliente a uno standard minimo operativo:
+Portare una cartella cliente a uno standard minimo operativo composto da:
 
-1. Fase 1 - Cervello: istruzioni, memoria unica, log tecnico e agenti.
-2. Fase 2 - Ecosistema: fonti reali, processi, limiti, decisioni.
+- Cervello: istruzioni, memoria unica, log tecnico e agenti.
+- Ecosistema operativo: fonti reali, processi, limiti e decisioni.
 
 ## Ruolo del Manifest
 
@@ -48,7 +48,7 @@ Deve:
 La repo insegna **come leggere e governare** un Ecosistema. Il nome e il numero
 delle stanze nascono dal lavoro reale del proprietario.
 
-La Fase 1 monta la stessa infrastruttura comune nella casa di Sal e in ogni
+Il nucleo Cervello monta la stessa infrastruttura comune nella casa di Sal e in ogni
 casa cliente: stessi compiti, stessi controlli e stessa prova finale. La casa
 di Sal resta completa della propria attivita'; quella del cliente riceve
 contenuto su misura e nessun dato personale di Sal.
@@ -79,12 +79,13 @@ Restano stabili in ogni installazione:
 - anagrafe dei soggetti giuridici in `ecosistema/SOGGETTI.md`: piu' soggetti,
   una casa, stanze per funzione;
 - fase del percorso guidato dichiarata nella mappa madre (`Fase del percorso:
-  N`): 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e consegna; sale
-  di un passo alla volta con la missione che chiude il passo e sotto il 3 il
-  guardiano blocca ogni stanza di lavoro;
-- Passo 5 `Evoluzione quando serve`: dopo la consegna ripete censimento e
-  costruzione su un nuovo lavoro reale e aggiunge soltanto la capacita'
-  necessaria; non rende incompleta una casa gia' consegnata;
+  N`): 1 Cervello, 2 Mappa del lavoro, 3 Primo processo,
+  4 Gestione dell'ecosistema, 5 Collaudo e consegna; sale di un passo alla
+  volta con la missione che chiude il passo e sotto il 3 il guardiano blocca
+  ogni stanza di lavoro;
+- dopo il Passo 5 il percorso guidato e' chiuso; i prodotti opzionali si
+  aggiungono dalla cartella separata `Prodotti`, soltanto quando un nuovo
+  lavoro reale li richiede;
 - chat di gruppo letta all'avvio e handoff tracciati tra sessioni distinte;
 - versione del metodo applicato e prove di collaudo.
 
@@ -288,7 +289,7 @@ una sola camminata per le misure strutturali, senza processi separati per
 ogni file. Il tempo si misura sulla postazione destinataria; il limite del
 controllo non si aumenta per nascondere un rallentamento.
 Python 3 (dal 3.8) deve rispondere dal terminale che esegue gli hook: e' un
-requisito d'installazione dichiarato in `INSTALLA_CON_AI.md`, Fase 2, e
+requisito d'installazione dichiarato in `01 - Cervello - installazione e aggiornamento.md`, Operazione 2, e
 verificato alla chiusura. Se manca, il guardiano si ferma e lo dice, senza
 degradare a un controllo parziale.
 I file di radice con un punto iniziale sono registrabili come gli altri,
@@ -345,8 +346,11 @@ tutti i criteri sono completati e provati. La
 conferma apre con `Perfetto, l'ho fatto. Tutto completato e funzionante.`; ogni
 stato intermedio resta nella casa del cliente.
 
-Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`; procedure,
-README e Manifest lo richiamano senza duplicarne il corpo.
+Il modello unico della prima email vive in `EMAIL_CONSEGNA.md`: e' un breve
+messaggio alla persona con un solo link. Tutta la procedura di installazione e
+aggiornamento vive in `01 - Cervello - installazione e aggiornamento.md`, pubblicato come
+`01 - Cervello - installazione e aggiornamento.md`; email e riepiloghi non ne
+duplicano il corpo.
 
 ## Modalita' agente
 
@@ -542,6 +546,21 @@ Il modulo passa quando:
   calcolo di un elemento critico non sono verificati;
 - produce un dossier tracciabile che il banker valida prima del report cliente.
 
+## Skill opzionali
+
+Le skill pronte del catalogo vivono in
+`LeaderAI Ecosystem/Ecosistema per i clienti/Prodotti/Skill`, una cartella per
+skill con il suo `SKILL.md`; sorgente `Skill/` nella copia di lavoro, inclusa
+nella release. L'agente della casa copia la cartella scelta in `.claude/skills/`
+o `.agents/skills/` e la richiama con le parole della descrizione. Non sono
+obbligatorie e non entrano nel Cervello.
+
+### Mente da principiante
+
+`Skill/mente-da-principiante/`: prima la competenza sul campo, poi lo sguardo
+nuovo; una costruzione si promuove solo con prova del risultato, di non
+regressione e del percorso reale.
+
 ## Fonti ufficiali da tenere vive
 
 Le tre fonti principali sono dichiarate anche in
@@ -605,8 +624,8 @@ Il pacchetto e' pronto quando:
   integrita';
 - le fonti proprietarie registrano versione del metodo, classificazione delle
   stanze, collegamenti e possibili lezioni candidate;
-- lo stato distingue Fase 1 Cervello creata/testata da Fase 2 Ecosistema da
-  collegare con fonti reali;
+- lo stato distingue il Cervello creato e collaudato dall'Ecosistema operativo
+  ancora da collegare alle fonti reali;
 - ogni nuovo asset operativo ha casa/fonte vera, riga in `ecosistema/ASSET.md`
   e solo i processi/limiti necessari aggiornati.
 - `AGENTS.md` include la mappa comunicazione:

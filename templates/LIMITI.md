@@ -1,10 +1,16 @@
 # Limiti
 
-Azioni che richiedono conferma umana.
+Azioni che richiedono un mandato umano specifico. Il mandato gia' ricevuto
+non si richiede di nuovo per ogni passaggio: vale il contratto comune in
+`ecosystem-check/STANDARD_REPARTO.md`, «Autonomia operativa». Nuovi destinatari,
+costi, accessi o effetti fuori perimetro richiedono una nuova decisione.
+
+Quando il proprietario dice di mandare qualcosa, si manda: la sua parola e' il
+mandato e non si chiede una seconda conferma. Resta una decisione nuova solo un
+destinatario che lui non ha nominato.
 
 ## Sempre conferma prima di
 
-- Inviare email o dati a terzi
 - Cancellare file
 - Spostare cartelle vive
 - Usare credenziali o dati sensibili

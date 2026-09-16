@@ -9,7 +9,7 @@ CONTRACT_FILES = [
     "AGENTS.md",
     "README.md",
     "MANIFEST.md",
-    "INSTALLA_CON_AI.md",
+    "01 - Cervello - installazione e aggiornamento.md",
     "CHECKUP.md",
     "templates/AGENTS.md",
 ]
@@ -117,67 +117,51 @@ class CrossAgentContractTest(unittest.TestCase):
                 with self.subTest(file=relative_path, formula=formula):
                     self.assertNotIn(formula, text)
 
-    def test_delivery_email_is_versioned_and_never_sends_automatically(self):
+    def test_delivery_email_is_a_short_pointer_to_the_single_operational_file(self):
         email = self.read("EMAIL_CONSEGNA.md")
-        install = self.read("INSTALLA_CON_AI.md")
+        install = self.read("01 - Cervello - installazione e aggiornamento.md")
 
-        self.assertIn("Modello unico e versionabile", email)
-        # Dal 04/09/2026 il cliente riceve l'Ecosistema per i clienti su Drive e il corso
-        # privato; GitHub conserva soltanto il backup e non entra nella missione.
+        self.assertLess(len(email.splitlines()), 80)
+        self.assertIn("Ciao [NOME]", email)
+        self.assertIn("01 - Cervello - installazione e aggiornamento.md", email)
         self.assertIn(
-            "https://drive.google.com/drive/folders/1POU01Ph15M1feSD_fRLQquZ1WbKjmfu6",
+            "https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view",
             email,
         )
-        self.assertIn("INSTALLA_CON_AI.md", email)
-        self.assertIn("https://www.salchiarenza.com/school/course/leaderai-ecosystem", email)
-        self.assertNotIn("github.com/salChiarenza/leaderai-cervello-ecosistema/blob/", email)
-        self.assertNotIn("archive/[RIFERIMENTO IMMUTABILE].tar.gz", email)
-        self.assertNotIn("[RIFERIMENTO IMMUTABILE]", email)
-        self.assertNotIn("[SHA256 ARCHIVIO]", email)
-        self.assertIn("GitHub conserva soltanto il backup", email)
-        self.assertIn("rilettura file per file del prodotto", email)
-        self.assertNotIn("/blob/main/", email)
+        self.assertIn("mostra a sal", email.lower())
         self.assertIn("autorizzazione esplicita", email)
-        self.assertIn("zero aggiornamenti intermedi", email)
-        self.assertNotIn("eventuale invio del report", email)
-        self.assertIn("PROVA_DESTINATARIO", email)
-        self.assertIn("AI_ACT_CHECK_OK", email)
-        self.assertGreaterEqual(email.count("SITUAZIONE IN BREVE"), 2)
-        for field in [
-            "Cosa funziona:",
-            "Cosa completiamo:",
-            "Cosa serve da te:",
-            "Quando si chiude:",
+        self.assertIn("controlla gmail inviati", email.lower())
+        self.assertNotIn("github.com/salChiarenza/leaderai-cervello-ecosistema/blob/", email)
+        for operational_only in [
+            "SITUAZIONE IN BREVE",
+            "AI_ACT_CHECK_OK",
+            "ID missione",
+            "%USERPROFILE%",
+            "SERVE UN TUO PASSAGGIO",
         ]:
-            with self.subTest(human_field=field):
-                self.assertIn(field, email)
-        self.assertNotIn("NON PASSA", email)
-        self.assertNotIn("BLOCCO REALE", email)
-        self.assertIn("SERVE UN TUO PASSAGGIO", email)
-        if "PROVA_DESTINATARIO_OK" in email:
-            version = self.read("VERSION").strip()
-            self.assertIn(f"versione `{version}`", email)
-        self.assertIn(
-            "[FIRMA AGENTE: Sal & Codex / Sal & Claude Code]",
-            email,
-        )
+            with self.subTest(operational_only=operational_only):
+                self.assertNotIn(operational_only, email)
+                self.assertIn(operational_only, install)
+        version = self.read("VERSION").strip()
+        self.assertIn(f"Versione corrente: `{version}`", install)
+        self.assertIn("installazione e aggiornamento", install.lower())
         self.assertNotIn("Modello email di consegna", install)
         for relative_path in [
             "AGENTS.md",
             "README.md",
             "MANIFEST.md",
-            "INSTALLA_CON_AI.md",
+            "01 - Cervello - installazione e aggiornamento.md",
         ]:
             with self.subTest(pointer=relative_path):
                 self.assertIn("EMAIL_CONSEGNA.md", self.read(relative_path))
 
     def test_ai_act_gate_is_installed_and_blocks_unclear_delivery(self):
         email = self.read("EMAIL_CONSEGNA.md")
-        install = self.read("INSTALLA_CON_AI.md")
+        install = self.read("01 - Cervello - installazione e aggiornamento.md")
         processes = self.read("templates/PROCESSI.md")
         limits = self.read("templates/LIMITI.md")
 
-        for surface in (email, install, processes):
+        for surface in (install, processes):
             self.assertIn("AI_ACT_CHECK_OK", surface)
             self.assertIn("sistema", surface.lower())
             self.assertIn("ruolo", surface.lower())
@@ -216,7 +200,7 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertIn("ecosystem-check/CONTROLLI.md", contract["common"]["required"])
 
     def test_remote_push_requires_explicit_command(self):
-        install = self.read("INSTALLA_CON_AI.md")
+        install = self.read("01 - Cervello - installazione e aggiornamento.md")
         self.assertIn(
             "esegui `git push` soltanto dopo il mio comando",
             install,
@@ -226,31 +210,24 @@ class CrossAgentContractTest(unittest.TestCase):
             install,
         )
 
-    def test_delivery_email_has_one_direct_operational_reader(self):
+    def test_delivery_email_has_one_human_reader_and_no_embedded_mission(self):
         email = self.read("EMAIL_CONSEGNA.md")
 
-        self.assertIn("Modo corrente: `AGENTE_CON_POSTA`", email)
-        self.assertIn(
+        self.assertIn("Ciao [NOME]", email)
+        for embedded_mission_phrase in [
+            "Modo corrente: `AGENTE_CON_POSTA`",
             "Questa missione operativa e' per l'agente AI che gestisce",
-            email,
-        )
-        for mixed_reader_phrase in [
-            "Ciao [NOME]",
-            "apri [AGENTE ATTIVO",
-            "Affidagli questa missione",
-            "leggi l'ultima email",
-            "digli di leggere",
+            "ISTRUZIONI PER L'AGENTE",
+            "CHIUSURA LOCALE",
         ]:
-            with self.subTest(phrase=mixed_reader_phrase):
-                self.assertNotIn(mixed_reader_phrase, email)
+            with self.subTest(phrase=embedded_mission_phrase):
+                self.assertNotIn(embedded_mission_phrase, email)
 
     def test_agent_emails_have_human_readable_progress_first(self):
-        email = self.read("EMAIL_CONSEGNA.md")
         checkup = self.read("CHECKUP.md")
         processes = self.read("templates/PROCESSI.md")
 
         for relative, text in [
-            ("EMAIL_CONSEGNA.md", email),
             ("CHECKUP.md", checkup),
             ("templates/PROCESSI.md", processes),
         ]:
@@ -274,8 +251,7 @@ class CrossAgentContractTest(unittest.TestCase):
         for relative in (
             "AGENTS.md",
             "CHECKUP.md",
-            "INSTALLA_CON_AI.md",
-            "EMAIL_CONSEGNA.md",
+            "01 - Cervello - installazione e aggiornamento.md",
             "MANIFEST.md",
             "README.md",
             "templates/PROCESSI.md",
@@ -291,7 +267,7 @@ class CrossAgentContractTest(unittest.TestCase):
                 self.assertNotIn("CONTINUA TERMINALE", text)
 
     def test_entrypoint_gate_is_in_installation_and_agent_boot_files(self):
-        install = self.read("INSTALLA_CON_AI.md")
+        install = self.read("01 - Cervello - installazione e aggiornamento.md")
         checkup = self.read("CHECKUP.md")
         codex = self.read("templates/CODEX_README.md")
         claude = self.read("templates/CLAUDE_README.md")
@@ -327,15 +303,15 @@ class CrossAgentContractTest(unittest.TestCase):
             self.assertIn(field, chat)
         self.assertIn("Crea la Brand Identity", manifest)
 
-    def test_delivery_email_authenticates_mission_and_is_portable(self):
+    def test_delivery_email_keeps_only_sender_checks(self):
         email = self.read("EMAIL_CONSEGNA.md")
 
-        self.assertIn("mittente LeaderAI esatto", email)
-        self.assertIn("ID missione", email)
-        self.assertIn("thread Gmail si registra dopo l'invio", email)
-        self.assertIn("conferma", email)
-        self.assertIn("%USERPROFILE%", email)
-        self.assertNotIn("[PERCORSO COMPLETO]", email)
+        self.assertIn("sal@salchiarenza.com", email)
+        self.assertIn("destinatario", email)
+        self.assertIn("versione corrente", " ".join(email.split()))
+        self.assertIn("link si apra", " ".join(email.split()))
+        self.assertNotIn("ID missione", email)
+        self.assertNotIn("%USERPROFILE%", email)
 
 
 if __name__ == "__main__":

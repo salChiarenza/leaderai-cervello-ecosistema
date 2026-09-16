@@ -7,7 +7,7 @@ Uso:
 
 ``python3 -m tests.gate --release --agents codex,claude``
     Esegue prima la suite deterministica, poi i collaudi comportamentali e
-    d'installazione manuale su sessioni reali di entrambi gli agenti.
+    d'installazione e ripresa autonoma su sessioni reali di entrambi gli agenti.
 """
 
 from __future__ import annotations
@@ -26,6 +26,7 @@ from typing import Any, Sequence, TextIO
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_RELEASE_AGENTS = ("codex", "claude")
+REQUIRED_RELEASE_KINDS = ("behavior", "manual_installation", "autonomy")
 
 
 @dataclass
@@ -135,6 +136,35 @@ def _live_entry(
     }
 
 
+def release_matrix_passes(entries: Sequence[dict[str, Any]]) -> bool:
+    """Accetta soltanto la matrice PASS completa agente per collaudo."""
+
+    expected = {
+        (agent, kind)
+        for agent in REQUIRED_RELEASE_AGENTS
+        for kind in REQUIRED_RELEASE_KINDS
+    }
+    if len(entries) != len(expected):
+        return False
+
+    observed: set[tuple[str, str]] = set()
+    for entry in entries:
+        agent = entry.get("agent")
+        kind = entry.get("kind")
+        if (
+            agent not in REQUIRED_RELEASE_AGENTS
+            or kind not in REQUIRED_RELEASE_KINDS
+            or entry.get("status") != "PASS"
+            or entry.get("passed") is not True
+        ):
+            return False
+        pair = (agent, kind)
+        if pair in observed:
+            return False
+        observed.add(pair)
+    return observed == expected
+
+
 def run_release_live(
     *,
     agents: Sequence[str],
@@ -146,6 +176,7 @@ def run_release_live(
 
     import behavior_harness
     import installation_harness
+    from tests.room_growth_live import run_autonomy
 
     overrides = executables or {}
     entries: list[dict[str, Any]] = []
@@ -224,6 +255,22 @@ def run_release_live(
                     detail={"error": str(exc)},
                 )
             )
+        autonomy_evidence = evidence_root / "autonomy" / agent
+        if not all(entry["passed"] for entry in entries if entry["agent"] == agent):
+            entries.append(_live_entry(kind="autonomy", agent=agent,
+                status="PRECONDITION_FAILED", evidence_dir=str(autonomy_evidence),
+                detail={"reason": "Uso o installazione non superati; nessuna nuova sessione avviata."}))
+            continue
+        try:
+            result = run_autonomy(agent, autonomy_evidence, timeout_seconds,
+                executable=overrides.get(agent))
+            entries.append(_live_entry(kind="autonomy", agent=agent,
+                status="PASS" if result.get("passed") else "AUTONOMY_FAILURE",
+                evidence_dir=str(autonomy_evidence), detail=result))
+        except Exception as exc:
+            entries.append(_live_entry(kind="autonomy", agent=agent,
+                status="HARNESS_ERROR", evidence_dir=str(autonomy_evidence),
+                detail={"error": str(exc)}))
     return entries
 
 
@@ -298,10 +345,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "claude": args.claude_executable,
         },
     )
-    passed = (
-        len(entries) == len(REQUIRED_RELEASE_AGENTS) * 2
-        and all(entry["status"] == "PASS" for entry in entries)
-    )
+    passed = release_matrix_passes(entries)
     summary = {
         "mode": "release",
         "passed": passed,

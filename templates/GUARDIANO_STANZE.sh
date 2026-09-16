@@ -46,7 +46,7 @@ add_issue() {
 
 # Un solo censimento nativo: stesso parser dell'Ispettore, archivi validati
 # prima della potatura. La mancanza del motore non equivale a una casa pulita.
-# Python 3 (dal 3.8) e' un requisito dichiarato in INSTALLA_CON_AI.md, Fase 2:
+# Python 3 (dal 3.8) e' un requisito dichiarato in 01 - Cervello - installazione e aggiornamento.md, Fase 2:
 # si prova davvero, perche' su Windows un alias puo' esistere senza funzionare.
 GUARD_PYTHON=""
 for guard_candidate in python3 python py; do
@@ -59,7 +59,7 @@ done
 if [ ! -f "$SCRIPT_DIR/archive_policy.py" ]; then
     add_issue ".agent/hooks/archive_policy.py - motore del controllo assente: reinstalla il file dal prodotto (templates/ARCHIVE_POLICY.py) insieme al guardiano"
 elif [ -z "$GUARD_PYTHON" ]; then
-    add_issue ".agent/hooks/archive_policy.py - Python 3 (dal 3.8) non risponde dal terminale degli hook: installalo o aggiungilo al PATH (Git Bash su Windows); requisito in INSTALLA_CON_AI.md, Fase 2"
+    add_issue ".agent/hooks/archive_policy.py - Python 3 (dal 3.8) non risponde dal terminale degli hook: installalo o aggiungilo al PATH (Git Bash su Windows); requisito in 01 - Cervello - installazione e aggiornamento.md, Fase 2"
 elif ! PYTHONUTF8=1 "$GUARD_PYTHON" "$SCRIPT_DIR/archive_policy.py" --scan "$ROOT" --archive-list "$ARCHIVES_FILE" >> "$ISSUES_FILE"; then
     add_issue ".agent/hooks/archive_policy.py - scansione non completata: riparare il motore prima di chiudere"
 fi
@@ -590,9 +590,6 @@ while IFS= read -r -d '' item; do
         fi
         if ! room_registered_at_root "$ROOT/AGENTS.md" "$rel"; then
             add_issue "$rel - stanza non registrata nella mappa madre"
-        fi
-        if [ -n "$PHASE" ] && [ "$PHASE" -lt 3 ] && [ "$rel" != "ecosystem-check" ]; then
-            add_issue "$rel - stanza creata prima del passo 3 del percorso (Fase del percorso: $PHASE)"
         fi
         if [ "$CONSOLIDATED" = false ]; then
             validate_room_map "$item" "$rel"

@@ -19,7 +19,7 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
     """
 
     def test_install_guide_requires_global_instructions_and_proof_from_outside(self):
-        text = _flat(ROOT / "INSTALLA_CON_AI.md")
+        text = _flat(ROOT / "01 - Cervello - installazione e aggiornamento.md")
         for phrase in [
             "4-bis. Istruzioni globali dell'agente attivo",
             "~/.claude/CLAUDE.md",
@@ -35,16 +35,15 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
                 self.assertIn(phrase, text)
 
     def test_install_guide_closes_with_inspector_in_a_new_session(self):
-        text = _flat(ROOT / "INSTALLA_CON_AI.md")
+        text = _flat(ROOT / "01 - Cervello - installazione e aggiornamento.md")
         self.assertIn("in una NUOVA sessione nata dalla cartella madre", text)
         self.assertIn("ultimo passo obbligatorio dell'installazione", text)
         self.assertIn("solo allora l'installazione e' chiusa", text)
 
     def test_final_confirmation_requires_full_pass_everywhere(self):
         surfaces = {
-            "INSTALLA_CON_AI.md": "soltanto con verdetto `PASSA` pieno",
+            "01 - Cervello - installazione e aggiornamento.md": "soltanto con verdetto `PASSA` pieno",
             "CHECKUP.md": "soltanto con verdetto `PASSA` pieno",
-            "EMAIL_CONSEGNA.md": "`PASSA` pieno",
             "MANIFEST.md": "parte soltanto con verdetto `PASSA` pieno",
             "templates/AGENTS.md": "con verdetto `PASSA` pieno",
             "templates/PROCESSI.md": "soltanto con verdetto `PASSA` pieno",
@@ -67,7 +66,7 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
             "README.md",
             "AGENTS.md",
             "CHECKUP.md",
-            "INSTALLA_CON_AI.md",
+            "01 - Cervello - installazione e aggiornamento.md",
             "templates/AGENTS.md",
             "templates/MEMORY.md",
             "templates/ISPETTORE_SKILL.md",
@@ -78,12 +77,12 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
         self.assertIn("SOGGETTI.md", guardian)
 
     def test_guided_path_keeps_structural_decisions_in_session(self):
-        for name in ["templates/AGENTS.md", "templates/LIMITI.md", "INSTALLA_CON_AI.md", "CHECKUP.md"]:
+        for name in ["templates/AGENTS.md", "templates/LIMITI.md", "01 - Cervello - installazione e aggiornamento.md", "CHECKUP.md"]:
             text = _flat(ROOT / name)
             with self.subTest(surface=name):
                 self.assertIn("DA DECIDERE IN CALL", text)
         self.assertIn("PERCORSO GUIDATO CHIUSO", _flat(ROOT / "templates" / "AGENTS.md"))
-        self.assertIn("PERCORSO GUIDATO CHIUSO", _flat(ROOT / "INSTALLA_CON_AI.md"))
+        self.assertIn("PERCORSO GUIDATO CHIUSO", _flat(ROOT / "01 - Cervello - installazione e aggiornamento.md"))
 
     def test_checkup_and_skill_verify_global_instructions(self):
         checkup = _flat(ROOT / "CHECKUP.md")
@@ -117,19 +116,16 @@ class UserInstructionsGuidanceTest(unittest.TestCase):
         self.assertIn("Fase del percorso: 1 (Cervello)", template)
         self.assertIn("sotto il 3 nessuna stanza di lavoro", template)
         for name, phrase in {
-            "CHECKUP.md": "ROOM_BEFORE_STEP_3",
-            "templates/ISPETTORE_SKILL.md": "ROOM_BEFORE_STEP_3",
-            "INSTALLA_CON_AI.md": "Fase del percorso: 1 (Cervello)",
-            "EMAIL_CONSEGNA.md": "Fase del percorso: [N di 4]",
+            "01 - Cervello - installazione e aggiornamento.md": "Fase del percorso: 1 (Cervello)",
             "MANIFEST.md": "fase del percorso guidato dichiarata nella mappa madre",
         }.items():
             with self.subTest(surface=name):
                 self.assertIn(phrase, _flat(ROOT / name))
         guardian = (ROOT / "templates" / "GUARDIANO_STANZE.sh").read_text(encoding="utf-8")
-        self.assertIn("stanza creata prima del passo 3", guardian)
+        self.assertNotIn("stanza creata prima del passo 3", guardian)
 
     def test_windows_backslash_lesson_is_in_the_install_guide(self):
-        text = _flat(ROOT / "INSTALLA_CON_AI.md")
+        text = _flat(ROOT / "01 - Cervello - installazione e aggiornamento.md")
         self.assertIn("backslash siano intatti", text)
         self.assertIn("sed, awk", text)
 

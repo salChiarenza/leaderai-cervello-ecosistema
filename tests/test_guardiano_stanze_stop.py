@@ -112,7 +112,7 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             result = self.run_guard(target, env=env)
             self.assertEqual(result.returncode, 2, result.stderr)
             self.assertIn("Python 3", result.stderr)
-            self.assertIn("INSTALLA_CON_AI.md", result.stderr)
+            self.assertIn("01 - Cervello - installazione e aggiornamento.md", result.stderr)
             (target / ".agent" / "hooks" / "archive_policy.py").unlink()
             result = self.run_guard(target)
             self.assertEqual(result.returncode, 2, result.stderr)
@@ -874,9 +874,10 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             self.assertEqual(codex_path.read_text(encoding="utf-8"), original)
 
 
-    def test_room_before_step_3_is_blocked(self):
-        """Caso Pastore 03/09/2026: il Claude della cliente propone stanze il
-        giorno dell'installazione. Con la fase a 1 il guardiano le ferma."""
+    def test_room_before_step_3_is_allowed(self):
+        """Caso Pastore, chiuso il 14/09/2026: una stanza completa passa anche
+        con la fase a 1. La fase dice a che punto e' il percorso, non vieta di
+        lavorare; il disordine lo ferma il controllo sulla forma della stanza."""
         with tempfile.TemporaryDirectory() as tmp:
             target = self.install(tmp)
             self.register_room(target)
@@ -884,8 +885,7 @@ class GuardianoStanzeStopTest(unittest.TestCase):
 
             result = self.run_guard(target)
 
-            self.assertEqual(result.returncode, 2)
-            self.assertIn("marketing - stanza creata prima del passo 3", result.stderr)
+            self.assertNotIn("prima del passo 3", result.stderr)
 
     def test_room_at_step_3_passes(self):
         with tempfile.TemporaryDirectory() as tmp:

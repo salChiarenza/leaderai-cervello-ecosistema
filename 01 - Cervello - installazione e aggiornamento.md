@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.6.30`
+Versione corrente: `0.6.31`
 
 Questa e' la procedura unica che il cliente apre per installare il Cervello o
 aggiornare una casa gia' esistente. Non duplicare questo file a ogni release:
@@ -335,6 +335,9 @@ Operazione 4 - monta localmente il Cervello
      (una nota nella chat di gruppo deve capirla chi non c'era)
    - `templates/GUARDIANO_TURNO.py` -> `.agent/hooks/guardiano_turno.py`
      (lucchetto comune: un solo blocco per turno fra tutti i controlli)
+   - `templates/SALVATAGGIO_AUTOMATICO.py` -> `.agent/hooks/salvataggio_automatico.py`
+     (a fine turno la casa si salva da sola nel registro git locale, segreti
+     esclusi: il proprietario non deve mai confermare modifiche a mano)
    - `templates/CHAT_AGGIORNAMENTI.sh` -> `.agent/hooks/chat_aggiornamenti.sh`
      (avvisa quando un altro agente ha lasciato una nota nuova)
    - modalita' Claude -> unisci `templates/CLAUDE_SETTINGS.json` a
