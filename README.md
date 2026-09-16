@@ -312,3 +312,76 @@ La cartella madre deve essere anche il punto di ingresso reale dell'agente:
 progetto locale primario in Codex Desktop, `-C`/directory corrente in Codex
 CLI, directory corrente in Claude Code. Dopo un cambio di cartella si apre una
 nuova task/sessione e si prova `AGENTS.md` prima del lavoro.
+
+## Layout (0.7.1, 16/09/2026)
+
+Una riga per pezzo: cosa e' e a cosa serve. Si aggiorna a ogni versione.
+
+### 1. La casa del cliente al Passo 1
+
+```
+EcosistemaAI-<Cliente>/           Passo 1 (0.7.1): solo documenti, nessuno script, nessun gancio, niente git
+├─ README.md                     come e' fatta la casa e da dove viene (letto per primo)
+├─ AGENTS.md                     la mappa madre: chi c'e', dove stanno le cose, come si lavora
+├─ CLAUDE.md                     il ponte di una riga (@AGENTS.md): l'assistente legge la mappa
+├─ AGENT_CHAT.md                 la chat di gruppo degli agenti (note al massimo 48 ore)
+├─ memory/MEMORY.md              la memoria unica, con indice
+├─ ecosistema/                   l'armadio comune: le anagrafi, non una stanza
+│  ├─ SOGGETTI.md                i soggetti (aziende, studi, enti)
+│  ├─ FONTI.md                   dove stanno i dati veri (cartelle, email, gestionali)
+│  ├─ ASSET.md                   strumenti e risorse, con stato e limiti
+│  ├─ PROCESSI.md                i lavori ricorrenti (dal censimento, Passo 2)
+│  ├─ LIMITI.md                  cosa l'assistente non deve fare
+│  └─ STANZA_AGENTS.md, STANZA_FONTE.md   i calchi per far nascere una stanza completa
+├─ <una stanza per processo>/    dal Passo 3: AGENTS.md + CLAUDE.md + la sua fonte, agganciata alla mappa madre
+├─ .secrets/                     credenziali: fuori da tutto, anche dalla copia di sicurezza
+└─ logs/install-log.md           cosa e' stato installato, quando, con quale versione
+```
+
+### 2. Passo 4, con scelta della persona
+
+```
+Passo 4, con una scelta visibile della persona: i controlli che scattano da soli
+├─ ecosystem-check/              la stanza che controlla la casa
+│  ├─ AGENTS.md, STATO.md        mappa e stato dei controlli
+│  ├─ CONTROLLI.md               registro: ogni cosa nasce col suo controllo
+│  ├─ REGISTRO_CONTROLLI.md      esiti dei giri di controllo
+│  ├─ STANDARD_REPARTO.md        lo standard di una stanza
+│  └─ ruoli/                     orchestratore, struttura, istruzioni, continuita', chiusura, intervento
+├─ .agent/hooks/                 i guardiani
+│  ├─ guardiano_stanze.sh (+ .ps1)   a fine turno: casa in ordine, niente file fuori posto
+│  ├─ guardiano_memoria.py       la memoria e' una sola ed e' agganciata
+│  ├─ guardiano_doppioni.py      niente copie datate: si corregge il file giusto
+│  ├─ guardiano_dati_verificati.py   niente dati «dovrebbe essere»
+│  ├─ guardiano_note_agenti.py   le note in chat si capiscono anche da chi non c'era
+│  ├─ guardiano_email_operativa.py   email al cliente solo col protocollo
+│  ├─ guardiano_turno.py         lucchetto: un solo blocco per turno
+│  ├─ chat_aggiornamenti.sh      avvisa se un altro agente ha lasciato una nota
+│  ├─ archive_policy.py          archivi protetti: dichiarati, fuori da copie e misure
+│  └─ backup_casa.py             la copia di sicurezza datata (routine 07:45, ultime sette)
+├─ .claude/                      settings.json (ganci) + skills/: Ispettore, Manutentore, Censitore, Impara dagli errori
+├─ .codex/ e .agents/skills/     lo stesso per chi usa ChatGPT Work / Codex
+└─ routine manutenzione-ecosistema   ogni giorno alle 07:45, dalla cartella madre: riordino + copia di sicurezza
+```
+
+### 3. Il prodotto
+
+```
+leaderai-cervello-ecosistema/     il prodotto (Drive = copia per i clienti, GitHub = solo backup)
+├─ PASSO1_CLIENTE.md             la guida breve del Passo 1: scarica, apri, personalizza, verifica (0.7.1)
+├─ 01 - Cervello - installazione e aggiornamento.md   la guida completa: installazione e aggiornamento (in riallineamento)
+├─ CHECKUP.md                    l'Ispettore: censisce, ripara e prova una casa gia' esistente
+├─ MANIFEST.md                   lo standard: cosa deve esserci e come si misura
+├─ EMAIL_CONSEGNA.md             la prima email al cliente: un link e basta
+├─ MODULO_CALENDARIO_OPERATIVO.md   modulo: il calendario operativo
+├─ README.md · CHANGELOG.md · VERSION   presentazione, storia delle versioni, versione corrente
+├─ install_contract.json         il contratto macchina: file, ganci, controlli, soglie (una fonte sola)
+├─ templates/                    i calchi che diventano la casa (passo1/ = i nove documenti del Passo 1)
+├─ Skill/ · Agenti/ · moduli/    catalogo: mente-da-principiante; Agente Commercialista, Ispettore del Bando; portafogli
+├─ leaderai_setup.py             installatore tecnico: solo per il collaudo LeaderAI, mai per il cliente
+├─ ecosistema_inspector.py       il motore dell'Ispettore
+├─ installation_harness.py · behavior_harness.py   collaudi vivi con i motori veri (Claude Code e Codex)
+├─ census_collector.py · census_rule.py · adoption_rule.py   regole macchina: censimento processi, adozione osservata
+└─ tests/                        31 file: ogni regola ha la sua prova
+```
+
