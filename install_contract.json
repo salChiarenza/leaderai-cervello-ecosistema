@@ -5,6 +5,69 @@
     "claude",
     "both"
   ],
+  "client_package": {
+    "schema_version": 1,
+    "name": "LeaderAI Cervello - Passo 1",
+    "purpose": "Crea una cartella di lavoro documentale. Le funzioni che cambiano il comportamento dell'assistente restano fuori da questo pacchetto.",
+    "templates": [
+      {
+        "source": "passo1/README.md",
+        "destination": "README.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/MEMORY.md",
+        "destination": "memory/MEMORY.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/AGENT_CHAT.md",
+        "destination": "AGENT_CHAT.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/FONTI.md",
+        "destination": "ecosistema/FONTI.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/ASSET.md",
+        "destination": "ecosistema/ASSET.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/PROCESSI.md",
+        "destination": "ecosistema/PROCESSI.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/LIMITI.md",
+        "destination": "ecosistema/LIMITI.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/SOGGETTI.md",
+        "destination": "ecosistema/SOGGETTI.md",
+        "strategy": "create"
+      },
+      {
+        "source": "passo1/INSTALL_LOG.md",
+        "destination": "logs/install-log.md",
+        "strategy": "create"
+      }
+    ],
+    "external_effects": [],
+    "allowed_extensions": [
+      ".md",
+      ".json"
+    ],
+    "forbidden_destinations": [
+      ".agent",
+      ".agents",
+      ".claude",
+      ".codex"
+    ]
+  },
   "official_sources": [
     {
       "id": "anthropic_claude_code_overview",

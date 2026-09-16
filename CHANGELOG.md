@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.1 - 16/09/2026
+
+- Il pacchetto pubblico del Passo 1 diventa solo documentale: nove file
+  Markdown, `VERSION` e un contratto JSON senza effetti esterni.
+- Rimossi dal primo ingresso script, hook, skill, impostazioni globali e
+  attivita' programmate. Le capacita' di controllo restano al Passo 4 e
+  richiedono una scelta separata.
+- Nuova guida cliente breve e verificabile: decompressione, apertura della
+  cartella, personalizzazione dei soli segnaposto e controllo finale.
+- Motivo: il classificatore di sicurezza di Claude riconosceva correttamente
+  il vecchio pacchetto come modifica persistente del comportamento dell'agente
+  e bloccava l'installazione con `Instruction Poisoning`.
+
 ## 0.7.0 - 16/09/2026
 
 - La casa del cliente non e' piu' un registro git: niente `git init`, commit,

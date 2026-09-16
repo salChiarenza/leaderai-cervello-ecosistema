@@ -1,6 +1,12 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.7.0`
+Versione corrente: `0.7.1`
+
+> **Nota 0.7.1:** questo file conserva il contratto dell'installatore tecnico
+> completo usato dai collaudi interni. Non e' piu' il documento pubblicato nel
+> Passo 1 della Challenge. La guida cliente corrente e' `PASSO1_CLIENTE.md` e il
+> builder Drive la pubblica con questo nome visibile; il relativo
+> `Cervello.zip` contiene soltanto documenti e zero effetti esterni.
 
 Questa e' la procedura unica che il cliente apre per installare il Cervello o
 aggiornare una casa gia' esistente. Non duplicare questo file a ogni release:
