@@ -5,6 +5,7 @@ import argparse
 import ast
 import json
 import os
+import time
 import re
 import stat
 import subprocess
@@ -25,13 +26,6 @@ ORGANIZATION = install_contract.organization_policy(CONTRACT)
 ROOM_LIFECYCLE = install_contract.room_lifecycle_policy(CONTRACT)
 MARKDOWN_HYGIENE = install_contract.markdown_hygiene_policy(CONTRACT)
 CLAUDE_BRIDGE = ROOM_LIFECYCLE.bridge_content
-GITIGNORE_REQUIRED_RULES = tuple(
-    line.strip()
-    for line in (ROOT / "templates" / "GITIGNORE.txt")
-    .read_text(encoding="utf-8")
-    .splitlines()
-    if line.strip() and not line.lstrip().startswith("#")
-)
 
 REQUIRED_FILES = tuple(CONTRACT["common"]["required"])
 
@@ -264,7 +258,7 @@ class Inspection:
     def verdict(self) -> str:
         if any(item.severity == "BLOCKER" for item in self.findings):
             return "NON PASSA"
-        if self.findings:
+        if any(item.severity != "NOTA" for item in self.findings):
             return "PASSA CON ATTENZIONE"
         return "PASSA"
 
@@ -1149,51 +1143,6 @@ def _is_inside_home(path: Path) -> bool:
     except (OSError, RuntimeError):
         return False
     return resolved == home or home in resolved.parents
-
-
-def _git_path_state(target: Path, rel: str) -> tuple[bool, bool]:
-    if not (target / ".git").is_dir():
-        return False, False
-    try:
-        tracked = subprocess.run(
-            ["git", "ls-files", "--error-unmatch", "--", rel],
-            cwd=str(target),
-            capture_output=True,
-            text=True,
-            check=False,
-        ).returncode == 0
-        history = bool(
-            subprocess.run(
-                ["git", "log", "--all", "--format=%H", "--", rel],
-                cwd=str(target),
-                capture_output=True,
-                text=True,
-                check=False,
-            ).stdout.strip()
-        )
-    except OSError:
-        return False, False
-    return tracked, history
-
-
-def _git_history_paths(target: Path) -> set[str]:
-    if not (target / ".git").is_dir():
-        return set()
-    try:
-        output = subprocess.run(
-            ["git", "log", "--all", "--name-only", "--pretty=format:"],
-            cwd=str(target),
-            capture_output=True,
-            text=True,
-            check=False,
-        ).stdout
-    except OSError:
-        return set()
-    return {
-        line.strip().replace("\\", "/")
-        for line in output.splitlines()
-        if line.strip()
-    }
 
 
 def _iter_files(target: Path, *, include_protected: bool = False, archives=()):
@@ -2390,101 +2339,50 @@ def inspect_ecosystem(
 
     if (
         requested_mode is None
-        or "git_baseline"
+        or "backup_copy"
         in install_contract.external_effects(CONTRACT, requested_mode)
     ):
-        gitignore_path = target / ".gitignore"
-        if gitignore_path.is_file() and not gitignore_path.is_symlink():
-            gitignore_lines = {
-                line.strip()
-                for line in gitignore_path.read_text(
-                    encoding="utf-8", errors="replace"
-                ).splitlines()
-            }
-            missing_ignore_rules = sorted(
-                set(GITIGNORE_REQUIRED_RULES) - gitignore_lines
-            )
-            if missing_ignore_rules:
-                findings.append(
-                    Finding(
-                        "GITIGNORE_RULES_MISSING",
-                        "BLOCKER",
-                        ".gitignore",
-                        "Regole di sicurezza mancanti: "
-                        + ", ".join(missing_ignore_rules),
-                    )
-                )
-
+        # La casa non e' un registro git: la copia di sicurezza quotidiana e' il
+        # backup. Un `.git` presente si toglie dopo la prima copia, col proprietario.
         git_dir = target / ".git"
-        if git_dir.is_symlink():
+        if git_dir.is_symlink() or git_dir.exists():
             findings.append(
                 Finding(
-                    "GIT_REPOSITORY_SYMLINK",
+                    "GIT_REPOSITORY_PRESENT",
                     "BLOCKER",
                     ".git",
-                    "La baseline Git deve appartenere alla cartella madre.",
+                    "La casa non deve essere un registro git: fai la copia di "
+                    "sicurezza con `.agent/hooks/backup_casa.py`, poi rimuovi "
+                    "`.git` con un solo gesto del proprietario.",
                 )
             )
-        elif not git_dir.is_dir():
+        backup_config = target / ".agent" / "backup_casa.json"
+        if not backup_config.is_file():
             findings.append(
                 Finding(
-                    "GIT_REPOSITORY_MISSING",
-                    "BLOCKER",
-                    ".git",
-                    "La casa non ha ancora una baseline Git verificabile.",
+                    "BACKUP_NOT_CONFIGURED",
+                    "NOTA",
+                    ".agent/backup_casa.json",
+                    "Cartella della copia di sicurezza non ancora scelta: "
+                    "`python3 .agent/hooks/backup_casa.py --imposta \"<cartella>\"`.",
                 )
             )
         else:
             try:
-                head = subprocess.run(
-                    ["git", "rev-parse", "--verify", "HEAD"],
-                    cwd=str(target),
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
-            except OSError:
-                head = None
-            if head is None or head.returncode != 0:
+                backup_conf = json.loads(backup_config.read_text(encoding="utf-8"))
+                cartella = Path(str(backup_conf.get("cartella", ""))).expanduser()
+                copie = sorted(cartella.glob(f"Cervello-{target.name}-*.zip")) if cartella.is_dir() else []
+                recente = copie and (time.time() - copie[-1].stat().st_mtime) < 48 * 3600
+            except (OSError, ValueError, TypeError):
+                recente = False
+            if not recente:
                 findings.append(
                     Finding(
-                        "GIT_BASELINE_MISSING",
-                        "BLOCKER",
-                        ".git",
-                        "Repository presente senza primo commit verificabile.",
-                    )
-                )
-
-            safety_paths = (
-                ".secrets/prova.txt",
-                "prova.env",
-                "api-token-prova.txt",
-                "client-secret-prova.txt",
-                "client-password-prova.txt",
-                "client-credential-prova.txt",
-            )
-            ineffective = []
-            for relative in safety_paths:
-                try:
-                    ignored = subprocess.run(
-                        ["git", "check-ignore", "--quiet", "--", relative],
-                        cwd=str(target),
-                        capture_output=True,
-                        text=True,
-                        check=False,
-                    )
-                except OSError:
-                    ignored = None
-                if ignored is None or ignored.returncode != 0:
-                    ineffective.append(relative)
-            if ineffective:
-                findings.append(
-                    Finding(
-                        "GITIGNORE_INEFFECTIVE",
-                        "BLOCKER",
-                        ".gitignore",
-                        "Le esclusioni non proteggono: "
-                        + ", ".join(ineffective),
+                        "BACKUP_STALE",
+                        "ATTENZIONE",
+                        ".agent/backup_casa.json",
+                        "Nessuna copia di sicurezza nelle ultime 48 ore: esegui "
+                        "`python3 .agent/hooks/backup_casa.py` e verifica la routine.",
                     )
                 )
 
@@ -3443,51 +3341,18 @@ def inspect_ecosystem(
         )
     )
 
-    current_credential_paths: set[str] = set()
     for rel, _path in _iter_files(target):
         if _is_credential_candidate(rel):
-            current_credential_paths.add(rel.as_posix())
-            tracked, history = _git_path_state(target, rel.as_posix())
-            if tracked or history:
-                findings.append(
-                    Finding(
-                        "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",
-                        "BLOCKER",
-                        rel.as_posix(),
-                        "Configurazione credenziali fuori .secrets/ e presente "
-                        "nell'indice o nella history Git: non leggere il "
-                        "contenuto; bloccare l'uso e proporre rotazione.",
-                    )
+            findings.append(
+                Finding(
+                    "CREDENTIAL_FILE_OUTSIDE_SECRETS",
+                    "ATTENZIONE",
+                    rel.as_posix(),
+                    "Configurazione credenziali fuori .secrets/: non leggere il "
+                    "contenuto; spostarla in .secrets/ insieme alla modifica e "
+                    "alla prova dell'app. Resta fuori dalla copia di sicurezza.",
                 )
-            else:
-                findings.append(
-                    Finding(
-                        "CREDENTIAL_FILE_OUTSIDE_SECRETS",
-                        "ATTENZIONE",
-                        rel.as_posix(),
-                        "Configurazione credenziali fuori .secrets/. La history "
-                        "del percorso non mostra commit; spostare e riprovare.",
-                    )
-                )
-
-    for historical_path in sorted(_git_history_paths(target)):
-        rel = Path(historical_path)
-        if (
-            historical_path in current_credential_paths
-            or ".secrets" in rel.parts
-            or not _is_credential_candidate(rel)
-        ):
-            continue
-        findings.append(
-            Finding(
-                "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",
-                "BLOCKER",
-                historical_path,
-                "Configurazione credenziali non piu' presente ma visibile nella "
-                "history Git: non leggere il contenuto; bloccare l'uso e "
-                "proporre rotazione finche' l'esposizione non e' esclusa.",
             )
-        )
 
     asset_registry_path = target / "ecosistema" / "ASSET.md"
     asset_registry = ""

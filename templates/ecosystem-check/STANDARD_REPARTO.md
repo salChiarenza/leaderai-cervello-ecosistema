@@ -55,7 +55,7 @@ avvio fallito, non perche' non c'e' gia' un agente aperto. La regia attende
 il risultato, lo confronta con le fonti e poi chiude lo stesso incarico.
 Il revisore resta sulle correzioni e sui loro utilizzatori, non riapre un audit
 generale. Usa letture esplicite (`Read`, `Grep`, `Glob`, oppure comandi singoli
-come `cat`, `rg`, `git diff`) e il controllo originale gia' presente; niente
+come `cat`, `rg`, `diff`) e il controllo originale gia' presente; niente
 script ad hoc, concatenazioni o scritture durante la verifica. Cosi' le prove
 sono rileggibili dal collaudo. L'avviso di avvio in background non e' l'esito.
 

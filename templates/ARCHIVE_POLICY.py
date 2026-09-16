@@ -14,7 +14,6 @@ import shlex
 import sys
 import tempfile
 import stat
-import subprocess
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -103,20 +102,9 @@ def collect(root: Path) -> tuple[list[Archive], list[tuple[str, str, str]]]:
                         else:
                             entries.append(child.relative_to(root).as_posix() + ("/" if name in dirs else ""))
                     dirs[:] = [d for d in dirs if not (Path(parent) / d).is_symlink()]
-                try:
-                    ignored = subprocess.run(["git", "check-ignore", "--no-index", "-z", "--stdin"], cwd=root,
-                        input="\0".join(entries).encode("utf-8") + b"\0", capture_output=True, timeout=10)
-                    ignored_paths = {p.decode("utf-8") for p in ignored.stdout.split(b"\0") if p}
-                    if ignored.returncode not in (0, 1) or not set(entries).issubset(ignored_paths):
-                        errors.append(("PROTECTED_ARCHIVE_UNPROTECTED", label, "L'archivio e tutti i suoi elementi devono essere esclusi da Git."))
-                    tracked = subprocess.run(["git", "ls-files", "-z", "--", path.relative_to(root).as_posix()], cwd=root, capture_output=True, timeout=10)
-                    history = subprocess.run(["git", "log", "--all", "--format=", "--name-only", "--", path.relative_to(root).as_posix()], cwd=root, capture_output=True, timeout=10)
-                    if tracked.returncode or history.returncode:
-                        errors.append(("PROTECTED_ARCHIVE_UNPROTECTED", label, "Indice o storia Git non verificabili."))
-                    elif tracked.stdout or history.stdout.strip():
-                        errors.append(("PROTECTED_ARCHIVE_TRACKED", label, "Dati presenti nell'indice o nella storia Git: l'esposizione resta da risolvere."))
-                except (OSError, subprocess.TimeoutExpired, UnicodeError):
-                    errors.append(("PROTECTED_ARCHIVE_UNPROTECTED", label, "Protezione Git non verificabile."))
+                # La casa non e' un registro git: la protezione dell'archivio e' la
+                # dichiarazione stessa. `backup_casa.py` lo lascia fuori dalle copie
+                # e i controlli strutturali non lo misurano.
             issues.extend(errors)
             if not errors:
                 archives.append(Archive(path, signatures))
@@ -179,13 +167,14 @@ def _hook_calls(command: object, script: str, root: Path) -> bool:
     }:
         return False
     # Le configurazioni native usano un percorso tra virgolette con la variabile
-    # della casa, oppure la radice Git. Nessuna valutazione del comando qui.
+    # della casa, oppure la cartella della sessione ($PWD: Codex esegue gli hook
+    # nella cwd della sessione). Nessuna valutazione del comando qui.
     candidate = words[1]
     return candidate in {
         script, "./" + script, str(root / script),
         "$CLAUDE_PROJECT_DIR/" + script, "${CLAUDE_PROJECT_DIR}/" + script,
         "$CODEX_PROJECT_DIR/" + script, "${CODEX_PROJECT_DIR}/" + script,
-        "$(git rev-parse --show-toplevel)/" + script,
+        "$PWD/" + script, "${PWD}/" + script,
     }
 
 

@@ -81,7 +81,7 @@ prepara la conferma finale per Sal quando la missione la richiede. La invia
 soltanto dopo autorizzazione esplicita del proprietario. Prima di giudicare
 censisce le cartelle candidate:
 la cartella viva puo' chiamarsi in qualunque modo, quindi si riconosce dai
-segnali di vita (memoria compilata, log, asset, commit, file di lavoro
+segnali di vita (memoria compilata, log, asset, copie di sicurezza, file di lavoro
 recenti, connettori provati), non dal nome. La ricerca include anche nomi
 brandizzati o sbagliati come `LeaderAI`, `Leader AI`, `leader ai`, `leder ai`,
 `cervello`, `ecosistema`, `_leaderai`, `install`, `setup`, `repo` e `clone`.
@@ -109,9 +109,10 @@ Dove mettere la cartella madre si decide caso per caso con domande guidate
 (disco locale oppure cartella sincronizzata OneDrive / Google Drive). Avviso da
 dire chiaro: Claude Code, mentre scrive, puo' corrompere o troncare i file su
 cartelle cloud con file on-demand (bug noti); il cliente sceglie se accettare il
-rischio in cambio della comodita'. Il backup si sceglie sempre col cliente
-(GitHub privato a comando oppure copia su Drive/OneDrive). I segreti restano
-sempre fuori dal git (`.gitignore`). Dettaglio in `01 - Cervello - installazione e aggiornamento.md`
+rischio in cambio della comodita'. La casa non e' un registro git: il backup e'
+la copia di sicurezza datata in una cartella scelta col cliente
+(`.agent/hooks/backup_casa.py`, routine delle 07:45). I segreti restano in
+`.secrets/`, fuori dalla copia. Dettaglio in `01 - Cervello - installazione e aggiornamento.md`
 Domande 1, 2, 3 e Operazione 7.
 
 Uso tecnico opzionale, dopo autorizzazione esplicita:
@@ -138,8 +139,7 @@ seconda casa.
 
 Nel target scelto crea solo i pezzi standard mancanti:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
-- inizializza la cartella madre come repository git (se non lo e' gia')
+- `.agent/hooks/backup_casa.py`, la copia di sicurezza datata (nessun registro git)
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se richiesto Codex

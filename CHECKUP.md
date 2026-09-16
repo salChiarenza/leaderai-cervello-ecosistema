@@ -74,7 +74,7 @@ nella chat e nelle email usa una sola di queste formule:
 Nel testo visibile non scrivere `NON PASSA`: confonde la conformita' interna
 con il valore del lavoro e fa sembrare perso un sistema che sta funzionando.
 Un rilievo strutturale, una versione arretrata, testo business nel codice, un
-file locale fuori `.secrets/` ma mai entrato nella storia Git o una cosa da
+file locale fuori `.secrets/` ma mai finito in una copia condivisa o una cosa da
 completare non sono da soli prova di blocco. Se usi la terza formula, nomina
 sempre la funzione ferma, la prova osservata e la prossima azione.
 
@@ -247,7 +247,7 @@ brandizzati, abbreviati o scritti male.
   `_leaderai`, `_leaderai_install` (legacy), `install`, `setup`, `standard`, `repo`, `clone`,
   `leaderai-cervello-ecosistema`;
 - cartelle con `AGENTS.md`, `CLAUDE.md`, `memory/MEMORY.md`, `ecosistema/`,
-  `logs/` o `.git`; la presenza di `REPORT_FINALE.md` segnala un residuo legacy.
+  `logs/` o una cartella `.git` residua; la presenza di `REPORT_FINALE.md` segnala un residuo legacy.
 
 Su Windows, se puoi usare PowerShell, una ricerca minima accettabile e':
 
@@ -268,7 +268,7 @@ Segnali di vita da pesare piu' del nome:
 - `logs/ con attivita'`;
 - `ecosistema/ASSET.md`, `FONTI.md`, `PROCESSI.md`, `LIMITI.md` o `SOGGETTI.md`
   con contenuto del proprietario;
-- `commit git` oltre al primo commit tecnico;
+- copie di sicurezza registrate in `logs/backup-log.md`;
 - file di lavoro recenti, output, procedure, bozze o documenti davvero usati;
 - connettori provati con un dato reale letto, non solo dichiarati.
 
@@ -281,7 +281,7 @@ Per ogni candidata scrivi una riga:
 Regole:
 
 - `VIVA` = contiene segnali di vita: memoria compilata, log, istruzioni cucite,
-  file di lavoro, commit, asset/fonti/processi, connettori provati o prove di
+  file di lavoro, copie di sicurezza, asset/fonti/processi, connettori provati o prove di
   uso reale.
 - `VUOTA` = contiene solo scheletro o pochi file generati senza contenuto del
   proprietario.
@@ -440,7 +440,7 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 5. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
    (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Ogni
    nuova sessione legge tutto il log; ogni handoff dichiara ID missione,
-   proprietario, stato, base Git, prove e prossimo agente. Le note oltre 48 ore
+   proprietario, stato, prove e prossimo agente. Le note oltre 48 ore
    vanno promosse nei file proprietari e tolte dalla chat.
 6. **Memoria unica** — la mappa madre dichiara `Memoria canonica` e quella
    directory contiene `MEMORY.md` come indice snello; `memory/` e' il nome
@@ -449,8 +449,14 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    `MEMORIA.md`, diari paralleli o memoria auto dell'agente lasciata in
    un'altra directory. Due memorie divergenti bloccano il verdetto finche' non
    vengono riconciliate.
-7. **Segreti** — `.gitignore` copre `.env`, `.secrets/`, token, chiavi,
-   password e credenziali prima di qualunque commit.
+7. **Segreti e copia di sicurezza** — `.secrets/` esiste e nessun file con
+   token, chiavi, password o credenziali sta fuori da `.secrets/`. La casa NON
+   e' un registro git: se esiste una cartella `.git`, fai prima una copia con
+   `python3 .agent/hooks/backup_casa.py` e chiedi al proprietario un solo gesto
+   per rimuoverla (`SERVE UN TUO PASSAGGIO`). `.agent/backup_casa.json` e'
+   presente e l'ultima copia ha meno di 48 ore; altrimenti esegui la copia,
+   ripara la routine delle 07:45 e, se la cartella non e' mai stata scelta,
+   chiedila al proprietario.
 
 ### B. Ramo Codex — solo se Codex e' attivo
 
@@ -603,9 +609,9 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   fonti proprietarie e spostato nel Cestino;
 - un contenuto business modificabile ha due padroni, e' hardcoded nel codice o
   produce derivati senza fallire visibilmente quando la fonte manca;
-- una configurazione credenziali vive fuori `.secrets/`, oppure la sua presenza
-  in indice/history Git non e' stata esclusa senza aprirne il contenuto;
-- firma, timbro o sigillo non sono protetti fuori Git, registrati per metadati
+- una configurazione credenziali vive fuori `.secrets/`, oppure e' finita in
+  una copia condivisa senza che l'esposizione sia stata esclusa;
+- firma, timbro o sigillo non sono protetti fuori dalla copia di sicurezza, registrati per metadati
   in `ASSET.md` e limitati da conferma umana sul singolo uso;
 - un file progetto non porta in testa stato corrente, prossimo passo e
   scadenze, oppure il diario non e' sotto e ordinato dal piu' recente;
@@ -732,8 +738,8 @@ La fonte business Word puo' essere dichiarata con `@/` dalla cartella madre.
 7. Tratta nomi generici come `documenti`, `output`, `exports`, `varie`, `misc`,
    `temp` o `nuova cartella` come `SOSPETTA` finche' contenuti e proprietario
    non sono chiari. Una cartella generica non passa perche' contiene file.
-8. Confronta le nuove cartelle col salvataggio precedente: nessun percorso
-   creato nel lavoro corrente entra nel commit senza classe, proprietario e
+8. Confronta le nuove cartelle con lo stato precedente: nessun percorso
+   creato nel lavoro corrente resta nella casa senza classe, proprietario e
    prova.
 
 Tabella obbligatoria del censimento:
@@ -761,10 +767,9 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
    installazione, aggiornamenti versione e cambi di struttura; non tutta la
    produzione business.
 2. **Residuo legacy.** Se esiste `REPORT_FINALE.md`, promuovi i soli fatti
-   ancora veri nelle fonti proprietarie, rimuovilo dall'indice Git se
-   necessario e spostalo nel Cestino.
-3. **Igiene Markdown.** Misura righe e byte di tutti i file `.md`, esclusi Git
-   e case protette. Le soglie sono una sola fonte macchina in
+   ancora veri nelle fonti proprietarie e spostalo nel Cestino.
+3. **Igiene Markdown.** Misura righe e byte di tutti i file `.md`, escluse le
+   case protette. Le soglie sono una sola fonte macchina in
    `install_contract.json -> inspection_policies -> markdown_hygiene`:
    `AGENTS.md`, `MEMORY.md` e `AGENT_CHAT.md` bloccano il verdetto oltre 350
    righe o 24 KiB; gli altri documenti entrano in revisione oltre 800 righe o
@@ -783,13 +788,12 @@ Questi controlli usano le case gia' esistenti. Non creare una cartella
    valida, l'app fallisce in modo visibile e non usa una copia hardcoded.
 5. **Credenziali per percorso, non per contenuto.** Individua dai soli nomi e
    metadati configurazioni di posta, PEC, SMTP, OAuth, token e app password
-   fuori `.secrets/`; non aprirle. Controlla `git ls-files` e la history del
-   solo percorso. Se l'esposizione non puo' essere esclusa, blocca l'uso e
-   proponi rotazione; se invece il percorso non e' mai entrato in Git,
-   registralo come elemento da valutare e spostalo soltanto insieme alla
-   modifica e alla prova dell'app.
+   fuori `.secrets/`; non aprirle. Se il file e' finito in una copia
+   condivisa o l'esposizione non puo' essere esclusa, blocca l'uso e proponi
+   rotazione; altrimenti registralo come elemento da valutare e spostalo
+   soltanto insieme alla modifica e alla prova dell'app.
 6. **Asset ad alto rischio.** Firma, timbro e sigillo vivono in `.secrets/` o
-   altra casa protetta fuori Git. In `ecosistema/ASSET.md` registra soltanto
+   altra casa protetta, fuori dalla copia di sicurezza. In `ecosistema/ASSET.md` registra soltanto
    metadati, casa protetta, uso e limite; ogni applicazione o invio richiede
    conferma umana sul documento preciso.
 
@@ -803,8 +807,8 @@ diventa visibile e scritto.
 
 Lavora sulle tracce che la macchina conserva gia': registro delle sessioni
 dell'agente attivo, cronologia dei file toccati nella cartella madre, `logs/`,
-diario in coda ai file progetto, `AGENT_CHAT.md`, `MEMORY.md` e storia Git
-della casa. Apri la sezione dichiarando quali tracce hai letto, da quale
+diario in coda ai file progetto, `AGENT_CHAT.md` e `MEMORY.md`.
+Apri la sezione dichiarando quali tracce hai letto, da quale
 macchina arrivano e quale periodo coprono davvero.
 
 **Finestra e postazione.** Le tracce vivono sulla macchina dell'agente, mentre
@@ -815,14 +819,14 @@ postazione sola: usa lo stato `OSSERVAZIONE PARZIALE - UNA POSTAZIONE` e non
 concludere che uno strumento non e' usato quando potrebbe esserlo sull'altra
 macchina.
 
-**Un episodio conta uno.** Lo stesso gesto lascia spesso piu' tracce: un commit
-in Git, una nota in `AGENT_CHAT.md`, una riga di diario. Prima di contare,
-deduplica per identita' di episodio: lo stesso episodio presente in Git, chat e
-diario vale uno, non tre. L'identita' e' l'episodio, non il testo del gesto: due
+**Un episodio conta uno.** Lo stesso gesto lascia spesso piu' tracce: una nota
+in `AGENT_CHAT.md`, una riga di diario, un file toccato. Prima di contare,
+deduplica per identita' di episodio: lo stesso episodio presente in chat, diario
+e file vale uno, non tre. L'identita' e' l'episodio, non il testo del gesto: due
 episodi distinti contano due anche con lo stesso gesto e nello stesso giorno, e
 lo stesso gesto ripetuto in giorni diversi conta una volta per giorno. Le tracce
 ammesse sono quelle elencate qui sopra — registro sessioni, cronologia file,
-`logs/`, diario, `AGENT_CHAT.md`, `MEMORY.md`, storia Git — con vocabolario
+`logs/`, diario, `AGENT_CHAT.md`, `MEMORY.md` — con vocabolario
 canonico nel contratto (`dedup_sources`). La regola deterministica e'
 `adoption_rule.py -> classify_adoption`, con verdetti e tracce ammesse in
 `install_contract.json -> inspection_policies -> adoption_observation`, unica
@@ -1056,9 +1060,9 @@ PROVENIENZA PROVE:
 
 COME SI LAVORA QUI DENTRO:
 - tracce lette: [registro sessioni, cronologia file, logs/, diario,
-  AGENT_CHAT.md, storia Git] - macchina [quale PC] - periodo coperto [dal ... al ...].
+  AGENT_CHAT.md, MEMORY.md] - macchina [quale PC] - periodo coperto [dal ... al ...].
 - adozione osservata: ADOZIONE OSSERVATA / OSSERVAZIONE PARZIALE - UNA
-  POSTAZIONE / TRACCE ASSENTI (episodi deduplicati, stesso gesto in Git/chat/diario conta uno).
+  POSTAZIONE / TRACCE ASSENTI (episodi deduplicati, stesso gesto in chat/diario/file conta uno).
 - usati davvero: strumento -> frequenza osservata -> lavoro -> prova.
 - NON USATO NEL PERIODO OSSERVATO: strumento -> stato tecnico -> tracce
   consultate -> macchina -> prova che coprono il periodo. Segnala e lascia

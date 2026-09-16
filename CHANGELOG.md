@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.7.0 - 16/09/2026
+
+- La casa del cliente non e' piu' un registro git: niente `git init`, commit,
+  `.gitignore`, GitHub o barra «Conferma modifiche». Il backup e' la copia di
+  sicurezza datata (`templates/BACKUP_CASA.py` -> `.agent/hooks/backup_casa.py`):
+  la routine delle 07:45 fa ogni giorno una copia zip nella cartella scelta dal
+  proprietario (Domanda 2), tiene le ultime sette e lascia fuori `.secrets/`,
+  file che sembrano segreti e gli archivi dichiarati `ARCHIVIO PROTETTO`.
+- L'Ispettore blocca una casa con `.git` (`GIT_REPOSITORY_PRESENT`: prima la
+  copia, poi un solo gesto del proprietario per rimuoverla), segnala la cartella
+  delle copie non scelta come nota (`BACKUP_NOT_CONFIGURED`) e una copia piu'
+  vecchia di 48 ore come attenzione (`BACKUP_STALE`). Le note non abbassano il
+  verdetto.
+- Gli archivi protetti sono protetti dalla dichiarazione nella mappa: fuori
+  dalla copia e dalle misure. Le credenziali fuori `.secrets/` restano
+  segnalate per percorso. Le tracce di adozione non includono piu' la storia
+  git. I ganci Codex partono dalla cartella della sessione (`$PWD`).
+- Tolto il gancio `salvataggio_automatico.py` della 0.6.31: senza registro git
+  non serve.
+- Motivo: Sal, in call con una cliente, «git dalla casa va tolto». Il programma
+  Git resta necessario solo su Windows come terminale (Git Bash) dei controlli.
+
 ## 0.6.31 - 16/09/2026
 
 - Nuovo gancio di fine turno `salvataggio_automatico.py` (Claude Code e

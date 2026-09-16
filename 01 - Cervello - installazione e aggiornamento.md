@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.6.31`
+Versione corrente: `0.7.0`
 
 Questa e' la procedura unica che il cliente apre per installare il Cervello o
 aggiornare una casa gia' esistente. Non duplicare questo file a ogni release:
@@ -62,8 +62,9 @@ inventarne altri e non aggiungere domande al proprietario.
    il lavoro del cliente perso di vista. Prima guarda se una casa esiste gia':
    se c'e', aggiorna quella.
 4. **Fermarsi davanti a un permesso del computer**: chiedilo una volta sola,
-   dicendo in una riga cosa deve cliccare, e riprendi. Su Windows, se manca Git,
-   installalo, chiudi l'app e riaprila.
+   dicendo in una riga cosa deve cliccare, e riprendi. Su Windows, se manca il
+   programma Git (serve solo il suo terminale Git Bash per i controlli: la casa
+   non e' un registro git), installalo, chiudi l'app e riaprila.
 
 ## Se hai ricevuto solo il link
 
@@ -98,8 +99,9 @@ del computer, saltala.
 3. In Claude apri la modalita' **Code** con l'icona `< / >`, scegli **Local** e
    seleziona `test`. In ChatGPT scegli **Codex**, crea un progetto locale e usa
    **Add folder** per selezionare `test`.
-4. Su Windows, se richiesto, installa prima Git da
-   **https://git-scm.com/download/win**, chiudi l'app con `Alt+F4` e riaprila.
+4. Su Windows, se richiesto, installa prima il programma Git da
+   **https://git-scm.com/download/win** (serve solo il terminale Git Bash per i
+   controlli), chiudi l'app con `Alt+F4` e riaprila.
 5. Scrivi `ciao` nella nuova sessione. Se l'AI risponde lavorando nel progetto
    `test`, torna a `Scegli il percorso corretto` e continua da qui.
 
@@ -157,9 +159,11 @@ personalizzazione, fonti reali e prove macchina.
    globali dell'agente (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`): nel
    collaudo isolato restano `DA COLLAUDARE`, sulla macchina cliente si
    scrivono e si provano.
-6. Inizializza Git locale. Prima del commit usa la allowlist dei file standard
-   del contratto, rileggi lo staging e controlla nomi e contenuti per segreti.
-   Il primo messaggio contiene la frase `installazione iniziale`.
+6. Niente registro git nella casa: nessun `git init`, nessun commit. Il backup
+   e' la copia di sicurezza datata. Se la cartella delle copie e' gia' scelta
+   (Domanda 2), esegui `python3 .agent/hooks/backup_casa.py --imposta "<cartella>"`
+   e registra la riga `BACKUP OK`; altrimenti registra
+   `Backup: cartella della copia di sicurezza da scegliere (Domanda 2)`.
 7. Registra in `logs/install-log.md` standard/versione, modalita', prove
    strutturali e limiti. Le prove macchina differite restano nelle fonti
    proprietarie con il prossimo passo preciso.
@@ -175,7 +179,7 @@ personalizzazione, fonti reali e prove macchina.
    accanto all'armadio come prima stanza standard, completa di mappa, stato,
    standard, registro e ruoli; non inventare altre stanze business.
 10. Verifica file obbligatori, file vietati del ramo opposto, ponte, memoria,
-   log tecnico, commit iniziale e fotografia standard intatta. Prova anche il
+   log tecnico, esito del backup e fotografia standard intatta. Prova anche il
    guardiano: casa pulita silenziosa, file di prova fuori posto bloccato e poi
    rimosso. In Codex esamina e autorizza il project hook da `/hooks`; in Claude
    verifica da `/hooks` che l'origine sia `Project`. La prova diretta dello
@@ -226,13 +230,14 @@ o permessi che non puoi concedere al posto mio.
 Regola sulle domande guidate (Domanda 1, 2 e 3): se l'email di consegna
 contiene gia' le "scelte fatte con Sal", applica direttamente le scelte e
 registrale nelle fonti proprietarie. Se una scelta manca, usa il default
-sicuro senza fermarti (cartella madre su disco locale; backup = repository
-git locale, quello remoto si aggiunge dopo; niente seconda postazione) e
+sicuro senza fermarti (cartella madre su disco locale; backup = copia di
+sicurezza in una cartella scelta col cliente, registrata come da scegliere
+finche' non e' scelta; niente seconda postazione) e
 registra nello stato che il default e' modificabile. Le domande si fanno solo
 se il cliente stesso chiede di decidere.
 
 Operazione 1 - autodiagnosi
-1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git e agente attivo.
+1. Dimmi sistema operativo, utente corrente, cartelle trovate, presenza di Git Bash (solo Windows) e agente attivo.
    Se il computer ha PIU' account utente (su Windows capita spesso: uno per
    persona o per reparto), elencali e chiedimi da quale account lavoro davvero:
    la cartella madre deve vivere nell'account che uso io, altrimenti da un altro
@@ -244,7 +249,7 @@ Operazione 1 - autodiagnosi
    Il nome non basta: la cartella viva puo' chiamarsi in qualunque modo
    (nome azienda, progetto, reparto, cartella AI, casa AI, workspace). Guardala
    dai segnali di vita: `memory/MEMORY.md compilata`, `logs/ con attivita'`,
-   `ecosistema/ASSET.md`, `commit git`, file di
+   `ecosistema/ASSET.md`, copie in `logs/backup-log.md`, file di
    lavoro recenti o connettori provati. Se una cartella ha questi segnali, non
    creare una nuova cartella solo perche' il nome non e' quello atteso.
 3. DOMANDA 1 - dove mettere la cartella madre (il cervello). [UMANO]
@@ -272,16 +277,18 @@ Operazione 1 - autodiagnosi
    dichiaralo, fatti concedere l'accesso al percorso scelto [UMANO] e crea
    la casa solo dove deve vivere.
 
-Operazione 2 - prepara la cartella madre e Git locale
-1. Se Git manca ed e' installabile, installalo o guidami solo nel click/permesso
-   necessario. Python non serve nel percorso standard di installazione: nessun
+Operazione 2 - prepara la cartella madre e la copia di sicurezza
+1. Su Windows, se il programma Git manca ed e' installabile, installalo o guidami
+   solo nel click/permesso necessario: serve soltanto il suo terminale Git Bash
+   per eseguire i controlli. Python non serve nel percorso standard di installazione: nessun
    codice scaricato viene eseguito. Serve invece Python 3 (dal 3.8) al guardiano
    di chiusura `.agent/hooks/archive_policy.py` e all'Ispettore: deve rispondere
    come `python3`, `python` o `py` dal terminale che esegue gli hook (Git Bash su
    Windows). Se manca ed e' installabile, installalo o guidami nel solo
    click/permesso necessario [UMANO].
-2. Crea o usa la cartella madre scelta nell'Operazione 1. Inizializzala come repository
-   git locale, senza collegarla automaticamente a repository esterne.
+2. Crea o usa la cartella madre scelta nell'Operazione 1. Non inizializzarla come
+   repository git: la casa non e' un registro git. Il backup e' la copia di
+   sicurezza datata dell'Operazione 7.
 3. Prima di aggiungere file, controlla cosa esiste gia'. Integra i pezzi mancanti
    e conserva il contenuto vivo del cliente.
 
@@ -308,7 +315,6 @@ Operazione 4 - monta localmente il Cervello
    - `templates/AGENTS.md` -> `AGENTS.md`
    - `templates/MEMORY.md` -> `memory/MEMORY.md`
    - `templates/ASSET.md` -> `ecosistema/ASSET.md`
-   - `templates/GITIGNORE.txt` -> `.gitignore`
    - `templates/FONTI.md` -> `ecosistema/FONTI.md`
    - `templates/PROCESSI.md` -> `ecosistema/PROCESSI.md`
    - `templates/LIMITI.md` -> `ecosistema/LIMITI.md`
@@ -335,9 +341,9 @@ Operazione 4 - monta localmente il Cervello
      (una nota nella chat di gruppo deve capirla chi non c'era)
    - `templates/GUARDIANO_TURNO.py` -> `.agent/hooks/guardiano_turno.py`
      (lucchetto comune: un solo blocco per turno fra tutti i controlli)
-   - `templates/SALVATAGGIO_AUTOMATICO.py` -> `.agent/hooks/salvataggio_automatico.py`
-     (a fine turno la casa si salva da sola nel registro git locale, segreti
-     esclusi: il proprietario non deve mai confermare modifiche a mano)
+   - `templates/BACKUP_CASA.py` -> `.agent/hooks/backup_casa.py`
+     (la copia di sicurezza datata della casa, segreti e archivi protetti
+     esclusi: la fa la routine delle 07:45, la prima volta l'installazione)
    - `templates/CHAT_AGGIORNAMENTI.sh` -> `.agent/hooks/chat_aggiornamenti.sh`
      (avvisa quando un altro agente ha lasciato una nota nuova)
    - modalita' Claude -> unisci `templates/CLAUDE_SETTINGS.json` a
@@ -421,8 +427,9 @@ Operazione 4 - monta localmente il Cervello
    asset, processi, limiti e storia tecnica restano nei rispettivi file.
 6. Integra le sezioni mancanti dei file vivi e registra nel log tecnico cosa
    era gia' presente, cosa hai creato e cosa hai aggiornato.
-7. Verifica che `.gitignore` escluda `.secrets/`, file `.env`, token, chiavi,
-   password e credenziali prima del primo commit.
+7. Verifica che `.secrets/` esista e che nessun file con token, chiavi,
+   password o credenziali stia fuori da `.secrets/`: la copia di sicurezza li
+   lascia fuori, ma non devono girare per la casa.
 
 Percorso tecnico opzionale:
 `leaderai_setup.py` resta un attrezzo LeaderAI per collaudi o installazioni
@@ -488,7 +495,7 @@ proprietario, eventuale mappa locale, collegamento alla radice e prova. Nomi
 generici come `documenti`, `output`, `exports`, `varie`, `misc`, `temp` o
 `nuova cartella` restano `SOSPETTA` finche' non vengono ricondotti alla stanza
 proprietaria. Un residuo vuoto o inutile creato dall'agente nello stesso
-lavoro viene rimosso prima del commit; contenuti preesistenti si spostano,
+lavoro viene rimosso prima della chiusura; contenuti preesistenti si spostano,
 fondono o eliminano solo dopo conferma.
 
 La mappa madre nasce con `- Fase del percorso: 1 (Cervello)`. Non alzarla in
@@ -510,20 +517,17 @@ Dentro `ecosistema/REGOLE.md`:
   generi l'output finale; ogni output e' una bozza che rivedo e firmo io;
 - non inviare email, non cancellare file, non spostare cartelle vive e non usare
   dati sensibili senza mia conferma esplicita;
-- SALVATAGGIO AUTOMATICO: alla fine di ogni sessione di lavoro prepara da solo
-  il primo commit con una allowlist dei file standard dichiarati in
-  `install_contract.json`, rileggi i nomi in staging e controlla che non
-  contengano segreti. Non usare `git add -A` come scorciatoia. Crea il commit
-  con un messaggio chiaro, senza che io lo chieda.
-  Se il backup remoto (GitHub) e' configurato, dimmi se esistono commit da
-  pubblicare; esegui `git push` soltanto dopo il mio comando. Il salvataggio
-  locale resta automatico;
+- COPIA DI SICUREZZA: la casa non e' un registro git. Ogni giorno alle 07:45
+  la routine fa una copia datata della casa nella cartella che ho scelto
+  (`python3 .agent/hooks/backup_casa.py`) e tiene le ultime sette; se la
+  copia manca da piu' di due giorni, dimmelo. Nessun `git`, nessun `commit`,
+  nessun `push`;
 - TUTTO NASCE NELLA CASA: ogni file, app, documento o nota che crei nasce
   dentro la cartella madre, mai sul Desktop o altrove. L'agente si apre
   sempre da questa cartella;
 - NIENTE MANI DENTRO LA CASA: dentro la cartella madre non si cancella e non
   si sposta nulla a mano da Esplora file/Finder. Si chiede all'agente, cosi'
-  il salvataggio git resta coerente e nulla si perde;
+  la copia di sicurezza resta coerente e nulla si perde;
 - OUTPUT NELLA CASA PROPRIETARIA: ogni analisi o documento finale vive nella
   stanza responsabile del processo e usa la casa esistente;
 - CONTENUTI BUSINESS FUORI DAL CODICE: testi e regole che devo poter correggere
@@ -562,7 +566,7 @@ In `ecosistema/ASSET.md` registra ogni risorsa operativa che emerge:
   app, archivio o servizio esterno;
 - per ogni asset indica casa/fonte vera, uso, stato, archivio/prove e limiti;
 - firma, timbro e sigillo sono asset ad alto rischio: file in `.secrets/` o
-  altra casa protetta fuori Git, soli metadati qui e conferma umana sul singolo
+  altra casa protetta, fuori dalla copia di sicurezza, soli metadati qui e conferma umana sul singolo
   documento prima di applicarli o inviarli;
 - se il cliente dice "aggiungi", "abbiamo", "ho comprato", "attiva" o
   "collega" una nuova risorsa, aggiorna questo registro e poi solo i processi o
@@ -574,9 +578,9 @@ Per PEC/email certificata chiedi sempre:
 - qual e' il provider e dove si controlla davvero?
 - esistono ricevute o archivi da conservare?
 - ci sono credenziali dedicate o app password? Se si', devono stare solo in
-  `.secrets/`, mai in Git, memoria o chat.
-  Controlla indice e history Git del solo percorso senza aprire il contenuto;
-  se l'esposizione non e' esclusa, blocca l'uso e proponi rotazione.
+  `.secrets/`, mai in memoria, chat o copie di sicurezza.
+  Se una credenziale e' finita fuori da `.secrets/` o in una cartella condivisa,
+  blocca l'uso e proponi rotazione senza aprire il contenuto.
 Non segnare la PEC `ATTIVO` senza una prova reale di login o lettura/invio.
 Ogni invio a terzi richiede conferma umana esplicita.
 
@@ -595,7 +599,7 @@ quale e' il browser predefinito di Windows/Mac. Se non coincidono, sistemalo
 TU: imposta il browser che il cliente usa come predefinito (se il sistema
 protegge il passaggio finale, apri tu la schermata giusta e digli solo dove
 fare un click). Poi prova reale: apri un link e conferma che si apre nel
-browser giusto. Serve perche' login e autorizzazioni (GitHub, Google,
+browser giusto. Serve perche' login e autorizzazioni (Google,
 Claude) si aprono nel predefinito: se e' quello sbagliato, il cliente si
 ritrova su un browser dove non e' loggato.
 Nel gate anonimo di rilascio questa prova resta `DA COLLAUDARE`: richiede il
@@ -635,7 +639,7 @@ prova sessioni nuove dentro una casa anonima e conserva le evidenze.
 
 Operazione 6 - collaudo
 1. Verifica che nella cartella madre esistano:
-   AGENTS.md, CLAUDE.md, .gitignore, memory/MEMORY.md,
+   AGENTS.md, CLAUDE.md, memory/MEMORY.md,
    ecosistema/FONTI.md, ecosistema/ASSET.md, ecosistema/PROCESSI.md,
    ecosistema/LIMITI.md, ecosistema/SOGGETTI.md, logs/install-log.md.
    Verifica anche che ogni vera stanza abbia `AGENTS.md` + `CLAUDE.md` e che
@@ -656,12 +660,12 @@ Operazione 6 - collaudo
    (`~/.claude/CLAUDE.md` o `~/.codex/AGENTS.md`): blocco `LEADERAI-CASA`
    presente, percorso della cartella madre corretto, prova da cartella
    estranea superata.
-2. Verifica che la cartella madre sia un repository git (esiste `.git`), che
-   `.gitignore` escluda `.secrets/`, `*.env`, token, chiavi e credenziali, e che
-   esista il primo commit (`git log` mostra "installazione iniziale"). Il setup
-   lo crea da solo a fine corsa: se manca, usa la allowlist del contratto,
-   rileggi lo staging, esegui il controllo segreti e poi `git commit`.
-   Altrimenti il backup dell'Operazione 7 parte da un repository vuoto.
+2. Verifica che la cartella madre NON sia un registro git (nessuna cartella
+   `.git`), che `.agent/hooks/backup_casa.py` esista e che
+   `python3 .agent/hooks/backup_casa.py --stato` risponda con la cartella
+   scelta e l'ultima copia, oppure con «non ancora scelta» registrato nel log.
+   Se trovi `.git`, fai prima una copia di sicurezza e chiedi al proprietario
+   un solo gesto per rimuovere `.git` (SERVE UN TUO PASSAGGIO).
    Verifica anche che Python 3 risponda dal terminale che esegue gli hook
    (`python3 --version`, `python --version` o `py --version` in Git Bash):
    senza, il guardiano di chiusura si ferma e lo dichiara a ogni turno.
@@ -709,44 +713,34 @@ Operazione 6 - collaudo
     `.secrets/` e history controllata per percorso; firma/timbro registrati e
     protetti; file progetto con stato, prossimo passo e scadenze in testa.
 
-Operazione 7 - backup e seconda postazione (scelta guidata)
+Operazione 7 - copia di sicurezza e seconda postazione (scelta guidata)
 Serve a non perdere il lavoro e a usare l'Ecosistema da piu' di un computer.
 Anche qui decidi con me, non con una regola fissa: la via giusta dipende da cosa
 gia' uso.
-1. Conferma che la cartella madre e' un repository git e che `.gitignore`
-   esclude i segreti. Se manca, crealo prima di proseguire. Questo vale sempre.
-2. DOMANDA 2 - come fare il backup. [UMANO]
-   Presentami le due opzioni e fammi scegliere:
-   - GitHub privato: copia su una repo privata. Sicuro, ma serve un account
-     GitHub. Una volta configurato, l'agente salva localmente a fine sessione
-     e propone il push quando esistono commit da pubblicare. Il push parte
-     soltanto dopo un comando esplicito.
-   AUTENTICAZIONE GITHUB - REGOLA FISSA: si usa SOLO GitHub CLI con login dal
-   browser (`gh auth login` → GitHub.com → HTTPS → login via web browser: il
-   cliente clicca Autorizza e basta). VIETATO far creare, copiare o incollare
-   token (ghp_...), password o chiavi al cliente: e' una procedura da
-   sviluppatori. Se `gh` manca, l'agente lo installa (es. winget/brew).
-   - Copia/sincronizzazione su Drive o OneDrive: uso quello che ho gia'; comodo,
-     ma la sincronizzazione continua puo' corrompere i file mentre l'agente
-     scrive. Meglio come copia di backup, non come cartella di lavoro viva.
-   L'account e l'autorizzazione (GitHub o cloud) li attivo io: tu guidami a voce,
-   non creare account ne' inserire password al posto mio.
-   Nel gate anonimo di rilascio il backup remoto resta `DA COLLAUDARE` perche'
-   richiede una scelta e un account reali.
+1. La casa non e' un registro git e non lo diventa: niente `git init`, niente
+   GitHub, niente commit o push. Questo vale sempre.
+2. DOMANDA 2 - dove tenere la copia di sicurezza. [UMANO]
+   Chiedimi una cartella fuori dalla casa, di solito dentro iCloud Drive,
+   Google Drive o OneDrive (va bene anche un disco esterno). Poi:
+   `python3 .agent/hooks/backup_casa.py --imposta "<cartella>"` fa la prima
+   copia e registra la scelta in `.agent/backup_casa.json`. Da quel momento
+   la routine delle 07:45 fa ogni giorno una copia datata e tiene le ultime
+   sette; `--stato` mostra cartella e ultima copia. La cartella delle copie
+   non e' mai la cartella di lavoro. Segreti e archivi protetti restano fuori.
+   Nel gate anonimo di rilascio la scelta resta `DA COLLAUDARE` perche'
+   richiede una cartella reale del proprietario.
 3. DOMANDA 3 - seconda postazione, se mi serve. [UMANO]
-   Coerente con la Domanda 2:
-   - se ho scelto GitHub: sull'altro PC si fa `clone` della stessa repo e si
-     tiene allineata con `pull` e `push` (copia locale vera, scrittura sicura);
-   - se ho scelto Drive/OneDrive: si usa la cartella condivisa, ricordando di non
-     aprirla viva da due PC nello stesso momento per non corromperla.
+   La casa si condivide con una cartella sincronizzata (iCloud Drive, Google
+   Drive o OneDrive), ricordando di non aprirla viva da due PC nello stesso
+   momento per non corromperla; su ogni PC vale l'avviso sulla scrittura.
    Se non mi serve una seconda postazione, salta questo punto.
 4. Su ogni PC i connettori (Gmail, Calendar, Drive, Meta) si ri-autorizzano con
-   un login: le chiavi restano per-macchina, non viaggiano nel backup. Confermalo.
-5. I documenti di business (report, anagrafiche, file pesanti) non vanno nel
-   backup del cervello: restano su Drive/OneDrive/server e si leggono via
+   un login: le chiavi restano per-macchina, non viaggiano nella copia. Confermalo.
+5. I documenti di business (report, anagrafiche, file pesanti) non vanno nella
+   copia del cervello: restano su Drive/OneDrive/server e si leggono via
    connettore da qualsiasi PC.
-Se non voglio impostare il backup adesso, lascia comunque la cartella come
-repository git in locale e segnala che il backup remoto resta da fare. Non
+Se non voglio scegliere la cartella adesso, registra
+`Backup: cartella della copia di sicurezza da scegliere (Domanda 2)` e non
 bloccare il setup.
 
 Operazione 8 - cosa collegare dopo
@@ -811,15 +805,15 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 - modalita' accesso standard: sola lettura / percorso tecnico autorizzato;
 - modalita' scelta: claude / codex / both;
 - file creati;
-- cartella madre = repository git si/no;
-- `.gitignore` esclude i segreti si/no;
+- cartella madre senza registro git si/no;
+- copia di sicurezza: cartella scelta e prima copia fatta / da scegliere;
 - memoria unica e, per Claude, prova `autoMemoryDirectory` + `/memory`;
 - istruzioni globali dell'agente attivo con blocco `LEADERAI-CASA`, percorso
   della cartella madre e prova da cartella estranea (`user_instructions_gate`);
 - soggetti giuridici censiti in `ecosistema/SOGGETTI.md`, stanze per funzione;
 - guardiano di chiusura presente una sola volta, visibile in `/hooks`, con
   prova pulita e prova bloccante;
-- backup scelto: GitHub privato / copia su Drive-OneDrive / da fare (Domanda 2);
+- copia di sicurezza scelta (Domanda 2) si/no;
 - seconda postazione impostata si/no/non serve;
 - Cervello verificato si/no;
 - prova piccola completata si/no;

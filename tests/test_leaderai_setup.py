@@ -1,3 +1,4 @@
+import json
 import subprocess
 import tempfile
 import unittest
@@ -137,29 +138,35 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("Architettura adattiva", agents)
             self.assertFalse((target / "resoconti").exists())
 
-    def test_first_commit_photographs_install(self):
-        # La cartella madre deve nascere come repository CON cronologia:
-        # senza primo commit il backup della Fase 7 parte da un repo vuoto.
+    def test_new_house_is_not_a_git_repository_and_declares_backup(self):
+        # La casa nasce senza registro git: il backup e' la copia di sicurezza
+        # datata, che parte quando il proprietario ha scelto la cartella.
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Test"
             result = self.run_setup(target, "claude")
 
-            log = subprocess.run(
-                ["git", "log", "--oneline"],
-                cwd=str(target),
-                capture_output=True,
-                text=True,
+            self.assertFalse((target / ".git").exists())
+            self.assertFalse((target / ".gitignore").exists())
+            self.assertTrue((target / ".agent" / "hooks" / "backup_casa.py").is_file())
+            self.assertIn("da scegliere", result.backup_outcome)
+            log = (target / "logs" / "install-log.md").read_text(encoding="utf-8")
+            self.assertIn("Backup:", log)
+
+    def test_first_backup_copy_is_made_when_folder_is_chosen(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "EcosistemaAI-Backup"
+            backups = Path(tmp) / "Copie"
+            self.run_setup(target, "claude")
+            (target / ".agent" / "backup_casa.json").write_text(
+                json.dumps({"cartella": str(backups), "conserva": 3}), encoding="utf-8"
             )
-            self.assertEqual(log.returncode, 0)
-            self.assertIn("installazione iniziale", log.stdout)
-            porcelain = subprocess.run(
-                ["git", "status", "--porcelain"],
-                cwd=str(target),
-                capture_output=True,
-                text=True,
-            )
-            self.assertEqual(porcelain.stdout.strip(), "")
-            self.assertIn("primo commit creato", result.git_outcome)
+
+            result = self.run_setup(target, "claude")
+
+            self.assertIn("prima copia di sicurezza creata", result.backup_outcome)
+            copie = sorted(backups.glob("Cervello-EcosistemaAI-Backup-*.zip"))
+            self.assertEqual(len(copie), 1)
+            self.assertTrue((target / "logs" / "backup-log.md").is_file())
 
     def test_second_run_does_not_overwrite(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -390,7 +397,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("CLAUDE.md", result.created)
             self.assertIn(".codex/README.md", result.created)
             self.assertNotIn(".claude/README.md", result.created)
-            self.assertIn("dry-run", result.git_outcome)
+            self.assertIn("dry-run", result.backup_outcome)
 
     def test_force_only_repairs_bridge_and_preserves_every_customer_file(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -410,10 +417,6 @@ class LeaderAISetupTest(unittest.TestCase):
             }
             for rel, content in protected.items():
                 (target / rel).write_text(content, encoding="utf-8")
-            (target / ".gitignore").write_text(
-                leaderai_setup.GITIGNORE_CONTENT + "regola-cliente\n",
-                encoding="utf-8",
-            )
             old_report = "REPORT STORICO\nVERDETTO\n- PASSA\n"
             (target / "REPORT_FINALE.md").write_text(old_report, encoding="utf-8")
             (target / "CLAUDE.md").write_text("ponte errato\n", encoding="utf-8")
@@ -430,70 +433,6 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertEqual(report, old_report)
             self.assertEqual(result.target_verdict, "NON PASSA")
             self.assertIn("CLAUDE.md", result.updated)
-
-    def test_gitignore_adds_every_missing_required_rule_once(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / "EcosistemaAI-Gitignore"
-            target.mkdir()
-            (target / "AGENTS.md").write_text("# Cliente\n", encoding="utf-8")
-            (target / ".gitignore").write_text(
-                ".secrets/\nregola-cliente\n",
-                encoding="utf-8",
-            )
-
-            leaderai_setup.run_setup(
-                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
-            )
-            first = (target / ".gitignore").read_text(encoding="utf-8")
-            leaderai_setup.run_setup(
-                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
-            )
-            second = (target / ".gitignore").read_text(encoding="utf-8")
-
-            for rule in leaderai_setup._required_gitignore_rules():
-                self.assertEqual(first.splitlines().count(rule), 1)
-            self.assertIn("regola-cliente", first)
-            self.assertEqual(second, first)
-
-    def test_gitignore_safety_block_overrides_secret_negations(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / "EcosistemaAI-GitignoreNegazione"
-            target.mkdir()
-            (target / "AGENTS.md").write_text("# Cliente\n", encoding="utf-8")
-            (target / ".gitignore").write_text(
-                "*.env\n!segreto.env\nregola-cliente\n",
-                encoding="utf-8",
-            )
-            subprocess.run(
-                ["git", "init"],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-            )
-
-            leaderai_setup.run_setup(
-                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
-            )
-            secret = target / "segreto.env"
-            secret.write_text("NON-COMMITTERE\n", encoding="utf-8")
-
-            ignored = subprocess.run(
-                ["git", "check-ignore", "-q", "segreto.env"],
-                cwd=str(target),
-            )
-            status = subprocess.run(
-                ["git", "status", "--porcelain", "--", "segreto.env"],
-                cwd=str(target),
-                capture_output=True,
-                text=True,
-            )
-            gitignore = (target / ".gitignore").read_text(encoding="utf-8")
-            self.assertEqual(ignored.returncode, 0)
-            self.assertEqual(status.stdout, "")
-            self.assertLess(
-                gitignore.index("!segreto.env"),
-                gitignore.rindex("*.env"),
-            )
 
     def test_rejects_symlinked_standard_parent_before_writing_outside(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -559,37 +498,6 @@ class LeaderAISetupTest(unittest.TestCase):
 
             self.assertFalse((target / "CLAUDE.md").exists())
 
-    def test_failed_first_commit_is_reported_truthfully(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / "EcosistemaAI-CommitFallito"
-            real_run = subprocess.run
-
-            def fail_first_commit(command, *args, **kwargs):
-                if command[0] == "git" and "commit" in command and "--amend" not in command:
-                    raise subprocess.CalledProcessError(1, command)
-                return real_run(command, *args, **kwargs)
-
-            with mock.patch.object(
-                leaderai_setup.subprocess,
-                "run",
-                side_effect=fail_first_commit,
-            ):
-                result = leaderai_setup.run_setup(
-                target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
-            )
-
-            log = (target / "logs" / "install-log.md").read_text(encoding="utf-8")
-            self.assertIn("primo commit fallito", result.git_outcome)
-            self.assertIn("primo commit fallito", log)
-            self.assertFalse((target / "REPORT_FINALE.md").exists())
-            head = real_run(
-                ["git", "rev-parse", "--verify", "HEAD"],
-                cwd=str(target),
-                capture_output=True,
-                text=True,
-            )
-            self.assertNotEqual(head.returncode, 0)
-
     def test_cli_returns_nonzero_when_gate_has_blockers(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-CLI-Bloccato"
@@ -618,7 +526,7 @@ class LeaderAISetupTest(unittest.TestCase):
             self.assertIn("verdict=NON PASSA", completed.stdout)
             self.assertFalse((target / "REPORT_FINALE.md").exists())
 
-    def test_identical_rerun_does_not_append_log_or_create_commit(self):
+    def test_identical_rerun_does_not_append_log(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "EcosistemaAI-Idempotente"
             leaderai_setup.run_setup(
@@ -627,13 +535,6 @@ class LeaderAISetupTest(unittest.TestCase):
             log_before = (target / "logs" / "install-log.md").read_text(
                 encoding="utf-8"
             )
-            count_before = subprocess.run(
-                ["git", "rev-list", "--count", "HEAD"],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
 
             result = leaderai_setup.run_setup(
                 target, "Cliente Test", "codex", codex_user_instructions_path=target.parent / "codex-user-AGENTS.md"
@@ -643,14 +544,6 @@ class LeaderAISetupTest(unittest.TestCase):
                 (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
                 log_before,
             )
-            count_after = subprocess.run(
-                ["git", "rev-list", "--count", "HEAD"],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout.strip()
-            self.assertEqual(count_after, count_before)
             self.assertEqual(result.created, [])
             self.assertEqual(result.updated, [])
 

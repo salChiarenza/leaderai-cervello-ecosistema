@@ -76,7 +76,7 @@ class AdoptionRuleTest(unittest.TestCase):
 
     def test_casa_condivisa_ma_tracce_da_due_postazioni_non_e_parziale(self):
         episodes = [
-            {"gesture": "invio email", "source": "git", "machine": "pc-ufficio"},
+            {"gesture": "invio email", "source": "chat", "machine": "pc-ufficio"},
             {"gesture": "analisi", "source": "diario", "machine": "portatile-casa"},
         ]
         outcome = classify_adoption(
@@ -100,7 +100,7 @@ class AdoptionRuleTest(unittest.TestCase):
         self.assertEqual(set(policy["verdicts"]), set(REQUIRED_VERDICTS))
         # Il contratto copre tutte le tracce del Passo 1-quinquies.
         self.assertLessEqual(
-            {"git", "chat", "diario", "sessioni", "file", "log", "memory"},
+            {"chat", "diario", "sessioni", "file", "log", "memory"},
             set(policy["dedup_sources"]),
         )
 
@@ -113,7 +113,7 @@ class ContractSourceTest(unittest.TestCase):
         missing = ROOT / "tests" / "fixtures" / "adoption" / "non_esiste.json"
         with self.assertRaises(ContractError):
             classify_adoption(
-                [{"gesture": "x", "source": "git"}],
+                [{"gesture": "x", "source": "chat"}],
                 traces_read=True,
                 contract_path=missing,
             )
@@ -126,7 +126,7 @@ class ContractSourceTest(unittest.TestCase):
             bad.write_text("{ questo non e' json valido ", encoding="utf-8")
             with self.assertRaises(ContractError):
                 classify_adoption(
-                    [{"gesture": "x", "source": "git"}],
+                    [{"gesture": "x", "source": "chat"}],
                     traces_read=True,
                     contract_path=bad,
                 )
@@ -142,7 +142,7 @@ class ContractSourceTest(unittest.TestCase):
                         "inspection_policies": {
                             "adoption_observation": {
                                 "verdicts": ["ADOZIONE OSSERVATA"],
-                                "dedup_sources": ["git"],
+                                "dedup_sources": ["chat"],
                             }
                         }
                     }
@@ -151,7 +151,7 @@ class ContractSourceTest(unittest.TestCase):
             )
             with self.assertRaises(ContractError):
                 classify_adoption(
-                    [{"gesture": "x", "source": "git"}],
+                    [{"gesture": "x", "source": "chat"}],
                     traces_read=True,
                     contract_path=partial,
                 )
@@ -176,7 +176,7 @@ class ContractSourceTest(unittest.TestCase):
             )
             with self.assertRaises(ContractError):
                 classify_adoption(
-                    [{"gesture": "x", "source": "git"}],
+                    [{"gesture": "x", "source": "chat"}],
                     traces_read=True,
                     contract_path=partial,
                 )
@@ -187,7 +187,7 @@ class ContractSourceTest(unittest.TestCase):
         tracce mancanti elencate (buco trovato dalla prova di Codex)."""
         import tempfile
 
-        canoniche = ["git", "chat", "diario", "sessioni", "file", "log", "memory"]
+        canoniche = ["chat", "diario", "sessioni", "file", "log", "memory"]
         with tempfile.TemporaryDirectory() as tmp:
             partial = Path(tmp) / "install_contract.json"
             partial.write_text(
@@ -196,9 +196,9 @@ class ContractSourceTest(unittest.TestCase):
                         "inspection_policies": {
                             "adoption_observation": {
                                 "verdicts": sorted(REQUIRED_VERDICTS),
-                                "dedup_sources": ["git"],
+                                "dedup_sources": ["altro"],
                                 "dedup_sources_glossario": {
-                                    s: s for s in canoniche
+                                    **{s: s for s in canoniche}, "altro": "altro"
                                 },
                             }
                         }
@@ -208,7 +208,7 @@ class ContractSourceTest(unittest.TestCase):
             )
             with self.assertRaises(ContractError) as ctx:
                 classify_adoption(
-                    [{"gesture": "x", "source": "git"}],
+                    [{"gesture": "x", "source": "chat"}],
                     traces_read=True,
                     contract_path=partial,
                 )

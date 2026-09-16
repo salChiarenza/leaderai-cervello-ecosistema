@@ -4,7 +4,7 @@
   "house_shared": false,
   "machines_in_house": ["mac-studio"],
   "episodes": [
-    {"episode": "fattura-elettronica-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
+    {"episode": "fattura-elettronica-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
     {"episode": "fattura-elettronica-2026-08-10", "gesture": "emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
     {"episode": "fattura-elettronica-2026-08-10", "gesture": "Emissione  fattura   elettronica", "source": "diario", "machine": "mac-studio", "date": "2026-08-11"}
   ],

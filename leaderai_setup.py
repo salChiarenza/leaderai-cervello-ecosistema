@@ -9,6 +9,7 @@ import json
 import re
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -19,7 +20,6 @@ ROOT = Path(__file__).resolve().parent
 STANDARD_VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 CONTRACT = install_contract.CONTRACT
 
-GITIGNORE_CONTENT = (ROOT / "templates" / "GITIGNORE.txt").read_text(encoding="utf-8")
 SUPPORTED_AGENTS = set(CONTRACT["supported_agents"])
 CLAUDE_BRIDGE = "@AGENTS.md\n"
 _ALL_STANDARD_FILES = {
@@ -35,7 +35,6 @@ STANDARD_DIRS = tuple(
             for rel in STANDARD_FILES
             if len(Path(rel).parts) > 1
         }
-        | {".git"}
     )
 )
 
@@ -53,7 +52,7 @@ class InstallResult:
     external_effects: list[str] = field(default_factory=list)
     target_verdict: str | None = None
     inspection_codes: list[str] = field(default_factory=list)
-    git_outcome: str = "Git: non ancora valutato."
+    backup_outcome: str = "Backup: non ancora valutato."
 
     def record(self, status: str, path: Path) -> None:
         rel = path.relative_to(self.target).as_posix()
@@ -794,193 +793,56 @@ def _assert_safe_layout(target: Path) -> None:
             raise ValueError(f"File standard occupato da una directory: {path}")
 
 
-def _required_gitignore_rules() -> list[str]:
-    return [
-        line.strip()
-        for line in GITIGNORE_CONTENT.splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    ]
-
-
-def ensure_gitignore(path: Path, result: InstallResult, dry_run: bool) -> None:
-    if path.exists():
-        current = path.read_text(encoding="utf-8")
-        required = set(_required_gitignore_rules())
-        cleaned: list[str] = []
-        inside_managed = False
-        for line in current.splitlines():
-            stripped = line.strip()
-            if stripped == "# BEGIN LEADERAI SAFETY RULES":
-                inside_managed = True
-                continue
-            if stripped == "# END LEADERAI SAFETY RULES":
-                inside_managed = False
-                continue
-            if inside_managed:
-                continue
-            if stripped == "# Regole LeaderAI obbligatorie aggiunte dal setup":
-                continue
-            if stripped in required:
-                continue
-            cleaned.append(line)
-        base = "\n".join(cleaned).rstrip()
-        desired = (
-            (base + "\n\n" if base else "")
-            + GITIGNORE_CONTENT.rstrip()
-            + "\n"
-        )
-        if current == desired:
-            result.record("existing", path)
-            return
-        if not dry_run:
-            path.write_text(desired, encoding="utf-8")
-        result.record("updated", path)
-        return
-    if not dry_run:
-        path.write_text(GITIGNORE_CONTENT, encoding="utf-8")
-    result.record("created", path)
-
-
-def ensure_git_repo(
+def ensure_backup_copy(
     target: Path,
     result: InstallResult,
     *,
     new_install: bool,
-    dry_run: bool,
-) -> bool:
-    if not new_install:
-        if (target / ".git").is_dir():
-            result.git_outcome = (
-                "Git: repository gia' presente; target vivo, nessun commit automatico."
-            )
-        else:
-            result.git_outcome = (
-                "Git: target vivo senza repository; nessuna inizializzazione o commit automatico."
-            )
-            result.warnings.append(
-                "Il target vivo non ha un repository Git; valutare il backup con il cliente."
-            )
-        return False
-    if dry_run:
-        result.git_outcome = (
-            "Git: nuova installazione, inizializzazione e primo commit pianificati (dry-run)."
-        )
-        return False
-    try:
-        subprocess.run(
-            ["git", "init"],
-            cwd=str(target),
-            check=True,
-            capture_output=True,
-        )
-        result.git_outcome = (
-            "Git: repository inizializzato; primo commit in preparazione."
-        )
-        return True
-    except FileNotFoundError:
-        result.git_outcome = (
-            "Git: comando non trovato; repository e primo commit da creare a mano."
-        )
-        result.warnings.append("Git non disponibile durante la nuova installazione.")
-    except subprocess.CalledProcessError:
-        result.git_outcome = (
-            "Git: inizializzazione fallita; repository e primo commit da completare a mano."
-        )
-        result.warnings.append("Inizializzazione Git fallita.")
-    return False
-
-
-def ensure_first_commit(
-    target: Path,
-    result: InstallResult,
-    *,
-    new_install: bool,
-    git_ready: bool,
     dry_run: bool,
 ) -> None:
-    if dry_run or not new_install or not git_ready:
+    """La casa non e' un registro git: il backup e' una copia datata in una
+    cartella scelta dal proprietario. Qui si fa la prima copia se la cartella
+    e' gia' stata scelta; altrimenti si dichiara che resta da scegliere."""
+    if dry_run:
+        result.backup_outcome = "Backup: prima copia di sicurezza pianificata (dry-run)."
         return
-    candidates: list[str] = []
-    for rel in dict.fromkeys(result.created + result.updated):
-        path = target / rel
-        if path.is_file() and not path.is_symlink() and not rel.startswith(".git/"):
-            candidates.append(rel)
-    if not candidates:
-        result.git_outcome = "Git: nessun file LeaderAI da fotografare."
+    if (target / ".git").exists():
+        result.backup_outcome = (
+            "Backup: la casa e' ancora un registro git; la copia di sicurezza lo "
+            "sostituisce e `.git` si rimuove con il proprietario dopo la prima copia."
+        )
+        result.warnings.append("Registro git presente nella casa: da rimuovere dopo la prima copia di sicurezza.")
         return
-    rendered_log_paths = [target / "logs" / "install-log.md"]
-    committed_log_paths = [target / "logs" / "install-log.md"]
-    rendered_outcome = result.git_outcome
-
-    def refresh_outcome(after: str) -> None:
-        nonlocal rendered_outcome
-        before_text = rendered_outcome.removeprefix("Git: ")
-        after_text = after.removeprefix("Git: ")
-        for path in rendered_log_paths:
-            if not path.is_file() or path.is_symlink():
-                continue
-            current = path.read_text(encoding="utf-8")
-            updated = current.replace(before_text, after_text)
-            if updated != current:
-                path.write_text(updated, encoding="utf-8")
-        rendered_outcome = after
-
+    script = target / ".agent" / "hooks" / "backup_casa.py"
+    config = target / ".agent" / "backup_casa.json"
+    if not script.is_file():
+        result.backup_outcome = "Backup: attrezzo `.agent/hooks/backup_casa.py` assente; copia da fare a mano."
+        result.warnings.append("Attrezzo della copia di sicurezza assente.")
+        return
+    if not config.is_file():
+        result.backup_outcome = (
+            "Backup: cartella della copia di sicurezza da scegliere con il "
+            "proprietario (Domanda 2); nessuna copia creata."
+        )
+        return
     try:
-        subprocess.run(
-            ["git", "add", "--", *candidates],
-            cwd=str(target),
-            check=True,
+        esito = subprocess.run(
+            [sys.executable, str(script), "--casa", str(target)],
             capture_output=True,
+            text=True,
+            check=False,
         )
-        subprocess.run(
-            [
-                "git",
-                "-c", "user.name=LeaderAI Setup",
-                "-c", "user.email=setup@leaderai.local",
-                "commit",
-                "-m", "Cervello + Ecosistema LeaderAI: installazione iniziale",
-            ],
-            cwd=str(target),
-            check=True,
-            capture_output=True,
-        )
-        result.git_outcome = (
-            "Git: repository inizializzato e primo commit creato con soli file LeaderAI."
-        )
-        refresh_outcome(result.git_outcome)
-        final_log_paths = [
-            path.relative_to(target).as_posix()
-            for path in committed_log_paths
-            if path.is_file() and not path.is_symlink()
-        ]
-        if final_log_paths:
-            subprocess.run(
-                ["git", "add", "--", *final_log_paths],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-            )
-            subprocess.run(
-                [
-                    "git",
-                    "-c", "user.name=LeaderAI Setup",
-                    "-c", "user.email=setup@leaderai.local",
-                    "commit",
-                    "--amend",
-                    "--no-edit",
-                ],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-            )
-    except FileNotFoundError:
-        result.git_outcome = "Git: comando non trovato; primo commit da fare a mano."
-        result.warnings.append("Primo commit Git non creato.")
-        refresh_outcome(result.git_outcome)
-    except subprocess.CalledProcessError:
-        result.git_outcome = "Git: primo commit fallito; completarlo a mano."
-        result.warnings.append("Primo commit Git fallito.")
-        refresh_outcome(result.git_outcome)
+    except OSError as errore:
+        result.backup_outcome = f"Backup: copia non riuscita ({errore})."
+        result.warnings.append("Prima copia di sicurezza non riuscita.")
+        return
+    riga = (esito.stdout or esito.stderr).strip().splitlines()
+    testo = riga[-1] if riga else "nessun esito"
+    if esito.returncode == 0 and testo.startswith("BACKUP OK"):
+        result.backup_outcome = "Backup: prima copia di sicurezza creata (" + testo.removeprefix("BACKUP OK: ") + ")."
+    else:
+        result.backup_outcome = f"Backup: copia non riuscita ({testo})."
+        result.warnings.append("Prima copia di sicurezza non riuscita.")
 
 
 def _event_key(result: InstallResult, agent: str) -> str:
@@ -993,7 +855,7 @@ def _event_key(result: InstallResult, agent: str) -> str:
         "warnings": result.warnings,
         "blockers": result.blockers,
         "inspection_codes": result.inspection_codes,
-        "git": result.git_outcome,
+        "backup": result.backup_outcome,
     }
     raw = json.dumps(payload, ensure_ascii=True, sort_keys=True).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()[:16]
@@ -1022,7 +884,7 @@ def ensure_event_log(
         f"- Updated: {', '.join(result.updated) if result.updated else 'none'}",
         f"- Warnings: {' | '.join(result.warnings) if result.warnings else 'none'}",
         f"- Blockers: {' | '.join(result.blockers) if result.blockers else 'none'}",
-        f"- {result.git_outcome}",
+        f"- {result.backup_outcome}",
     ]
     block = "\n".join(lines).rstrip() + "\n"
     if not path.exists():
@@ -1099,8 +961,8 @@ def _finalize_blocked_target(
         result.target_verdict = "NON PASSA"
         return result
     effects = install_contract.external_effects(CONTRACT, agent)
-    if "git_baseline" in effects:
-        ensure_git_repo(
+    if "backup_copy" in effects:
+        ensure_backup_copy(
             result.target,
             result,
             new_install=False,
@@ -1291,22 +1153,9 @@ def run_setup(
         if parent != target:
             ensure_dir(parent, result, dry_run)
 
-    gitignore_rule = next(
-        rule for rule in rules if rule.strategy == "merge_gitignore"
-    )
-    ensure_gitignore(target / gitignore_rule.destination, result, dry_run)
-    git_ready = False
-    if "git_baseline" in effects:
-        git_ready = ensure_git_repo(
-            target,
-            result,
-            new_install=new_install,
-            dry_run=dry_run,
-        )
-
     for rule in rules:
         path = target / rule.destination
-        if rule.strategy in {"merge_gitignore", "event_log"}:
+        if rule.strategy == "event_log":
             continue
         if rule.strategy == "claude_bridge":
             ensure_claude_bridge(
@@ -1381,13 +1230,13 @@ def run_setup(
         if path.exists():
             result.record("existing", path)
 
-    ensure_first_commit(
-        target,
-        result,
-        new_install=new_install,
-        git_ready=git_ready,
-        dry_run=dry_run,
-    )
+    if "backup_copy" in effects:
+        ensure_backup_copy(
+            target,
+            result,
+            new_install=new_install,
+            dry_run=dry_run,
+        )
 
     if dry_run and not target.exists():
         result.target_verdict = "DA COLLAUDARE"

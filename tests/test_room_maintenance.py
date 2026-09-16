@@ -245,8 +245,9 @@ class RoomMaintenanceTest(unittest.TestCase):
         from tests.room_growth_live import run_autonomy
         baseline = []
         def simulated_agent(command, root, prompt, timeout):
-            baseline.append(subprocess.run(["git", "status", "--porcelain"], cwd=root,
-                capture_output=True, text=True, check=True).stdout)
+            # Il caso pronto porta gia' il difetto da riparare: se manca, il
+            # revisore starebbe confrontando con il template dell'installatore.
+            baseline.append("prima-prova-vecchia.md" in (root / "app-iscrizioni/STATO_ISCRIZIONI.md").read_text())
             source = root / "app-iscrizioni/STATO_ISCRIZIONI.md"
             source.write_text(source.read_text().replace("prima-prova-vecchia.md", "prima_prova.md"))
             memory = root / "memory/MEMORY.md"
@@ -292,7 +293,7 @@ class RoomMaintenanceTest(unittest.TestCase):
 
     def test_autonomy_baseline_is_the_ready_case_not_the_installer(self):
         report, baseline = self.autonomy_case()
-        self.assertEqual(baseline, [""], "Il revisore deve confrontare con il caso pronto, non con il template iniziale")
+        self.assertEqual(baseline, [True], "Il revisore deve confrontare con il caso pronto, non con il template iniziale")
         self.assertTrue(report["passed"], report)
 
     def test_claude_background_review_waits_for_runtime_completion(self):

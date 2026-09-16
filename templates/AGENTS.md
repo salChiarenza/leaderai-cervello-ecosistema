@@ -56,10 +56,12 @@ Versione standard applicata: `{{version}}`.
   proprietario, non nella Posta in arrivo.
 - Non salvare segreti, password, token o dati bancari in memoria.
 - **Se l'azienda del cliente ha disattivato servizi cloud** (es. Google Docs/Drive spenti dall'IT, add-in Office non autorizzati), genera i documenti come **file locali** (`.docx`/`.md`) nella cartella di lavoro e aprili con l'app installata. Non tentare l'export su Drive/Docs: dà "non hai accesso" e blocca. Se un pulsante propone il cloud aziendale, ignoralo e proponi il file locale.
-- La posizione di questa cartella (locale o cloud) e il backup (GitHub privato a
-  comando oppure copia su Drive/OneDrive) sono stati scelti col cliente caso per
-  caso. Sul cloud vale l'avviso: Claude Code puo' corrompere/troncare i file
-  durante la scrittura. I segreti restano sempre nel `.gitignore`.
+- La posizione di questa cartella (locale o cloud) e la cartella della copia di
+  sicurezza sono state scelte col cliente caso per caso. La casa NON e' un
+  registro git: la copia quotidiana (`.agent/hooks/backup_casa.py`, routine
+  delle 07:45) e' il backup. Sul cloud vale l'avviso: Claude Code puo'
+  corrompere/troncare i file durante la scrittura. I segreti restano in
+  `.secrets/` e fuori dalla copia.
 - Se manca un pezzo standard, crearlo.
 - `CLAUDE.md` c'e' SEMPRE ed e' solo il ponte di una riga (`@AGENTS.md`)
   verso questa mappa: Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`
@@ -207,7 +209,7 @@ lo ha PROVATO da solo e mostra la prova. Vale per configurazioni, script,
 analisi, collegamenti e riparazioni.
 
 - Script o installazione → eseguirlo davvero su una cartella di prova usa-e-getta,
-  mostrare il risultato reale (file creati, commit, output), poi eliminare la prova.
+  mostrare il risultato reale (file creati, output), poi eliminare la prova.
 - Fonte o collegamento → una lettura innocua con un dato vero mostrato
   (oggetto email, titolo evento, nome file). Niente dato = `DA COLLEGARE`.
 - Documento o output per il cliente → aprirlo e rileggerlo come lo vedra' lui.
@@ -282,7 +284,7 @@ Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
   tutti gli agenti della casa. Prima di modificare file importanti si annuncia
   li'; note in cima, massimo 48 ore, poi si promuovono nel file proprietario.
   Il "come si fa" vive nella procedura o nel file proprietario, la chat porta
-  solo il coordinamento. Ogni handoff usa un ID missione, base Git, stato,
+  solo il coordinamento. Ogni handoff usa un ID missione, stato,
   prove e destinatario del prossimo turno. Un agente nuovo conferma la presa in
   carico nella stessa nota prima di continuare.
 

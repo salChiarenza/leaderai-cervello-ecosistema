@@ -47,7 +47,7 @@ STANDARD_FILES = (
     "templates/GUARDIANO_DATI_VERIFICATI.py",
     "templates/GUARDIANO_NOTE_AGENTI.py",
     "templates/GUARDIANO_TURNO.py",
-    "templates/SALVATAGGIO_AUTOMATICO.py",
+    "templates/BACKUP_CASA.py",
     "templates/CHAT_AGGIORNAMENTI.sh",
     "templates/AGENT_CHAT.md",
     "templates/ASSET.md",
@@ -59,7 +59,6 @@ STANDARD_FILES = (
     "templates/CODEX_USER_AGENTS.md",
     "templates/CODEX_HOOKS.json",
     "templates/FONTI.md",
-    "templates/GITIGNORE.txt",
     "templates/GUARDIANO_STANZE.sh",
     "templates/ARCHIVE_POLICY.py",
     "templates/GUARDIANO_STANZE_WINDOWS.ps1",
@@ -703,7 +702,7 @@ def evaluate_oracle(
     target_after: dict[str, Any],
     git_evidence: dict[str, Any],
 ) -> dict[str, Any]:
-    """Verifica parita' manuale, modalita', Git, versione e log tecnico."""
+    """Verifica parita' manuale, modalita', assenza di git, backup, versione e log tecnico."""
 
     version = (snapshot / "VERSION").read_text(encoding="utf-8").strip()
     present_files = set(target_after["files"])
@@ -722,7 +721,6 @@ def evaluate_oracle(
     agents = _read_text(target, "AGENTS.md")
     install_log = _read_text(target, "logs/install-log.md")
     bridge = _read_text(target, "CLAUDE.md")
-    gitignore = _read_text(target, ".gitignore")
 
     install_log_folded = install_log.casefold()
     declared_mode = install_contract.declared_agent(agents)
@@ -746,34 +744,8 @@ def evaluate_oracle(
         for check in install_contract.environment_checks(INSTALL_CONTRACT)
     )
 
-    required_ignore_rules = [
-        line.strip()
-        for line in (snapshot / "templates/GITIGNORE.txt")
-        .read_text(encoding="utf-8")
-        .splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    ]
-    ignore_missing = sorted(
-        rule for rule in required_ignore_rules if rule not in gitignore.splitlines()
-    )
-    expected_ignored = {
-        ".secrets/prova.txt",
-        "prova.env",
-        "api-token-prova.txt",
-        "client-secret-prova.txt",
-        "client-password-prova.txt",
-        "client-credential-prova.txt",
-    }
-    ignored_observed = set(git_evidence["ignored_safety_paths"])
-    git_ok = (
-        git_evidence["available"]
-        and git_evidence["is_repository"]
-        and git_evidence["commit_count"] >= 1
-        and "installazione iniziale" in git_evidence["log"].casefold()
-        and not git_evidence["status"].strip()
-        and not git_evidence["remotes"].strip()
-        and expected_ignored <= ignored_observed
-    )
+    senza_git = not git_evidence["is_repository"]
+    backup_dichiarato = "backup:" in install_log_folded
 
     generated_with_placeholders = sorted(
         relative
@@ -844,7 +816,7 @@ def evaluate_oracle(
     allowed_root_names = {
         Path(relative).parts[0]
         for relative in MODE_REQUIRED_FILES[mode]
-    } | {".git"}
+    }
     observed_root_names = {
         Path(relative).parts[0]
         for relative in (*present_files, *present_dirs)
@@ -894,14 +866,11 @@ def evaluate_oracle(
             ),
         ),
         _check(
-            "git_locale_pronto_e_segreti_ignorati",
-            git_ok and not ignore_missing,
+            "casa_senza_registro_git_e_backup_dichiarato",
+            senza_git and backup_dichiarato,
             (
-                f"repo={git_evidence['is_repository']}; "
-                f"commit={git_evidence['commit_count']}; "
-                f"pulito={not bool(git_evidence['status'].strip())}; "
-                f"remoti={bool(git_evidence['remotes'].strip())}; "
-                f"regole_mancanti={ignore_missing}"
+                f"registro_git={git_evidence['is_repository']}; "
+                f"backup_nel_log={backup_dichiarato}"
             ),
         ),
         _check(

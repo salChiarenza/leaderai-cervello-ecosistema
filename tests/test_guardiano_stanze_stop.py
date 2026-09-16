@@ -179,14 +179,8 @@ class GuardianoStanzeStopTest(unittest.TestCase):
             (family / "relazione_finale.md").write_text("Documento storico\n" * 900)
             path = room / "AGENTS.md"
             path.write_text(path.read_text().replace("NESSUNA SOTTOCARTELLA", "`dati/` — Dati.\n- `dati/pratiche/` — ARCHIVIO PROTETTO: fascicoli delle famiglie", 1))
-            ignore = target / ".gitignore"
-            ignore.write_text(ignore.read_text() + "\n/iscrizioni/dati/pratiche/\n")
             result = self.run_guard(target)
             self.assertEqual(result.returncode, 0, result.stderr)
-            ignore.write_text(ignore.read_text().replace("/iscrizioni/dati/pratiche/", ""))
-            result = self.run_guard(target)
-            self.assertEqual(result.returncode, 2)
-            self.assertIn("esclusi da Git", result.stderr)
 
     def test_clean_house_can_close(self):
         """Break caught: the installed guard must not block a conforming house."""

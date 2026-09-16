@@ -134,7 +134,6 @@
         "ADOZIONE OSSERVATA"
       ],
       "dedup_sources": [
-        "git",
         "chat",
         "diario",
         "sessioni",
@@ -143,7 +142,6 @@
         "memory"
       ],
       "dedup_sources_glossario": {
-        "git": "storia Git della casa",
         "chat": "AGENT_CHAT.md",
         "diario": "diario in coda ai file progetto",
         "sessioni": "registro delle sessioni dell'agente attivo",
@@ -400,11 +398,6 @@
   "common": {
     "templates": [
       {
-        "template": "GITIGNORE.txt",
-        "destination": ".gitignore",
-        "strategy": "merge_gitignore"
-      },
-      {
         "template": "AGENTS.md",
         "destination": "AGENTS.md",
         "strategy": "create"
@@ -565,8 +558,8 @@
         "strategy": "managed_text"
       },
       {
-        "template": "SALVATAGGIO_AUTOMATICO.py",
-        "destination": ".agent/hooks/salvataggio_automatico.py",
+        "template": "BACKUP_CASA.py",
+        "destination": ".agent/hooks/backup_casa.py",
         "strategy": "managed_text"
       },
       {
@@ -581,7 +574,6 @@
       }
     ],
     "required": [
-      ".gitignore",
       "AGENTS.md",
       "CLAUDE.md",
       "AGENT_CHAT.md",
@@ -613,13 +605,13 @@
       ".agent/hooks/guardiano_dati_verificati.py",
       ".agent/hooks/guardiano_note_agenti.py",
       ".agent/hooks/guardiano_turno.py",
-      ".agent/hooks/salvataggio_automatico.py",
+      ".agent/hooks/backup_casa.py",
       ".agent/hooks/chat_aggiornamenti.sh",
       ".agent/hooks/guardiano_email_operativa.py"
     ],
     "forbidden": [],
     "external_effects": [
-      "git_baseline"
+      "backup_copy"
     ],
     "semantic_requirements": [
       "canonical_memory_index"
@@ -751,9 +743,9 @@
     }
   },
   "external_effects": {
-    "git_baseline": {
+    "backup_copy": {
       "scope": "target",
-      "description": "Inizializza Git e crea il primo commit solo per una casa nuova."
+      "description": "Prima copia di sicurezza della casa quando la cartella del backup e' stata scelta; la casa non e' mai un registro git."
     },
     "claude_user_settings": {
       "scope": "user",

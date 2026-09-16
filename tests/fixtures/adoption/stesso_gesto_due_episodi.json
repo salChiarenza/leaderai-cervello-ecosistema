@@ -4,8 +4,8 @@
   "house_shared": false,
   "machines_in_house": ["mac-studio"],
   "episodes": [
-    {"episode": "fattura-rossi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"},
-    {"episode": "fattura-bianchi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "git", "machine": "mac-studio", "date": "2026-08-10"}
+    {"episode": "fattura-rossi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"},
+    {"episode": "fattura-bianchi-2026-08-10", "gesture": "Emissione fattura elettronica", "source": "chat", "machine": "mac-studio", "date": "2026-08-10"}
   ],
   "expected": {
     "verdict": "ADOZIONE OSSERVATA",

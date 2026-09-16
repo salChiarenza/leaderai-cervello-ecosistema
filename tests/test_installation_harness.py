@@ -108,13 +108,12 @@ write(".agent/hooks/guardiano_doppioni.py", render("GUARDIANO_DOPPIONI.py"))
 write(".agent/hooks/guardiano_dati_verificati.py", render("GUARDIANO_DATI_VERIFICATI.py"))
 write(".agent/hooks/guardiano_note_agenti.py", render("GUARDIANO_NOTE_AGENTI.py"))
 write(".agent/hooks/guardiano_turno.py", render("GUARDIANO_TURNO.py"))
-write(".agent/hooks/salvataggio_automatico.py", render("SALVATAGGIO_AUTOMATICO.py"))
+write(".agent/hooks/backup_casa.py", render("BACKUP_CASA.py"))
 write(".agent/hooks/chat_aggiornamenti.sh", render("CHAT_AGGIORNAMENTI.sh"))
 write(
     ".agent/hooks/guardiano_stanze_windows.ps1",
     render("GUARDIANO_STANZE_WINDOWS.ps1"),
 )
-write(".gitignore", render("GITIGNORE.txt"))
 write(
     "logs/install-log.md",
     "# Install log\n\n"
@@ -123,7 +122,8 @@ write(
     "default_browser: DA COLLAUDARE\n"
     "desktop_launcher: DA COLLAUDARE\n"
     "remote_backup: DA COLLEGARE\n"
-    "user_instructions_gate: DA COLLAUDARE\n",
+    "user_instructions_gate: DA COLLAUDARE\n"
+    "Backup: cartella della copia di sicurezza da scegliere (Domanda 2)\n",
 )
 
 if mode in ("codex", "both"):
@@ -157,23 +157,6 @@ if mode in ("claude", "both"):
         render("CENSITORE_PROCESSI_SKILL.md"),
     )
 
-subprocess.run(["git", "init"], cwd=target, check=True, capture_output=True)
-subprocess.run(["git", "add", "-A"], cwd=target, check=True, capture_output=True)
-subprocess.run(
-    [
-        "git",
-        "-c",
-        "user.name=LeaderAI Test",
-        "-c",
-        "user.email=test@leaderai.local",
-        "commit",
-        "-m",
-        "installazione iniziale",
-    ],
-    cwd=target,
-    check=True,
-    capture_output=True,
-)
 print(json.dumps({"type": "result", "result": "installazione completata"}))
 """
 
@@ -512,7 +495,7 @@ class InstallationHarnessTest(unittest.TestCase):
                     "templates/GUARDIANO_DATI_VERIFICATI.py",
                     "templates/GUARDIANO_NOTE_AGENTI.py",
                     "templates/GUARDIANO_TURNO.py",
-                    "templates/SALVATAGGIO_AUTOMATICO.py",
+                    "templates/BACKUP_CASA.py",
                 },
             )
             self.assertFalse(any(path.startswith(".git/") for path in files))

@@ -288,8 +288,6 @@ class EcosistemaInspectorTest(unittest.TestCase):
         (family / "iscrizione-firmata.pdf").write_bytes(b"%PDF synthetic")
         path = target / "app-iscrizioni" / "AGENTS.md"
         path.write_text(path.read_text().replace("NESSUNA SOTTOCARTELLA", "`dati/` — Dati della scuola.\n- `dati/pratiche/` — ARCHIVIO PROTETTO: fascicoli delle famiglie; FIRME SOTTOSCRITTORI", 1))
-        ignore = target / ".gitignore"
-        ignore.write_text(ignore.read_text() + "\n/app-iscrizioni/dati/pratiche/\n")
         return archive
 
     def test_new_enrolment_in_declared_archive_does_not_add_structural_errors(self):
@@ -318,17 +316,15 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertIn("app-iscrizioni/dati/pratiche/firma_scuola.png", sensitive)
             self.assertTrue(any(f.code.startswith("CREDENTIAL") and f.path.endswith("token.json") for f in findings))
 
-    def test_archive_protection_requires_ignore_no_tracked_files_and_local_paths(self):
+    def test_archive_protection_requires_local_paths(self):
+        # La casa non e' un registro git: la protezione e' la dichiarazione
+        # nella mappa (fuori dalle copie e dalle misure), purche' resti locale.
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
             archive = self.make_family_archive(target)
-            ignore = target / ".gitignore"
-            saved = ignore.read_text()
-            ignore.write_text(saved.replace("/app-iscrizioni/dati/pratiche/", ""))
-            self.assertIn("PROTECTED_ARCHIVE_UNPROTECTED", self.codes(self.inspect(target)))
-            ignore.write_text(saved)
-            subprocess.run(["git", "add", "-f", "--", str(archive / "iscrizione-uno" / "firma.png")], cwd=target, check=True, capture_output=True)
-            self.assertIn("PROTECTED_ARCHIVE_TRACKED", self.codes(self.inspect(target)))
+            codes = self.codes(self.inspect(target))
+            self.assertNotIn("PROTECTED_ARCHIVE_UNPROTECTED", codes)
+            self.assertNotIn("PROTECTED_ARCHIVE_TRACKED", codes)
             (archive / "collegamento").symlink_to(Path(tmp), target_is_directory=True)
             self.assertIn("PROTECTED_ARCHIVE_SYMLINK", self.codes(self.inspect(target)))
 
@@ -432,21 +428,14 @@ class EcosistemaInspectorTest(unittest.TestCase):
             inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "PASSA")
-            self.assertEqual(inspection.findings, [])
+            self.assertEqual([f for f in inspection.findings if f.severity != "NOTA"], [])
             settings = json.loads(self.claude_user_settings.read_text(encoding="utf-8"))
             self.assertEqual(
                 settings["autoMemoryDirectory"],
                 leaderai_setup._portable_machine_path(target / "memory"),
             )
-            tracked = subprocess.run(
-                ["git", "ls-files"],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout
             self.assertFalse((target / ".claude" / "settings.local.json").exists())
-            self.assertNotIn("REPORT_FINALE.md", tracked)
+            self.assertFalse((target / "REPORT_FINALE.md").exists())
 
     def test_stale_reference_to_a_merged_memory_blocks_pass(self):
         """Una fusione deve lasciare tutti i richiami sul file che resta vivo."""
@@ -1181,26 +1170,25 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertEqual(inspection.verdict, "NON PASSA")
             self.assertIn("STANDARD_PATH_SYMLINK", self.codes(inspection))
 
-    def test_empty_gitignore_blocks_pass(self):
+    def test_git_repository_in_house_is_blocker(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
-            (target / ".gitignore").write_text("", encoding="utf-8")
+            subprocess.run(["git", "init", "-q"], cwd=str(target), check=True, capture_output=True)
 
             inspection = self.inspect(target)
 
             self.assertEqual(inspection.verdict, "NON PASSA")
-            self.assertIn("GITIGNORE_RULES_MISSING", self.codes(inspection))
-            self.assertIn("GITIGNORE_INEFFECTIVE", self.codes(inspection))
+            self.assertIn("GIT_REPOSITORY_PRESENT", self.codes(inspection))
 
-    def test_missing_git_repository_is_blocker(self):
+    def test_house_without_git_has_no_git_findings(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = self.make_target(tmp)
-            (target / ".git").rename(Path(tmp) / "git-backup")
+            self.assertFalse((target / ".git").exists())
 
-            inspection = self.inspect(target)
+            codes = self.codes(self.inspect(target))
 
-            self.assertEqual(inspection.verdict, "NON PASSA")
-            self.assertIn("GIT_REPOSITORY_MISSING", self.codes(inspection))
+            self.assertFalse([c for c in codes if c.startswith("GIT")], codes)
+            self.assertIn("BACKUP_NOT_CONFIGURED", codes)
 
     def test_technical_portfolio_pipeline_is_not_proven_as_a_room(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1743,43 +1731,6 @@ class EcosistemaInspectorTest(unittest.TestCase):
 
             self.assertNotIn("CLAUDE_MEMORY_NOT_PORTABLE", self.codes(inspection))
             self.assertEqual(inspection.verdict, "PASSA")
-
-    def test_credential_path_in_git_history_requires_rotation(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            target = self.make_target(tmp, "claude")
-            config = target / "app-iscrizioni" / "dati" / "config_posta.json"
-            config.parent.mkdir(parents=True)
-            config.write_text("{}\n", encoding="utf-8")
-            subprocess.run(
-                ["git", "add", "-f", config.relative_to(target).as_posix()],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-            )
-            subprocess.run(
-                [
-                    "git",
-                    "-c",
-                    "user.name=Test",
-                    "-c",
-                    "user.email=test@example.invalid",
-                    "commit",
-                    "-m",
-                    "test config path",
-                ],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-            )
-            config.unlink()
-
-            inspection = self.inspect(target)
-
-            self.assertIn(
-                "CREDENTIAL_EXPOSURE_NOT_EXCLUDED",
-                self.codes(inspection),
-            )
-
 
     def test_missing_user_instructions_block_pass(self):
         """Caso Pastore 03/09/2026: casa installata, ma l'agente aperto da

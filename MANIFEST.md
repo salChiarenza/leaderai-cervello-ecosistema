@@ -247,9 +247,9 @@ restano una `PROPOSTA STRUTTURALE` da approvare.
   dichiarata nella stanza. App e script generano PDF/Word come derivati e
   falliscono visibilmente se la fonte manca; nessuna copia hardcoded silenziosa.
 - Configurazioni con credenziali, app password o token vivono in `.secrets/`.
-  L'Ispettore controlla percorso, indice e history Git senza aprire il
-  contenuto; propone rotazione quando l'esposizione non puo' essere esclusa.
-- Firma, timbro e sigillo sono asset ad alto rischio: file protetto fuori Git,
+  L'Ispettore controlla il solo percorso senza aprire il contenuto; propone
+  rotazione quando l'esposizione non puo' essere esclusa.
+- Firma, timbro e sigillo sono asset ad alto rischio: file protetto fuori dalla copia di sicurezza,
   soli metadati e limiti in `ecosistema/ASSET.md`, uso sul singolo documento
   soltanto con conferma umana.
 
@@ -263,13 +263,12 @@ La sezione `Dentro` della stanza puo' dichiarare un archivio anche annidato:
 ```
 
 Il percorso deve essere locale e relativo alla stanza, senza `..`, assoluti o
-collegamenti simbolici, anche interni. L'archivio intero e ciascun elemento
-devono risultare ignorati da Git; indice e storia devono essere privi dei suoi
-dati. In assenza di una prova la dichiarazione resta bloccata.
+collegamenti simbolici, anche interni. L'archivio dichiarato resta fuori dalla
+copia di sicurezza (`backup_casa.py` lo salta) e dalle misure strutturali.
 Solo gli archivi validi escono dalla misura di profondita', dalla ricerca di
-fonti operative/generatori e dall'igiene strutturale; credenziali, storia Git
-e asset riutilizzabili restano controllati. La protezione Git non certifica
-permessi del sistema operativo, backup o conformita' del trattamento.
+fonti operative/generatori e dall'igiene strutturale; credenziali e asset
+riutilizzabili restano controllati. La dichiarazione non certifica permessi
+del sistema operativo, backup esterni o conformita' del trattamento.
 
 La dichiarazione `FIRME SOTTOSCRITTORI` ammette soltanto `firma.png` dentro
 un fascicolo con un PDF locale accanto. E' un'indicazione del ruolo, non una
@@ -293,7 +292,7 @@ requisito d'installazione dichiarato in `01 - Cervello - installazione e aggiorn
 verificato alla chiusura. Se manca, il guardiano si ferma e lo dice, senza
 degradare a un controllo parziale.
 I file di radice con un punto iniziale sono registrabili come gli altri,
-con proprietario e dettaglio: per esempio `.gitattributes` necessario a Windows.
+con proprietario e dettaglio: per esempio `.mcp.json` per i connettori.
 
 ### Ciclo di apprendimento
 
@@ -370,8 +369,9 @@ il telaio comune.
 
 Il target passa solo se esistono:
 
-- `.gitignore` che esclude i segreti (`.secrets/`, `*.env`, token, chiavi, credenziali)
-- la cartella madre e' un repository git (nella posizione scelta col cliente, locale o cloud; sul cloud vale l'avviso sul rischio corruzione)
+- nessuna cartella `.git`: la casa non e' un registro git, il backup e' la copia
+  di sicurezza datata (`.agent/hooks/backup_casa.py`, routine delle 07:45)
+- la cartella madre nella posizione scelta col cliente, locale o cloud (sul cloud vale l'avviso sul rischio corruzione)
 - `AGENTS.md`
 - `CLAUDE.md` (ponte di una riga `@AGENTS.md`, sempre presente)
 - `memory/MEMORY.md`
@@ -421,7 +421,7 @@ e zero test saltati. Il gate completo richiede inoltre:
 4. nessuna contaminazione tra stanze o scrittura nella fonte storica;
 5. installazione manuale reale per entrambi gli agenti, senza clone, Python o
    `leaderai_setup.py`;
-6. cartella finale conforme, repository Git pulito e prove conservate;
+6. cartella finale conforme, senza registro git, e prove conservate;
 7. stato bloccante per CLI assente, login mancante, timeout o oracolo fallito.
 8. richiesta esatta `Crea la Brand Identity`, senza indizi tecnici nel prompt,
    con fonte brand reale e output nella responsabilita' proprietaria.

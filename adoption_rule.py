@@ -50,7 +50,7 @@ class ContractError(RuntimeError):
 def normalize_gesture(raw: str) -> str:
     """Normalizza un testo: minuscole, spazi collassati, bordi puliti.
 
-    Lo stesso gesto scritto in Git, in chat e nel diario collassa cosi' su una
+    Lo stesso gesto scritto in chat, nel diario e nei log collassa cosi' su una
     sola forma, altrimenti il conteggio si gonfia (difetto gia' visto sul campo
     a luglio sul conteggio consumi di un cliente)."""
 

@@ -10,6 +10,14 @@ import install_contract
 import leaderai_setup
 
 
+def _tree(target):
+    """Impronta dell'albero su disco: la casa non e' un registro git."""
+    return sorted(
+        (p.relative_to(target).as_posix(), p.stat().st_size, p.stat().st_mtime_ns)
+        for p in target.rglob("*") if p.is_file()
+    )
+
+
 class InstallContractTest(unittest.TestCase):
     def settings_path(self, root: Path, name: str = "claude-settings.json") -> Path:
         return root / name
@@ -123,11 +131,11 @@ class InstallContractTest(unittest.TestCase):
         )
         self.assertEqual(
             install_contract.external_effects(contract, "codex"),
-            {"git_baseline", "codex_user_instructions"},
+            {"backup_copy", "codex_user_instructions"},
         )
         self.assertEqual(
             install_contract.external_effects(contract, "claude"),
-            {"git_baseline", "claude_user_settings", "claude_user_instructions"},
+            {"backup_copy", "claude_user_settings", "claude_user_instructions"},
         )
         self.assertEqual(
             install_contract.environment_checks(contract),
@@ -536,6 +544,7 @@ class InstallContractTest(unittest.TestCase):
             log_before = (target / "logs" / "install-log.md").read_text(
                 encoding="utf-8"
             )
+            tree_before = _tree(target)
 
             result = leaderai_setup.run_setup(
                 target,
@@ -545,18 +554,10 @@ class InstallContractTest(unittest.TestCase):
                 claude_user_instructions_path=settings.with_name("claude-user-CLAUDE.md"),
                 codex_user_instructions_path=settings.with_name("codex-user-AGENTS.md"),
             )
-            status = subprocess.run(
-                ["git", "status", "--porcelain"],
-                cwd=str(target),
-                check=True,
-                capture_output=True,
-                text=True,
-            ).stdout
-
             self.assertEqual(result.created, [])
             self.assertEqual(result.updated, [])
             self.assertEqual(result.removed, [])
-            self.assertEqual(status, "")
+            self.assertEqual(_tree(target), tree_before)
             self.assertFalse((target / "REPORT_FINALE.md").exists())
             self.assertEqual(
                 (target / "logs" / "install-log.md").read_text(encoding="utf-8"),
@@ -570,7 +571,7 @@ class InstallContractTest(unittest.TestCase):
         self.assertEqual(
             install_contract.external_effects(contract, "both"),
             {
-                "git_baseline",
+                "backup_copy",
                 "claude_user_settings",
                 "claude_user_instructions",
                 "codex_user_instructions",

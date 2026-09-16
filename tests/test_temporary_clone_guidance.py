@@ -42,7 +42,6 @@ class SafeDeliveryGuidanceTest(unittest.TestCase):
     def test_new_install_exposes_readable_static_templates(self):
         install = (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8")
         required_templates = [
-            "GITIGNORE.txt",
             "CODEX_README.md",
             "CLAUDE_README.md",
             "CLAUDE.md",

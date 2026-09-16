@@ -71,7 +71,14 @@ Restano ammesse le riparazioni meccaniche:
 Vietato, sempre: eliminare file o cartelle senza un mandato specifico;
 modifiche business, accessi a segreti, invii o disattivazioni esterne non sono
 impliciti nella pulizia.
-`.secrets/`, `.git/` e prove tecniche originali restano protetti.
+`.secrets/` e prove tecniche originali restano protetti.
+
+Copia di sicurezza, ogni giro: esegui `python3 .agent/hooks/backup_casa.py`
+e riporta la riga `BACKUP OK` con il percorso. Se risponde che la cartella non
+e' ancora scelta, chiedi al proprietario una cartella (dentro iCloud Drive,
+Google Drive o OneDrive) e impostala con `--imposta`. La casa non e' un
+registro git: se trovi una cartella `.git` nella casa, fai prima la copia e
+poi chiedi al proprietario un solo gesto per rimuoverla.
 Se hai corretto qualcosa, avvia l'Ispettore con `Agent`/`Task` in Claude oppure
 `spawn_agent` in Codex, secondo il mandato comune, e attendi il suo risultato.
 Fornisci le fonti e il difetto originale; il revisore ripete il percorso reale.

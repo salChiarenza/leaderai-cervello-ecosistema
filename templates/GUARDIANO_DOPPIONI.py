@@ -89,7 +89,7 @@ def main():
     reason = (
         "STOP — regola un-file-per-cosa. Stai creando una COPIA datata di '%s', "
         "ma esiste gia' (%s). Non aggiungere l'ennesimo file: MODIFICA quello giusto, "
-        "git tiene la storia da solo. La data va in git, non nel nome del file. "
+        "la copia di sicurezza quotidiana tiene la storia. La data non va nel nome del file. "
         "Se ti serve davvero uno snapshot storico, mettilo in una cartella backups/ o logs/."
         % (prefisso, esempi)
     )

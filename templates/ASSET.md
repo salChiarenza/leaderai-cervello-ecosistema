@@ -10,7 +10,7 @@ kit, app, servizio esterno, archivio o canale ufficiale.
 
 | Asset | Tipo | Casa/fonte vera | Stanza/e servite | Uso | Stato | Archivio/prove | Limiti |
 |---|---|---|---|---|---|---|---|
-| Cartella madre | Cervello | Questa cartella | Tutte | Istruzioni, memoria e mappe | OK | `logs/`, git locale | Segreti fuori git |
+| Cartella madre | Cervello | Questa cartella | Tutte | Istruzioni, memoria e mappe | OK | `logs/`, copia di sicurezza quotidiana | Segreti fuori dalla copia |
 | Ispettore Ecosistema | Capacita | Repo `salChiarenza/leaderai-cervello-ecosistema`, `CHECKUP.md` | Tutte | Censimento, riparazione e collaudo delle strade | ATTIVO | Skill dell'agente attivo | Non elimina contenuti preesistenti senza conferma |
 
 ## Regola di aggiornamento
@@ -52,10 +52,11 @@ terzi richiede conferma umana esplicita.
 Firma, timbro, sigillo, documento di identita' e certificati di firma non sono
 dettagli minori. Se esistono:
 
-- il file vive in `.secrets/` o in un'altra casa locale protetta e fuori Git;
+- il file vive in `.secrets/` o in un'altra casa locale protetta, fuori dalla copia di sicurezza;
 - qui si registrano solo tipo, proprietario, casa protetta, uso consentito,
   prova di protezione e limite;
 - il contenuto non si apre durante un censimento strutturale;
 - ogni applicazione o invio richiede conferma umana sul documento preciso;
-- se il percorso compare nella history Git e l'esposizione non puo' essere
-  esclusa, si blocca l'uso e si valuta sostituzione o revoca con il proprietario.
+- se il file e' finito in una copia di sicurezza o in una cartella condivisa e
+  l'esposizione non puo' essere esclusa, si blocca l'uso e si valuta
+  sostituzione o revoca con il proprietario.

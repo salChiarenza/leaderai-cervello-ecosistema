@@ -5,21 +5,10 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$(git rev-parse --show-toplevel)/.agent/hooks/guardiano_stanze.sh\"",
-            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"$leaderaiRoot = (git rev-parse --show-toplevel); & (Join-Path $leaderaiRoot '.agent/hooks/guardiano_stanze_windows.ps1')\"",
+            "command": "bash \"$PWD/.agent/hooks/guardiano_stanze.sh\"",
+            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"$leaderaiRoot = (Get-Location).Path; & (Join-Path $leaderaiRoot '.agent/hooks/guardiano_stanze_windows.ps1')\"",
             "timeout": 30,
             "statusMessage": "Controllo ordine Ecosistema"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"$(git rev-parse --show-toplevel)/.agent/hooks/salvataggio_automatico.py\"",
-            "commandWindows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \"$leaderaiRoot = (git rev-parse --show-toplevel); python (Join-Path $leaderaiRoot '.agent/hooks/salvataggio_automatico.py')\"",
-            "timeout": 30,
-            "statusMessage": "Salvataggio automatico della casa"
           }
         ]
       }

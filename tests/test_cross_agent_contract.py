@@ -199,12 +199,11 @@ class CrossAgentContractTest(unittest.TestCase):
             self.assertIn(path, contract["agents"][agent]["required"])
         self.assertIn("ecosystem-check/CONTROLLI.md", contract["common"]["required"])
 
-    def test_remote_push_requires_explicit_command(self):
+    def test_house_has_no_git_and_no_push(self):
         install = self.read("01 - Cervello - installazione e aggiornamento.md")
-        self.assertIn(
-            "esegui `git push` soltanto dopo il mio comando",
-            install,
-        )
+        self.assertIn("COPIA DI SICUREZZA: la casa non e' un registro git", install)
+        self.assertIn("nessun `push`", install)
+        self.assertNotIn("Inizializza Git locale", install)
         self.assertNotIn(
             "il push lo fa l'agente da solo a fine sessione",
             install,
@@ -296,7 +295,6 @@ class CrossAgentContractTest(unittest.TestCase):
         for field in (
             "ID missione",
             "agente proprietario",
-            "base Git",
             "Prove",
             "PRESO IN CARICO",
         ):

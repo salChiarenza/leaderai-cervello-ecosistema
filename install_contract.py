@@ -11,7 +11,6 @@ ROOT = Path(__file__).resolve().parent
 CONTRACT_PATH = ROOT / "install_contract.json"
 VALID_STRATEGIES = {
     "create",
-    "merge_gitignore",
     "merge_hooks_json",
     "managed_text",
     "claude_bridge",
