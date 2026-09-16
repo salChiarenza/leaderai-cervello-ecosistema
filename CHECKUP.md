@@ -17,10 +17,11 @@ nell'Ecosistema per i clienti, fonte corrente della procedura. Nel workspace int
 `leaderai/leaderai-ecosistema/setup/AUDIT_FASE_1_CERVELLO.md` resta soltanto un
 puntatore alla versione Drive corrente.
 
-La cartella `Percorso Ecosistema` rende visibili le cinque fasi. I primi quattro
-passi chiudono l'installazione guidata; `Evoluzione quando serve` e' il Passo 5
-continuo, usato per aggiungere un solo nuovo processo o una sola capacita'
-necessaria e poi ripetere questo controllo.
+La cartella `Percorso Ecosistema` rende visibili i cinque passi: `1 Cervello`,
+`2 Mappa del lavoro`, `3 Primo processo`, `4 Gestione dell'ecosistema` e
+`5 Collaudo e consegna`. Dopo il quinto passo il percorso guidato e' chiuso.
+I prodotti opzionali si aggiungono soltanto dopo la consegna, dalla cartella
+separata `Prodotti`, e poi si ripete questo controllo.
 
 ## Espansione con manutenzione alla nascita
 
@@ -145,6 +146,13 @@ che HAI GIA' sistemato, con la prova.
 
 L'ordine obbligatorio e':
 diagnosi -> riparazione -> prova -> salvataggio nella casa -> chiusura locale.
+Il mandato comprende anche i passaggi ordinari e la ripresa senza un nuovo OK:
+contratto di tutti i ruoli in `ecosystem-check/STANDARD_REPARTO.md`, Autonomia
+operativa. Verifica che la routine recuperi un incarico assegnato il cui
+esecutore e' terminato e che un'eccezione umana non fermi i lavori riparabili.
+Verifica che la routine giornaliera abbia come cartella di lavoro la cartella
+madre: se parte da un'altra cartella, il controllo FUORI DAL CERVELLO la ferma
+a ogni giro; correggi la definizione della routine e lancia un giro di prova.
 Permessi, login, hardware o scelte di business vengono registrati come
 `DA DECIDERE IN CALL`, con il gesto preciso.
 
@@ -295,7 +303,7 @@ Regole:
   viva.
 - Se non riesci a distinguere due cartelle vive, chiedi una sola scelta umana:
   "quale di queste due devo diagnosticare?". Non creare una terza cartella.
-- Usa `INSTALLA_CON_AI.md` solo se, dopo il censimento, non esiste nessun
+- Usa `01 - Cervello - installazione e aggiornamento.md` solo se, dopo il censimento, non esiste nessun
   ambiente installato o Sal/LeaderAI chiede esplicitamente un rimontaggio.
 
 ## Passo 1 — Contratto tecnico: telaio comune e rami attivi
@@ -415,11 +423,12 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    macchina: `USER_INSTRUCTIONS_MISSING`, `USER_INSTRUCTIONS_WITHOUT_HOUSE`
    (bloccanti), `USER_INSTRUCTIONS_WITHOUT_GATE` (attenzione).
 1-ter. **Fase del percorso** — la mappa madre porta la riga `- Fase del percorso:
-   N (nome)`: 1 Cervello, 2 Censimento, 3 Prima stanza, 4 Ispettore e consegna.
+   N (nome)`: 1 Cervello, 2 Mappa del lavoro, 3 Primo processo,
+   4 Gestione dell'ecosistema, 5 Collaudo e consegna.
    La alza soltanto la missione LeaderAI che chiude il passo, di uno alla volta.
-   Sotto il 3 nessuna stanza di lavoro: il guardiano di chiusura blocca ogni
-   stanza registrata prima del passo 3 e l'Ispettore emette
-   `ROOM_BEFORE_STEP_3`. Riga assente in una casa nata prima di questo standard:
+   La fase dice a che punto sei, non blocca il lavoro: una stanza si giudica
+   dalla forma (mappa, ponte, responsabile, registrazione), mai dal numero
+   della fase. Riga assente in una casa nata prima di questo standard:
    aggiungila con il passo reale, provato dai fatti (stanze vive = almeno 3).
 2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
@@ -561,8 +570,6 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
   oppure la prova da cartella estranea non risponde `FUORI DAL CERVELLO`;
 - manca `ecosistema/SOGGETTI.md` oppure un soggetto giuridico nominato dal
   proprietario non ha la sua riga nell'anagrafe;
-- una stanza di lavoro esiste mentre la mappa madre dichiara `Fase del
-  percorso` 1 o 2 (`ROOM_BEFORE_STEP_3`);
 - una configurazione necessaria all'agente attivo e' assente, non valida o
   contiene segreti.
 - una prova di processo o di fonte e' circolare, inventata durante il checkup
@@ -1069,7 +1076,7 @@ diventa un controllo dei checkup successivi.
 ```
 
 Se l'ambiente e' quasi vuoto, non dare una pagella piena di rossi: proponi di
-partire dall'installazione (`INSTALLA_CON_AI.md`).
+partire dall'installazione (`01 - Cervello - installazione e aggiornamento.md`).
 
 ## Protocollo missione chiusa
 

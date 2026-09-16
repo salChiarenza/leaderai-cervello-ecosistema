@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.30 - 16/09/2026
+
+- La routine giornaliera `manutenzione-ecosistema` nasce con la cartella madre
+  come cartella di lavoro; il checkup lo verifica e ripara la definizione.
+- Motivo: sul Mac di una cliente la routine era stata creata senza cartella di
+  lavoro, partiva dalla cartella predefinita (iCloud) e il controllo FUORI DAL
+  CERVELLO la fermava a ogni giro. Il suo assistente si e' fermato e ha chiesto
+  alla proprietaria di impostare la cartella a mano.
+- I due ganci sulla chat degli agenti (`CHAT_AGGIORNAMENTI.sh` e
+  `GUARDIANO_NOTE_AGENTI.py`) cercavano `docs/AGENT_CHAT.md`, mentre il
+  contratto installa `AGENT_CHAT.md` nella radice: non scattavano mai. Ora
+  leggono il file nella radice. Segnalato dall'assistente della stessa cliente.
+
 ## 0.6.29 - 15/09/2026
 
 - La guida si apre dichiarando la propria provenienza: chi l'ha scritta, cosa

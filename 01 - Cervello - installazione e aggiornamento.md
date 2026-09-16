@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.6.29`
+Versione corrente: `0.6.30`
 
 Questa e' la procedura unica che il cliente apre per installare il Cervello o
 aggiornare una casa gia' esistente. Non duplicare questo file a ogni release:
@@ -362,7 +362,10 @@ Operazione 4 - monta localmente il Cervello
    - crea l'automazione giornaliera `manutenzione-ecosistema` (07:45 locali,
      modello leggero) che invoca la skill `manutentore-ecosistema`: per Claude
      Code un task programmato, per Codex un'automazione; una sola sessione che
-     chiude da sola. Riusa la routine equivalente gia presente: mai due routine
+     chiude da sola. La routine ha come cartella di lavoro la cartella madre,
+     con il percorso completo: senza cartella di lavoro parte dalla cartella
+     predefinita del sistema e il controllo FUORI DAL CERVELLO la ferma a ogni
+     giro (caso reale del 16/09/2026). Riusa la routine equivalente gia presente: mai due routine
      per motore o reparto. Il suo elenco nasce dalle mappe correnti e comprende
      quindi anche ogni stanza aggiunta in futuro. Leggi la sezione Manutenzione
      del calco e compila la destinazione degli esiti nella fonte esistente.
@@ -642,7 +645,8 @@ Operazione 6 - collaudo
    `censitore-processi`
    nel percorso dell'agente attivo: `.claude/skills/` per Claude Code,
    `.agents/skills/` per Codex, entrambe in modalita' both; e l'automazione
-   giornaliera `manutenzione-ecosistema` attiva.
+   giornaliera `manutenzione-ecosistema` attiva, con cartella di lavoro uguale
+   alla cartella madre e un giro eseguito con esito letto.
    Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
    del workspace e `/memory` sulla memoria canonica.
    Verifica su ogni computer le istruzioni globali dell'agente attivo
