@@ -143,9 +143,16 @@ def run_growth(agent, evidence_dir, timeout=300):
                     for hook in group.get("hooks", []):
                         # Ganci ammessi nella casa usa-e-getta: il guardiano delle
                         # stanze e il salvataggio automatico (git locale, silenzioso).
+                        # Dal 19/09/2026 anche il guardiano dei dati verificati, che
+                        # lato Codex era installato ma non lo chiamava nessuno: legge
+                        # il transcript del turno, non esce dalla cartella e in caso
+                        # di errore tace.
                         ammesso = any(
                             policy._hook_calls(hook.get("command"), rel, root)
-                            for rel in (".agent/hooks/guardiano_stanze.sh",)
+                            for rel in (
+                                ".agent/hooks/guardiano_stanze.sh",
+                                ".agent/hooks/guardiano_dati_verificati.py",
+                            )
                         )
                         if not ammesso:
                             raise ValueError("Hook di collaudo non previsto")

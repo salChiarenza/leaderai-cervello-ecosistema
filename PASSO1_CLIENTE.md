@@ -1,6 +1,25 @@
 # Cervello LeaderAI - Passo 1
 
-Versione corrente: `0.7.1`
+Versione corrente: `0.7.9`
+
+## Prima cosa: guarda dove sei (lo decidi tu, assistente)
+
+Il proprietario non deve dirti in che stato e' la sua casa: lo vedi tu. Nella
+cartella aperta, o in quella che ti indica, cerca `VERSION` e i documenti del
+contratto.
+
+- li trovi: e' una casa gia' installata, vai a `Hai gia' la casa: come si
+  aggiorna` e non scaricare il pacchetto;
+- non li trovi ma la cartella e' viva lo stesso - documenti compilati, memoria
+  scritta, registri, lavoro del proprietario, sue cartelle - allora e' una casa
+  nata con una versione precedente, quando quei due file non c'erano ancora. E'
+  comunque una casa gia' installata: vai all'aggiornamento, non scaricare il
+  pacchetto, e come primo gesto scrivile il file della versione con il numero
+  qui sopra. Non crearne mai una seconda accanto;
+- non li trovi e la cartella e' vuota: e' una prima installazione, prosegui da qui.
+
+Se hai un dubbio, dillo in una riga con quello che hai visto e proponi il ramo
+che ritieni giusto.
 
 ## Il risultato
 
@@ -52,10 +71,55 @@ stati sostituiti.
 
 La cartella e' pronta quando:
 
-- `VERSION` mostra `0.7.1`;
+- `VERSION` mostra `0.7.9`;
 - esistono tutti i nove documenti elencati in `install_contract.json`;
 - nei documenti non restano `{{client_name}}`, `{{date}}` o `{{version}}`;
 - non sono comparse cartelle nascoste di configurazione o file eseguibili.
+
+## Hai gia' la casa: come si aggiorna
+
+Sei qui perche' hai trovato una casa gia' installata. Non scaricare il
+pacchetto: si aggiorna quella. App, dati e documenti gia' compilati non si
+toccano. Il proprietario deve scegliere una cosa sola, la cartella delle copie di
+sicurezza: tutto il resto lo porti a termine tu.
+
+Cosa cambia con questa versione:
+
+- la casa non tiene piu' il registro delle modifiche;
+- al suo posto una copia di sicurezza datata della casa, ripetuta ogni giorno,
+  con le ultime sette conservate; restano fuori i segreti e gli archivi
+  dichiarati protetti. Orario, cartella e modo di fermarla stanno nelle
+  istruzioni collegate qui sotto;
+- controllo, Ispettore, Manutentore e guardiano si aggiornano dalla cartella
+  `4 Gestione dell'ecosistema` del prodotto,
+  <https://drive.google.com/drive/folders/1wdSNouSCbuF7G8Ab_m8R_Kw0uGnphc2Q>,
+  leggibile senza account Google.
+
+Passaggi per l'assistente, in quest'ordine:
+
+1. leggi `CHECKUP.md` e le istruzioni di Ispettore, Manutentore e guardiano
+   nella cartella collegata;
+2. chiedi al proprietario in quale cartella tenere le copie di sicurezza e
+   attendi la risposta;
+3. crea subito la prima copia datata della casa, lasciando fuori segreti e
+   archivi protetti;
+4. soltanto dopo che quella copia esiste, togli dalla casa il registro delle
+   modifiche;
+5. attiva la copia giornaliera come descritto nelle istruzioni collegate,
+   conservando le ultime sette;
+6. aggiorna soltanto i file del controllo, conservando stato e registri gia'
+   compilati dal proprietario;
+7. ripeti il controllo e misura quanto dura;
+8. verifica senza modificare dati che le app e i documenti gia' presenti
+   continuino ad aprirsi.
+
+Una capacita' nuova non entra in automatico: si presenta con effetto, percorso e
+modo di disattivarla, e la sceglie il proprietario.
+
+L'aggiornamento e' concluso quando nella casa non c'e' piu' il registro delle
+modifiche, una copia datata esiste nella cartella scelta dal proprietario, la
+copia giornaliera e' attiva, il controllo arriva a un verdetto e le app di prima
+funzionano come prima.
 
 Questo chiude il Passo 1. Il Passo 2 serve a compilare la mappa del lavoro con
 fonti e processi reali.

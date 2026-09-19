@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.7.1`
+Versione corrente: `0.7.9`
 
 > **Nota 0.7.1:** questo file conserva il contratto dell'installatore tecnico
 > completo usato dai collaudi interni. Non e' piu' il documento pubblicato nel
@@ -511,11 +511,13 @@ alla volta (2 Mappa del lavoro, 3 Primo processo, 4 Gestione dell'ecosistema,
 impedisce di lavorare: se serve una stanza prima, si fa, purche' nasca
 completa (mappa alla porta, responsabile, registrazione nella mappa madre).
 
-Crea `ecosistema/REGOLE.md` con le regole reali del proprietario e richiamalo
-da `AGENTS.md` con una riga sola ("Regole del proprietario: `ecosistema/REGOLE.md`").
+Crea `REGOLE.md` nella cartella madre con le regole reali del proprietario
+e richiamalo da `AGENTS.md` con una riga sola ("Regole del proprietario:
+`REGOLE.md`"). Non metterlo in `ecosistema/`: li' stanno soltanto i registri
+comuni e l'Ispettore lo segnalerebbe come BLOCCO.
 Non scrivere le regole dentro la mappa: la mappa ha un tetto di righe e la
 sforerebbe, facendo scattare il controllo di chiusura del prodotto stesso.
-Dentro `ecosistema/REGOLE.md`:
+Dentro `REGOLE.md`:
 - chi sono e cosa faccio [AZIENDA];
 - rispondi in italiano, chiaro e operativo;
 - cosa ti chiedo di supportare (ricerca, analisi, organizzazione fonti, bozze);

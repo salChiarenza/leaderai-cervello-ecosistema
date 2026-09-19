@@ -11,6 +11,75 @@
             "statusMessage": "Controllo ordine Ecosistema"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_dati_verificati.py\"",
+            "timeout": 30,
+            "statusMessage": "Controllo dati verificati"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel 2>/dev/null || pwd)/.agent/hooks/guardiano_manuali.py\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_memoria.py\"",
+            "statusMessage": "Richiamo le lezioni gia' imparate"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$PWD/.agent/hooks/chat_aggiornamenti.sh\"",
+            "statusMessage": "Guardo le note dell'altro assistente"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_doppioni.py\"",
+            "statusMessage": "Controllo se il file esiste gia'"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_email_operativa.py\"",
+            "statusMessage": "Controllo l'email prima dell'invio"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_note_agenti.py\"",
+            "statusMessage": "Controllo la nota nella chat di gruppo"
+          }
+        ]
       }
     ]
   }

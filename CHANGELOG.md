@@ -1,5 +1,179 @@
 # Changelog
 
+## 0.7.9 - 19/09/2026
+
+- **Un guardiano che nessuno chiama e' spento.** Nella casa di Sal una email
+  gia' lavorata era rimasta in Posta in arrivo: il guardiano sapeva gestirla dal
+  17/09, ma il punto in cui viene chiamato nominava ancora solo gli invii nuovi.
+  Guardando la stessa famiglia nel prodotto: delle otto regole che scattano da
+  sole, lato Codex ne partivano due. Sei guardiani - dati verificati, doppioni,
+  email operativa, memoria, note fra assistenti, note in arrivo - erano
+  installati in ogni casa e non li chiamava nessuno, mentre l'elenco prometteva
+  che valessero per tutti e due gli assistenti.
+- **Ora la prova guarda la chiamata, non solo il programma.**
+  `test_guardiani_dichiarati.py` verifica che ogni guardiano dell'elenco sia
+  richiamato nelle impostazioni di Claude Code **e** di Codex: la prova di prima
+  controllava che il guardiano esistesse, ed era verde mentre l'errore passava.
+- **`GUARDIANI.md` dice la regola a chi legge:** installarlo non basta, va
+  richiamato in tutte e due le case, e se gli si insegna un caso nuovo si
+  guarda anche il punto che lo chiama.
+
+## 0.7.8 - 18/09/2026
+
+- **Niente da lanciare a mano.** Regola di Sal, vista nella casa di una cliente:
+  «il cliente non deve sognarsi di spingere qualcosa». Ogni capacita' installata
+  ha la sua ricorrenza; il proprietario riceve il risultato.
+- **Il Manutentore accorpa, non segnala.** Quando la mappa madre o quella di un
+  reparto arriva al tetto, la stringe lui: unisce le ripetizioni, porta il
+  dettaglio nel file del reparto, conserva obblighi ed eccezioni parola per
+  parola e scrive nel resoconto quanto era grande prima e dopo. Al proprietario
+  resta una sola domanda, sul contenuto che non esiste da nessun'altra parte.
+  Prima diceva «va accorpata, non la posso tagliare io» e si fermava li'.
+- **Chi apre una routine la chiude.** Un'attivita' nata per un giro solo, gia'
+  eseguita, viene spenta e tolta: dall'Ispettore che l'ha creata e comunque dal
+  Manutentore al giro dopo. Caso vero: due voci morte rimaste per giorni nella
+  lista di una cliente, che sembravano lavori attivi.
+- **Nuovo `templates/COSA_E_ACCESO.md`.** Una pagina sola, in parole del
+  proprietario: cosa fa, quando parte, dove scrive, come si spegne. La tiene
+  aggiornata il Manutentore; una capacita' installata e non elencata e' un
+  difetto. Il dettaglio dei guardiani resta in `GUARDIANI.md`, senza due elenchi.
+- **Il ponte fra chi ripara e chi controlla.** Idea di Sal, 18/09/2026: la
+  manutenzione lavora ogni mattina, il controllo della casa passa il lunedi' e
+  dice se quel lavoro regge. Ora scrivono nella stessa tabella `Lavori aperti`
+  con quattro stati soli: `DA VERIFICARE` (riparato, non ancora ricontrollato),
+  `CHIUSO` (il controllo ha riaperto la prova), `BOCCIATO` (col motivo, e la
+  mattina dopo la manutenzione riparte da li'), `AL PROPRIETARIO` (bocciato due
+  volte: l'unica cosa che arriva alla persona). Nessuno si scrive `CHIUSO` da
+  solo e una riga senza prova non si chiude.
+- **Comanda il controllo, esegue la manutenzione.** Sal, stesso giorno: chi vede
+  tutta la casa deve anche dire cosa togliere e cosa sistemare. Il lunedi' il
+  controllo lascia al massimo tre righe `DA FARE`; la mattina dopo la
+  manutenzione le esegue prima delle proprie, e se una richiede un gesto fuori
+  dal suo mandato la lascia scrivendo perche'. Chi ha eseguito non giudica il
+  proprio lavoro: e' la risposta a «chi controlla il manutentore».
+- **La tabella resta corta:** le righe chiuse spariscono dopo sette giorni e nel
+  registro resta il numero, non la riga. Una riga ferma da quattordici giorni
+  sale al proprietario da sola.
+- **La mappa della casa dice chi ci lavora.** Prima non nominava nessuno dei
+  manuali: l'assistente poteva vivere nella casa senza aprirli mai. Ora la mappa
+  porta al Manutentore, all'Ispettore, a come e' messa in piedi la casa e a cosa
+  e' acceso. I due documenti nuovi entrano nel contratto di installazione, nei
+  due guardiani e nell'armadio comune: prima erano scritti e nessuno li
+  installava.
+- **La mappa e' rientrata sotto il tetto** senza perdere una parola: paragrafi
+  riavvolti, 18 righe libere. Era a un soffio dal limite, come nella casa della
+  cliente da cui e' partita questa giornata.
+- **Il foglio dei passaggi.** Idea di Sal: «un foglio dove mettiamo tutti i
+  passaggi che facciamo, cosi' l'Ispettore puo' verificare». Nuovo
+  `templates/PASSAGGI.md`: ogni cosa fatta sulla casa — da noi in call, dal
+  proprietario o da un agente — lascia una riga con quando, chi, cosa e **come si
+  controlla**. Chi l'ha fatta non la verifica: l'Ispettore riapre il controllo e
+  scrive `SI` o `NO`; un `NO` diventa un ordine nei lavori aperti. Una riga senza
+  «come si controlla» si boccia a scatola chiusa: il passaggio non era finito.
+- Prova nuova `tests/test_capacita_automatiche.py` sui tre comportamenti, sul
+  ponte e sulla mappa che nomina i manuali (560 prove verdi).
+
+## 0.7.7 - 17/09/2026
+
+- **I guardiani si presentano.** Nuovo `templates/GUARDIANI.md`, installato in
+  ogni casa come `ecosistema/GUARDIANI.md` e obbligatorio nel contratto: una
+  riga per guardiano - cosa impedisce, quando scatta - piu' come si installa e
+  come si prova dopo l'installazione. Prima i dieci programmi arrivavano muti:
+  nessuno sapeva quali regole facessero rispettare.
+- **Vale anche per chi non esegue programmi.** L'elenco dice esplicitamente che
+  per gli assistenti senza ganci (ChatGPT sul web e simili) quelle righe sono la
+  regola da rispettere leggendo. Fino a ieri il prodotto proteggeva soltanto
+  Claude Code e Codex.
+- `templates/GUARDIANO_STANZE.sh` ammette il nuovo file nell'armadio comune:
+  senza questa riga il guardiano bocciava il file appena installato (trovato
+  provando l'installazione, non a tavolino).
+- Prova nuova `tests/test_guardiani_dichiarati.py`: un guardiano senza riga e
+  una riga senza guardiano fanno diventare rossa la suite. 549 prove verdi.
+
+## 0.7.6 - 17/09/2026
+
+- Tolta una duplicazione reale in `templates/AGENTS.md` (P-041): le due regole
+  di chiusura ("chi apre chiude", "email lavorata = archiviata") ripetevano
+  parola per parola cio' che sta gia' in `templates/PROCESSI.md`, sezione
+  Chiusura ambiente. Ora e' un rimando di una riga. Margine sotto il tetto di
+  350 righe: da 8 a 15 righe.
+- Non toccato il blocco piu' grande, `## Missioni da LeaderAI`: e' doppione
+  voluto di `templates/PROCESSI.md` per un motivo preciso
+  (`tests/test_mission_loop_guidance.py`,
+  `test_client_template_contains_closed_mission_loop`) — la mappa del
+  cliente deve restare autosufficiente anche se `ecosistema/PROCESSI.md` non
+  viene aperto. Restringere il tetto resta una decisione di Sal, non tecnica.
+- 468 prove verdi.
+
+## 0.7.5 - 17/09/2026
+
+- **Ingresso proporzionato alla richiesta.** La mappa della casa ordinava di
+  leggere a ogni avvio mappa, memoria e **tutta** la chat degli assistenti:
+  anche per «qual e' la mia partita IVA?». Ora una domanda puntuale su un dato
+  gia' mappato apre soltanto la fonte che possiede quel dato; stato, note
+  recenti della chat e mappa della stanza si aprono per lavoro operativo,
+  modifica o coordinamento; una fonte gia' letta e non cambiata non si rilegge.
+- Il checkup verifica la regola sulle case gia' installate e la aggiunge dal
+  modello corrente se manca; la voce della chat non chiede piu' di leggere
+  tutto il log a ogni sessione.
+- Nessun guardiano nuovo: sono cambiate le istruzioni. Prova
+  `tests/test_ingresso_proporzionato.py`, sei casi, compreso il controllo che
+  la regola resti generica (nessun percorso della casa di Sal nel prodotto).
+- Motivo: Sal, 17/09/2026, miglioramento gia' provato nella sua casa.
+
+## 0.7.4 - 17/09/2026
+
+Quattro difetti trovati dall'assistente dello Studio Legale Mencarini mentre
+installava e censiva davvero (rapporto del 16/09/2026). Il prodotto ordinava
+cose che poi bloccava.
+
+- La guida non manda piu' le regole del proprietario in `ecosistema/`, dove
+  l'Ispettore ammette soltanto i sette registri comuni e le avrebbe bocciate:
+  `REGOLE.md` nasce nella cartella madre, accanto ad `AGENTS.md` (P-035).
+- Il censimento dei processi e l'adozione osservata non promettono piu' un
+  programma che il cliente non riceve: dalla 0.7.1 il pacchetto e' solo
+  documentale, quindi la politica scritta nel contratto **e'** la regola e si
+  applica leggendola. `census_rule.py` e `adoption_rule.py` restano dichiarati
+  come attuazione di riferimento LeaderAI (P-036).
+- I tratti sensibili del censimento si tarano sul mestiere del proprietario:
+  chi lavora in uno studio legale dichiara «legale», «avvocat» e «tribunale»
+  prima di leggere e quelle parole smettono di marcare zona sensibile dentro il
+  perimetro gia' approvato. Prima marcavano l'intero studio e il censimento non
+  partiva. Vale per ogni mestiere che coincide con un tratto: sanitario,
+  paghe e contributi, consulenza alla persona. Gli altri tratti restano e le
+  esclusioni assolute (segreti, credenziali, IBAN, documenti di identita')
+  vincono sempre (P-037).
+- Il guardiano delle note e il modello che fa rispettare parlano la stessa
+  lingua: titolo `## data`, le tre parti `Di cosa si parla:`, `Cosa cambia:` e
+  `Cosa serve:`, via `Base Git` che la 0.7.0 aveva gia' tolto. Prima il modello
+  insegnava una forma che il guardiano non riconosceva e ogni modifica alla
+  chat veniva bloccata. Provandoli insieme e' emerso un quinto difetto: il
+  guardiano apriva il registro alla prima parola `## Log`, che compare gia'
+  nelle regole in testa al file (P-038).
+
+Quattro prove nuove, una per difetto, tutte rosse sul caso vero prima della
+correzione: `test_ecosystem_registry_guidance.py`,
+`test_census_rule_availability.py`, `test_census_trade_terms.py`,
+`test_guardiano_note_calco.py`. 462 prove verdi.
+
+## 0.7.3 - 16/09/2026
+
+- La guida apre con il controllo che fa l'assistente da solo: cerca `VERSION` e
+  i documenti del contratto e decide se installare o aggiornare. Il proprietario
+  non deve sapere ne' dire in che stato e' la sua casa.
+- Nell'aggiornamento resta una sola scelta umana, la cartella delle copie di
+  sicurezza.
+- Motivo: Sal, 16/09/2026, «non deve essere il cliente a capire se ha
+  l'ecosistema».
+
+## 0.7.2 - 16/09/2026
+
+- La guida cliente contiene il ramo per chi ha gia' la casa: cosa cambia, gli
+  otto passaggi dell'aggiornamento, la cartella `4 Gestione dell'ecosistema` come
+  fonte e la verifica finale. Prima viveva soltanto nelle email scritte a mano.
+- Motivo: Sal, 16/09/2026, «mettiamolo nelle istruzioni, cosi' se non ce lo
+  ricordiamo e' scritto».
+
 ## 0.7.1 - 16/09/2026
 
 - Il pacchetto pubblico del Passo 1 diventa solo documentale: nove file
