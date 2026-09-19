@@ -55,7 +55,7 @@ permessi del suo computer e le scelte che appartengono a lui.
 
 ## Cosa e' gia' andato storto: previenilo
 
-Quattro guasti visti nelle installazioni fatte. Sono gli unici quattro: non
+Cinque guasti visti nelle installazioni fatte. Sono gli unici cinque: non
 inventarne altri e non aggiungere domande al proprietario.
 
 1. **Clonare da un archivio di codice** (Villa, 09/07/2026): l'agente ha provato
@@ -71,6 +71,11 @@ inventarne altri e non aggiungere domande al proprietario.
    dicendo in una riga cosa deve cliccare, e riprendi. Su Windows, se manca il
    programma Git (serve solo il suo terminale Git Bash per i controlli: la casa
    non e' un registro git), installalo, chiudi l'app e riaprila.
+5. **Verifica fatta da una chat senza cartella** (Montagner, 19/09/2026): il
+   proprietario ha aperto l'app e ha incollato la domanda in una chat nuova;
+   l'agente non vedeva la casa e un guardiano copiato nelle impostazioni
+   globali lo ha bloccato. Alla fine dell'installazione digli una regola sola:
+   «apri sempre la tua AI dentro la cartella della casa».
 
 ## Se hai ricevuto solo il link
 
@@ -861,8 +866,10 @@ Controlli di chiusura obbligatori, salvati nelle fonti proprietarie:
 Chiusura locale della missione:
 1. Verifica il risultato che il proprietario vedra' e le prove salvate nelle
    fonti proprietarie.
-2. Mostra al proprietario la conferma finale in parole comuni; il verdetto
-   tecnico resta nelle fonti proprietarie.
+2. Mostra al proprietario la conferma finale in parole comuni, con una sola
+   regola per il futuro: «apri sempre la tua AI dentro la cartella della casa,
+   da una chat nuova non vede i suoi file». Il verdetto tecnico resta nelle
+   fonti proprietarie.
 3. Salva stato, prove, prossimo passo e scadenze nelle fonti proprietarie.
    Registra i gesti umani come `DA DECIDERE IN CALL`.
 4. Archivia l'email della missione e chiudi pagine, tab, finestre e strumenti

@@ -40,6 +40,9 @@ class CheckupGuidanceTest(unittest.TestCase):
             self.assertIn(phrase, checkup)
         self.assertIn("mai copiarci i", " ".join(guide.split()))
         self.assertIn("guardiani (`hooks`) della casa", " ".join(guide.split()))
+        passo1 = (ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8")
+        self.assertIn("apri sempre la tua AI dentro la cartella", passo1)
+        self.assertIn("apri sempre la tua AI dentro la cartella della casa", " ".join(guide.split()))
 
     def test_checkup_is_name_agnostic_and_uses_life_signals(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")

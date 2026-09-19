@@ -13,6 +13,10 @@
 - **Checkup 5-bis e Ispettore:** nuovo controllo `CLAUDE_USER_HOOKS_IN_HOUSE`,
   BLOCKER, con prova `test_house_hooks_in_user_settings_block`. Chi ha gia' la
   casa lo scopre al prossimo checkup e sposta i guardiani nella cartella.
+- **La regola arriva alla persona, non solo all'agente.** Passo 1 ha la
+  sezione «Da adesso: apri sempre la tua AI dentro la cartella»; la guida la
+  fa dire dall'agente nella conferma finale ed e' il quinto guasto noto. Cosi'
+  ogni testo futuro (corso, membership, email) la eredita dal prodotto.
 - Registrato come P-056 nel foglio dei problemi.
 
 ## 0.7.9 - 19/09/2026

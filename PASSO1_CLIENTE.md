@@ -29,6 +29,14 @@ Il pacchetto non contiene programmi e non cambia le impostazioni di Claude o
 Codex. Skill, controlli automatici e attivita' programmate appartengono al
 Passo 4 e richiedono una scelta separata.
 
+## Da adesso: apri sempre la tua AI dentro la cartella
+
+Ogni volta che parli con la tua AI, aprila dentro la cartella della casa, la
+stessa che hai usato per installare. Da una chat nuova, aperta senza cartella,
+non vede i suoi file: risponde a vuoto o si blocca. Vale per Claude, Codex e
+ChatGPT Work. Se ti risponde `FUORI DAL CERVELLO`, hai aperto la chat nel posto
+sbagliato: chiudila e riaprila dalla cartella.
+
 ## Cosa scaricare
 
 Nella stessa cartella Drive di questa guida trovi `Cervello.zip`. Dentro devono
