@@ -1,4 +1,50 @@
-# LeaderAI Cervello + Ecosistema
+<!-- vista: inizio (generata, non correggere a mano) -->
+
+# LeaderAI Cervello + Ecosistema 0.7.6
+
+Monta un ambiente AI di lavoro sul computer di chi lo riceve e lo porta a uno standard: una sola cartella madre, la memoria, le stanze del lavoro vero e i controlli che la tengono in ordine. Funziona con Claude Code e con Codex.
+
+Dentro ci sono 2 stanze, 2 agenti, 1 skill, 11 guardiani, 4 memorie, 41 modelli, 33 prove. Si installa in 5 fasi, una per volta.
+
+| Incluso | Quanti | Cosa ti da' |
+|---|---|---|
+| Stanze | 2 | dove vive ogni cosa (le altre nascono dal lavoro del cliente) |
+| Agenti | 2 | lavori interi fatti da soli |
+| Skill | 1 | procedure richiamate a voce |
+| Guardiani | 11 | fermano l'errore prima che accada |
+| Memorie | 4 | la conoscenza che resta (modelli vuoti da riempire) |
+| Modelli | 41 | il calco di ogni pezzo |
+| Prove | 33 | si controlla da solo |
+
+## Come si installa
+
+| Fase | Cosa monta | Finito quando |
+|---|---|---|
+| 1. Cervello | nasce una sola cartella madre con il telaio documentale minimo: memoria, chat, fonti, asset, processi,… | Cervello.zip non contiene file eseguibili ne' cartelle di configurazione dell'agente; install_contract.json… |
+| 2. Mappa del lavoro | l'agente intervista e registra, non crea: soggetti giuridici in ecosistema/SOGGETTI.md, fonti vere in… | ogni riga dei registri porta un dato vero (nome del soggetto, percorso o accesso della fonte, esempio del… |
+| 3. Prima stanza col primo processo | la casa del cliente si costruisce come la casa di Sal, che e' l'unico modello vivo: le stanze seguono chi… | una richiesta reale fatta all'agente senza suggerimenti, che nomina il soggetto e il lavoro, fa partire la… |
+| 4. Gestione dell'ecosistema | su una casa gia' usata e compresa si valutano Controllo della casa, Manutenzione e guardiani. | il Manutentore ha girato una volta da solo e ha scritto la sua misura; l'Ispettore lanciato a comando… |
+| 5. Collaudo e consegna | controllo completo della casa contro lo standard (versione, telaio, stanze, strade, istruzioni), riparazioni… | verdetto PASSA pieno, approvazione di Sal e conferma finale al modo previsto; da qui in poi il cliente decide… |
+
+## Cosa c'e' dentro
+
+```text
+Cervello + Ecosistema/
+|-- Agenti/                                            # 2 agenti installabili nel Claude del cliente
+|-- Skill/                                             # 1 skill richiamabile a voce
+|-- moduli/                                            # pezzi che si montano solo quando servono
+|-- templates/                                         # 41 modelli: il calco di mappa, stanza, fonte, controlli
+|-- tests/                                             # 33 prove che il prodotto gira prima di uscire
+|-- 01 - Cervello - installazione e aggiornamento.md   # l'unico file da cui parte il cliente
+|-- CHECKUP.md                                         # diagnosi e riparazione di una casa già viva
+|-- MANIFEST.md                                        # lo standard con cui si confronta il caso reale
+|-- install_contract.json                              # la lista che leggono installazione, Ispettore e collaudo
+```
+
+> Blocco generato il 17/09/2026 dalle cartelle del prodotto con
+> `leaderai-ecosistema/tools/mappa_sistema.py`. Si rigenera, non si corregge a mano.
+
+<!-- vista: fine -->
 
 Copia di lavoro del prodotto che monta un ambiente AI cliente secondo lo
 standard LeaderAI. La versione corrente vive nell'Ecosistema per i clienti su Google

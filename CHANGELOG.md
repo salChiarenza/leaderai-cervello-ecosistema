@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.10 - 19/09/2026
+
+- **I guardiani stanno solo nella casa.** Un partecipante della Challenge
+  (Lorenzo Montagner) ha fatto la verifica da una chat dell'app aperta senza
+  cartella: un guardiano registrato nelle impostazioni globali del suo Mac e'
+  partito, non ha trovato il suo file e ha bloccato il prompt. L'installatore
+  non li scrive li'; ce li aveva copiati il suo assistente nella
+  "configurazione globale", e ne' la guida ne' il checkup lo vietavano.
+- **Guida, passo 4:** nelle user settings va solo `autoMemoryDirectory`, mai
+  `hooks` con `${CLAUDE_PROJECT_DIR}`.
+- **Checkup 5-bis e Ispettore:** nuovo controllo `CLAUDE_USER_HOOKS_IN_HOUSE`,
+  BLOCKER, con prova `test_house_hooks_in_user_settings_block`. Chi ha gia' la
+  casa lo scopre al prossimo checkup e sposta i guardiani nella cartella.
+- Registrato come P-056 nel foglio dei problemi.
+
 ## 0.7.9 - 19/09/2026
 
 - **Un guardiano che nessuno chiama e' spento.** Nella casa di Sal una email

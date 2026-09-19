@@ -19,6 +19,15 @@ gesto umano vero previsto dal `CHECKUP.md`. Applica il mandato comune
 passa il difetto a INTERVENTO e verifica la correzione; la sola diagnosi resta
 sola lettura quando e' questo l'incarico ricevuto.
 
+## Chi apre una routine la chiude
+
+Se ti hanno avviato con un'attivita' programmata nata per un giro solo (nel nome
+o nel testo: `usa e getta`, `una tantum`, `primo step`), quando finisci la spegni
+e la togli, e la togli anche da `COSA_E_ACCESO.md`. Il proprietario non deve
+restare con nella lista lavori che non partono piu'. Nel resoconto scrivi quale
+hai tolto. Caso vero: 18/09/2026, due voci dell'Ispettore rimaste nella lista di
+una cliente per giorni, senza niente dietro.
+
 ## Scelta del controllo
 
 Se la richiesta riguarda una casa cliente installata o il controllo completo,
@@ -36,6 +45,32 @@ Riapri gli artefatti citati e ripeti almeno un passaggio tra reparti pertinente
 alla missione; per un reparto appena nato verifica il primo processo completo.
 Ganci e routine configurati non dimostrano l'esecuzione nativa: conserva i due
 riscontri distinti. Un reparto nuovo entra nella stessa manutenzione della casa.
+
+## Il foglio dei passaggi
+
+`ecosistema/PASSAGGI.md` elenca tutto quello che e' stato fatto su questa casa,
+anche da noi in call. Per ogni riga senza `Verificato` rifai il controllo scritto
+nella colonna «come si controlla»: metti `SI` con la data se regge, `NO` col
+motivo se non regge, e in quel caso apri una riga `DA FARE` nei lavori aperti.
+Una riga senza «come si controlla» si boccia: il passaggio non era finito.
+Chi ha fatto il passaggio non lo verifica: se l'hai fatto tu, lascialo a chi
+passa dopo.
+
+## Il lunedi': chiudi o boccia il lavoro della settimana
+
+Apri `ecosystem-check/STATO.md`, tabella `Lavori aperti`, e prendi solo le righe
+`DA VERIFICARE`. Per ognuna riapri la prova e rifai il passaggio: se regge scrivi
+`CHIUSO`, se non regge scrivi `BOCCIATO` con il motivo in poche parole, nella
+colonna accanto. Il «fatto» scritto dalla manutenzione non e' una prova.
+
+Poi decidi il lavoro della settimana: lascia nella stessa tabella le righe
+`DA FARE`, una per cosa, con scritto cosa va tolto, cosa va sistemato e cosa non
+si tocca. La manutenzione le esegue prima delle sue: tu vedi tutta la casa, lei
+vede la giornata. Non lasciare un elenco lungo: le tre cose che pesano di piu'.
+
+Quello che bocci due volte diventa `AL PROPRIETARIO`: e' l'unica cosa che esce
+dal giro e arriva alla persona. Alla fine scrivi una riga nel registro dei
+controlli: quante verificate, quante chiuse, quante bocciate.
 
 ## Missione
 

@@ -213,7 +213,8 @@
         "memory": "MEMORY.md"
       },
       "episode_identity": "campo episode esplicito; in mancanza, coppia (gesto normalizzato, data). Le tracce dello stesso episodio contano uno; due episodi distinti contano due anche con stesso gesto e stesso giorno.",
-      "rule": "adoption_rule.py -> classify_adoption",
+      "applicazione": "l'agente classifica l'adozione leggendo questa politica: verdetti, tracce ammesse e identita' dell'episodio stanno qui e sono la regola. Non cercare un programma: il pacchetto del cliente e' solo documentale.",
+      "leaderai_reference_implementation": "adoption_rule.py -> classify_adoption (attrezzo LeaderAI: tiene onesta questa politica nelle prove, non viaggia nel pacchetto del cliente)",
       "scope": "uso reale degli strumenti; spesa e consumo restano al prodotto Il Consigliere"
     },
     "process_census": {
@@ -322,6 +323,7 @@
         "separazione",
         "divorzio"
       ],
+      "sensitive_zone_terms_del_mestiere": "prima di leggere, chiedi al proprietario quali di questi tratti descrivono il suo mestiere (per uno studio legale: legale, avvocat, tribunale) e scrivili nel rapporto insieme al perimetro approvato. Dentro quel perimetro quei tratti non marcano piu' zona sensibile: marcherebbero tutto il lavoro e il censimento non partirebbe. Gli altri tratti restano, le esclusioni assolute vincono sempre.",
       "sensitive_zone_rule": "un elemento con tratti personali, sanitari o legali dentro una cartella autorizzata non si apre e non si cita nel dettaglio: si segnala soltanto la zona e si chiede se includerla per uno scopo preciso",
       "scan_policy": {
         "structure_before_content": true,
@@ -403,7 +405,8 @@
       "room_status_after_census": "DA DECIDERE IN CALL",
       "handoff": "un solo candidato scelto dal proprietario passa al Passo 3",
       "agent_parity": "stessi candidati, stesse prove e stessa certezza su Claude e Codex; puo' cambiare solo il testo",
-      "rule": "census_rule.py -> classify_path, classify_certainty, dedupe_candidates, plan_scan, prioritize, report_is_clean, run_census"
+      "applicazione": "l'agente applica il censimento leggendo questa politica: perimetro, esclusioni, calcolo della certezza, unione dei doppioni, soglie e registri di uscita stanno qui e sono la regola. Non cercare un programma: il pacchetto del cliente e' solo documentale.",
+      "leaderai_reference_implementation": "census_rule.py -> classify_path, classify_certainty, dedupe_candidates, plan_scan, prioritize, report_is_clean, run_census (attrezzo LeaderAI: tiene onesta questa politica nelle prove, non viaggia nel pacchetto del cliente)"
     },
     "markdown_hygiene": {
       "router_names": [
@@ -601,6 +604,11 @@
         "strategy": "managed_text"
       },
       {
+        "template": "GUARDIANO_MANUALI.py",
+        "destination": ".agent/hooks/guardiano_manuali.py",
+        "strategy": "managed_text"
+      },
+      {
         "template": "GUARDIANO_DOPPIONI.py",
         "destination": ".agent/hooks/guardiano_doppioni.py",
         "strategy": "managed_text"
@@ -634,6 +642,26 @@
         "template": "GUARDIANO_EMAIL_OPERATIVA.py",
         "destination": ".agent/hooks/guardiano_email_operativa.py",
         "strategy": "managed_text"
+      },
+      {
+        "template": "GUARDIANI.md",
+        "destination": "ecosistema/GUARDIANI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "COME_E_MESSA_IN_PIEDI.md",
+        "destination": "ecosistema/COME_E_MESSA_IN_PIEDI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "COSA_E_ACCESO.md",
+        "destination": "ecosistema/COSA_E_ACCESO.md",
+        "strategy": "create"
+      },
+      {
+        "template": "PASSAGGI.md",
+        "destination": "ecosistema/PASSAGGI.md",
+        "strategy": "create"
       }
     ],
     "required": [
@@ -664,13 +692,18 @@
       ".agent/hooks/archive_policy.py",
       ".agent/hooks/guardiano_stanze_windows.ps1",
       ".agent/hooks/guardiano_memoria.py",
+      ".agent/hooks/guardiano_manuali.py",
       ".agent/hooks/guardiano_doppioni.py",
       ".agent/hooks/guardiano_dati_verificati.py",
       ".agent/hooks/guardiano_note_agenti.py",
       ".agent/hooks/guardiano_turno.py",
       ".agent/hooks/backup_casa.py",
       ".agent/hooks/chat_aggiornamenti.sh",
-      ".agent/hooks/guardiano_email_operativa.py"
+      ".agent/hooks/guardiano_email_operativa.py",
+      "ecosistema/GUARDIANI.md",
+      "ecosistema/COSA_E_ACCESO.md",
+      "ecosistema/COME_E_MESSA_IN_PIEDI.md",
+      "ecosistema/PASSAGGI.md"
     ],
     "forbidden": [],
     "external_effects": [

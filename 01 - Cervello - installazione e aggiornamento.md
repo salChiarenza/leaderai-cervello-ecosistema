@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.7.9`
+Versione corrente: `0.7.10`
 
 > **Nota 0.7.1:** questo file conserva il contratto dell'installatore tecnico
 > completo usato dai collaudi interni. Non e' piu' il documento pubblicato nel
@@ -411,7 +411,12 @@ Operazione 4 - monta localmente il Cervello
    La chiave non e' valida nelle settings project/local. Accetta il trust del
    workspace e verifica ogni postazione con `/memory`. Se trovi una memoria
    auto esterna gia' piena, confronta e unisci le voci prima di cambiare il
-   percorso.
+   percorso. Nelle user settings va SOLO questa chiave: mai copiarci i
+   guardiani (`hooks`) della casa. Un guardiano scritto li' con
+   `${CLAUDE_PROJECT_DIR}` parte in ogni chat aperta fuori dalla cartella
+   madre, non trova il suo file e blocca il prompt del proprietario (caso reale
+   del 19/09/2026). I guardiani vivono in `.claude/settings.json` della casa e
+   basta; il checkup lo controlla.
 4-bis. Istruzioni globali dell'agente attivo, su ogni computer del cliente.
    PRIMA DI SCRIVERE FUORI DALLA CARTELLA MADRE, CHIEDILO. Questo punto tocca
    file che valgono per ogni lavoro futuro su quel computer, non solo per

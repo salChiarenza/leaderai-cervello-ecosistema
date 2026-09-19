@@ -553,7 +553,7 @@ validate_room_map() {
     done < <(find "$room" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print0 2>/dev/null)
 }
 
-# L'armadio comune contiene soltanto i sette file canonici.
+# L'armadio comune contiene soltanto i file canonici (registri, calchi, elenco dei guardiani).
 if [ ! -d "$ROOT/ecosistema" ]; then
     if [ "$CONSOLIDATED" = true ] && [ -n "$(canonical_registries)" ]; then
         :
@@ -564,7 +564,7 @@ else
     while IFS= read -r -d '' item; do
         name="$(basename -- "$item")"
         case "$name" in
-            FONTI.md|ASSET.md|PROCESSI.md|LIMITI.md|SOGGETTI.md|STANZA_AGENTS.md|STANZA_FONTE.md) ;;
+            FONTI.md|ASSET.md|PROCESSI.md|LIMITI.md|SOGGETTI.md|STANZA_AGENTS.md|STANZA_FONTE.md|GUARDIANI.md|COSA_E_ACCESO.md|COME_E_MESSA_IN_PIEDI.md|PASSAGGI.md) ;;
             *) add_issue "$(relative_path "$item") - elemento non ammesso nell'armadio comune" ;;
         esac
     done < <(find "$ROOT/ecosistema" -mindepth 1 -maxdepth 1 -print0 2>/dev/null)

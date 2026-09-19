@@ -22,6 +22,12 @@ import sys
 FILE = "AGENT_CHAT.md"
 RICHIESTI = ("Di cosa si parla:", "Cosa cambia:", "Cosa serve:")
 MAX_RIGHE = 20
+# Titolo di una nota, come lo scrive il calco in testa al file: due o tre
+# cancelletti e una data, italiana (17/09/2026) oppure ISO (2026-09-17).
+# L'inizio del registro: il titolo `## Log` a capo riga, non la parola citata
+# dentro le regole d'uso in testa al file.
+SEZIONE_LOG = re.compile(r"(?m)^## Log[ \t]*$")
+TITOLO_NOTA = re.compile(r"(?m)^(?=#{2,3} \[?(?:\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2}))")
 
 
 def _event() -> dict:
@@ -36,10 +42,11 @@ def _root(event: dict) -> str:
 
 
 def _prima_nota(testo: str) -> str | None:
-    if "## Log" not in testo:
+    apertura = SEZIONE_LOG.search(testo)
+    if not apertura:
         return None
-    log = testo.split("## Log", 1)[1]
-    note = [n for n in re.split(r"(?m)^(?=## \d{4}-\d{2}-\d{2} )", log) if n.strip()]
+    log = testo[apertura.end():]
+    note = [n for n in re.split(TITOLO_NOTA, log) if n.strip()]
     return note[0] if note else None
 
 

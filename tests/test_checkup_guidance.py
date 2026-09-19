@@ -28,7 +28,18 @@ class CheckupGuidanceTest(unittest.TestCase):
                 self.assertIn(" ".join(phrase.lower().split()), checkup_normalized)
 
         self.assertIn("Non chiedere di nuovo se vuole avviarlo", skill)
-        self.assertIn("non chiedere una\nseconda volta se partire", agents)
+        self.assertIn("non chiedere una seconda volta se partire", " ".join(agents.split()))
+
+
+    def test_checkup_and_guide_forbid_house_hooks_in_user_settings(self):
+        checkup = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")
+        guide = (ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(
+            encoding="utf-8"
+        )
+        for phrase in ("Guardiani nel posto sbagliato", "CLAUDE_USER_HOOKS_IN_HOUSE"):
+            self.assertIn(phrase, checkup)
+        self.assertIn("mai copiarci i", " ".join(guide.split()))
+        self.assertIn("guardiani (`hooks`) della casa", " ".join(guide.split()))
 
     def test_checkup_is_name_agnostic_and_uses_life_signals(self):
         text = (ROOT / "CHECKUP.md").read_text(encoding="utf-8")

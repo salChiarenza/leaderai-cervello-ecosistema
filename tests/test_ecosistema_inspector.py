@@ -1846,5 +1846,28 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertNotIn("ROOM_BEFORE_STEP_3", self.codes(inspection))
 
 
+    def test_house_hooks_in_user_settings_block(self):
+        # Caso reale 19/09/2026: guardiani copiati in ~/.claude/settings.json,
+        # chat dell'app senza cartella bloccata con "can't open file".
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            clean = self.inspect(target)
+            self.assertNotIn(
+                "CLAUDE_USER_HOOKS_IN_HOUSE", {f.code for f in clean.findings}
+            )
+            settings = json.loads(self.claude_user_settings.read_text(encoding="utf-8"))
+            settings["hooks"] = {
+                "UserPromptSubmit": [
+                    {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PROJECT_DIR}/.agent/hooks/guardiano_memoria.py\""}]}
+                ]
+            }
+            self.claude_user_settings.write_text(json.dumps(settings), encoding="utf-8")
+            broken = self.inspect(target)
+            hits = [f for f in broken.findings if f.code == "CLAUDE_USER_HOOKS_IN_HOUSE"]
+            self.assertEqual(len(hits), 1)
+            self.assertEqual(hits[0].severity, "BLOCKER")
+            self.assertIn("guardiano_memoria", hits[0].detail)
+
+
 if __name__ == "__main__":
     unittest.main()

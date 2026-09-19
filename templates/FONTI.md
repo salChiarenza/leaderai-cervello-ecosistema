@@ -16,13 +16,26 @@ Mappa delle fonti vere del cliente.
 - Email/calendario: da collegare solo se autorizzati
 - CRM/gestionale/fatture: da collegare solo se esiste una fonte reale
 
-## Fonti ufficiali vive del checkup
+## Manuali ufficiali degli strumenti
 
-| Fonte | Uso nel confronto | Regola |
+Qui non si esegue niente: si legge. Ci attinge **qualsiasi** agente della casa prima di
+dire come funziona un comando, una skill, un permesso o un'impostazione, non solo il
+checkup. La regola che tiene in piedi lo scaffale: **si apre la guida dello strumento di
+cui si parla**, non quella che si ha sottomano - rispondere su Codex leggendo la
+documentazione Anthropic e' l'errore da cui nasce questa sezione. La lettura vale per la
+sessione in cui si fa: in una sessione nuova si riapre, perche' queste pagine cambiano.
+
+| Manuale | Indirizzo | Quando si apre |
 |---|---|---|
-| [Claude Code - panoramica ufficiale](https://code.claude.com/docs/en/overview) | Superficie Claude Code e accesso alla documentazione tecnica pertinente | Aprire e riverificare a ogni checkup |
-| [ChatGPT - documentazione ufficiale](https://learn.chatgpt.com/docs) | Accesso alla documentazione OpenAI pertinente a Codex, istruzioni, skill e configurazione | Aprire e riverificare a ogni checkup |
-| [OpenAI Academy - Codex per il lavoro](https://openai.com/it-IT/academy/codex-for-work/) | Pratiche operative da confrontare con l'uso reale | Non sostituisce le specifiche tecniche |
+| **Claude Code** (Anthropic) | https://code.claude.com/docs/en/overview | si lavora con Claude Code o si tocca l'infrastruttura della casa: skill, guardiani, regole, impostazioni |
+| **Codex e ChatGPT Work** (OpenAI) | https://learn.chatgpt.com/docs | si lavora con Codex o con ChatGPT Work: comandi, file di istruzioni, permessi, modo di lavorare |
+| **Codex per il lavoro** (OpenAI Academy) | https://openai.com/it-IT/academy/codex-for-work/ | serve la pratica operativa da confrontare con l'uso reale; non sostituisce le specifiche tecniche |
+
+Un manuale nuovo entra qui solo se e' la pagina del produttore, e' stato aperto il giorno
+in cui lo si aggiunge e porta scritto **quando si apre**: un elenco di indirizzi senza il
+momento in cui usarli fa aprire la pagina sbagliata. Il guardiano dei manuali legge questa
+tabella e mette la guida giusta davanti all'agente: aggiungendo una riga qui, si accende
+da sola.
 
 L'Ispettore registra nel report `fonte -> regola -> stato osservato ->
 scostamento -> riparazione -> prova`. Le fonti business del cliente si

@@ -1,6 +1,6 @@
 # Cervello LeaderAI - Passo 1
 
-Versione corrente: `0.7.9`
+Versione corrente: `0.7.10`
 
 ## Prima cosa: guarda dove sei (lo decidi tu, assistente)
 
@@ -71,7 +71,7 @@ stati sostituiti.
 
 La cartella e' pronta quando:
 
-- `VERSION` mostra `0.7.9`;
+- `VERSION` mostra `0.7.10`;
 - esistono tutti i nove documenti elencati in `install_contract.json`;
 - nei documenti non restano `{{client_name}}`, `{{date}}` o `{{version}}`;
 - non sono comparse cartelle nascoste di configurazione o file eseguibili.

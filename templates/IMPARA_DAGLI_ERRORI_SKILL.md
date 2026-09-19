@@ -20,6 +20,35 @@ Questa capacita' fa il terzo passaggio, quello che di solito non fa nessuno.
 Non parte per un errore di battitura, per una preferenza estetica momentanea,
 o per una cosa che capita una volta sola e non capitera' piu'.
 
+## Passo zero: capisci il meccanismo
+
+Prima di correggere qualsiasi cosa si applicano le quattro mosse della skill
+`capisci-il-meccanismo`, il modo di ragionare comune a tutti gli assistenti della
+casa: smonta prima di toccare, nomina la famiglia, correggi dove nasce, prova il
+fratello (un secondo caso della stessa famiglia, mai successo prima). Qui non si
+ripetono: si usano. Se la correzione regge solo il caso di oggi, e' una toppa e il
+lavoro non e' chiuso.
+
+La mossa che regge tutto questo lavoro e' la prima: **perche' lo ha fatto**.
+Ricostruisci il ragionamento di chi ha sbagliato: cosa ha guardato, cosa gli e' sembrato vero, cosa non poteva vedere da
+dove stava. Quasi mai e' distrazione. Quasi sempre e' una regola che, dentro il suo
+mondo, era coerente.
+
+Da li' esce la logica giusta. Senza questo passaggio nasce una **toppa**: una
+correzione che copre il caso di oggi e lascia passare il prossimo della stessa
+famiglia, perche' nessuno ha capito quale fosse la famiglia.
+
+La prova che il passaggio e' stato fatto: sai dire in una frase perche' il gesto
+sbagliato gli sembrava giusto, e la regola che scrivi copre casi che non sono
+ancora successi.
+
+Caso, 19/09/2026: il Manutentore ha dichiarato che la casa non aveva nessuna copia
+di sicurezza. Non era distratto: la sua misura cammina sui file della casa, e in
+quel mondo una copia che gira da fuori non esiste. La toppa sarebbe stata «controlla
+anche la copia». La logica e': una capacita' che parte da sola non vive nei file,
+quindi prima di dire che una cosa manca si guarda dove vivono le automazioni. La
+seconda copre anche il prossimo caso, che non sara' una copia di sicurezza.
+
 ## I quattro passaggi
 
 ### 1. Scrivi il fatto, non l'intenzione

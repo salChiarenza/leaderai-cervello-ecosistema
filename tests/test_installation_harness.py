@@ -57,6 +57,10 @@ write("ecosistema/LIMITI.md", render("LIMITI.md"))
 write("ecosistema/SOGGETTI.md", render("SOGGETTI.md"))
 write("ecosistema/STANZA_AGENTS.md", render("STANZA_AGENTS.md"))
 write("ecosistema/STANZA_FONTE.md", render("STANZA_FONTE.md"))
+write("ecosistema/GUARDIANI.md", render("GUARDIANI.md"))
+write("ecosistema/COSA_E_ACCESO.md", render("COSA_E_ACCESO.md"))
+write("ecosistema/COME_E_MESSA_IN_PIEDI.md", render("COME_E_MESSA_IN_PIEDI.md"))
+write("ecosistema/PASSAGGI.md", render("PASSAGGI.md"))
 write("ecosystem-check/AGENTS.md", render("ecosystem-check/AGENTS.md"))
 write("ecosystem-check/CLAUDE.md", render("ecosystem-check/CLAUDE.md"))
 write("ecosystem-check/STATO.md", render("ecosystem-check/STATO.md"))
@@ -99,6 +103,7 @@ write(
 write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
 write(".agent/hooks/archive_policy.py", render("ARCHIVE_POLICY.py"))
 write(".agent/hooks/guardiano_memoria.py", render("GUARDIANO_MEMORIA.py"))
+write(".agent/hooks/guardiano_manuali.py", render("GUARDIANO_MANUALI.py"))
 if mode in ("claude", "both"):
     write(".claude/skills/impara-dagli-errori/SKILL.md", render("IMPARA_DAGLI_ERRORI_SKILL.md"))
 if mode in ("codex", "both"):
@@ -490,6 +495,7 @@ class InstallationHarnessTest(unittest.TestCase):
                 {
                     "templates/ARCHIVE_POLICY.py",
                     "templates/GUARDIANO_MEMORIA.py",
+                    "templates/GUARDIANO_MANUALI.py",
                     "templates/GUARDIANO_EMAIL_OPERATIVA.py",
                     "templates/GUARDIANO_DOPPIONI.py",
                     "templates/GUARDIANO_DATI_VERIFICATI.py",

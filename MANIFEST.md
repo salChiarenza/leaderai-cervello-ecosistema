@@ -449,12 +449,19 @@ definitiva dell'azienda, non stima ore, costi o ritorni e non autorizza
 automazioni.
 
 Il contratto vive in `install_contract.json -> inspection_policies ->
-process_census` ed e' applicato da `census_rule.py`:
+process_census` e l'agente lo applica leggendo quella politica, che e' la regola
+(`census_rule.py` e' l'attuazione di riferimento LeaderAI: tiene onesta la
+politica nelle nostre prove e non viaggia nel pacchetto del cliente):
 
 - perimetro dichiarato e approvato prima della lettura; esclusioni assolute
   (segreti, credenziali, portachiavi, dati bancari e di identita') che vincono
   anche dentro il perimetro; zona sensibile segnalata come cartella, mai come
   file, con consenso mirato prima di aprirla;
+- i tratti sensibili che descrivono il mestiere del proprietario si chiedono
+  prima di leggere e si scrivono nel rapporto: dentro il perimetro approvato non
+  marcano piu' zona sensibile. In uno studio legale «legale», «avvocat» e
+  «tribunale» coprirebbero tutto il lavoro e il censimento non partirebbe; gli
+  altri tratti restano e le esclusioni assolute vincono sempre;
 - fonti ammesse in prima versione: albero, metadati, documenti selezionati,
   registri esistenti; email, calendario e cronologie soltanto se gia' collegati
   e inclusi dal proprietario;

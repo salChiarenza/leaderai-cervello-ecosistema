@@ -39,6 +39,15 @@
             "timeout": 30
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PROJECT_DIR}/.agent/hooks/guardiano_manuali.py\"",
+            "timeout": 30
+          }
+        ]
       }
     ],
     "PreToolUse": [

@@ -433,13 +433,20 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
 2. **Cartella di lavoro stabile** — fuori da `Downloads`, `Desktop`, cartelle
    temporanee o cartelle tecniche dell'agente.
 3. **Mappa comune** — `AGENTS.md` esiste alla radice, e' leggibile e indica
-   dove stanno memoria, log ed Ecosistema.
+   dove stanno memoria, log ed Ecosistema. Porta anche la regola
+   dell'**ingresso proporzionato**: `Domanda puntuale` su un dato gia' mappato
+   apre soltanto la fonte che possiede quel dato; lavoro operativo, modifica o
+   coordinamento aprono stato, chat e mappa della stanza; una fonte gia' letta
+   e non cambiata non si rilegge. Se la mappa non la porta, aggiungila dal
+   modello corrente: e' la differenza fra rispondere in un colpo e riaprire
+   tutta la casa per un numero di telefono.
 4. **Ponte Claude universale** — `CLAUDE.md` esiste alla radice come file
    regolare e contiene esattamente `@AGENTS.md` seguito da una nuova riga.
    Converti i symlink legacy; una copia indipendente non e' conforme.
 5. **Chat di gruppo** — `AGENT_CHAT.md` e' presente nella cartella madre
-   (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Ogni
-   nuova sessione legge tutto il log; ogni handoff dichiara ID missione,
+   (template `templates/AGENT_CHAT.md`). Se manca, creala dal template. Le note
+   recenti si leggono prima di un lavoro operativo o di un coordinamento, non a
+   ogni domanda; ogni handoff dichiara ID missione,
    proprietario, stato, prove e prossimo agente. Le note oltre 48 ore
    vanno promosse nei file proprietari e tolte dalla chat.
 6. **Memoria unica** — la mappa madre dichiara `Memoria canonica` e quella
@@ -502,6 +509,16 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    Nessun segreto in chiaro. Deve contenere un solo handler `Stop` per
    `guardiano_stanze`; `/hooks` lo mostra con origine `Project`. Prova casa
    pulita e file temporaneo fuori posto, poi elimina subito la prova.
+5-bis. **Guardiani nel posto sbagliato.** Apri le user settings
+   (`~/.claude/settings.json`) e verifica che non contengano `hooks` che puntano
+   alla casa (`${CLAUDE_PROJECT_DIR}/.agent/hooks/...` o un percorso dentro la
+   cartella madre). Un guardiano registrato li' parte in ogni chat aperta fuori
+   dalla casa, non trova il suo file e blocca il prompt del proprietario (caso
+   reale 19/09/2026: verifica fatta da una chat dell'app senza cartella,
+   `can't open file` su una cartella temporanea). Se lo trovi, spostalo in
+   `.claude/settings.json` della casa e prova: una chat aperta da una cartella
+   estranea deve rispondere senza blocchi. L'Ispettore lo segnala come
+   `CLAUDE_USER_HOOKS_IN_HOUSE`.
 6. Se servono impostazioni Claude di progetto e `.claude/settings.json` manca,
    crealo con il minimo necessario e senza segreti.
 7. **Chiave di permesso nel posto sbagliato.** Ogni chiave dei settings va
@@ -827,11 +844,12 @@ episodi distinti contano due anche con lo stesso gesto e nello stesso giorno, e
 lo stesso gesto ripetuto in giorni diversi conta una volta per giorno. Le tracce
 ammesse sono quelle elencate qui sopra — registro sessioni, cronologia file,
 `logs/`, diario, `AGENT_CHAT.md`, `MEMORY.md` — con vocabolario
-canonico nel contratto (`dedup_sources`). La regola deterministica e'
-`adoption_rule.py -> classify_adoption`, con verdetti e tracce ammesse in
+canonico nel contratto (`dedup_sources`). La regola sta in
 `install_contract.json -> inspection_policies -> adoption_observation`, unica
-fonte macchina: se il contratto manca, non e' valido o la policy e' incompleta,
-la regola fallisce in modo visibile. Il rapporto la rispetta a mano.
+fonte: verdetti, tracce ammesse e identita' dell'episodio si applicano leggendo
+quella politica, a mano. Se il contratto manca, non e' valido o la policy e'
+incompleta, il verdetto non si da'. (`adoption_rule.py -> classify_adoption` e'
+l'attuazione di riferimento LeaderAI, non e' nel pacchetto del cliente.)
 
 1. **Strumenti vivi.** Elenca gli strumenti, i connettori e le capacita' che
    compaiono nelle giornate di lavoro. Per ognuno riporta la frequenza

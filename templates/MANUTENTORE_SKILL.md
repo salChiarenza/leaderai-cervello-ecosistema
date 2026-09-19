@@ -46,6 +46,13 @@ include riparazione, verifica e ripresa, non un nuovo consenso a ogni passaggio.
 
 ## 2. Ripara e semplifica
 
+Prima di riparare leggi `COME_E_MESSA_IN_PIEDI.md`: dice come sono collegate le
+quattro parti della casa (istruzioni, memoria, guardiani, attivita' che partono
+da sole), cosa vuol dire «sano» e come si ragiona su un guasto. Non applicare un
+elenco di comandi: capisci a quale parte appartiene il pezzo rotto e riparalo
+dove vive. Una configurazione presente non prova che sia partita; una
+riparazione vale solo se la rilanci e leggi il risultato.
+
 Leggi integralmente le sezioni «Autonomia operativa» e «Igiene dei file» di
 `ecosystem-check/STANDARD_REPARTO.md` prima di intervenire: sono il mandato
 comune e il metodo per manutenzione di contenuti, memoria e collegamenti.
@@ -67,6 +74,26 @@ Restano ammesse le riparazioni meccaniche:
   esistente. Non creare un archivio o un altro stato per far rientrare una soglia;
   spostare tutto altrove non e' snellimento. Il contenuto dubbio resta nella
   sua fonte e il problema resta aperto, senza una copia aggiuntiva.
+
+Mappa arrivata al tetto: quando la mappa madre o la mappa di un reparto supera
+il limite, o gli resta meno di un decimo, la accorpi tu nello stesso giro. Non
+si segnala e basta: unisci le righe che dicono la stessa cosa, porta il dettaglio
+nel file del reparto che lo possiede e lascia nella mappa la riga che ci rimanda.
+Obblighi, eccezioni, divieti e problemi aperti restano, parola per parola. Nel
+resoconto scrivi quanto era grande prima e quanto e' adesso. Al proprietario
+lasci una sola domanda: quel contenuto che non esiste da nessun'altra parte si
+cancella o si sposta? Tutto il resto lo fai tu.
+
+Routine che hanno finito: un'attivita' programmata nata per un giro solo (nel
+nome o nel testo: `usa e getta`, `una tantum`, `primo step`) e gia' eseguita va
+spenta e tolta nello stesso giro, e sparisce anche dall'elenco di cosa e' acceso.
+Il proprietario non deve vedere nella sua lista lavori che non partono piu':
+sembrano vivi e non lo sono.
+
+Elenco di cosa e' acceso: tieni aggiornato `COSA_E_ACCESO.md` nella cartella
+madre a ogni giro. Una riga per capacita': cosa fa in parole del proprietario,
+quando parte, dove scrive, come si spegne. Una capacita' installata che non e'
+in quell'elenco e' un difetto, e lo correggi scrivendola.
 
 Vietato, sempre: eliminare file o cartelle senza un mandato specifico;
 modifiche business, accessi a segreti, invii o disattivazioni esterne non sono
@@ -92,6 +119,28 @@ Rilancia `guardiano_stanze.sh --misura`. La scomparsa del segnale non prova
 la riparazione: riapri la fonte e ripeti il percorso che falliva. I problemi
 rimasti tornano al responsabile e alla regia nello stesso incarico.
 Al proprietario arrivano solo decisioni e limiti reali fuori dal mandato.
+
+## 3-bis. Il ponte con il controllo settimanale
+
+Ogni cosa che fai su questa casa lascia una riga in `ecosistema/PASSAGGI.md`:
+quando, chi, cosa, e come si controlla. La colonna `Verificato` non la tocchi:
+la riempie l'Ispettore.
+
+
+Prima di cercare lavoro nuovo apri `ecosystem-check/STATO.md`, tabella
+`Lavori aperti`, ed esegui nell'ordine le righe `DA FARE` (le ha decise il
+controllo della casa: cosa togliere, cosa sistemare, cosa non toccare) e poi le
+`BOCCIATO`. Sono lavoro gia' assegnato, non roba da rifare da capo. Se una riga
+`DA FARE` chiede un gesto che il tuo mandato non permette, la lasci e scrivi
+perche' accanto: non la esegui a meta'.
+
+Per ogni cosa che ripari aggiungi una riga: cosa, data, la prova che si puo'
+riaprire, stato `DA VERIFICARE`. Non scriverti `CHIUSO` da solo: chiude il
+controllo del lunedi', che riapre la prova. Una riga bocciata due volte diventa
+`AL PROPRIETARIO` e finisce nelle cinque righe che gli mandi.
+
+Tieni corta la tabella: le righe `CHIUSO` piu' vecchie di sette giorni si
+tolgono, il conteggio resta nel registro dei controlli.
 
 ## 4. Scrivi
 

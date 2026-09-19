@@ -8,8 +8,11 @@ stessa cosa.
 ## Regole d'uso
 
 1. **Nuove note sempre in CIMA**, sotto `## Log`. La piu' recente per prima.
-2. **Ogni nota dichiara**: data/ora, ID missione, agente proprietario, stato,
-   base Git, obiettivo, file coinvolti, prove, prossimo agente e prossimo passo.
+2. **Ogni nota apre con un titolo `## data`** con ID missione e agente proprietario.
+   Poi dichiara `Di cosa si parla:`, `Cosa cambia:` e `Cosa serve:` — le tre
+   parti che il guardiano pretende — e a seguire stato, obiettivo, file
+   coinvolti, Prove, prossimo agente e prossimo passo. Codici e percorsi
+   soltanto nella riga `File:`.
 3. **Massimo 20 righe per nota.** Se serve di piu', file dedicato e link qui.
 4. **Una nota vive 48 ore.** Poi si promuove nel file giusto (stato, procedura,
    `ecosistema/ASSET.md`) e si toglie da qui. La chat e' coordinamento; la
@@ -24,9 +27,11 @@ stessa cosa.
 ## Calco nota
 
 ```text
-### [DATA/ORA] [ID MISSIONE] — [AGENTE]
+## [gg/mm/aaaa (hh:mm)] [ID MISSIONE] — [AGENTE]
+Di cosa si parla: [una o due righe in parole normali: di quale lavoro si tratta]
+Cosa cambia: [il fatto nuovo o la decisione]
+Cosa serve: [una cosa sola: chi fa cosa]
 Stato: CLAIM / PRESO IN CARICO / BLOCCO / FATTO
-Base Git: [SHA o NON PRESENTE]
 Obiettivo: [...]
 File: [...]
 Prove: [...]

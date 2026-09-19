@@ -186,11 +186,16 @@ class Perimeter:
     ``roots`` sono le cartelle autorizzate; ``consented_sources`` le fonti a
     consenso (email, calendario, cronologie) che il proprietario ha incluso;
     ``extra_exclusions`` cartelle o file che il proprietario tiene fuori anche
-    dentro le radici autorizzate."""
+    dentro le radici autorizzate; ``trade_terms`` i tratti sensibili che
+    descrivono il suo mestiere (per uno studio legale: legale, avvocat,
+    tribunale). Dentro un perimetro che ha gia' approvato, quel tratto non
+    distingue piu' niente: marcherebbe tutto il lavoro come zona sensibile e il
+    censimento non partirebbe. Le esclusioni assolute non si toccano."""
 
     roots: tuple[str, ...]
     consented_sources: tuple[str, ...] = ()
     extra_exclusions: tuple[str, ...] = ()
+    trade_terms: tuple[str, ...] = ()
 
     @classmethod
     def from_dict(cls, raw: dict[str, Any]) -> "Perimeter":
@@ -202,6 +207,7 @@ class Perimeter:
             extra_exclusions=tuple(
                 str(item) for item in raw.get("extra_exclusions", [])
             ),
+            trade_terms=tuple(str(item) for item in raw.get("trade_terms", [])),
         )
 
     def contains(self, path: str) -> bool:
@@ -238,6 +244,7 @@ def sensitive_zone(
     *,
     is_dir: bool = False,
     contract_path: Path = CONTRACT_PATH,
+    trade_terms: tuple[str, ...] = (),
 ) -> str:
     """Restituisce la zona sensibile che contiene ``path`` oppure ``""``.
 
@@ -247,7 +254,12 @@ def sensitive_zone(
     Con ``is_dir`` la cartella che porta il tratto e' essa stessa la zona."""
 
     policy = _load_policy(contract_path)
-    terms = [_normalized(term) for term in policy["sensitive_zone_terms"]]
+    mestiere = {_normalized(term) for term in trade_terms}
+    terms = [
+        _normalized(term)
+        for term in policy["sensitive_zone_terms"]
+        if _normalized(term) not in mestiere
+    ]
     parts = _path_parts(path)
     if not parts:
         return ""
@@ -277,7 +289,9 @@ def classify_path(
         return PATH_EXCLUDED
     if not perimeter.contains(path):
         return PATH_OUTSIDE
-    if sensitive_zone(path, contract_path=contract_path):
+    if sensitive_zone(
+        path, contract_path=contract_path, trade_terms=perimeter.trade_terms
+    ):
         return PATH_SENSITIVE
     return PATH_ALLOWED
 

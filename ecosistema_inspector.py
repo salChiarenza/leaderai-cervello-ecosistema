@@ -1118,6 +1118,51 @@ def _user_instructions_findings(
 PHASE_LINE_RE = re.compile(r"^- Fase del percorso: ([1-4])\b", re.MULTILINE)
 
 
+def _user_settings_hook_findings(
+    settings: object, settings_label: str, target: Path
+) -> list[Finding]:
+    """Guardiani della casa registrati nelle user settings di Claude Code.
+
+    Un hook scritto li' con ``${CLAUDE_PROJECT_DIR}`` o con un percorso dentro
+    la cartella madre parte in OGNI chat aperta fuori dalla casa, non trova il
+    suo file e blocca il prompt del proprietario (caso reale 19/09/2026: verifica
+    fatta da una chat dell'app senza cartella, ``can't open file`` su una cartella
+    temporanea). I guardiani vivono solo in ``.claude/settings.json`` della casa.
+    """
+    if not isinstance(settings, dict):
+        return []
+    hook_map = settings.get("hooks")
+    if not isinstance(hook_map, dict):
+        return []
+    house = str(target.resolve())
+    markers = ("${CLAUDE_PROJECT_DIR}", "$CLAUDE_PROJECT_DIR", ".agent/hooks", house)
+    offending: list[str] = []
+    for event, groups in hook_map.items():
+        if not isinstance(groups, list):
+            continue
+        for group in groups:
+            handlers = group.get("hooks", []) if isinstance(group, dict) else []
+            if not isinstance(handlers, list):
+                continue
+            for handler in handlers:
+                command = handler.get("command") if isinstance(handler, dict) else None
+                if isinstance(command, str) and any(m in command for m in markers):
+                    offending.append(f"{event}: {command}")
+    if not offending:
+        return []
+    return [
+        Finding(
+            "CLAUDE_USER_HOOKS_IN_HOUSE",
+            "BLOCKER",
+            settings_label,
+            "Guardiani della casa registrati nelle user settings: partono in ogni "
+            "chat fuori dalla cartella madre, non trovano il file e bloccano il "
+            "prompt. Spostarli in .claude/settings.json della casa e provare una "
+            "chat da una cartella estranea. Trovati: " + "; ".join(offending),
+        )
+    ]
+
+
 def _declared_phase(agents_text: str) -> int | None:
     """Fase del percorso guidato dichiarata nella mappa madre (1-4), se c'e'.
 
@@ -3281,6 +3326,9 @@ def inspect_ecosystem(
                 settings = json.loads(settings_path.read_text(encoding="utf-8"))
             except (OSError, UnicodeError, json.JSONDecodeError):
                 settings = None
+            findings.extend(
+                _user_settings_hook_findings(settings, settings_label, target)
+            )
             raw_memory = (
                 settings.get("autoMemoryDirectory")
                 if isinstance(settings, dict)

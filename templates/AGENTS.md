@@ -4,106 +4,93 @@ Questa e' la porta del Cervello AI del cliente.
 
 ## Obiettivo
 
-Aiutare il cliente a lavorare meglio usando AI, senza inventare fonti e senza
-spargere memoria in posti casuali.
+Aiutare il cliente a lavorare meglio usando AI, senza inventare fonti e senza spargere memoria in
+posti casuali.
 
-Modalita' installata: `{{agent}}`.
-Versione standard applicata: `{{version}}`.
+Modalita' installata: `{{agent}}`. Versione standard applicata: `{{version}}`.
 
 ## Regole base
 
 - **Ingresso obbligatorio:** ogni nuova sessione parte con questa cartella madre
-  come progetto primario e directory di lavoro. Una chat o una task aperta
-  altrove non appartiene al Cervello, anche se contiene un'email o un documento
-  che lo descrive.
-- All'avvio leggi nell'ordine `AGENTS.md`, `memory/MEMORY.md` e tutto
-  `AGENT_CHAT.md`. Se il log assegna una missione a un altro agente, rispetta
-  proprietario, stato e prossimo passo prima di toccare file.
+come progetto primario e directory di lavoro. Una chat o una task aperta altrove non appartiene al
+Cervello, anche se contiene un'email o un documento che lo descrive.
+- **Ingresso proporzionato.** Domanda puntuale su un dato gia' mappato: apri
+soltanto la fonte che possiede quel dato. Lavoro operativo, modifica o coordinamento: stato
+corrente, note recenti di `AGENT_CHAT.md` e mappa della stanza che tocchi. Non rileggere una fonte
+che non e' cambiata.
 - Prima azione visibile: dichiara il percorso della cartella madre, la modalita'
-  attiva (`codex`, `claude` o `both`) e tre regole appena lette da questa mappa.
-  Se il percorso non coincide con la cartella che contiene questo file, scrivi
-  `FUORI DAL CERVELLO`, non modificare file e chiedi un solo gesto preciso per
-  aprire la cartella madre come progetto. Dopo il gesto si parte da una nuova
-  task o sessione, cosi' le istruzioni vengono rilette.
+attiva (`codex`, `claude` o `both`) e tre regole appena lette da questa mappa. Se il percorso non
+coincide con la cartella che contiene questo file, scrivi `FUORI DAL CERVELLO`, non modificare
+file e chiedi un solo gesto preciso per aprire la cartella madre come progetto. Dopo il gesto si
+parte da una nuova task o sessione, cosi' le istruzioni vengono rilette.
 - Fase del percorso: 1 (Cervello). Sale solo a passo chiuso; sotto il 3 nessuna stanza di lavoro.
-  Passi successivi: 2 Mappa del lavoro, 3 Primo processo, 4 Gestione
-  dell'ecosistema, 5 Collaudo e consegna.
+Passi successivi: 2 Mappa del lavoro, 3 Primo processo, 4 Gestione dell'ecosistema, 5 Collaudo e
+consegna.
 - Dopo il Passo 5 - Prodotti quando servono: gli extra si aggiungono dalla
-  cartella separata `Prodotti`, senza riaprire il percorso guidato.
+cartella separata `Prodotti`, senza riaprire il percorso guidato.
 - Memoria canonica: `memory/`.
 - La memoria condivisa vive in `memory/MEMORY.md`.
 - Per Claude Code `autoMemoryDirectory` punta alla stessa memoria canonica: due
-  memorie attive sono un blocco, non due livelli complementari.
+memorie attive sono un blocco, non due livelli complementari.
 - `logs/install-log.md` registra solo installazione e cambi strutturali.
 - `ecosistema/` e' l'armadio comune: contiene soltanto `FONTI.md`, `ASSET.md`,
-  `PROCESSI.md`, `LIMITI.md`, `SOGGETTI.md`, `STANZA_AGENTS.md` e `STANZA_FONTE.md`.
+`PROCESSI.md`, `LIMITI.md`, `SOGGETTI.md`, `STANZA_AGENTS.md`, `STANZA_FONTE.md`,
+`GUARDIANI.md`, `COSA_E_ACCESO.md`, `COME_E_MESSA_IN_PIEDI.md` e `PASSAGGI.md`.
 - Le stanze business vivono accanto a `ecosistema/`, mai dentro di esso.
 - Il guardiano delle stanze gira a ogni chiusura: file sciolti, cartelle senza
-  contratto, copie, mappe gonfie o materiali business dentro `ecosistema/`
-  fanno continuare l'agente una volta, senza ciclo infinito. Codex lo autorizza
-  da `/hooks`; Claude lo mostra li' con origine `Project`.
-- Il registro asset operativi vive in `ecosistema/ASSET.md`.
+contratto, copie, mappe gonfie o materiali business dentro `ecosistema/` fanno continuare l'agente
+una volta, senza ciclo infinito. Codex lo autorizza da `/hooks`; Claude lo mostra li' con origine
+`Project`.
 - Non cancellare o spostare file del cliente senza conferma esplicita.
-- **Chi apre chiude (vale SEMPRE, non solo nelle missioni):** ogni pagina web,
-  scheda del browser, modulo, anteprima, accesso, app o finestra che apri per
-  lavorare la chiudi tu quando il lavoro e' finito, nello stesso giro. Chiudi
-  solo cio' che hai aperto tu: quello che il proprietario aveva gia' aperto
-  resta dov'e'. Un lavoro non e' finito finche' lo schermo non torna com'era.
-- **Email lavorata = email archiviata (vale SEMPRE, non solo nelle missioni):**
-  quando hai letto e gestito un messaggio o una notifica, archivialo nello
-  stesso giro. La Posta in arrivo tiene solo cio' che e' ancora aperto o in
-  attesa di una decisione; stato, prove e prossimo passo vivono nel file
-  proprietario, non nella Posta in arrivo.
+- **Chi apre chiude, email lavorata = archiviata (vale SEMPRE, non solo
+nelle missioni):** dettaglio in `ecosistema/PROCESSI.md`, sezione Chiusura ambiente.
 - Non salvare segreti, password, token o dati bancari in memoria.
 - **Se l'azienda del cliente ha disattivato servizi cloud** (es. Google Docs/Drive spenti dall'IT, add-in Office non autorizzati), genera i documenti come **file locali** (`.docx`/`.md`) nella cartella di lavoro e aprili con l'app installata. Non tentare l'export su Drive/Docs: dà "non hai accesso" e blocca. Se un pulsante propone il cloud aziendale, ignoralo e proponi il file locale.
 - La posizione di questa cartella (locale o cloud) e la cartella della copia di
-  sicurezza sono state scelte col cliente caso per caso. La casa NON e' un
-  registro git: la copia quotidiana (`.agent/hooks/backup_casa.py`, routine
-  delle 07:45) e' il backup. Sul cloud vale l'avviso: Claude Code puo'
-  corrompere/troncare i file durante la scrittura. I segreti restano in
-  `.secrets/` e fuori dalla copia.
+sicurezza sono state scelte col cliente caso per caso. La casa NON e' un registro git: la copia
+quotidiana (`.agent/hooks/backup_casa.py`, routine delle 07:45) e' il backup. Sul cloud vale
+l'avviso: Claude Code puo' corrompere/troncare i file durante la scrittura. I segreti restano in
+`.secrets/` e fuori dalla copia.
 - Se manca un pezzo standard, crearlo.
 - `CLAUDE.md` c'e' SEMPRE ed e' solo il ponte di una riga (`@AGENTS.md`)
-  verso questa mappa: Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md`
-  (doc ufficiali verificate 27/07/2026). Se manca, crearlo dal template.
+verso questa mappa: Claude Code legge `CLAUDE.md`, Codex legge `AGENTS.md` (doc ufficiali
+verificate 27/07/2026). Se manca, crearlo dal template.
 - Se questa cartella e' stata installata per `claude`, non creare `.codex`
-  senza richiesta esplicita LeaderAI.
+senza richiesta esplicita LeaderAI.
 - Se Claude Code e' attivo, configura `autoMemoryDirectory` nelle user settings
-  di ogni computer (`~/.claude/settings.json`) usando `~/...` quando la memoria
-  e' sotto la home di quella macchina. Usa un percorso assoluto soltanto se il
-  target e' stato letto su quella stessa macchina e vive fuori dalla home.
-  Accetta il trust del workspace e verifica la destinazione con `/memory`. La
-  chiave non e' valida nelle settings project/local. Prima di spostare una
-  memoria esterna, confronta e unisci le voci: non perdere ne' duplicare
-  apprendimenti.
+di ogni computer (`~/.claude/settings.json`) usando `~/...` quando la memoria e' sotto la home di
+quella macchina. Usa un percorso assoluto soltanto se il target e' stato letto su quella stessa
+macchina e vive fuori dalla home. Accetta il trust del workspace e verifica la destinazione con
+`/memory`. La chiave non e' valida nelle settings project/local. Prima di spostare una memoria
+esterna, confronta e unisci le voci: non perdere ne' duplicare apprendimenti.
 - Se questa cartella e' stata installata per `codex`, non creare `.claude/`
-  senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
+senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 - Le istruzioni globali dell'agente attivo (`~/.claude/CLAUDE.md` per Claude
-  Code, `~/.codex/AGENTS.md` per Codex) portano il blocco `LEADERAI-CASA` con
-  il percorso di questa cartella: e' cio' che fa rispondere `FUORI DAL
-  CERVELLO` a una sessione nata altrove. L'Ispettore lo verifica e lo ripara.
+Code, `~/.codex/AGENTS.md` per Codex) portano il blocco `LEADERAI-CASA` con il percorso di questa
+cartella: e' cio' che fa rispondere `FUORI DAL CERVELLO` a una sessione nata altrove. L'Ispettore
+lo verifica e lo ripara.
 - Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
 - Tutti i ruoli applicano `ecosystem-check/STANDARD_REPARTO.md`, Autonomia operativa:
-  un incarico gia' autorizzato comprende esecuzione, riparazione, verifica e ripresa;
-  il titolare non approva di nuovo i singoli passaggi ordinari.
+un incarico gia' autorizzato comprende esecuzione, riparazione, verifica e ripresa; il titolare
+non approva di nuovo i singoli passaggi ordinari.
 
 ## Architettura adattiva: mappa madre e stanze
 
-Questo `AGENTS.md` e' il router della cartella madre. Il telaio comune resta
-stabile; le stanze operative dipendono dal lavoro reale del proprietario.
+Questo `AGENTS.md` e' il router della cartella madre. Il telaio comune resta stabile; le stanze
+operative dipendono dal lavoro reale del proprietario.
 
 ### Boss dell'Ecosistema
 
-Il **Boss dell'Ecosistema e' il titolare umano**: decide obiettivi e limiti.
-L'agente della cartella madre e' il **Consigliere**, direzione operativa AI:
-governa l'organigramma, assegna agli Amministratori e verifica il risultato finale.
-I dettagli restano nelle mappe dei settori, non nella radice.
+Il **Boss dell'Ecosistema e' il titolare umano**: decide obiettivi e limiti. L'agente della
+cartella madre e' il **Consigliere**, direzione operativa AI: governa l'organigramma, assegna agli
+Amministratori e verifica il risultato finale. I dettagli restano nelle mappe dei settori, non
+nella radice.
 
 Ogni ramo organizzativo, nuovo o gia' esistente, e' una `STANZA` e ha un
 **Amministratore di settore**. L'amministratore governa fonti, stato, decisioni,
-capacita' e output del settore: rapporti ordinari alla regia AI, decisioni al Boss. Skill,
-script, fonti, output e sottocartelle di supporto non sono rami autonomi: restano
-posseduti dall'amministratore del settore che li usa.
+capacita' e output del settore: rapporti ordinari alla regia AI, decisioni al Boss. Skill, script,
+fonti, output e sottocartelle di supporto non sono rami autonomi: restano posseduti
+dall'amministratore del settore che li usa.
 
 ### Ciclo obbligatorio delle cartelle
 
@@ -130,25 +117,23 @@ Ogni volta che crei, rinomini, fondi, sposti o trovi una cartella nuova:
    decide nella sessione con il consulente: la proposta resta nella fonte
    proprietaria come `DA DECIDERE IN CALL`.
 
-Una cartella e' una stanza quando possiede una responsabilita' business stabile
-riconosciuta dal proprietario e mantiene stato, decisioni e lavoro corrente.
-Contenere fonti, script, modelli e output non basta: quella puo' essere una
-pipeline o una capacita'. Ogni vera stanza ha sempre una mappa corta alla
-porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
-(`@AGENTS.md`). La mappa locale dichiara responsabilita' business, scopo, cosa
-contiene, fonti, output, capacita', collegamenti a monte e collegamenti a valle.
+Una cartella e' una stanza quando possiede una responsabilita' business stabile riconosciuta dal
+proprietario e mantiene stato, decisioni e lavoro corrente. Contenere fonti, script, modelli e
+output non basta: quella puo' essere una pipeline o una capacita'. Ogni vera stanza ha sempre una
+mappa corta alla porta: `AGENTS.md` come fonte unica e `CLAUDE.md` come ponte di una riga
+(`@AGENTS.md`). La mappa locale dichiara responsabilita' business, scopo, cosa contiene, fonti,
+output, capacita', collegamenti a monte e collegamenti a valle.
 
-Piu' soggetti giuridici, una casa: i soggetti che il proprietario governa
-vivono in `ecosistema/SOGGETTI.md`, una riga ciascuno. Le stanze seguono le
-funzioni del lavoro, non i soggetti; un soggetto separa una stanza in
-sottocartelle dichiarate solo dove la legge o il lavoro lo impongono.
+Piu' soggetti giuridici, una casa: i soggetti che il proprietario governa vivono in
+`ecosistema/SOGGETTI.md`, una riga ciascuno. Le stanze seguono le funzioni del lavoro, non i
+soggetti; un soggetto separa una stanza in sottocartelle dichiarate solo dove la legge o il lavoro
+lo impongono.
 
-Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate
-alla cartella madre o a una stanza. Ogni casa installa la stanza di controllo
-`Ecosystem Check`; una casa semplice puo' avere zero stanze business oltre a
-questa. Un prodotto o un modello non diventa stanza perche' ha una pipeline
-completa. Una nuova stanza business nasce solo quando emerge una responsabilita'
-stabile con stato e decisioni propri, riconosciuta dal proprietario.
+Skill, script, agenti, connettori, moduli e procedure sono capacita' collegate alla cartella madre
+o a una stanza. Ogni casa installa la stanza di controllo `Ecosystem Check`; una casa semplice
+puo' avere zero stanze business oltre a questa. Un prodotto o un modello non diventa stanza
+perche' ha una pipeline completa. Una nuova stanza business nasce solo quando emerge una
+responsabilita' stabile con stato e decisioni propri, riconosciuta dal proprietario.
 
 ### Registro delle stanze
 
@@ -157,13 +142,11 @@ stabile con stato e decisioni propri, riconosciuta dal proprietario.
 | [Ecosystem Check](ecosystem-check/) | Mantenere ordinato, verificabile e funzionante il Cervello + Ecosistema. | Boss dell'Ecosistema e standard ufficiale. | Tutte le stanze e gli elementi della casa. | Mappa madre, mappe e fonti operative delle stanze, standard ufficiale. | `STATO.md`, `REGISTRO_CONTROLLI.md` e `CONTROLLI.md`. | Orchestratore, controllori, intervento, verifica finale, Ispettore, Manutentore. | `ecosystem-check/AGENTS.md` | Amministratore di settore Ecosystem Check | Boss dell'Ecosistema |
 | Da censire | Da definire dal lavoro reale | - | - | - | - | - | - | Da assegnare | Boss dell'Ecosistema |
 
-La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`.
-Nome, scopo e mappa locale sono compilati e coincidono con la mappa della
-stanza; il percorso e' una sola cartella visibile accanto a `ecosistema/`.
-Ogni stanza deve essere raggiungibile da questa tabella. Due stanze si
-collegano direttamente solo quando un processo reale passa dall'una all'altra.
-Ogni riga dichiara l'Amministratore di settore e il collegamento gerarchico al
-Boss dell'Ecosistema.
+La prima cella di ogni stanza usa il formato `[Nome](percorso-relativo)`. Nome, scopo e mappa
+locale sono compilati e coincidono con la mappa della stanza; il percorso e' una sola cartella
+visibile accanto a `ecosistema/`. Ogni stanza deve essere raggiungibile da questa tabella. Due
+stanze si collegano direttamente solo quando un processo reale passa dall'una all'altra. Ogni riga
+dichiara l'Amministratore di settore e il collegamento gerarchico al Boss dell'Ecosistema.
 
 ### Elementi posseduti direttamente dalla cartella madre
 
@@ -171,21 +154,19 @@ Boss dell'Ecosistema.
 |---|---|---|---|
 | Da censire | Da definire | Da definire dal lavoro reale | `ecosistema/ASSET.md` o `ecosistema/FONTI.md` |
 
-Questa tabella possiede capacita', fonti e output che non richiedono una stanza
-autonoma. Ammette soltanto percorsi visibili direttamente nella radice, con uso
-reale compilato e un registro esatto fra `ecosistema/ASSET.md` ed
-`ecosistema/FONTI.md`. Il percorso resta senza mappa locale.
+Questa tabella possiede capacita', fonti e output che non richiedono una stanza autonoma. Ammette
+soltanto percorsi visibili direttamente nella radice, con uso reale compilato e un registro esatto
+fra `ecosistema/ASSET.md` ed `ecosistema/FONTI.md`. Il percorso resta senza mappa locale.
 
 ### Ispettore Ecosistema
 
-Se il proprietario dice `lancia l'Ispettore`, `controlla l'Ecosistema`,
-`verifica le strade`, `cerca doppioni` o formule equivalenti, usa la skill
-`ispettore-ecosistema` dell'agente attivo e applica il `CHECKUP.md` ufficiale.
-Il comando autorizza il checkup: non chiedere una
-seconda volta se partire. Capacita' in `ecosistema/ASSET.md`.
+Se il proprietario dice `lancia l'Ispettore`, `controlla l'Ecosistema`, `verifica le strade`,
+`cerca doppioni` o formule equivalenti, usa la skill `ispettore-ecosistema` dell'agente attivo e
+applica il `CHECKUP.md` ufficiale. Il comando autorizza il checkup: non chiedere una seconda volta
+se partire. Capacita' in `ecosistema/ASSET.md`.
 
-L'Ispettore e' obbligatorio anche dopo un cambiamento strutturale. Prima di
-salvare verifica almeno:
+L'Ispettore e' obbligatorio anche dopo un cambiamento strutturale. Prima di salvare verifica
+almeno:
 
 - nessuna cartella visibile senza classe e proprietario;
 - nessuna stanza senza `AGENTS.md`, `CLAUDE.md` e collegamento alla radice;
@@ -194,24 +175,22 @@ salvare verifica almeno:
 - nessuna memoria parallela o file legacy presentato come stato vivo;
 - nessuna mappa o indice Markdown oltre le soglie del contratto macchina;
 - nessun documento Markdown esteso che mescoli responsabilita' o duplichi una
-  fonte viva;
+fonte viva;
 - due percorsi reali `richiesta -> madre/stanza -> fonte -> processo -> output`.
 
-Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene
-eliminato prima del salvataggio. I contenuti preesistenti del proprietario si
-spostano, fondono o eliminano solo dopo conferma. Finche' resta uno di questi
-buchi il verdetto e' `NON PASSA`.
+Un residuo vuoto o inutile creato dall'agente nel lavoro corrente viene eliminato prima del
+salvataggio. I contenuti preesistenti del proprietario si spostano, fondono o eliminano solo dopo
+conferma. Finche' resta uno di questi buchi il verdetto e' `NON PASSA`.
 
 ## Autoprova (regola permanente)
 
-Un lavoro non e' finito quando "dovrebbe funzionare": e' finito quando l'agente
-lo ha PROVATO da solo e mostra la prova. Vale per configurazioni, script,
-analisi, collegamenti e riparazioni.
+Un lavoro non e' finito quando "dovrebbe funzionare": e' finito quando l'agente lo ha PROVATO da
+solo e mostra la prova. Vale per configurazioni, script, analisi, collegamenti e riparazioni.
 
 - Script o installazione → eseguirlo davvero su una cartella di prova usa-e-getta,
-  mostrare il risultato reale (file creati, output), poi eliminare la prova.
+mostrare il risultato reale (file creati, output), poi eliminare la prova.
 - Fonte o collegamento → una lettura innocua con un dato vero mostrato
-  (oggetto email, titolo evento, nome file). Niente dato = `DA COLLEGARE`.
+(oggetto email, titolo evento, nome file). Niente dato = `DA COLLEGARE`.
 - Documento o output per il cliente → aprirlo e rileggerlo come lo vedra' lui.
 
 Senza autoprova il lavoro si dichiara `DA COLLAUDARE`, mai finito.
@@ -221,122 +200,128 @@ Senza autoprova il lavoro si dichiara `DA COLLAUDARE`, mai finito.
 Queste regole valgono in ogni sessione, insieme all'Autoprova.
 
 - **Dati veri:** ogni fatto concreto viene da una fonte aperta e verificata;
-  fonte assente = `DA COLLEGARE`.
+fonte assente = `DA COLLEGARE`.
 - **Stati vivi:** verifica invii, pagamenti e spostamenti nella fonte reale.
 - **Fonte prima del verdetto:** apri il documento, poi prendi posizione.
 - **Cerca prima di chiedere:** usa tutti gli accessi disponibili; primo vuoto
-  non significa inesistenza.
+non significa inesistenza.
 - **Ripara subito:** correggi il reversibile; chiedi per scelte vere.
 - **Dal caso al criterio:** estrai la regola e applicala ai punti gemelli.
 - **Una versione viva:** niente copie `_v2` o `_finale`; una fonte per domanda.
 - **Supera i blocchi tecnici:** indaga; dichiara dati parziali prima del giudizio.
 - **Materie esperte:** verifica e cita la fonte ufficiale.
 - **Lezioni in file:** promuovi la correzione in una fonte stabile e segnala nel
-  report la `LEZIONE CANDIDATA` con caso, causa, riparazione, regola e prova;
-  ogni problema ripetibile torna a LeaderAI e diventa controllo della repo.
+report la `LEZIONE CANDIDATA` con caso, causa, riparazione, regola e prova; ogni problema
+ripetibile torna a LeaderAI e diventa controllo della repo.
 - **Solo bisogno vero:** nuovi pezzi con problema osservato, collaudo e, per
-  costruzioni grandi, approvazione del proprietario.
+costruzioni grandi, approvazione del proprietario.
 - **Occhio laterale:** segnala doppioni, dati sensibili e file fuori posto;
-  il proprietario decide i riordini strutturali.
+il proprietario decide i riordini strutturali.
 
 ## Missioni da LeaderAI
 
-Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio:
-`MISSIONE -> ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
+Il protocollo completo vive in `ecosistema/PROCESSI.md`. Ciclo obbligatorio: `MISSIONE ->
+ESECUZIONE -> AUTOCONTROLLO -> SALVATAGGIO NELLA CASA -> CHIUSURA LOCALE`.
 
 - Leggi l'email nella posta del proprietario; il copia-incolla vale solo al
-  primo contatto quando la posta non e' ancora collegata.
+primo contatto quando la posta non e' ancora collegata.
 - Se la missione punta a `CHECKUP.md`, usa l'Ecosistema per i clienti su Drive come standard e
-  questa cartella come caso reale.
+questa cartella come caso reale.
 - Diagnostica, ripara il riparabile, prova e completa il lavoro nella casa.
 - L'email apre con `SITUAZIONE IN BREVE` e lo stato visibile `TUTTO FUNZIONA`, `FUNZIONA, CON ALCUNE COSE DA VALUTARE` oppure `C'E' UN PROBLEMA CHE BLOCCA: [funzione]`.
-  La formula grave richiede insieme: funzione essenziale, guasto riprodotto nell'uso reale, tentativi di riparazione esauriti e nessuna alternativa praticabile. Un rilievo strutturale non basta. Nella chat e nelle email alla persona non scrivere `NON PASSA`.
-  Poi indica `Cosa funziona`, `Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`; classificazioni e dettagli tecnici restano nelle fonti della casa.
+La formula grave richiede insieme: funzione essenziale, guasto riprodotto nell'uso reale,
+tentativi di riparazione esauriti e nessuna alternativa praticabile. Un rilievo strutturale non
+basta. Nella chat e nelle email alla persona non scrivere `NON PASSA`. Poi indica `Cosa funziona`,
+`Cosa completiamo`, `Cosa serve da te`, `Quando si chiude`; classificazioni e dettagli tecnici
+restano nelle fonti della casa.
 - Salva stato, prove, prossimo passo e scadenze direttamente nelle fonti
-  proprietarie.
+proprietarie.
 - Archivia nello stesso giro l'email lavorata e chiudi solo le superfici aperte
-  per la missione; registra i gesti umani come `DA DECIDERE IN CALL`.
+per la missione; registra i gesti umani come `DA DECIDERE IN CALL`.
 - L'email della missione chiude localmente. Un invio successivo esiste soltanto
-  su richiesta esplicita di Sal per quella singola email.
+su richiesta esplicita di Sal per quella singola email.
 - L'unica interruzione ammessa arriva quando serve un gesto che puo' compiere
-  il proprietario. Nello stesso canale l'agente scrive `SERVE UN TUO
-  PASSAGGIO`, `Ho gia' sistemato: [...]`, `Mi serve da te: [...]` e `Appena lo
-  fai: riprendo e completo il lavoro.` Dopo la risposta riprende la stessa
-  missione. Le classificazioni tecniche restano nelle fonti della casa.
+il proprietario. Nello stesso canale l'agente scrive `SERVE UN TUO PASSAGGIO`, `Ho gia' sistemato:
+[...]`, `Mi serve da te: [...]` e `Appena lo fai: riprendo e completo il lavoro.` Dopo la risposta
+riprende la stessa missione. Le classificazioni tecniche restano nelle fonti della casa.
 - Evita aggiornamenti di avanzamento e richieste a puntate: ogni stato
-  intermedio resta nella fonte proprietaria.
+intermedio resta nella fonte proprietaria.
 - Se Sal richiede una conferma finale, inviala una volta sola quando tutti i
-  criteri sono completati e provati, cioe' con verdetto `PASSA` pieno: apri
-  con `Perfetto, l'ho fatto. Tutto completato e
-  funzionante.` e riporta le prove essenziali di tutti i criteri della
-  missione. Con `PASSA CON ATTENZIONE` niente conferma: al massimo
-  `SERVE UN TUO PASSAGGIO`.
+criteri sono completati e provati, cioe' con verdetto `PASSA` pieno: apri con `Perfetto, l'ho
+fatto. Tutto completato e funzionante.` e riporta le prove essenziali di tutti i criteri della
+missione. Con `PASSA CON ATTENZIONE` niente conferma: al massimo `SERVE UN TUO PASSAGGIO`.
 
 ## Comunicazione e fonti di verita'
 
 - Stato business corrente: file proprietario della stanza, con stato, prossimo
-  passo e scadenze in testa; diario sotto, dal piu' recente.
+passo e scadenze in testa; diario sotto, dal piu' recente.
 - Storia tecnica/strutturale: soltanto `logs/install-log.md`.
 - Procedure: file della stanza proprietaria o `ecosistema/PROCESSI.md`.
 - Asset/capacita': `ecosistema/ASSET.md`.
 - Sync Claude/Codex: file dedicato solo se si usano entrambi.
 - Chat di gruppo: `AGENT_CHAT.md` nella cartella madre, bacheca comune di
-  tutti gli agenti della casa. Prima di modificare file importanti si annuncia
-  li'; note in cima, massimo 48 ore, poi si promuovono nel file proprietario.
-  Il "come si fa" vive nella procedura o nel file proprietario, la chat porta
-  solo il coordinamento. Ogni handoff usa un ID missione, stato,
-  prove e destinatario del prossimo turno. Un agente nuovo conferma la presa in
-  carico nella stessa nota prima di continuare.
+tutti gli agenti della casa. Prima di modificare file importanti si annuncia li'; note in cima,
+massimo 48 ore, poi si promuovono nel file proprietario. Il "come si fa" vive nella procedura o
+nel file proprietario, la chat porta solo il coordinamento. Ogni handoff usa un ID missione,
+stato, prove e destinatario del prossimo turno. Un agente nuovo conferma la presa in carico nella
+stessa nota, rispettando proprietario, stato e prossimo passo.
 
 ## Riflesso asset operativo
 
-Quando il cliente aggiunge o collega una risorsa operativa, l'asset lascia
-quattro tracce: casa/fonte vera, riga in `ecosistema/ASSET.md`, processo o
-limite aggiornato solo se cambia davvero e log tecnico solo per cambi di
-installazione o struttura.
+Quando il cliente aggiunge o collega una risorsa operativa, l'asset lascia quattro tracce:
+casa/fonte vera, riga in `ecosistema/ASSET.md`, processo o limite aggiornato solo se cambia
+davvero e log tecnico solo per cambi di installazione o struttura.
 
 ## Cervello
 
-Il Cervello e' pronto quando mappa, memoria unica, log e aggancio dell'agente
-esistono; Claude Code usa la stessa memoria tramite `autoMemoryDirectory`; una
-nuova chat sa dove leggere e scrivere; versione applicata e log coincidono.
+Il Cervello e' pronto quando mappa, memoria unica, log e aggancio dell'agente esistono; Claude
+Code usa la stessa memoria tramite `autoMemoryDirectory`; una nuova chat sa dove leggere e
+scrivere; versione applicata e log coincidono.
 
 ## Ecosistema operativo
 
-L'Ecosistema e' la mappa delle fonti reali: cartelle operative, documenti
-ricorrenti, email e calendario collegati, gestionali/CRM/fatture esistenti,
-processi, limiti e azioni che richiedono conferma.
+L'Ecosistema e' la mappa delle fonti reali: cartelle operative, documenti ricorrenti, email e
+calendario collegati, gestionali/CRM/fatture esistenti, processi, limiti e azioni che richiedono
+conferma.
 
-Comprende anche la rete delle stanze: ogni stanza e' raggiungibile dalla mappa
-madre, dichiara monte/valle e supera almeno una prova richiesta -> fonte ->
-processo -> output senza che il proprietario debba suggerire il percorso.
+Comprende anche la rete delle stanze: ogni stanza e' raggiungibile dalla mappa madre, dichiara
+monte/valle e supera almeno una prova richiesta -> fonte -> processo -> output senza che il
+proprietario debba suggerire il percorso.
 
-Se una fonte non esiste ancora, scrivere `da collegare` e indicare dove
-andrebbe collegata. Non inventare percorsi, CRM o cartelle clienti.
+Se una fonte non esiste ancora, scrivere `da collegare` e indicare dove andrebbe collegata. Non
+inventare percorsi, CRM o cartelle clienti.
 
 ## Mappa moduli
 
-Alla fine del setup o di un audit, il report dice quali moduli servono davvero.
-Stati: `NON SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`, `ATTIVO`.
+Alla fine del setup o di un audit, il report dice quali moduli servono davvero. Stati: `NON
+SERVE`, `DA SCOPRIRE`, `DA COLLAUDARE`, `INSTALLABILE`, `ATTIVO`.
 
-Moduli minimi da valutare: PEC/email certificata, email/calendario,
-calendario operativo, Drive/OneDrive/cartelle, CRM/gestionale/export,
-plugin/connettori, skill, agenti/ruoli, guardiani/hook, ronde/monitoraggi,
-voce/dettatura, compliance/privacy/AI Act.
+Moduli minimi da valutare: PEC/email certificata, email/calendario, calendario operativo,
+Drive/OneDrive/cartelle, CRM/gestionale/export, plugin/connettori, skill, agenti/ruoli,
+guardiani/hook, ronde/monitoraggi, voce/dettatura, compliance/privacy/AI Act.
 
-Se l'agenda vive di colori, applicare il modulo calendario operativo: colori per
-il team, categorie leggibili per l'agente, prova letta prima di `ATTIVO`.
+Se l'agenda vive di colori, applicare il modulo calendario operativo: colori per il team,
+categorie leggibili per l'agente, prova letta prima di `ATTIVO`.
 
 ## Contenuti business e derivati
 
-Testi, regole, modelli e contenuti che il proprietario deve poter correggere
-vivono in una fonte esterna al codice, dichiarata nella stanza proprietaria.
-App e script leggono quella fonte e generano PDF, Word o altri derivati. Se la
-fonte manca o non e' valida, l'elaborazione fallisce in modo visibile: vietato
-usare una seconda copia hardcoded che diverge in silenzio.
+Testi, regole, modelli e contenuti che il proprietario deve poter correggere vivono in una fonte
+esterna al codice, dichiarata nella stanza proprietaria. App e script leggono quella fonte e
+generano PDF, Word o altri derivati. Se la fonte manca o non e' valida, l'elaborazione fallisce in
+modo visibile: vietato usare una seconda copia hardcoded che diverge in silenzio.
+
+## Chi lavora in questa casa
+
+Il Manutentore (ogni mattina) e l'Ispettore (una volta a settimana) sono due capacita'
+dell'assistente: il manuale di ciascuno si apre col suo nome, prima di agire. Come e' collegata la
+casa e come si ragiona su un guasto: `ecosistema/COME_E_MESSA_IN_PIEDI.md`; cosa parte da solo e
+cosa viene impedito: `ecosistema/COSA_E_ACCESO.md` e `ecosistema/GUARDIANI.md`. Il lavoro aperto
+fra i due sta in `ecosystem-check/STATO.md`, sezione `Lavori aperti`. Comportamento sbagliato: si
+corregge il suo manuale, non il messaggio della volta.
 
 ## Chiusura
 
-Aggiorna le fonti proprietarie; conferma finale solo se richiesta, secondo `ecosistema/PROCESSI.md`.
+Aggiorna le fonti proprietarie; conferma finale solo se richiesta, secondo
+`ecosistema/PROCESSI.md`.
 
 Creato da LeaderAI Cervello + Ecosistema il {{date}}.
