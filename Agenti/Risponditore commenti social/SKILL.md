@@ -26,9 +26,14 @@ si registra e si lascia al titolare.
 
 ## Durante il giro
 
-Per ogni commento, in quest'ordine: doppione → contesto del contenuto →
-categoria → risposta o registro. Mai saltare il controllo del doppione, mai
+Prima si aprono tutte le risposte nascoste: le viste «senza risposta» dei canali
+non mostrano chi ha scritto dentro un thread. Poi, per ogni commento, in
+quest'ordine: doppione → contesto del contenuto → categoria → risposta o
+registro. Il doppione si guarda persona per persona, mai sul thread. Mai
 rispondere senza aver guardato sotto quale contenuto sta.
+
+Una risposta scritta nomina il pezzo che l'azienda ha già, detto come bisogno
+della persona: mai uno strumento generico né il prodotto di un altro al suo posto.
 
 ## Chiusura
 
