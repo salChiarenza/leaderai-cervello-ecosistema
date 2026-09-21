@@ -32,6 +32,9 @@ Oggetto: `Cervello LeaderAI — installazione o aggiornamento`
 con ChatGPT Work, Codex o Claude Code e segui le istruzioni fino al controllo
 finale:</p>
 <p><a href="https://drive.google.com/drive/folders/1SzRA4SCSyXw_PnHWP7ouGeNzUv6Wcl1L">Apri la cartella 1 Cervello</a></p>
+<p>Apri il documento nel browser: dentro trovi il messaggio da copiare e
+incollare nella chat della tua AI. Se poi l'AI ti chiede il permesso di usare
+internet, rispondi si'.</p>
 <p>Dentro trovi due cose, una accanto all'altra: il documento
 <strong>01 - Cervello - installazione e aggiornamento</strong> e il pacchetto
 <strong>Cervello.zip</strong>. Non c'e' niente in allegato a questa email: si
@@ -51,6 +54,10 @@ finale:
 
 Cartella 1 Cervello
 https://drive.google.com/drive/folders/1SzRA4SCSyXw_PnHWP7ouGeNzUv6Wcl1L
+
+Apri il documento nel browser: dentro trovi il messaggio da copiare e
+incollare nella chat della tua AI. Se poi l'AI ti chiede il permesso di usare
+internet, rispondi si'.
 
 Dentro trovi due cose, una accanto all'altra: il documento
 "01 - Cervello - installazione e aggiornamento" e il pacchetto Cervello.zip.

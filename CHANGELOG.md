@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.7.13 - 21/09/2026
+
+- **La guida dice di nuovo chi l'ha scritta.** In testa alla guida pubblicata
+  torna il blocco di provenienza: autore, cosa contiene il pacchetto, cosa
+  l'assistente non fa, ispezionare e poi andare avanti. Era nella guida tecnica
+  0.6.29 ed era rimasto fuori dalla guida breve pubblicata dalla 0.7.1: due
+  assistenti puliti provati il 21/09 si sarebbero fermati a chiedere «chi te
+  l'ha mandato?».
+- **Il messaggio da incollare porta l'autorizzazione della persona** e il
+  collegamento diretto al pacchetto: l'assistente che vede solo il blocco sa
+  chi lo autorizza e dove scaricare. Su ChatGPT Work la persona dice si' alla
+  richiesta di usare internet.
+- **Il nome del proprietario lo trova l'assistente**, dall'utente del computer o
+  dai documenti presenti; domandarlo non e' il primo passo (decisione di Sal).
+- **Il pacchetto si estrae in Download e si cancella alla fine**: non resta
+  nella casa (caso Zedda, 21/09).
+- **Pagina «Hai la casa vecchia? Come aggiornarla»** in `1 Cervello`: copia di
+  sicurezza, via il registro git, guardiani provati (su Windows `py`), guardiani
+  solo nella casa, documenti nuovi di gestione, poi la guida normale. Prima
+  viaggiava in email scritte a mano (Corroppoli, 18/09).
+- **Consiglio, non obbligo.** Alla fine l'assistente consiglia cartella online o
+  copia ogni tanto; la scelta resta al proprietario (Sal, 21/09).
+- **Cosa vede la persona alla fine**: nove documenti con tabelle ancora vuote,
+  ed e' giusto cosi'. La guida glielo fa dire.
+
 ## 0.7.12 - 21/09/2026
 
 - **Stesso pacchetto per installare, aggiornare o riprendere.** L'assistente

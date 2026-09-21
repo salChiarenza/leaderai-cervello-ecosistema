@@ -23,6 +23,11 @@ dal proprietario o verificati nella loro fonte.
 ## Installazione e aggiornamento
 
 Il pacchetto scaricato e' il riferimento, non va copiato sopra questa cartella.
+Il nome del proprietario e della sua attivita' l'assistente li ricava da solo
+(utente del computer, documenti presenti, cose gia' dette); se non li trova usa
+il nome dell'utente del computer e lo segna `DA CONFERMARE`. Il pacchetto
+estratto e lo zip non restano nella casa: si cancellano alla fine.
+
 L'assistente legge `install_contract.json`, poi lavora nella cartella viva:
 
 1. apre `logs/install-state.json`; se un lavoro era rimasto a meta', riparte dal
