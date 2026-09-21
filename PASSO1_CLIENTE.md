@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.13`
+Versione corrente: `0.7.14`
 
 ## Da dove arriva questo documento (leggi per primo)
 
@@ -89,11 +89,11 @@ cartella Download, rispondi si': gli serve per prendere il pacchetto.
 - Stato `IN_PROGRESS` o `INTERRUPTED`: riparte dal primo elemento non completato.
 - File esistente senza blocco LeaderAI: non lo sostituisce.
 - Conflitto: conserva il file e lo elenca nello stato; non inventa una fusione.
-- Il nome del proprietario e della sua attivita' li ricava da solo: dall'utente
-  del computer, dai documenti presenti nella cartella o da cio' che il
-  proprietario ha gia' scritto. Domandarli al proprietario non e' il primo
-  passo: se non li trova usa il nome dell'utente del computer e lo segna
-  `DA CONFERMARE` nel registro di installazione.
+- Il nome del proprietario lo ricava da quello che il proprietario ha gia'
+  scritto nella chat o dall'utente del computer. Non lo cerca in altri
+  documenti del computer. Se non lo trova, usa il nome dell'utente e lo segna
+  `DA CONFERMARE` nel registro di installazione; l'attivita' si scrive quando
+  il proprietario la dice.
 
 Una casa vecchia senza `VERSION` resta una casa vecchia: non diventa corrente
 scrivendo subito un numero. La versione viene dichiarata soltanto dopo il

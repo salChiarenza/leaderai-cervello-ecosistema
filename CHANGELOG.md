@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.14 - 21/09/2026
+
+- **Case vecchie: il vecchio si toglie solo dopo aver provato il nuovo.** Dal
+  parere esterno del 21/09: prima inventario e copia completa della cartella
+  cosi' com'e' (file nascosti e registro git compresi), attivita' giornaliera in
+  pausa, poi copia di sicurezza quotidiana, guardiani, documenti nuovi e guida;
+  il registro git si toglie soltanto dopo una prova dalla casa aggiornata, e la
+  copia completa resta per tornare indietro.
+- **Il nome non si cerca nei documenti del computer.** L'assistente lo prende da
+  cio' che il proprietario ha scritto nella chat o dall'utente del computer;
+  l'attivita' si scrive quando il proprietario la dice.
+
 ## 0.7.13 - 21/09/2026
 
 - **La guida dice di nuovo chi l'ha scritta.** In testa alla guida pubblicata
