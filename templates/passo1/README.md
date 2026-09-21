@@ -25,7 +25,8 @@ dal proprietario o verificati nella loro fonte.
 Il pacchetto scaricato e' il riferimento, non va copiato sopra questa cartella.
 Il nome del proprietario l'assistente lo ricava da quello che il proprietario ha
 gia' scritto nella chat o dall'utente del computer, senza cercarlo in altri
-documenti; se non lo trova usa il nome dell'utente e lo segna `DA CONFERMARE`. Il pacchetto
+documenti; se l'utente del computer non e' un nome di persona (Utente, User, admin)
+lo chiede al proprietario con una domanda sola alla fine e intanto scrive `DA CONFERMARE`. Il pacchetto
 estratto e lo zip non restano nella casa: si cancellano alla fine.
 
 L'assistente legge `install_contract.json`, poi lavora nella cartella viva:

@@ -1,6 +1,6 @@
 # Hai la casa vecchia? Come aggiornarla
 
-Versione corrente: `0.7.14`
+Versione corrente: `0.7.15`
 
 Questa pagina serve quando nella cartella del proprietario c'e' gia' una casa
 nata con una versione precedente. La riconosci cosi': `VERSION` inizia con

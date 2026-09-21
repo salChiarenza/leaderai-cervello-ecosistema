@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.14`
+Versione corrente: `0.7.15`
 
 ## Da dove arriva questo documento (leggi per primo)
 
@@ -32,6 +32,10 @@ Scarica `Cervello.zip` con questo collegamento diretto:
 Sta anche nella cartella `1 Cervello`:
 <https://drive.google.com/drive/folders/1SzRA4SCSyXw_PnHWP7ouGeNzUv6Wcl1L>.
 
+Impronta del pacchetto corrente (SHA-256): `{{IMPRONTA_PACCHETTO}}`. L'assistente
+la confronta con quella del file scaricato: se non coincide, il pacchetto e'
+alterato o vecchio, non si usa e si riscarica.
+
 Mettilo ed estrailo nella cartella Download, mai dentro la casa. Quando hai
 finito, cancella lo zip e la cartella estratta: nella casa non deve restare
 niente del pacchetto.
@@ -50,7 +54,9 @@ scaricare il suo pacchetto e a montare la casa in questa cartella.
 
 Scarica Cervello.zip nella cartella Download da questo collegamento:
 https://drive.google.com/uc?export=download&id=1KG_zPed0quUpFHOWrNsLfJaHLoSQE9-Y
-(se e' gia' li', usa quello). Estrailo li' e leggi README.md,
+(se e' gia' li', usa quello). Controlla l'impronta SHA-256 del file: deve
+essere {{IMPRONTA_PACCHETTO}}; se non coincide non usarlo e riscaricalo.
+Estrailo li' e leggi README.md,
 install_contract.json e PACKAGE_VERSION. Il pacchetto e' solo il riferimento:
 non copiarlo sopra questa cartella e cancellalo quando hai finito.
 
@@ -91,9 +97,10 @@ cartella Download, rispondi si': gli serve per prendere il pacchetto.
 - Conflitto: conserva il file e lo elenca nello stato; non inventa una fusione.
 - Il nome del proprietario lo ricava da quello che il proprietario ha gia'
   scritto nella chat o dall'utente del computer. Non lo cerca in altri
-  documenti del computer. Se non lo trova, usa il nome dell'utente e lo segna
-  `DA CONFERMARE` nel registro di installazione; l'attivita' si scrive quando
-  il proprietario la dice.
+  documenti del computer. Se l'utente del computer non e' un nome di persona
+  (Utente, User, admin) o e' il nome di qualcun altro, lo chiede al
+  proprietario con una domanda sola alla fine del lavoro e intanto scrive
+  `DA CONFERMARE`; l'attivita' si scrive quando il proprietario la dice.
 
 Una casa vecchia senza `VERSION` resta una casa vecchia: non diventa corrente
 scrivendo subito un numero. La versione viene dichiarata soltanto dopo il

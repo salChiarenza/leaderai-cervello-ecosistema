@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.15 - 21/09/2026
+
+- **Il pacchetto ha un'impronta.** A ogni pubblicazione il costruttore scrive
+  nella guida l'impronta SHA-256 di `Cervello.zip`, anche dentro il messaggio da
+  incollare: l'assistente la confronta con il file scaricato e un pacchetto
+  alterato, incompleto o vecchio non passa (parere esterno del 21/09).
+- **Il nome si chiede solo se l'utente del computer non e' un nome vero**
+  (Utente, User, admin, o il nome di un altro): una domanda sola, alla fine.
+  Casi veri: «Utente» e «cecilia».
+- **Provenienza nel registro di installazione:** il pacchetto viene dalla
+  cartella `1 Cervello` del Drive LeaderAI.
+
 ## 0.7.14 - 21/09/2026
 
 - **Case vecchie: il vecchio si toglie solo dopo aver provato il nuovo.** Dal
