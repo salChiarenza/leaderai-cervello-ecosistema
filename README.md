@@ -1,20 +1,20 @@
 <!-- vista: inizio (generata, non correggere a mano) -->
 
-# LeaderAI Cervello + Ecosistema 0.7.6
+# LeaderAI Cervello + Ecosistema 0.7.16
 
-Monta un ambiente AI di lavoro sul computer di chi lo riceve e lo porta a uno standard: una sola cartella madre, la memoria, le stanze del lavoro vero e i controlli che la tengono in ordine. Funziona con Claude Code e con Codex.
+Costruisce un ambiente AI di lavoro in cinque passi. Il Passo 1 consegna soltanto la base documentale; stanze, controlli e capacita' nascono dopo dal lavoro vero. Funziona con Claude Code e con ChatGPT Work.
 
-Dentro ci sono 2 stanze, 2 agenti, 1 skill, 11 guardiani, 4 memorie, 41 modelli, 33 prove. Si installa in 5 fasi, una per volta.
+Dentro ci sono 3 stanze, 3 agenti, 2 skill, 13 guardiani, 4 memorie, 50 modelli, 39 prove nella sorgente completa. Alla persona arrivano in 5 passi, uno per volta; non sono tutti nel Passo 1.
 
-| Incluso | Quanti | Cosa ti da' |
+| Nella sorgente | Quanti | Quando serve |
 |---|---|---|
-| Stanze | 2 | dove vive ogni cosa (le altre nascono dal lavoro del cliente) |
-| Agenti | 2 | lavori interi fatti da soli |
-| Skill | 1 | procedure richiamate a voce |
-| Guardiani | 11 | fermano l'errore prima che accada |
+| Stanze | 3 | dove vive ogni cosa (le altre nascono dal lavoro del cliente) |
+| Agenti | 3 | prodotti opzionali successivi |
+| Skill | 2 | capacita' opzionali successive |
+| Guardiani | 13 | controlli valutati nel Passo 4 |
 | Memorie | 4 | la conoscenza che resta (modelli vuoti da riempire) |
-| Modelli | 41 | il calco di ogni pezzo |
-| Prove | 33 | si controlla da solo |
+| Modelli | 50 | il calco di ogni pezzo |
+| Prove | 39 | si controlla da solo |
 
 ## Come si installa
 
@@ -23,26 +23,26 @@ Dentro ci sono 2 stanze, 2 agenti, 1 skill, 11 guardiani, 4 memorie, 41 modelli,
 | 1. Cervello | nasce una sola cartella madre con il telaio documentale minimo: memoria, chat, fonti, asset, processi,… | Cervello.zip non contiene file eseguibili ne' cartelle di configurazione dell'agente; install_contract.json… |
 | 2. Mappa del lavoro | l'agente intervista e registra, non crea: soggetti giuridici in ecosistema/SOGGETTI.md, fonti vere in… | ogni riga dei registri porta un dato vero (nome del soggetto, percorso o accesso della fonte, esempio del… |
 | 3. Prima stanza col primo processo | la casa del cliente si costruisce come la casa di Sal, che e' l'unico modello vivo: le stanze seguono chi… | una richiesta reale fatta all'agente senza suggerimenti, che nomina il soggetto e il lavoro, fa partire la… |
-| 4. Gestione dell'ecosistema | su una casa gia' usata e compresa si valutano Controllo della casa, Manutenzione e guardiani. | il Manutentore ha girato una volta da solo e ha scritto la sua misura; l'Ispettore lanciato a comando… |
+| 4. Gestione dell'ecosistema | su una casa gia' usata e compresa si valutano Controllo della casa, Manutenzione e guardiani. | il Manutentore ha girato una volta da solo e ha scritto la sua misura; l'Ispettore parte da solo alla sua… |
 | 5. Collaudo e consegna | controllo completo della casa contro lo standard (versione, telaio, stanze, strade, istruzioni), riparazioni… | verdetto PASSA pieno, approvazione di Sal e conferma finale al modo previsto; da qui in poi il cliente decide… |
 
-## Cosa c'e' dentro
+## Libreria sorgente completa
 
 ```text
 Cervello + Ecosistema/
-|-- Agenti/                                            # 2 agenti installabili nel Claude del cliente
-|-- Skill/                                             # 1 skill richiamabile a voce
+|-- Agenti/                                            # 3 prodotti opzionali per i passi successivi
+|-- Skill/                                             # 2 capacita' opzionali per i passi successivi
 |-- moduli/                                            # pezzi che si montano solo quando servono
-|-- templates/                                         # 41 modelli: il calco di mappa, stanza, fonte, controlli
-|-- tests/                                             # 33 prove che il prodotto gira prima di uscire
+|-- templates/                                         # 50 modelli: il calco di mappa, stanza, fonte, controlli
+|-- tests/                                             # 39 prove che il prodotto gira prima di uscire
 |-- 01 - Cervello - installazione e aggiornamento.md   # l'unico file da cui parte il cliente
 |-- CHECKUP.md                                         # diagnosi e riparazione di una casa già viva
 |-- MANIFEST.md                                        # lo standard con cui si confronta il caso reale
 |-- install_contract.json                              # la lista che leggono installazione, Ispettore e collaudo
 ```
 
-> Blocco generato il 17/09/2026 dalle cartelle del prodotto da uno strumento
-> interno LeaderAI. Si rigenera, non si corregge a mano.
+> Blocco generato il 21/09/2026 dalle cartelle del prodotto con
+> `leaderai-ecosistema/tools/mappa_sistema.py`. Si rigenera, non si corregge a mano.
 
 <!-- vista: fine -->
 
@@ -55,11 +55,12 @@ quando l'ambiente esiste gia', aggiorna le fonti della casa e chiude con una
 conferma unica.
 
 Le fasi successive restano visibili nel percorso. La prima usa un solo file,
-`01 - Cervello - installazione e aggiornamento.md`, che monta o aggiorna la
-stessa infrastruttura comune usata da LeaderAI; le case condividono
-funzioni e controlli, mentre ognuna conserva contenuto su misura. Il percorso
-guidato termina con `5 Collaudo e consegna`; eventuali nuovi prodotti o
-processi si aggiungono dopo, soltanto quando servono.
+`01 - Cervello - installazione e aggiornamento.md`, che monta o aggiorna
+soltanto la base documentale dichiarata da `install_contract.json`. Stanze,
+controlli e capacita' arrivano nei passi successivi, dal lavoro reale e con una
+scelta separata: ogni casa conserva contenuto su misura. Il percorso guidato
+termina con `5 Collaudo e consegna`; eventuali nuovi prodotti o processi si
+aggiungono dopo, soltanto quando servono.
 
 ## Fonti ufficiali vive del checkup
 
@@ -427,4 +428,3 @@ leaderai-cervello-ecosistema/     il prodotto (Drive = copia per i clienti, GitH
 ├─ census_collector.py · census_rule.py · adoption_rule.py   regole macchina: censimento processi, adozione osservata
 └─ tests/                        31 file: ogni regola ha la sua prova
 ```
-

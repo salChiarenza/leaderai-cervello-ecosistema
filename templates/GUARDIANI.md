@@ -46,7 +46,7 @@
 
 Un guardiano nuovo nasce con la sua riga qui, nello stesso lavoro. Un guardiano
 senza riga non esiste per chi legge, e una riga senza guardiano e' una promessa:
-la prova `test_guardiani_dichiarati.py` tiene le due cose attaccate.
+il collaudo del prodotto tiene le due cose attaccate.
 
 Installarlo non basta: va anche **richiamato nelle impostazioni di tutti e due
 gli assistenti**, Claude Code e Codex. Un guardiano copiato nella casa ma che

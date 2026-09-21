@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.16 - 21/09/2026
+
+- **Una fase, una promessa.** Il Passo 1 consegna soltanto la base documentale;
+  stanze e primo processo arrivano nel Passo 3, mentre backup, guardiani, skill,
+  automazioni e impostazioni entrano soltanto nel Passo 4, separatamente e con
+  scelta visibile della persona.
+- **La casa vecchia non installa piu' la tecnica prima della base.** Prima mette
+  al sicuro i dati, applica e prova il Passo 1; soltanto dopo separa i vecchi
+  componenti. La nuova tecnica si valuta piu' avanti nel Passo 4.
+- **La cartella del cliente non contiene piu' il motore LeaderAI.** La sorgente
+  tecnica viene pubblicata in una cartella sorella privata; il link pubblico
+  mostra soltanto percorso, pacchetto e prodotti destinati al cliente.
+
 ## 0.7.15 - 21/09/2026
 
 - **Il pacchetto ha un'impronta.** A ogni pubblicazione il costruttore scrive

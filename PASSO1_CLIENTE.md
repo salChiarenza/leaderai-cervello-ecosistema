@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.15`
+Versione corrente: `0.7.16`
 
 ## Da dove arriva questo documento (leggi per primo)
 

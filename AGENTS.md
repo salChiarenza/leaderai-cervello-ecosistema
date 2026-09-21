@@ -21,9 +21,11 @@ lista di file obbligatori o rami agente.
 `Percorso Ecosistema/` e' la vista generata dei cinque passi: 1 Cervello,
 2 Mappa del lavoro, 3 Primo processo, 4 Gestione dell'ecosistema e
 5 Collaudo e consegna. I prodotti opzionali si aggiungono soltanto dopo la
-consegna, dalla cartella separata `Prodotti`. Il Passo 1 monta la stessa
-infrastruttura funzionale per Sal e clienti; contenuti e capacita' opzionali
-restano su misura.
+consegna, dalla cartella separata `Prodotti`. Il Passo 1 monta soltanto la base
+documentale dichiarata da `install_contract.json`: nessun programma, hook,
+skill, impostazione globale, automazione o accesso ad altre app. Questi elementi
+si possono valutare nel Passo 4, separatamente e con scelta visibile della
+persona. Contenuti, stanze e capacita' restano su misura.
 
 Lo standard ha due strati: il telaio universale del Cervello e il metodo
 adattivo con cui si scoprono le stanze del cliente. Installa una sola stanza
@@ -42,36 +44,25 @@ rami autonomi.
 
 ## Cosa fa
 
-Monta in una cartella cliente lo standard minimo LeaderAI:
+Porta la casa del cliente attraverso cinque passi distinti:
 
-- `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
-- **niente git nella casa del cliente** (decisione di Sal, 16/09/2026): non
-  inizializzare la cartella madre come repository, non fare commit. Il backup e'
-  la copia di sicurezza datata delle 07:45 (`BACKUP_CASA.py`), ultime sette copie
-- `AGENTS.md` come mappa comune del Cervello
-- `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
-- `.codex/README.md` se serve Codex
-- `.claude/README.md` se serve Claude Code
-- project hook `Stop` del ramo attivo e guardiano comune in `.agent/hooks/`;
-  i JSON vengono uniti senza cancellare configurazioni del cliente
-- user settings Claude Code (`~/.claude/settings.json`) con
-  `autoMemoryDirectory` sulla memoria canonica della casa, verificate su ogni PC
-- skill `ispettore-ecosistema` e `manutentore-ecosistema` nel percorso dell'agente attivo
-- `memory/MEMORY.md`
-- `AGENT_CHAT.md`
-- `logs/install-log.md`
-- `ecosistema/FONTI.md`
-- `ecosistema/ASSET.md`
-- `ecosistema/PROCESSI.md`
-- `ecosistema/LIMITI.md`
-- `ecosistema/SOGGETTI.md`
-- `ecosistema/STANZA_AGENTS.md`
-- `ecosistema/STANZA_FONTE.md`
-- `ecosystem-check/` con mappa, stato, standard, registro e ruoli separati
+- **Passo 1 — Cervello:** crea solo i nove documenti e lo stato di installazione
+  elencati da `install_contract.json`, fra cui `SOGGETTI.md`; non installa
+  codice e non cambia il computer.
+- **Passo 2 — Mappa del lavoro:** riempie la base documentale con la realta' del
+  proprietario, senza inventare una struttura generica.
+- **Passo 3 — Primo processo:** fa nascere le stanze necessarie dal primo lavoro
+  reale e ne prova il risultato.
+- **Passo 4 — Gestione dell'ecosistema:** valuta, uno per volta, controlli,
+  manutenzione, backup, hook, skill e impostazioni; per ciascuno dichiara effetto,
+  percorso, prova e modo per disattivarlo.
+- **Passo 5 — Collaudo e consegna:** verifica casa, istruzioni, continuita' e
+  responsabilita', poi chiude il percorso guidato.
 
-Questi sono il telaio, i registri comuni e la stanza di controllo. Le stanze
-business del cliente non sono elencate qui: emergono dai suoi processi reali e
-rispettano il contratto adattivo di `MANIFEST.md`.
+La casa del cliente non usa git. Le stanze business non sono predefinite:
+emergono dai processi reali e rispettano il contratto adattivo di
+`MANIFEST.md`. La lista tecnica completa dello standard finale non descrive
+mai il contenuto del Passo 1.
 
 Moduli professionali versionati:
 

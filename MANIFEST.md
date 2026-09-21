@@ -2,7 +2,11 @@
 
 ## Obiettivo
 
-Portare una cartella cliente a uno standard minimo operativo composto da:
+Portare una cartella cliente a uno standard operativo attraverso cinque passi
+distinti. Il primo monta soltanto la base documentale; codice, automazioni e
+impostazioni possono entrare soltanto nel Passo 4, uno alla volta.
+
+Lo standard finale puo' comprendere:
 
 - Cervello: istruzioni, memoria unica, log tecnico e agenti.
 - Ecosistema operativo: fonti reali, processi, limiti e decisioni.
@@ -48,14 +52,19 @@ Deve:
 La repo insegna **come leggere e governare** un Ecosistema. Il nome e il numero
 delle stanze nascono dal lavoro reale del proprietario.
 
-Il nucleo Cervello monta la stessa infrastruttura comune nella casa di Sal e in ogni
-casa cliente: stessi compiti, stessi controlli e stessa prova finale. La casa
-di Sal resta completa della propria attivita'; quella del cliente riceve
-contenuto su misura e nessun dato personale di Sal.
+Il nucleo Cervello del Passo 1 monta la stessa base documentale nella casa di
+Sal e in ogni casa cliente. Controlli tecnici e componenti automatici non fanno
+parte del nucleo iniziale: si valutano nel Passo 4 e diventano standard della
+casa soltanto dopo scelta e prova. La casa di Sal resta completa della propria
+attivita'; quella del cliente riceve contenuto su misura e nessun dato
+personale di Sal. La stessa infrastruttura comune e' quindi un possibile esito
+verificato del percorso completo, non una promessa dell'installazione iniziale.
 
-### Telaio universale
+### Telaio universale — standard finale dopo il percorso
 
-Restano stabili in ogni installazione:
+I seguenti elementi descrivono il possibile standard al termine dei cinque
+passi, non il contenuto del Passo 1. Ogni elemento tecnico del Passo 4 entra
+solo se scelto, installato e provato sulla casa reale:
 
 - una sola cartella madre viva;
 - `AGENTS.md` alla radice come mappa e router comune;
