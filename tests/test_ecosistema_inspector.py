@@ -1869,5 +1869,248 @@ class EcosistemaInspectorTest(unittest.TestCase):
             self.assertIn("guardiano_memoria", hits[0].detail)
 
 
+    # --- Le carte dell'armadio chiamano da sole, o non le apre nessuno.
+    # Il punto 8 del Passo 1-bis lo chiedeva a parole: dal 21/09/2026 lo
+    # verifica un programma, carta per carta.
+
+    def test_una_carta_senza_quando_si_apre_non_passa(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            for card in ecosistema_inspector.ECOSYSTEM_CALLING_CARDS:
+                with self.subTest(card=card):
+                    path = target / "ecosistema" / card
+                    original = path.read_text(encoding="utf-8")
+                    path.write_text(
+                        "\n".join(
+                            line
+                            for line in original.splitlines()
+                            if "Quando si apre" not in line
+                        ),
+                        encoding="utf-8",
+                    )
+                    hits = [
+                        f
+                        for f in self.inspect(target).findings
+                        if f.code == "ECOSYSTEM_CARD_TRIGGER_MISSING"
+                    ]
+                    path.write_text(original, encoding="utf-8")
+                    self.assertEqual(
+                        [f.path for f in hits], [f"ecosistema/{card}"]
+                    )
+                    self.assertEqual(hits[0].severity, "BLOCKER")
+
+    def test_un_quando_si_apre_sepolto_in_fondo_non_chiama_nessuno(self):
+        """Sotto il titolo, non a pagina due: li' l'assistente non la legge."""
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            path = target / "ecosistema" / "LIMITI.md"
+            lines = path.read_text(encoding="utf-8").splitlines()
+            trigger = next(l for l in lines if "Quando si apre" in l)
+            lines.remove(trigger)
+            path.write_text("\n".join(lines + ["", trigger, ""]), encoding="utf-8")
+
+            self.assertIn(
+                "ECOSYSTEM_CARD_TRIGGER_MISSING", self.codes(self.inspect(target))
+            )
+
+    def test_un_quando_si_apre_vuoto_vale_come_assente(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            path = target / "ecosistema" / "SOGGETTI.md"
+            original = path.read_text(encoding="utf-8")
+            trigger = next(
+                l for l in original.splitlines() if "Quando si apre" in l
+            )
+            path.write_text(
+                original.replace(trigger, "**Quando si apre:** quando serve."),
+                encoding="utf-8",
+            )
+
+            self.assertIn(
+                "ECOSYSTEM_CARD_TRIGGER_MISSING", self.codes(self.inspect(target))
+            )
+
+    def test_una_carta_che_nessun_sintomo_nomina_non_passa(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            map_path = target / ecosistema_inspector.ECOSYSTEM_CARD_MAP
+            original = map_path.read_text(encoding="utf-8")
+            map_path.write_text(
+                "\n".join(
+                    line
+                    for line in original.splitlines()
+                    if not (line.startswith("|") and "LIMITI.md" in line)
+                ),
+                encoding="utf-8",
+            )
+
+            hits = [
+                f
+                for f in self.inspect(target).findings
+                if f.code == "ECOSYSTEM_CARD_SYMPTOM_MISSING"
+            ]
+
+            self.assertEqual(len(hits), 1)
+            self.assertEqual(hits[0].severity, "BLOCKER")
+            self.assertIn("LIMITI.md", hits[0].detail)
+            self.assertEqual(
+                hits[0].path, ecosistema_inspector.ECOSYSTEM_CARD_MAP
+            )
+
+    def test_la_tabella_dei_sintomi_cancellata_blocca_da_sola(self):
+        """Senza tabella il guardiano delle carte resta muto: e' un guasto."""
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+            map_path = target / ecosistema_inspector.ECOSYSTEM_CARD_MAP
+            content = map_path.read_text(encoding="utf-8")
+            heading = (
+                "## " + ecosistema_inspector.ECOSYSTEM_CARD_SYMPTOM_HEADING
+            )
+            map_path.write_text(content.split(heading)[0], encoding="utf-8")
+
+            codes = self.codes(self.inspect(target))
+
+            self.assertIn("ECOSYSTEM_CARD_SYMPTOM_TABLE_MISSING", codes)
+            # La tabella non c'e' piu': non si accusano anche le sei carte.
+            self.assertNotIn("ECOSYSTEM_CARD_SYMPTOM_MISSING", codes)
+
+    def test_lelenco_delle_carte_segue_i_calchi_del_prodotto(self):
+        """Una carta nuova col «Quando si apre» non deve restare fuori dal controllo.
+
+        Vale nei due posti dove vivono le carte: l'armadio `ecosistema/` e lo
+        sportello `assistenza/`.
+        """
+        templates = Path(ecosistema_inspector.__file__).resolve().parent / "templates"
+        for cartella, attese in (
+            (templates, ecosistema_inspector.ECOSYSTEM_CALLING_CARDS),
+            (
+                templates / ecosistema_inspector.ASSISTANCE_DIR,
+                ecosistema_inspector.ASSISTANCE_CALLING_CARDS,
+            ),
+        ):
+            with self.subTest(cartella=cartella.name):
+                con_riga = {
+                    path.name
+                    for path in cartella.glob("*.md")
+                    if ecosistema_inspector._card_trigger(
+                        path.read_text(encoding="utf-8")
+                    )
+                }
+                self.assertEqual(con_riga, set(attese))
+
+    def test_le_carte_di_una_casa_appena_installata_chiamano_gia_da_sole(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root)
+
+            findings = [
+                f
+                for f in self.inspect(target).findings
+                if f.code.startswith("ECOSYSTEM_CARD")
+            ]
+
+            self.assertEqual(findings, [])
+
+    # --- P-054, 19/09/2026: sei guardiani su otto erano nella casa del cliente
+    # e nessuno li chiamava. Installato e mai richiamato vuol dire spento.
+
+    def test_un_guardiano_installato_e_mai_richiamato_e_un_guasto(self):
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root, agent="both")
+            settings_path = target / ".claude" / "settings.json"
+            settings = json.loads(settings_path.read_text(encoding="utf-8"))
+            settings["hooks"]["UserPromptSubmit"] = [
+                group
+                for group in settings["hooks"]["UserPromptSubmit"]
+                if "guardiano_carte.py" not in json.dumps(group)
+            ]
+            settings_path.write_text(json.dumps(settings), encoding="utf-8")
+
+            hits = [
+                f
+                for f in self.inspect(target).findings
+                if f.code == "GUARDIAN_INSTALLED_NOT_CALLED"
+            ]
+
+            self.assertEqual(len(hits), 1)
+            self.assertEqual(hits[0].severity, "BLOCKER")
+            self.assertEqual(hits[0].path, ".claude/settings.json")
+            self.assertIn("guardiano_carte.py", hits[0].detail)
+
+    def test_ogni_guardiano_con_evento_e_coperto_dal_controllo(self):
+        """La prova del fratello: non solo le carte, tutta la famiglia."""
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root, agent="codex")
+            hooks_path = target / ".codex" / "hooks.json"
+            original = hooks_path.read_text(encoding="utf-8")
+            hooks_dir = target / ".agent" / "hooks"
+            attesi = [
+                item.name
+                for item in sorted(hooks_dir.iterdir())
+                if item.is_file()
+                and item.suffix in ecosistema_inspector.GUARD_SCRIPT_SUFFIXES
+                and item.name not in ecosistema_inspector.GUARDS_WITHOUT_EVENT
+                and item.name not in ecosistema_inspector.GUARD_OS_VARIANTS
+            ]
+            self.assertGreaterEqual(len(attesi), 8)
+            for name in attesi:
+                with self.subTest(guardiano=name):
+                    hooks = json.loads(original)
+                    hooks["hooks"] = {
+                        event: [
+                            group
+                            for group in groups
+                            if name not in json.dumps(group)
+                        ]
+                        for event, groups in hooks["hooks"].items()
+                    }
+                    hooks_path.write_text(json.dumps(hooks), encoding="utf-8")
+                    hits = [
+                        f
+                        for f in self.inspect(target).findings
+                        if f.code == "GUARDIAN_INSTALLED_NOT_CALLED"
+                    ]
+                    self.assertEqual(
+                        [f.path for f in hits], [".codex/hooks.json"]
+                    )
+                    self.assertIn(name, hits[0].detail)
+            hooks_path.write_text(original, encoding="utf-8")
+
+    def test_una_casa_per_un_solo_assistente_non_viene_accusata(self):
+        """Il ramo dell'assistente non installato non e' un guardiano spento."""
+        for agent in ("claude", "codex"):
+            with self.subTest(agent=agent), tempfile.TemporaryDirectory() as root:
+                target = self.make_target(root, agent=agent)
+                assente = ".codex/hooks.json" if agent == "claude" else ".claude/settings.json"
+                self.assertFalse((target / assente).is_file())
+
+                findings = [
+                    f
+                    for f in self.inspect(target).findings
+                    if f.code == "GUARDIAN_INSTALLED_NOT_CALLED"
+                ]
+
+                self.assertEqual(findings, [])
+
+    def test_la_routine_e_le_librerie_non_sono_guardiani_spenti(self):
+        """Nessun evento chiama la copia di sicurezza: non e' un guasto."""
+        with tempfile.TemporaryDirectory() as root:
+            target = self.make_target(root, agent="both")
+            hooks_dir = target / ".agent" / "hooks"
+            for name in ecosistema_inspector.GUARDS_WITHOUT_EVENT:
+                self.assertTrue((hooks_dir / name).is_file(), name)
+            self.assertTrue(
+                (hooks_dir / "guardiano_stanze_windows.ps1").is_file()
+            )
+
+            findings = [
+                f
+                for f in self.inspect(target).findings
+                if f.code == "GUARDIAN_INSTALLED_NOT_CALLED"
+            ]
+
+            self.assertEqual(findings, [])
+
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,7 @@
 # Soggetti
 
+**Quando si apre:** quando il proprietario nomina una societa', una ditta o un'associazione, e devi sapere se e' un'attivita' vera, chi la amministra e a chi si fattura.
+
 Anagrafe dei soggetti giuridici che il proprietario governa da questa casa:
 societa', ditte, cooperative, associazioni, enti. Una riga per soggetto, anche
 quando il soggetto e' uno solo.

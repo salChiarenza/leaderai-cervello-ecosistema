@@ -465,6 +465,45 @@ aperte. Controlla e ripara nello stesso turno dove puoi.
    ripara la routine delle 07:45 e, se la cartella non e' mai stata scelta,
    chiedila al proprietario.
 
+8. **Le carte della casa chiamano da sole** — `ecosistema/` porta
+   `LIMITI.md`, `COSA_E_ACCESO.md`, `GUARDIANI.md`, `COME_E_MESSA_IN_PIEDI.md`,
+   `PASSAGGI.md` e `SOGGETTI.md`; lo sportello `assistenza/` porta `SINTOMI.md`,
+   `MANUALI.md` e `CONTATTO.md`. Che ci siano non basta: una carta che nessuno
+   apre mai vale quanto una carta che manca. Per ognuna verifica due cose.
+   Primo: subito sotto il titolo porta la riga `**Quando si apre:**` con il
+   momento reale in cui un assistente deve venire li', in parole del
+   proprietario. Secondo: la tabella «Dove si guarda, a seconda di cosa sta
+   succedendo» in `assistenza/SINTOMI.md` la nomina con un
+   sintomo coerente con quella riga (la tabella non nomina se stessa). Riga assente o sintomo mancante: ripara
+   nello stesso turno dal template corrente e rifai la prova. La prova e' una
+   sola: in una sessione nuova nata dalla cartella madre descrivi all'assistente
+   un sintomo della tabella senza nominare nessun file, e guarda quale carta
+   apre. Se ne apre un'altra, o nessuna, il sintomo e' scritto male e si
+   riscrive; non basta che la carta esista.
+   Le due condizioni non restano affidate all'occhio: l'Ispettore le misura
+   carta per carta e segnala `ECOSYSTEM_CARD_TRIGGER_MISSING` quando manca la
+   riga sotto il titolo, `ECOSYSTEM_CARD_SYMPTOM_MISSING` quando la tabella non
+   nomina quella carta e `ECOSYSTEM_CARD_SYMPTOM_TABLE_MISSING` quando la
+   tabella stessa non c'e' piu'. Restano all'agente le due cose che nessun
+   programma vede: che il momento sia scritto nelle parole del proprietario e
+   che il sintomo porti davvero a quella carta nella prova in sessione nuova.
+
+9. **Guardiani installati e mai chiamati** — ogni programma in `.agent/hooks/`
+   deve essere richiamato dalle impostazioni del ramo attivo
+   (`.claude/settings.json`, `.codex/hooks.json`). Presente e mai richiamato
+   vuol dire spento, con la faccia di chi e' acceso: caso reale del 19/09/2026,
+   sei guardiani su otto erano nella casa e nessuno li chiamava lato Codex.
+   L'Ispettore lo segnala come `GUARDIAN_INSTALLED_NOT_CALLED`; restano fuori,
+   perche' nessun evento li chiama, la copia di sicurezza (`backup_casa.py`,
+   routine delle 07:45), le librerie che gli altri guardiani usano al proprio
+   interno (il turno e la politica degli archivi) e la variante Windows del
+   guardiano delle stanze, che viaggia nel `commandWindows` dello stesso
+   handler. Una casa installata per un solo assistente non ha il ramo
+   dell'altro: quel ramo assente non e' un guasto. Riparazione: aggiungere
+   l'handler dal modello corrente (`templates/CLAUDE_SETTINGS.json`,
+   `templates/CODEX_HOOKS.json`) e riprovare il caso reale che deve fermare
+   l'assistente.
+
 ### B. Ramo Codex — solo se Codex e' attivo
 
 1. Verifica `.codex/README.md`: deve dichiarare che Codex usa `AGENTS.md` come
@@ -580,6 +619,10 @@ Il verdetto e' obbligatoriamente `NON PASSA` se, dopo le riparazioni:
 - manca il guardiano comune, manca la configurazione `Stop` del ramo attivo,
   l'handler e' duplicato, non e' autorizzato/visibile in `/hooks` oppure la
   prova bloccante non continua il lavoro;
+- un guardiano presente in `.agent/hooks/` non e' richiamato da nessun evento
+  delle impostazioni del ramo attivo;
+- una carta dell'armadio non porta la riga `Quando si apre` sotto il titolo,
+  oppure la tabella dei sintomi non la nomina;
 - in modalita' `both` manca uno dei due agganci;
 - la prova `Crea la Brand Identity` contiene indizi tecnici, non raggiunge una
   fonte brand reale o scrive l'output fuori dalla responsabilita' proprietaria;
@@ -677,8 +720,11 @@ La fonte business Word puo' essere dichiarata con `@/` dalla cartella madre.
    Il guardiano di chiusura (`guardiano_stanze`) ripete lo stesso controllo a
    ogni `Stop`: una modifica "di scena" ordinata dal proprietario si annulla
    nello stesso turno, senza aspettare un secondo segnale.
-   Tratta `ecosistema/` come armadio comune riservato: confronta ricorsivamente
-   il suo contenuto con i soli percorsi ammessi da `install_contract.json`.
+   Tratta `ecosistema/` come armadio comune riservato e `assistenza/` come
+   sportello riservato: confronta ricorsivamente il loro contenuto con i soli
+   percorsi ammessi da `install_contract.json`. `assistenza/` ha una mappa alla
+   porta ma non e' una stanza: niente fonte operativa, niente manutenzione
+   propria, niente prova di stanza.
    Casa consolidata: una casa nata prima dello standard, con statuti di reparto
    propri e funzionanti, dichiara nella mappa madre `- Contratto di stanza:
    consolidato` e, sotto quella riga, `- Chat di gruppo: \`percorso\``,
@@ -1045,6 +1091,8 @@ Memoria                 OK / RIPARATO / DA FARE - ...
 Memoria Claude unica    OK / RIPARATO / NON PASSA - path + prova /memory...
 Istruzioni globali      OK / RIPARATO / NON PASSA - file utente, casa nominata, gate provato da fuori...
 Soggetti giuridici      OK / RIPARATO / DA CENSIRE - anagrafe ecosistema/SOGGETTI.md, stanze per funzione...
+Carte della casa        OK / RIPARATO / NON PASSA - sei carte, ognuna con «Quando si apre» e il suo sintomo nella tabella...
+Guardiani accesi        OK / RIPARATO / NON PASSA - ogni guardiano di `.agent/hooks/` richiamato dal ramo attivo...
 Fase del percorso       OK / RIPARATO / NON PASSA - riga nella mappa madre, stanze coerenti con il passo...
 Skill/subagent/hook     OK / RIPARATO / DA FARE / NON NECESSARI - ...
 Audit istruzioni        OK / DA COLLAUDARE / PROPOSTA - blocco, confronto, metriche, classificazione...

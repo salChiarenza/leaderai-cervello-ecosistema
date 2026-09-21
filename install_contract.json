@@ -6,54 +6,77 @@
     "both"
   ],
   "client_package": {
-    "schema_version": 1,
+    "schema_version": 2,
     "name": "LeaderAI Cervello - Passo 1",
     "purpose": "Crea una cartella di lavoro documentale. Le funzioni che cambiano il comportamento dell'assistente restano fuori da questo pacchetto.",
+    "state_file": "logs/install-state.json",
     "templates": [
       {
         "source": "passo1/README.md",
         "destination": "README.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/MEMORY.md",
         "destination": "memory/MEMORY.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/AGENT_CHAT.md",
         "destination": "AGENT_CHAT.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/FONTI.md",
         "destination": "ecosistema/FONTI.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client",
+        "managed_blocks": [
+          {
+            "id": "gmail-multiple-accounts",
+            "start": "<!-- leaderai:gmail-multiple-accounts:inizio -->",
+            "end": "<!-- leaderai:gmail-multiple-accounts:fine -->"
+          }
+        ]
       },
       {
         "source": "passo1/ASSET.md",
         "destination": "ecosistema/ASSET.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/PROCESSI.md",
         "destination": "ecosistema/PROCESSI.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/LIMITI.md",
         "destination": "ecosistema/LIMITI.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/SOGGETTI.md",
         "destination": "ecosistema/SOGGETTI.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
       },
       {
         "source": "passo1/INSTALL_LOG.md",
         "destination": "logs/install-log.md",
-        "strategy": "create"
+        "strategy": "create",
+        "ownership": "client"
+      },
+      {
+        "source": "passo1/INSTALL_STATE.json",
+        "destination": "logs/install-state.json",
+        "strategy": "state",
+        "ownership": "leaderai"
       }
     ],
     "external_effects": [],
@@ -609,6 +632,11 @@
         "strategy": "managed_text"
       },
       {
+        "template": "GUARDIANO_CARTE.py",
+        "destination": ".agent/hooks/guardiano_carte.py",
+        "strategy": "managed_text"
+      },
+      {
         "template": "GUARDIANO_DOPPIONI.py",
         "destination": ".agent/hooks/guardiano_doppioni.py",
         "strategy": "managed_text"
@@ -662,6 +690,31 @@
         "template": "PASSAGGI.md",
         "destination": "ecosistema/PASSAGGI.md",
         "strategy": "create"
+      },
+      {
+        "template": "assistenza/AGENTS.md",
+        "destination": "assistenza/AGENTS.md",
+        "strategy": "create"
+      },
+      {
+        "template": "assistenza/CLAUDE.md",
+        "destination": "assistenza/CLAUDE.md",
+        "strategy": "managed_text"
+      },
+      {
+        "template": "assistenza/SINTOMI.md",
+        "destination": "assistenza/SINTOMI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "assistenza/MANUALI.md",
+        "destination": "assistenza/MANUALI.md",
+        "strategy": "create"
+      },
+      {
+        "template": "assistenza/CONTATTO.md",
+        "destination": "assistenza/CONTATTO.md",
+        "strategy": "create"
       }
     ],
     "required": [
@@ -693,6 +746,7 @@
       ".agent/hooks/guardiano_stanze_windows.ps1",
       ".agent/hooks/guardiano_memoria.py",
       ".agent/hooks/guardiano_manuali.py",
+      ".agent/hooks/guardiano_carte.py",
       ".agent/hooks/guardiano_doppioni.py",
       ".agent/hooks/guardiano_dati_verificati.py",
       ".agent/hooks/guardiano_note_agenti.py",
@@ -703,7 +757,12 @@
       "ecosistema/GUARDIANI.md",
       "ecosistema/COSA_E_ACCESO.md",
       "ecosistema/COME_E_MESSA_IN_PIEDI.md",
-      "ecosistema/PASSAGGI.md"
+      "ecosistema/PASSAGGI.md",
+      "assistenza/AGENTS.md",
+      "assistenza/CLAUDE.md",
+      "assistenza/SINTOMI.md",
+      "assistenza/MANUALI.md",
+      "assistenza/CONTATTO.md"
     ],
     "forbidden": [],
     "external_effects": [

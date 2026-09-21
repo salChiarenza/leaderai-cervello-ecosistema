@@ -570,6 +570,19 @@ else
     done < <(find "$ROOT/ecosistema" -mindepth 1 -maxdepth 1 -print0 2>/dev/null)
 fi
 
+# Lo sportello dell'assistenza: cartella dichiarata del telaio, non una stanza
+# business. Porta soltanto la sua mappa e le tre carte che si aprono quando
+# qualcosa si e' fermato.
+if [ -d "$ROOT/assistenza" ]; then
+    while IFS= read -r -d '' item; do
+        name="$(basename -- "$item")"
+        case "$name" in
+            AGENTS.md|CLAUDE.md|SINTOMI.md|MANUALI.md|CONTATTO.md) ;;
+            *) add_issue "$(relative_path "$item") - elemento non ammesso nello sportello assistenza" ;;
+        esac
+    done < <(find "$ROOT/assistenza" -mindepth 1 -maxdepth 1 -print0 2>/dev/null)
+fi
+
 # Fase del percorso guidato (mappa madre, riga "- Fase del percorso: N"):
 # sotto il passo 3 nessuna stanza di lavoro. Riga assente = casa senza percorso
 # guidato dichiarato: nessun blocco.
@@ -579,7 +592,7 @@ PHASE="$(sed 's/\r$//' "$ROOT/AGENTS.md" 2>/dev/null | sed -n 's/^- Fase del per
 while IFS= read -r -d '' item; do
     rel="$(relative_path "$item")"
     case "$rel" in
-        AGENTS.md|CLAUDE.md|AGENT_CHAT.md|ecosistema|memory|logs) continue ;;
+        AGENTS.md|CLAUDE.md|AGENT_CHAT.md|ecosistema|assistenza|memory|logs) continue ;;
     esac
 
     if [ -d "$item" ] && { [ -e "$item/AGENTS.md" ] || [ -e "$item/CLAUDE.md" ]; }; then

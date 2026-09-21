@@ -41,8 +41,8 @@ Cervello + Ecosistema/
 |-- install_contract.json                              # la lista che leggono installazione, Ispettore e collaudo
 ```
 
-> Blocco generato il 17/09/2026 dalle cartelle del prodotto con
-> `leaderai-ecosistema/tools/mappa_sistema.py`. Si rigenera, non si corregge a mano.
+> Blocco generato il 17/09/2026 dalle cartelle del prodotto da uno strumento
+> interno LeaderAI. Si rigenera, non si corregge a mano.
 
 <!-- vista: fine -->
 
@@ -388,21 +388,18 @@ EcosistemaAI-<Cliente>/           Passo 1 (0.7.1): solo documenti, nessuno scrip
 
 ```
 Passo 4, con una scelta visibile della persona: i controlli che scattano da soli
+├─ assistenza/                   lo sportello: si entra col guasto in mano
+│  ├─ SINTOMI.md                 dal sintomo alla carta giusta (la legge il guardiano delle carte)
+│  ├─ MANUALI.md                 le guide ufficiali degli strumenti (la legge il guardiano dei manuali)
+│  └─ CONTATTO.md                l'assistenza LeaderAI, quando hai provato e sei ancora fermo
 ├─ ecosystem-check/              la stanza che controlla la casa
 │  ├─ AGENTS.md, STATO.md        mappa e stato dei controlli
 │  ├─ CONTROLLI.md               registro: ogni cosa nasce col suo controllo
 │  ├─ REGISTRO_CONTROLLI.md      esiti dei giri di controllo
 │  ├─ STANDARD_REPARTO.md        lo standard di una stanza
 │  └─ ruoli/                     orchestratore, struttura, istruzioni, continuita', chiusura, intervento
-├─ .agent/hooks/                 i guardiani
+├─ .agent/hooks/                 i guardiani che arrivano col Passo 4
 │  ├─ guardiano_stanze.sh (+ .ps1)   a fine turno: casa in ordine, niente file fuori posto
-│  ├─ guardiano_memoria.py       la memoria e' una sola ed e' agganciata
-│  ├─ guardiano_doppioni.py      niente copie datate: si corregge il file giusto
-│  ├─ guardiano_dati_verificati.py   niente dati «dovrebbe essere»
-│  ├─ guardiano_note_agenti.py   le note in chat si capiscono anche da chi non c'era
-│  ├─ guardiano_email_operativa.py   email al cliente solo col protocollo
-│  ├─ guardiano_turno.py         lucchetto: un solo blocco per turno
-│  ├─ chat_aggiornamenti.sh      avvisa se un altro agente ha lasciato una nota
 │  ├─ archive_policy.py          archivi protetti: dichiarati, fuori da copie e misure
 │  └─ backup_casa.py             la copia di sicurezza datata (routine 07:45, ultime sette)
 ├─ .claude/                      settings.json (ganci) + skills/: Ispettore, Manutentore, Censitore, Impara dagli errori

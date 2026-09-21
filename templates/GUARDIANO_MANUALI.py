@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Hook UserPromptSubmit — il manuale giusto arriva prima della spiegazione.
 
-La casa tiene i manuali ufficiali degli strumenti in `ecosistema/FONTI.md`,
-sezione «Manuali ufficiali degli strumenti», con accanto quando si apre quale.
+La casa tiene i manuali ufficiali degli strumenti nello sportello:
+`assistenza/MANUALI.md`, con accanto quando si apre quale.
 Averli scritti non basta: la regola «si apre la guida dello strumento di cui si
 parla, non quella che si ha sottomano» va messa davanti all'agente prima che
 scriva, altrimenti resta una frase da ricordare e si risponde a memoria.
@@ -19,7 +19,7 @@ import os
 import re
 import sys
 
-SCAFFALE = os.path.join("ecosistema", "FONTI.md")
+SCAFFALE = os.path.join("assistenza", "MANUALI.md")
 CONTORNO = {"casa", "sviluppatori", "documentazione", "guida", "manuale", "docs", "academy"}
 
 

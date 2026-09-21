@@ -26,6 +26,7 @@ GUARDIANI = {
     "GUARDIANO_EMAIL_OPERATIVA.py": "Email operativa",
     "GUARDIANO_MEMORIA.py": "Memoria",
     "GUARDIANO_MANUALI.py": "Manuali",
+    "GUARDIANO_CARTE.py": "Carte",
     "GUARDIANO_NOTE_AGENTI.py": "Note fra assistenti",
     "GUARDIANO_TURNO.py": "Un blocco per turno",
     "GUARDIANO_STANZE.sh": "Stanze",
@@ -98,6 +99,7 @@ GUARDIANI_CON_EVENTO = {
     "Note in arrivo": "chat_aggiornamenti.sh",
     "Stanze": "guardiano_stanze.sh",
     "Manuali": "guardiano_manuali.py",
+    "Carte": "guardiano_carte.py",
 }
 
 IMPOSTAZIONI = {

@@ -1,5 +1,7 @@
 # Limiti
 
+**Quando si apre:** quando l'assistente non riesce a fare una cosa e non sai se e' un guasto o un confine.
+
 Azioni che richiedono un mandato umano specifico. Il mandato gia' ricevuto
 non si richiede di nuovo per ogni passaggio: vale il contratto comune in
 `ecosystem-check/STANDARD_REPARTO.md`, «Autonomia operativa». Nuovi destinatari,

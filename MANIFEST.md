@@ -384,6 +384,11 @@ Il target passa solo se esistono:
 - `ecosistema/SOGGETTI.md`
 - `ecosistema/STANZA_AGENTS.md`
 - `ecosistema/STANZA_FONTE.md`
+- `assistenza/AGENTS.md`, `assistenza/SINTOMI.md`, `assistenza/MANUALI.md` e
+  `assistenza/CONTATTO.md`: lo sportello della casa. `SINTOMI.md` e' l'unica
+  tabella sintomo -> carta e la leggono l'Ispettore e il guardiano delle carte;
+  `MANUALI.md` e' l'unico scaffale delle guide ufficiali e lo legge il guardiano
+  dei manuali. Non e' una stanza: niente fonte operativa, niente manutenzione propria.
 
 Lo standard statico necessario alla procedura senza esecuzione di codice e'
 esposto in `templates/` e la sua versione e' dichiarata in `VERSION`.

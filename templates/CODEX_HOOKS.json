@@ -36,6 +36,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "python3 \"$PWD/.agent/hooks/guardiano_carte.py\"",
+            "statusMessage": "Cerco la carta giusta della casa"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "python3 \"$PWD/.agent/hooks/guardiano_memoria.py\"",
             "statusMessage": "Richiamo le lezioni gia' imparate"
           }

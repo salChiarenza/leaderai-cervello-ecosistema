@@ -2,6 +2,9 @@
 
 Mappa delle fonti vere del cliente.
 
+Le guide ufficiali degli strumenti non stanno qui: sono una carta dello sportello,
+`assistenza/MANUALI.md`.
+
 ## Fonti trovate
 
 | Fonte | Percorso o accesso vero | Stanza/processo che la usa | Prova e data | Stato |
@@ -16,26 +19,21 @@ Mappa delle fonti vere del cliente.
 - Email/calendario: da collegare solo se autorizzati
 - CRM/gestionale/fatture: da collegare solo se esiste una fonte reale
 
-## Manuali ufficiali degli strumenti
+## Se il proprietario usa piu' Gmail
 
-Qui non si esegue niente: si legge. Ci attinge **qualsiasi** agente della casa prima di
-dire come funziona un comando, una skill, un permesso o un'impostazione, non solo il
-checkup. La regola che tiene in piedi lo scaffale: **si apre la guida dello strumento di
-cui si parla**, non quella che si ha sottomano - rispondere su Codex leggendo la
-documentazione Anthropic e' l'errore da cui nasce questa sezione. La lettura vale per la
-sessione in cui si fa: in una sessione nuova si riapre, perche' queste pagine cambiano.
+Ogni indirizzo Gmail da controllare e' una fonte distinta: una riga per account,
+con uso autorizzato, prova e data. Sul computer il proprietario apre il menu del
+profilo Google in alto a destra, sceglie **Aggiungi un altro account** e completa
+personalmente login e verifica. Poi l'assistente passa a ogni account dal medesimo
+menu, controlla l'indirizzo visibile e prova la lettura di una email scelta dal
+proprietario prima di segnare la fonte `ATTIVA`.
 
-| Manuale | Indirizzo | Quando si apre |
-|---|---|---|
-| **Claude Code** (Anthropic) | https://code.claude.com/docs/en/overview | si lavora con Claude Code o si tocca l'infrastruttura della casa: skill, guardiani, regole, impostazioni |
-| **Codex e ChatGPT Work** (OpenAI) | https://learn.chatgpt.com/docs | si lavora con Codex o con ChatGPT Work: comandi, file di istruzioni, permessi, modo di lavorare |
-| **Codex per il lavoro** (OpenAI Academy) | https://openai.com/it-IT/academy/codex-for-work/ | serve la pratica operativa da confrontare con l'uso reale; non sostituisce le specifiche tecniche |
-
-Un manuale nuovo entra qui solo se e' la pagina del produttore, e' stato aperto il giorno
-in cui lo si aggiunge e porta scritto **quando si apre**: un elenco di indirizzi senza il
-momento in cui usarli fa aprire la pagina sbagliata. Il guardiano dei manuali legge questa
-tabella e mette la guida giusta davanti all'agente: aggiungendo una riga qui, si accende
-da sola.
+Questo accesso permette di passare da una casella all'altra nello stesso browser:
+non crea una casella unica e non autorizza automaticamente API, MCP o altri
+connettori. Ogni connettore va autorizzato e provato separatamente per ciascun
+account. Prima di leggere, preparare o inviare posta, verificare sempre quale
+indirizzo e' selezionato; l'account predefinito puo' comparire al posto di quello
+atteso. Password, codici e sessioni non si scrivono mai qui.
 
 L'Ispettore registra nel report `fonte -> regola -> stato osservato ->
 scostamento -> riparazione -> prova`. Le fonti business del cliente si

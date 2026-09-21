@@ -100,7 +100,9 @@ controlli: quante verificate, quante chiuse, quante bocciate.
    tecniche.
 4. Usa la cartella viva del proprietario come caso reale. Non creare una
    seconda casa e non giudicare dal nome.
-   `ecosistema/` contiene soltanto registri e calchi comuni. Per creare una
+   `ecosistema/` contiene soltanto registri e calchi comuni; `assistenza/`
+   soltanto la sua mappa e le tre carte dello sportello (`SINTOMI.md`,
+   `MANUALI.md`, `CONTATTO.md`) e non e' una stanza. Per creare una
    stanza usa insieme `ecosistema/STANZA_AGENTS.md` e
    `ecosistema/STANZA_FONTE.md`; la stanza vive accanto all'armadio comune.
 5. Esegui l'Ispettore completo descritto in `CHECKUP.md`: censimento,

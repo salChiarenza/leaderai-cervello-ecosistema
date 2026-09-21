@@ -46,7 +46,8 @@ include riparazione, verifica e ripresa, non un nuovo consenso a ogni passaggio.
 
 ## 2. Ripara e semplifica
 
-Prima di riparare leggi `COME_E_MESSA_IN_PIEDI.md`: dice come sono collegate le
+Col guasto in mano si entra da `assistenza/SINTOMI.md`: la riga del sintomo dice
+quale carta si apre. Prima di riparare leggi `COME_E_MESSA_IN_PIEDI.md`: dice come sono collegate le
 quattro parti della casa (istruzioni, memoria, guardiani, attivita' che partono
 da sole), cosa vuol dire «sano» e come si ragiona su un guasto. Non applicare un
 elenco di comandi: capisci a quale parte appartiene il pezzo rotto e riparalo

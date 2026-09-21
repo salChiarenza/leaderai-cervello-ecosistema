@@ -45,7 +45,9 @@ rami autonomi.
 Monta in una cartella cliente lo standard minimo LeaderAI:
 
 - `.gitignore` che esclude `.secrets/`, `*.env`, token, chiavi e credenziali
-- inizializza la cartella madre come repository git (se non lo e' gia')
+- **niente git nella casa del cliente** (decisione di Sal, 16/09/2026): non
+  inizializzare la cartella madre come repository, non fare commit. Il backup e'
+  la copia di sicurezza datata delle 07:45 (`BACKUP_CASA.py`), ultime sette copie
 - `AGENTS.md` come mappa comune del Cervello
 - `CLAUDE.md` come ponte permanente di una riga (`@AGENTS.md`)
 - `.codex/README.md` se serve Codex
@@ -210,9 +212,11 @@ usarla da piu' PC. Evitare comunque `Downloads`, `Desktop` o cartelle temporanee
 come destinazione finale.
 
 Per clienti con piu' computer, backup e seconda postazione si scelgono col
-cliente: GitHub privato (cartella madre = repository git, `push` a comando,
-secondo PC via `clone` + `pull`/`push`) oppure copia/sincronizzazione su
-Drive/OneDrive, secondo cosa il cliente gia' usa. I documenti di business restano
+cliente: la casa viva resta una sola e il backup e' la copia di sicurezza datata
+(`BACKUP_CASA.py`, routine delle 07:45, ultime sette copie), su cartella locale
+oppure sincronizzata su Drive/OneDrive secondo cosa il cliente gia' usa. Git non
+entra nella casa del cliente: GitHub resta soltanto il backup del prodotto, dietro
+le quinte di LeaderAI. I documenti di business restano
 su Drive/OneDrive/server e si leggono via connettore; non entrano nella repo.
 
 ## Uso cliente
@@ -312,15 +316,6 @@ Preflight strutturale opzionale e in sola lettura:
 
 ```bash
 python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
-```
-
-Collaudo diretto del modulo Portafogli:
-
-```bash
-python3 moduli/portafogli/portfolio_engine.py analizza \
-  --input moduli/portafogli/DATI_PORTAFOGLIO_MODELLO.csv \
-  --output /tmp/analisi-portafoglio.csv \
-  --report /tmp/report-calcoli.md
 ```
 
 Installazione manuale:

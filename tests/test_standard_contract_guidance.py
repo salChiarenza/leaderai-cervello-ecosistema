@@ -16,7 +16,7 @@ class StandardContractGuidanceTest(unittest.TestCase):
             ROOT / "README.md",
             ROOT / "MANIFEST.md",
             ROOT / "CHECKUP.md",
-            ROOT / "templates" / "FONTI.md",
+            ROOT / "templates" / "assistenza" / "MANUALI.md",
             ROOT / "templates" / "ISPETTORE_SKILL.md",
         ]
 

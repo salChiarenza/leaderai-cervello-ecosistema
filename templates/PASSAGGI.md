@@ -1,5 +1,7 @@
 # Passaggi fatti in questa casa
 
+**Quando si apre:** mentre fai qualcosa su questa casa, per lasciarne la riga, e quando devi sapere chi ha toccato un pezzo e come si controlla che regga.
+
 > Il foglio dei passaggi. Ogni cosa che qualcuno fa su questa casa lascia una
 > riga qui: chi l'ha fatta, quando, cosa ha toccato, come si controlla.
 > Serve all'Ispettore per verificare, non al proprietario per leggere.

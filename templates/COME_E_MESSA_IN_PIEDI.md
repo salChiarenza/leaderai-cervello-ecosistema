@@ -1,5 +1,7 @@
 # Come e' messa in piedi questa casa
 
+**Quando si apre:** quando una cosa della casa non funziona e prima di ripararla devi capire com'e' montata e a quale pezzo appartiene il guasto.
+
 > Pagina per l'assistente, non per il proprietario. Serve a capire dove guardare
 > quando una cosa smette di funzionare. Non e' un elenco di comandi da ripetere:
 > e' la mappa dei collegamenti, su cui si ragiona.
@@ -40,6 +42,15 @@
 - La copia di sicurezza dell'ultimo giorno esiste nella cartella scelta.
 
 Uno solo di questi che non torna e' un guasto, anche se non se ne lamenta nessuno.
+
+## Quale carta apre il tuo guasto
+
+Questa pagina dice com'e' montata la casa. Quale carta si apre a seconda di cosa
+sta succedendo lo dice lo sportello: `assistenza/SINTOMI.md`, che lega ogni
+sintomo alla sua carta. Se hai provato e sei ancora fermo, `assistenza/CONTATTO.md`.
+
+Riparato il guasto, la lezione si scrive con «impara dagli errori»: la stessa cosa
+non deve ricapitare una seconda volta.
 
 ## Come si ragiona su un guasto
 

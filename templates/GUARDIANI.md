@@ -1,5 +1,7 @@
 # I guardiani della casa
 
+**Quando si apre:** quando l'assistente si e' fermato e non sai chi l'ha fermato, o quando una cosa che doveva essere impedita e' passata lo stesso.
+
 > Un guardiano e' una regola che scatta da sola nel momento in cui stai per
 > sbagliare. Non e' un promemoria: una regola scritta e basta viene ignorata.
 >
@@ -36,7 +38,8 @@
 | Stanze | chiudere un lavoro lasciando file, cartelle o copie fuori dal posto che gli spetta | alla chiusura del turno |
 | Copia di sicurezza | perdere la casa: ogni giorno ne resta una copia datata fuori dal computer | una volta al giorno |
 | Note in arrivo | lavorare senza sapere cosa ha appena fatto l'altro assistente | a ogni richiesta, se la chat e' cambiata da poco |
-| Manuali | spiegare come funziona uno strumento andando a memoria, o aprire la guida sbagliata (rispondere su Codex leggendo la documentazione di Claude) | quando la richiesta nomina uno strumento che ha il suo manuale nelle fonti |
+| Manuali | spiegare come funziona uno strumento andando a memoria, o aprire la guida sbagliata (rispondere su Codex leggendo la documentazione di Claude) | quando la richiesta nomina uno strumento che ha il suo manuale in `assistenza/MANUALI.md` |
+| Carte | lasciare chiuse le carte della casa mentre il proprietario sta raccontando proprio il sintomo che una di loro risolve, invece di aprire la riga di `assistenza/SINTOMI.md` | a ogni richiesta del proprietario che descrive un sintomo |
 | Archivi protetti | toccare archivi e segreti scambiandoli per disordine da sistemare | quando si valuta o si pulisce una cartella |
 
 ## Regola di manutenzione

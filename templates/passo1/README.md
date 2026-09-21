@@ -4,7 +4,7 @@ Questa e' la cartella di lavoro principale di {{client_name}}.
 
 - Versione LeaderAI: `{{version}}`
 - Creata il: `{{date}}`
-- Stato: Passo 1 completato; prossimo passo, mappa del lavoro
+- Stato: vedi `logs/install-state.json`; soltanto `COMPLETED` chiude il Passo 1
 
 ## Contenuto
 
@@ -19,3 +19,20 @@ Questa e' la cartella di lavoro principale di {{client_name}}.
 
 I documenti iniziano vuoti: i fatti entrano soltanto quando vengono confermati
 dal proprietario o verificati nella loro fonte.
+
+## Installazione e aggiornamento
+
+Il pacchetto scaricato e' il riferimento, non va copiato sopra questa cartella.
+L'assistente legge `install_contract.json`, poi lavora nella cartella viva:
+
+1. apre `logs/install-state.json`; se un lavoro era rimasto a meta', riparte dal
+   primo elemento non completato;
+2. conserva ogni file gia' compilato dal proprietario;
+3. crea soltanto i file mancanti dichiarati nel contratto;
+4. aggiorna soltanto i blocchi delimitati `leaderai:...:inizio/fine`;
+5. controlla che tutti i file richiesti esistano;
+6. soltanto alla fine scrive `VERSION` con il valore di `PACKAGE_VERSION` e
+   porta lo stato a `COMPLETED`.
+
+Se la sessione viene chiusa, una sessione nuova legge lo stato e continua:
+non ricomincia e non crea una seconda casa.

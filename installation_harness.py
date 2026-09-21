@@ -42,6 +42,7 @@ STANDARD_FILES = (
     "templates/AGENTS.md",
     "templates/GUARDIANO_MEMORIA.py",
     "templates/GUARDIANO_MANUALI.py",
+    "templates/GUARDIANO_CARTE.py",
     "templates/IMPARA_DAGLI_ERRORI_SKILL.md",
     "templates/GUARDIANO_EMAIL_OPERATIVA.py",
     "templates/GUARDIANO_DOPPIONI.py",
@@ -77,6 +78,11 @@ STANDARD_FILES = (
     "templates/COSA_E_ACCESO.md",
     "templates/COME_E_MESSA_IN_PIEDI.md",
     "templates/PASSAGGI.md",
+    "templates/assistenza/AGENTS.md",
+    "templates/assistenza/CLAUDE.md",
+    "templates/assistenza/SINTOMI.md",
+    "templates/assistenza/MANUALI.md",
+    "templates/assistenza/CONTATTO.md",
     "templates/ecosystem-check/AGENTS.md",
     "templates/ecosystem-check/CLAUDE.md",
     "templates/ecosystem-check/STATO.md",
@@ -160,8 +166,9 @@ Esegui il nucleo deterministico della procedura manuale:
   creati nel target, prima di personalizzarli;
 - non usare Python, `leaderai_setup.py`, clone, rete o codice scaricato;
 - crea e personalizza soltanto il telaio comune e le superfici della modalita';
-- inizializza Git locale e crea il primo commit con identita' solo per quel
-  comando se la configurazione Git globale manca;
+- non inizializzare git nella casa e non fare commit: la casa del cliente non e'
+  un registro di modifiche (decisione di Sal, 16/09/2026); il backup e' la copia
+  di sicurezza datata;
 - non inventare stanze, fonti, asset, connettori o percorsi business;
 - lascia le prove che richiedono account, browser, impostazioni utente o dati
   reali come `DA COLLAUDARE` o `DA COLLEGARE`, senza fermare il telaio;
@@ -170,7 +177,6 @@ Esegui il nucleo deterministico della procedura manuale:
   stato `DA COLLAUDARE` o `DA COLLEGARE`;
 - registra nello stesso evento del log standard, versione, modalita', prove
   svolte e limiti; la conferma finale resta nel messaggio conclusivo;
-- il messaggio del primo commit contiene esattamente `installazione iniziale`.
 
 La fotografia `standard-snapshot/` e' intoccabile. Non copiare dentro il target
 la guida, il manifest, VERSION, template, script o codice della repo. Al termine

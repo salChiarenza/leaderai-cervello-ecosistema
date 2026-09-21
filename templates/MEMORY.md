@@ -22,6 +22,7 @@ Indice della memoria condivisa del Cervello.
 - `logs/install-log.md` - versione applicata e soli cambi
   tecnici/strutturali.
 - `ecosistema/FONTI.md` - dove vivono le fonti vere del cliente.
+- `assistenza/` - lo sportello: dal sintomo alla carta, le guide degli strumenti, chi si chiama se resti fermo.
 - `ecosistema/ASSET.md` - capacita' e asset collegati alle stanze che servono.
 - `ecosistema/PROCESSI.md` - processi osservati o candidati.
 - `ecosistema/LIMITI.md` - azioni che richiedono conferma umana.

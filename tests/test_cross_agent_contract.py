@@ -124,10 +124,14 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertLess(len(email.splitlines()), 80)
         self.assertIn("Ciao [NOME]", email)
         self.assertIn("01 - Cervello - installazione e aggiornamento.md", email)
+        # 21/09/2026, caso Simona Vari: il link al singolo documento non mostra
+        # la cartella che lo contiene, e la guida rimanda al pacchetto che sta
+        # li' accanto. La prima email porta la CARTELLA, mai il solo documento.
         self.assertIn(
-            "https://drive.google.com/file/d/19l_f_VViewXaVVhq3in9KBnnqkoRyh7E/view",
+            "https://drive.google.com/drive/folders/1SzRA4SCSyXw_PnHWP7ouGeNzUv6Wcl1L",
             email,
         )
+        self.assertNotIn("drive.google.com/file/d/", email)
         self.assertIn("mostra a sal", email.lower())
         self.assertIn("autorizzazione esplicita", email)
         self.assertIn("controlla gmail inviati", email.lower())
@@ -307,7 +311,7 @@ class CrossAgentContractTest(unittest.TestCase):
         self.assertIn("sal@salchiarenza.com", email)
         self.assertIn("destinatario", email)
         self.assertIn("versione corrente", " ".join(email.split()))
-        self.assertIn("link si apra", " ".join(email.split()))
+        self.assertIn("cartella si apra", " ".join(email.split()))
         self.assertNotIn("ID missione", email)
         self.assertNotIn("%USERPROFILE%", email)
 

@@ -61,6 +61,11 @@ write("ecosistema/GUARDIANI.md", render("GUARDIANI.md"))
 write("ecosistema/COSA_E_ACCESO.md", render("COSA_E_ACCESO.md"))
 write("ecosistema/COME_E_MESSA_IN_PIEDI.md", render("COME_E_MESSA_IN_PIEDI.md"))
 write("ecosistema/PASSAGGI.md", render("PASSAGGI.md"))
+write("assistenza/AGENTS.md", render("assistenza/AGENTS.md"))
+write("assistenza/CLAUDE.md", render("assistenza/CLAUDE.md"))
+write("assistenza/SINTOMI.md", render("assistenza/SINTOMI.md"))
+write("assistenza/MANUALI.md", render("assistenza/MANUALI.md"))
+write("assistenza/CONTATTO.md", render("assistenza/CONTATTO.md"))
 write("ecosystem-check/AGENTS.md", render("ecosystem-check/AGENTS.md"))
 write("ecosystem-check/CLAUDE.md", render("ecosystem-check/CLAUDE.md"))
 write("ecosystem-check/STATO.md", render("ecosystem-check/STATO.md"))
@@ -104,6 +109,7 @@ write(".agent/hooks/guardiano_stanze.sh", render("GUARDIANO_STANZE.sh"))
 write(".agent/hooks/archive_policy.py", render("ARCHIVE_POLICY.py"))
 write(".agent/hooks/guardiano_memoria.py", render("GUARDIANO_MEMORIA.py"))
 write(".agent/hooks/guardiano_manuali.py", render("GUARDIANO_MANUALI.py"))
+write(".agent/hooks/guardiano_carte.py", render("GUARDIANO_CARTE.py"))
 if mode in ("claude", "both"):
     write(".claude/skills/impara-dagli-errori/SKILL.md", render("IMPARA_DAGLI_ERRORI_SKILL.md"))
 if mode in ("codex", "both"):
@@ -181,7 +187,11 @@ class InstallationHarnessTest(unittest.TestCase):
         self.assertEqual(install.count("END_NUCLEO_INSTALLAZIONE"), 1)
         self.assertIn("START_NUCLEO_INSTALLAZIONE", prompt)
         self.assertIn("END_NUCLEO_INSTALLAZIONE", prompt)
-        self.assertIn("esattamente `installazione iniziale`", prompt)
+        # 21/09/2026: la casa del cliente non e' un registro di modifiche
+        # (decisione di Sal del 16/09). Il collaudo non deve piu' chiedere git:
+        # deve vietarlo, altrimenti la prova protegge proprio cio' che e' vietato.
+        self.assertIn("non inizializzare git nella casa", prompt)
+        self.assertNotIn("primo commit", prompt)
         self.assertIn("la conferma finale resta nel messaggio conclusivo", prompt)
         self.assertNotIn("Leggi integralmente", prompt)
         core = install.split("<!-- START_NUCLEO_INSTALLAZIONE -->", 1)[1].split(
@@ -496,6 +506,7 @@ class InstallationHarnessTest(unittest.TestCase):
                     "templates/ARCHIVE_POLICY.py",
                     "templates/GUARDIANO_MEMORIA.py",
                     "templates/GUARDIANO_MANUALI.py",
+                    "templates/GUARDIANO_CARTE.py",
                     "templates/GUARDIANO_EMAIL_OPERATIVA.py",
                     "templates/GUARDIANO_DOPPIONI.py",
                     "templates/GUARDIANO_DATI_VERIFICATI.py",

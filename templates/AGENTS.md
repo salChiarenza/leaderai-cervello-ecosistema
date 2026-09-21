@@ -37,6 +37,10 @@ memorie attive sono un blocco, non due livelli complementari.
 `PROCESSI.md`, `LIMITI.md`, `SOGGETTI.md`, `STANZA_AGENTS.md`, `STANZA_FONTE.md`,
 `GUARDIANI.md`, `COSA_E_ACCESO.md`, `COME_E_MESSA_IN_PIEDI.md` e `PASSAGGI.md`.
 - Le stanze business vivono accanto a `ecosistema/`, mai dentro di esso.
+- `assistenza/` e' lo sportello della casa, accanto all'armadio e non dentro le
+stanze: contiene soltanto la sua mappa e le tre carte `SINTOMI.md` (tabella sintomo ->
+carta), `MANUALI.md` (guide ufficiali degli strumenti) e `CONTATTO.md` (assistenza
+LeaderAI). Non e' una stanza business e non tiene stato.
 - Il guardiano delle stanze gira a ogni chiusura: file sciolti, cartelle senza
 contratto, copie, mappe gonfie o materiali business dentro `ecosistema/` fanno continuare l'agente
 una volta, senza ciclo infinito. Codex lo autorizza da `/hooks`; Claude lo mostra li' con origine
@@ -69,6 +73,9 @@ senza richiesta esplicita LeaderAI; il ponte `CLAUDE.md` resta comunque.
 Code, `~/.codex/AGENTS.md` per Codex) portano il blocco `LEADERAI-CASA` con il percorso di questa
 cartella: e' cio' che fa rispondere `FUORI DAL CERVELLO` a una sessione nata altrove. L'Ispettore
 lo verifica e lo ripara.
+- **Se qualcosa non va**, prima di fermarti o di dire «non funziona»: `assistenza/`.
+`SINTOMI.md` porta dal sintomo alla carta giusta, `MANUALI.md` alla guida dello strumento,
+`CONTATTO.md` a chi scrivere se resti fermo lo stesso.
 - Se serve una decisione umana vera, scriverla nel file proprietario come `DECISIONE`.
 - Tutti i ruoli applicano `ecosystem-check/STANDARD_REPARTO.md`, Autonomia operativa:
 un incarico gia' autorizzato comprende esecuzione, riparazione, verifica e ripresa; il titolare
@@ -313,8 +320,9 @@ modo visibile: vietato usare una seconda copia hardcoded che diverge in silenzio
 ## Chi lavora in questa casa
 
 Il Manutentore (ogni mattina) e l'Ispettore (una volta a settimana) sono due capacita'
-dell'assistente: il manuale di ciascuno si apre col suo nome, prima di agire. Come e' collegata la
-casa e come si ragiona su un guasto: `ecosistema/COME_E_MESSA_IN_PIEDI.md`; cosa parte da solo e
+dell'assistente: il manuale di ciascuno si apre col suo nome, prima di agire. Col guasto in mano si
+entra da `assistenza/SINTOMI.md`; come e' collegata la casa e come si ragiona su un guasto:
+`ecosistema/COME_E_MESSA_IN_PIEDI.md`; cosa parte da solo e
 cosa viene impedito: `ecosistema/COSA_E_ACCESO.md` e `ecosistema/GUARDIANI.md`. Il lavoro aperto
 fra i due sta in `ecosystem-check/STATO.md`, sezione `Lavori aperti`. Comportamento sbagliato: si
 corregge il suo manuale, non il messaggio della volta.

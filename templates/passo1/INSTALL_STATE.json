@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "package_version": "{{version}}",
+  "previous_version": null,
+  "mode": null,
+  "status": "NOT_STARTED",
+  "next_step": "inspect_target",
+  "completed": [],
+  "pending": [],
+  "conflicts": []
+}

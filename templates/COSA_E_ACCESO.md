@@ -1,5 +1,7 @@
 # Cosa e' acceso in questa casa
 
+**Quando si apre:** quando qualcosa doveva partire da solo e non e' partito, o e' partito e non doveva.
+
 > Questa pagina la tiene aggiornata il Manutentore, ogni mattina. Se una cosa
 > parte da sola nella tua casa, sta scritta qui. Se non e' qui, non parte.
 > Ultimo aggiornamento: {{date}}

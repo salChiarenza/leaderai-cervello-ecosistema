@@ -56,6 +56,35 @@ STANDARD_ECOSYSTEM_PATHS = {
     if Path(rule.destination).parts[0] == "ecosistema"
 }
 
+# Le carte che devono chiamare da sole (CHECKUP.md, Passo 1-bis, sezione A,
+# punto 8). Che il file esista non basta: sotto il titolo dice in quale momento
+# si apre, e la tabella dei sintomi lo nomina. Vivono in due posti: l'armadio
+# `ecosistema/` per le carte che descrivono la casa, lo sportello `assistenza/`
+# per quelle che si aprono col guasto in mano. FONTI, ASSET e PROCESSI restano
+# fuori: sono registri che si compilano, non carte di pronto intervento.
+ECOSYSTEM_CALLING_CARDS = (
+    "LIMITI.md",
+    "COSA_E_ACCESO.md",
+    "GUARDIANI.md",
+    "COME_E_MESSA_IN_PIEDI.md",
+    "PASSAGGI.md",
+    "SOGGETTI.md",
+)
+ASSISTANCE_DIR = "assistenza"
+ASSISTANCE_CALLING_CARDS = (
+    "SINTOMI.md",
+    "MANUALI.md",
+    "CONTATTO.md",
+)
+# La tabella sintomo -> carta vive nello sportello: la leggono l'Ispettore e il
+# guardiano delle carte, e non ne esiste una seconda copia.
+ECOSYSTEM_CARD_MAP = ASSISTANCE_DIR + "/SINTOMI.md"
+ECOSYSTEM_CARD_SYMPTOM_HEADING = "Dove si guarda, a seconda di cosa sta succedendo"
+ECOSYSTEM_CARD_TRIGGER = "quando si apre:"
+# Il momento deve essere raccontato, non accennato: una riga piu' corta di
+# questo e' un segnaposto, non un sintomo riconoscibile.
+ECOSYSTEM_CARD_TRIGGER_MIN = 20
+
 ROOM_TEMPLATE_RULES = {
     rule.destination: rule.template
     for rule in install_contract.template_rules(CONTRACT, "both")
@@ -317,6 +346,83 @@ def _hidden_from_owner(path: Path) -> bool:
     return False
 
 
+# Caso vero P-054 del 19/09/2026: sei guardiani su otto erano nella casa e
+# nessuno li chiamava. Presenti e mai richiamati vuol dire spenti, con la
+# faccia di chi e' acceso.
+# Questi tre non li chiama nessun evento dell'assistente, e va bene cosi':
+GUARDS_WITHOUT_EVENT = {
+    "backup_casa.py",  # routine giornaliera delle 07:45, non un hook
+    "guardiano_turno.py",  # libreria: la usano gli altri guardiani
+    "archive_policy.py",  # libreria: la usano gli altri guardiani
+}
+# La variante per sistema operativo non ha un handler suo: la chiama lo stesso
+# handler del guardiano principale, col campo commandWindows. Chi risponde per
+# lei e' quel guardiano, gia' controllato qui e in GUARDIAN_WINDOWS_COMMAND_MISSING.
+GUARD_OS_VARIANTS = {"guardiano_stanze_windows.ps1": "guardiano_stanze.sh"}
+GUARD_SCRIPT_SUFFIXES = {".py", ".sh", ".ps1"}
+
+
+def _hook_commands(config: dict) -> str:
+    """Tutto cio' che quelle impostazioni eseguono davvero, in un testo solo."""
+    hook_map = config.get("hooks")
+    if not isinstance(hook_map, dict):
+        return ""
+    commands: list[str] = []
+    for groups in hook_map.values():
+        if not isinstance(groups, list):
+            continue
+        for group in groups:
+            handlers = group.get("hooks", []) if isinstance(group, dict) else []
+            if not isinstance(handlers, list):
+                continue
+            for handler in handlers:
+                if not isinstance(handler, dict):
+                    continue
+                for key in ("command", "commandWindows"):
+                    value = handler.get(key)
+                    if isinstance(value, str):
+                        commands.append(value)
+    return " ".join(commands)
+
+
+def _guards_never_called_findings(
+    target: Path, configs: list[tuple[str, str, str]]
+) -> list[Finding]:
+    """Guardiano installato che nessun evento chiama: guasto, non dettaglio."""
+    hooks_dir = target / ".agent" / "hooks"
+    if not configs or not hooks_dir.is_dir():
+        return []
+    findings: list[Finding] = []
+    for script in sorted(hooks_dir.iterdir(), key=lambda item: item.name):
+        name = script.name
+        if not script.is_file() or name.startswith("."):
+            continue
+        if script.suffix not in GUARD_SCRIPT_SUFFIXES:
+            continue
+        if name in GUARDS_WITHOUT_EVENT or name in GUARD_OS_VARIANTS:
+            continue
+        # Il comando deve nominare proprio quel file: `memoria.py` non e'
+        # chiamato perche' esiste `guardiano_memoria.py`.
+        chiamato = re.compile(r"[/\\]" + re.escape(name) + r"(?![\w.-])")
+        for relative, commands, template_name in configs:
+            if chiamato.search(commands):
+                continue
+            findings.append(
+                Finding(
+                    "GUARDIAN_INSTALLED_NOT_CALLED",
+                    "BLOCKER",
+                    relative,
+                    f"Il guardiano `.agent/hooks/{name}` e' installato nella "
+                    "casa ma nessun evento lo richiama: sembra acceso e resta "
+                    "fermo. Aggiungere il suo handler in "
+                    f"`{relative}` dal modello corrente "
+                    f"`templates/{template_name}`, poi provare il caso reale "
+                    "che deve fermare l'assistente.",
+                )
+            )
+    return findings
+
+
 def _expected_guard_handler(template_name: str) -> dict:
     template = json.loads(
         (ROOT / "templates" / template_name).read_text(encoding="utf-8")
@@ -362,6 +468,9 @@ def _guardiano_findings(target: Path, mode: str) -> list[Finding]:
             )
 
     configs: list[tuple[str, bool, str]] = []
+    # Le impostazioni davvero presenti: una casa installata per un solo
+    # assistente non ha il ramo dell'altro, e quel ramo non e' un guasto.
+    reachable: list[tuple[str, str, str]] = []
     if mode in {"codex", "both"}:
         configs.append((".codex/hooks.json", True, "CODEX_HOOKS.json"))
     if mode in {"claude", "both"}:
@@ -385,6 +494,7 @@ def _guardiano_findings(target: Path, mode: str) -> list[Finding]:
                 )
             )
             continue
+        reachable.append((relative, _hook_commands(config), template_name))
         if relative.startswith(".claude/") and config.get("disableAllHooks") is True:
             findings.append(
                 Finding(
@@ -456,6 +566,7 @@ def _guardiano_findings(target: Path, mode: str) -> list[Finding]:
                     "Il ramo Codex non contiene il comando Windows del guardiano.",
                 )
             )
+    findings.extend(_guards_never_called_findings(target, reachable))
     return findings
 
 
@@ -1620,6 +1731,124 @@ def _markdown_headings(content: str, level: int = 2) -> tuple[str, ...]:
     )
 
 
+def _card_trigger(content: str) -> str:
+    """Il momento dichiarato dalla riga «Quando si apre:» sotto il titolo.
+
+    Sotto il titolo e prima della prima sezione: li' l'assistente la legge
+    senza scorrere. Piu' in basso la riga esiste ma non chiama nessuno.
+    """
+    head = re.split(r"(?m)^[ ]{0,3}##\s", _active_markdown(content), maxsplit=1)[0]
+    for line in head.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        normalized = _normalized(stripped.replace("**", "").lstrip("> ").strip())
+        if normalized.startswith(ECOSYSTEM_CARD_TRIGGER):
+            return stripped.replace("**", "").split(":", 1)[1].strip()
+    return ""
+
+
+def _card_symptom_targets(map_content: str) -> str:
+    """La colonna «Dove vai» della tabella dei sintomi, in un testo solo."""
+    section = _markdown_section(
+        _active_markdown(map_content), ECOSYSTEM_CARD_SYMPTOM_HEADING
+    )
+    if not section:
+        return ""
+    destinations: list[str] = []
+    for line in section.splitlines():
+        cells = _table_cells(line)
+        if len(cells) != 2 or set(cells[1]) <= set("- :"):
+            continue
+        destinations.append(cells[1])
+    return " ".join(destinations)
+
+
+def _card_template(folder: str, card: str) -> str:
+    """Il calco da cui si riscrive la carta: `templates/<card>` per l'armadio,
+    `templates/assistenza/<card>` per lo sportello."""
+    return card if folder == "ecosistema" else f"{folder}/{card}"
+
+
+def _ecosystem_card_findings(target: Path) -> list[Finding]:
+    """Le carte della casa chiamano da sole, o non le apre nessuno.
+
+    Il punto 8 del Passo 1-bis lo chiede a parole dal 21/09/2026: qui lo
+    verifica un programma, perche' una carta che nessuno apre mai vale quanto
+    una carta che manca. Vale per l'armadio `ecosistema/` e per lo sportello
+    `assistenza/`, che tiene la tabella dei sintomi.
+    """
+    registry = target / "ecosistema"
+    if registry.is_symlink() or not registry.is_dir():
+        return []
+
+    findings: list[Finding] = []
+    map_path = target / ECOSYSTEM_CARD_MAP
+    map_content = ""
+    if map_path.is_file() and not map_path.is_symlink():
+        try:
+            map_content = map_path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            map_content = ""
+    symptom_targets = _card_symptom_targets(map_content)
+    map_rel = ECOSYSTEM_CARD_MAP
+    if map_content and not symptom_targets:
+        findings.append(
+            Finding(
+                "ECOSYSTEM_CARD_SYMPTOM_TABLE_MISSING",
+                "BLOCKER",
+                map_rel,
+                "Manca la tabella «" + ECOSYSTEM_CARD_SYMPTOM_HEADING + "»: "
+                "senza quella tabella nessuna carta viene chiamata da un "
+                "sintomo e il guardiano delle carte resta muto. Ripristinarla "
+                "dal template corrente `templates/" + ECOSYSTEM_CARD_MAP + "`.",
+            )
+        )
+
+    cards = [("ecosistema", card) for card in ECOSYSTEM_CALLING_CARDS]
+    cards += [(ASSISTANCE_DIR, card) for card in ASSISTANCE_CALLING_CARDS]
+    for folder, card in cards:
+        card_path = target / folder / card
+        card_rel = f"{folder}/{card}"
+        if not card_path.is_file() or card_path.is_symlink():
+            # L'assenza e la sostituzione con un collegamento le dichiarano
+            # gia' i controlli dei file obbligatori.
+            continue
+        try:
+            content = card_path.read_text(encoding="utf-8")
+        except (OSError, UnicodeError):
+            continue
+        trigger = _card_trigger(content)
+        if len(_normalized(trigger)) < ECOSYSTEM_CARD_TRIGGER_MIN:
+            findings.append(
+                Finding(
+                    "ECOSYSTEM_CARD_TRIGGER_MISSING",
+                    "BLOCKER",
+                    card_rel,
+                    "La carta non dice quando si apre: sotto il titolo manca la "
+                    "riga `**Quando si apre:**` con il momento reale in cui "
+                    "l'assistente deve venire qui. Riscriverla dal template "
+                    "corrente `templates/" + _card_template(folder, card)
+                    + "` con le parole del proprietario.",
+                )
+            )
+        # La tabella non deve nominare se stessa: e' l'ingresso, non una meta.
+        if symptom_targets and card_rel != map_rel and card not in symptom_targets:
+            findings.append(
+                Finding(
+                    "ECOSYSTEM_CARD_SYMPTOM_MISSING",
+                    "BLOCKER",
+                    map_rel,
+                    f"La tabella dei sintomi non nomina `{card_rel}`: la carta "
+                    "esiste ma nessun sintomo ci porta. Aggiungere la riga con "
+                    "il sintomo coerente con il suo «Quando si apre», poi "
+                    "raccontare quel sintomo in una sessione nuova e guardare "
+                    "quale carta apre l'assistente.",
+                )
+            )
+    return findings
+
+
 def _ecosystem_registry_findings(target: Path) -> list[Finding]:
     registry = target / "ecosistema"
     if registry.is_symlink():
@@ -2368,6 +2597,7 @@ def inspect_ecosystem(
     if requested_mode is not None:
         findings.extend(_guardiano_findings(target, requested_mode))
     findings.extend(_ecosystem_registry_findings(target))
+    findings.extend(_ecosystem_card_findings(target))
     if requested_mode is not None:
         for rel in install_contract.forbidden_paths(CONTRACT, requested_mode):
             path = target / rel

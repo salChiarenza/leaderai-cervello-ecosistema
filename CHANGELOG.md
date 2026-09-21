@@ -1,5 +1,87 @@
 # Changelog
 
+## 0.7.12 - 21/09/2026
+
+- **Stesso pacchetto per installare, aggiornare o riprendere.** L'assistente
+  scarica sempre il pacchetto corrente come riferimento, riconosce la casa
+  reale e non lo copia sopra ai documenti del cliente.
+- **Windows non crea piu' `Cervello/Cervello`.** I file dello ZIP sono alla
+  radice: `Estrai tutto` crea un solo involucro. I vecchi pacchetti con il
+  livello interno restano riconoscibili.
+- **La versione viene dichiarata soltanto alla fine.** Il pacchetto porta
+  `PACKAGE_VERSION`; `VERSION` nasce o cambia dopo il controllo dei file
+  richiesti e dei contenuti conservati. Una casa vecchia non puo' sembrare
+  aggiornata solo perche' le e' stato scritto il numero nuovo.
+- **Una sessione interrotta riparte.** `logs/install-state.json` viene scritto
+  prima delle modifiche e aggiornato dopo ogni file. Fino a `COMPLETED`, il
+  giro successivo continua dal lavoro rimasto e non apre una seconda casa.
+- **I documenti del cliente restano suoi.** I file esistenti non vengono
+  sostituiti; il contratto permette di aggiornare soltanto blocchi LeaderAI
+  delimitati. Il primo blocco gestito porta nel censimento il passaggio per
+  aggiungere e provare separatamente piu' Gmail.
+- Prova deterministica del pacchetto su installazione nuova, casa 0.7.10,
+  interruzione/ripresa, vecchio ZIP annidato e contenuti cliente preservati.
+
+## 0.7.11 - 21/09/2026
+
+- **Le carte dell'armadio non aspettano piu' che qualcuno si ricordi di
+  aprirle.** Nella casa del cliente stavano nove carte. Solo tre avevano
+  qualcuno che le metteva davanti all'assistente al momento giusto: manuali,
+  memoria, note fra assistenti. Le altre sei - limiti, cosa e' acceso,
+  guardiani, come e' messa in piedi, passaggi, soggetti - esistevano, il
+  controllo verificava che ci fossero, e nessuno ci mandava mai nessuno.
+  Esserci non e' funzionare.
+- **Guardiano Carte** (`guardiano_carte.py`, UserPromptSubmit, acceso in tutte
+  e due le case): il proprietario descrive un sintomo, l'assistente si vede
+  arrivare davanti la carta che lo risolve. Legge la tabella dei sintomi in
+  `ecosistema/COME_E_MESSA_IN_PIEDI.md`: una riga nuova li' si accende da sola,
+  senza toccare il programma. Massimo due carte per volta; serve piu' di una
+  parola in comune, altrimenti un'assonanza aprirebbe la carta sbagliata.
+- **Ogni carta dice da sola quando si apre:** riga `Quando si apre:` sotto il
+  titolo delle sei carte, in parole del proprietario.
+- **Se qualcosa non va, la porta manda da qualche parte.** La mappa madre
+  rimanda a «Come e' messa in piedi questa casa», che porta la tabella
+  sintomo -> carta e, se l'assistente resta fermo lo stesso, l'assistenza
+  LeaderAI con l'indirizzo: prima non c'era scritto da nessuna parte a chi
+  scrivere.
+- **Checkup, punto 8:** il controllo non misura piu' solo che le carte
+  esistano, ma che ognuna porti il suo «Quando si apre» e sia raggiungibile
+  dalla tabella dei sintomi.
+- 583 prove verdi (da 572), piu' l'installazione provata su una casa vera con
+  tutti e due gli assistenti.
+- **Il controllo smette di fidarsi della prosa.** L'Ispettore adesso misura da
+  solo cio' che il checkup chiedeva a parole: ogni carta porta la sua riga
+  «Quando si apre» in testa e la tabella dei sintomi la nomina; una riga sepolta
+  in fondo o un segnaposto non passano.
+- **Guardiano installato e mai chiamato = guasto.** Nuovo controllo che confronta
+  i programmi presenti nella casa con quelli davvero richiamati dalle
+  impostazioni dei due assistenti. E' il caso P-054 del 19/09, dove sei guardiani
+  su otto erano spenti e la prova era verde lo stesso. Una casa installata per un
+  solo assistente non viene accusata.
+- **Il divieto di git arriva anche dove era rimasto scritto il contrario.** La
+  decisione del 16/09 (la casa del cliente non e' un registro di modifiche) era
+  nella guida ma non nelle istruzioni interne del prodotto, che ordinavano ancora
+  di inizializzare la cartella come repository e di fare il primo commit; il
+  collaudo dell'installazione pretendeva quel commit. Tolti tutti e tre, e la
+  prova ora verifica il divieto invece del commit.
+- 594 prove verdi.
+
+- **Nasce lo sportello `assistenza/` nella casa del cliente.** L'assistente che
+  si blocca entra da li': i manuali ufficiali con il loro «quando si apre», la
+  tabella che lega ogni sintomo alla carta giusta, e a chi scrivere se resta
+  fermo. Il materiale e' stato spostato, non copiato: le vecchie sezioni sono
+  sparite dalle carte dove stavano, e i due guardiani, l'Ispettore, la mappa
+  madre, il contratto di installazione e le prove sono stati ripuntati. Una
+  prova nuova legge tutti i documenti del prodotto e boccia la stessa tabella
+  scritta in due posti.
+- **Niente disco esterno per la copia di sicurezza.** La cartella deve essere
+  sincronizzata (iCloud, Drive, OneDrive): un disco esterno non si condivide e
+  non si raggiunge da un secondo computer.
+- 603 prove verdi, piu' l'installazione reale su una casa di prova con i due
+  assistenti e i guardiani lanciati a mano dal suo interno.
+
+- Registrato come P-061 nel foglio dei problemi.
+
 ## 0.7.10 - 19/09/2026
 
 - **I guardiani stanno solo nella casa.** Un partecipante della Challenge

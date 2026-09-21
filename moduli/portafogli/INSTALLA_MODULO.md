@@ -57,7 +57,7 @@ la cartella viva come caso reale.
 14. Verifica il risultato finale, mostralo al proprietario e chiedi
     autorizzazione esplicita all'invio quando la missione richiede una
     conferma esterna.
-15. Dopo il si', invia la conferma a `sal@salchiarenza.ai`, archivia l'email
+15. Dopo il si', invia la conferma a `info@salchiarenza.com`, archivia l'email
     della missione nello stesso giro e chiudi localmente.
 
 ## Esito richiesto

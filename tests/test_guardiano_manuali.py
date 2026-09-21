@@ -2,8 +2,8 @@
 
 19/09/2026, Sal: «la parte dei manuali va integrata nell'ecosistema che mandiamo ai
 clienti, cosi' i loro agenti possono attingere a queste fonti». Le guide ufficiali
-c'erano gia' nelle fonti del cliente, ma servivano a un solo controllo e nessuno le
-apriva al momento giusto. Ora ci attinge qualsiasi agente della casa, e il guardiano
+c'erano gia' nella casa del cliente, ma servivano a un solo controllo e nessuno le
+apriva al momento giusto. Dal 21/09/2026 vivono nello sportello `assistenza/MANUALI.md`. Ora ci attinge qualsiasi agente della casa, e il guardiano
 le mette davanti quando la richiesta nomina lo strumento.
 
 Portabile: nessun percorso della casa di Sal, nessun indirizzo scritto nel guardiano.
@@ -17,13 +17,13 @@ from pathlib import Path
 
 PRODOTTO = Path(__file__).resolve().parents[1]
 GUARDIANO = PRODOTTO / "templates" / "GUARDIANO_MANUALI.py"
-FONTI = PRODOTTO / "templates" / "FONTI.md"
+SCAFFALE = PRODOTTO / "templates" / "assistenza" / "MANUALI.md"
 
 
 def _casa_finta(tmp_path: Path) -> Path:
-    (tmp_path / "ecosistema").mkdir(parents=True, exist_ok=True)
-    (tmp_path / "ecosistema" / "FONTI.md").write_text(
-        FONTI.read_text(encoding="utf-8"), encoding="utf-8")
+    (tmp_path / "assistenza").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "assistenza" / "MANUALI.md").write_text(
+        SCAFFALE.read_text(encoding="utf-8"), encoding="utf-8")
     return tmp_path
 
 
@@ -63,10 +63,10 @@ def test_niente_percorsi_di_sal_ne_indirizzi_nel_guardiano():
     assert "code.claude.com" not in codice and "learn.chatgpt.com" not in codice
 
 
-def test_un_manuale_nuovo_nelle_fonti_e_subito_attivo(tmp_path):
+def test_un_manuale_nuovo_nello_scaffale_e_subito_attivo(tmp_path):
     """La prova del fratello: il manuale che il cliente aggiungera' domani."""
     casa = _casa_finta(tmp_path)
-    fonti = casa / "ecosistema" / "FONTI.md"
+    fonti = casa / "assistenza" / "MANUALI.md"
     fonti.write_text(fonti.read_text(encoding="utf-8")
                      + "\n| **Strumento Nuovo** (Tizio) | https://esempio.test/guida | si lavora con Strumento Nuovo |\n",
                      encoding="utf-8")

@@ -126,6 +126,11 @@ def family_signature(path: Path, archives: list[Archive]) -> bool:
 
 SKIP_DIRS = {".git", ".agent", ".agents", ".codex", ".claude", ".venv", "venv", "node_modules", "__pycache__", ".secrets", "vendor"}
 ROUTERS = {"AGENTS.md", "MEMORY.md", "AGENT_CHAT.md"}
+# Cartelle del telaio con una mappa alla porta ma senza responsabilita'
+# business: l'armadio comune e lo sportello dell'assistenza. Non sono stanze,
+# quindi non hanno manutenzione propria ne' prova di stanza; chi le mantiene e'
+# chi mantiene la casa.
+FRAME_DIRS = {"ecosistema", "assistenza"}
 
 
 def maintenance_owner(root: Path, relative: str) -> str:
@@ -219,6 +224,8 @@ def maintenance_findings(root: Path) -> list[tuple[str, str, str]]:
             issues.append(("MAINTENANCE_HOOK_UNWIRED", rel, "Il guardiano dichiarato non e' collegato a Stop o risulta disabilitato."))
     for room in sorted(root.iterdir()):
         if room.name.startswith(".") or room.is_symlink() or not room.is_dir():
+            continue
+        if room.name in FRAME_DIRS:
             continue
         path = room / "AGENTS.md"
         if not path.is_file() or path.is_symlink():

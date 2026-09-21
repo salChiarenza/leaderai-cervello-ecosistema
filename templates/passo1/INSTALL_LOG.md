@@ -5,4 +5,5 @@
 - Versione: `{{version}}`
 - Pacchetto: documenti Markdown e contratto JSON
 - Effetti esterni: nessuno
-- Esito: PASSO 1 COMPLETATO
+- Esito: vedi `logs/install-state.json`; la versione e' installata soltanto con
+  stato `COMPLETED`
