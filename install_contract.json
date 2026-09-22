@@ -428,7 +428,7 @@
       "room_status_after_census": "DA DECIDERE IN CALL",
       "handoff": "un solo candidato scelto dal proprietario passa al Passo 3",
       "agent_parity": "stessi candidati, stesse prove e stessa certezza su Claude e Codex; puo' cambiare solo il testo",
-      "applicazione": "l'agente applica il censimento leggendo questa politica: perimetro, esclusioni, calcolo della certezza, unione dei doppioni, soglie e registri di uscita stanno qui e sono la regola. Non cercare un programma: il pacchetto del cliente e' solo documentale.",
+      "applicazione": "l'agente applica il censimento con gli strumenti della cartella «2 Mappa del lavoro», leggendo questa politica: perimetro, esclusioni, calcolo della certezza, unione dei doppioni, soglie e registri di uscita stanno qui e sono la regola.",
       "leaderai_reference_implementation": "census_rule.py -> classify_path, classify_certainty, dedupe_candidates, plan_scan, prioritize, report_is_clean, run_census (attrezzo LeaderAI: tiene onesta questa politica nelle prove, non viaggia nel pacchetto del cliente)"
     },
     "markdown_hygiene": {
