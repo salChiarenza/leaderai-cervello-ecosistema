@@ -1,5 +1,21 @@
 # Changelog
 
+## Prossima versione - non ancora pubblicata (esce col manda di Sal, insieme al marchio LeaderAI)
+
+- **Una casa sola, in qualunque cartella si apra l'AI (P-087).** La persona non
+  sceglie piu' cartelle: prima di scrivere, l'assistente cerca la casa su tutto
+  il computer, cartelle online comprese, dal contenuto e non dal nome; Cestino e
+  pacchetto scaricato non contano. Una casa: la aggiorna dov'e'. Piu' case: non
+  le tocca e prepara l'email «Ho due case». Nessuna: la crea nella cartella
+  utente. Caso vero: Caterina Mencarini, aggiornamento aperto da iCloud il 23/09.
+- **Torna il biglietto della casa.** Il blocco `LEADERAI-CASA` nelle istruzioni
+  generali dell'assistente (Claude Code e Codex/ChatGPT Work) dice in ogni chat
+  che la casa e' la casa di tutto il lavoro. Lo chiede la persona nel messaggio
+  che incolla, non il pacchetto: il 16/09 la stessa modifica chiesta dal
+  documento scaricato faceva bloccare l'installazione a Claude. Non ferma le chat
+  aperte altrove: le fa lavorare nella casa. Solo istruzioni, nessun gancio.
+- **La casa si sposta, non si copia**, anche quando va in una cartella online.
+
 ## 0.7.16 - 21/09/2026
 
 - **Una fase, una promessa.** Il Passo 1 consegna soltanto la base documentale;

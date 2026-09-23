@@ -40,14 +40,18 @@ sta nella cartella `4 Gestione dell'ecosistema`:
 7. **Solo dopo separa il vecchio tecnico.** Se la prova riesce, disattiva o
    archivia i vecchi hook e le vecchie impostazioni LeaderAI che non fanno parte
    del Passo 1. Se ne trovi nelle impostazioni generali dell'assistente,
-   toglili da li': non devono bloccare chat aperte altrove. Non sostituirli con
+   toglili da li': non devono bloccare chat aperte altrove. Resta soltanto il
+   blocco LEADERAI-CASA che dice dov'e' la casa, nella forma scritta dal Passo 1. Non sostituirli con
    componenti nuovi durante la migrazione.
 8. **Togli il registro git soltanto dopo la prova.** Chiedi al proprietario un
    solo gesto: cancellare la cartella `.git` e il file `.gitignore`. La casa non
    e' un repository: niente clone, pull o push.
 9. **Tieni una sola casa.** Se lavora da piu' computer, la casa vive in una
    cartella condivisa (OneDrive, Google Drive o iCloud) marcata «sempre
-   disponibile offline» su ogni computer, una macchina alla volta.
+   disponibile offline» su ogni computer, una macchina alla volta. Per portarla
+   li' la sposti, non la copi. Se sul computer trovi due case, non unirle da
+   solo: fermati e prepara per il proprietario un'email a
+   info@salchiarenza.com, oggetto «Ho due case», senza dati personali.
 10. **Rimanda la tecnica al Passo 4.** Backup quotidiano, guardiani,
    manutenzione, skill e impostazioni si valutano piu' avanti, uno per volta.
    Per ciascuno il proprietario deve vedere cosa fa, dove vive, come si prova e
@@ -62,4 +66,5 @@ Di' al proprietario in una frase cosa hai fatto, e aggiungi questo consiglio con
 queste parole: «Ti consiglio di tenere questa cartella dentro una cartella
 online (OneDrive, Google Drive o iCloud) oppure di farne una copia ogni tanto.
 Decidi tu.» E' un consiglio, non un obbligo: se sceglie di non farlo, la casa
-funziona lo stesso.
+funziona lo stesso. Se sceglie la cartella online, la casa si sposta, non si
+copia: ne resta una sola.

@@ -254,7 +254,8 @@ Operazione 1 - autodiagnosi
    la cartella madre deve vivere nell'account che uso io, altrimenti da un altro
    profilo sembra vuota o invisibile.
 2. Cerca una cartella di lavoro gia' viva, sia su disco locale sia dentro
-   OneDrive / Google Drive. Se ne trovi una che sembra gia' usata per il lavoro
+   OneDrive / Google Drive / iCloud Drive, anche se la sessione e' aperta
+   altrove. Se ne trovi una che sembra gia' usata per il lavoro
    (per esempio una cartella [CARTELLA DI LAVORO] o EcosistemaAI-...), proponila
    come possibile cartella madre. Non creare doppioni.
    Il nome non basta: la cartella viva puo' chiamarsi in qualunque modo
