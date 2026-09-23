@@ -388,13 +388,17 @@ Operazione 4 - monta localmente il Cervello
      in sola lettura il perimetro autorizzato e scrive la panoramica in
      `ecosistema/PROCESSI.md`. Nessuna automazione: non entra in routine
    - crea l'automazione giornaliera `manutenzione-ecosistema` (07:45 locali,
-     modello leggero) che invoca la skill `manutentore-ecosistema`: per Claude
-     Code un task programmato, per Codex un'automazione; una sola sessione che
-     chiude da sola. La routine ha come cartella di lavoro la cartella madre,
+     modello leggero) che invoca la skill `manutentore-ecosistema`, su una sola AI:
+     per Claude Code un task programmato, per Codex un'automazione, mai tutte e
+     due. Se il proprietario usa piu' AI, gli chiedi una volta su quale la vuole
+     e scrivi la risposta in `COSA_E_ACCESO.md`. Prima di crearla guarda le
+     attivita' programmate di tutte le AI del computer (sul Mac per esempio
+     `~/.claude/scheduled-tasks/` e `~/.codex/automations/`): se c'e' gia', la
+     riusi. Una sola sessione che chiude da sola. La routine ha come cartella di lavoro la cartella madre,
      con il percorso completo: senza cartella di lavoro parte dalla cartella
      predefinita del sistema e il controllo FUORI DAL CERVELLO la ferma a ogni
      giro (caso reale del 16/09/2026). Riusa la routine equivalente gia presente: mai due routine
-     per motore o reparto. Il suo elenco nasce dalle mappe correnti e comprende
+     per lo stesso lavoro, nemmeno su due AI diverse. Il suo elenco nasce dalle mappe correnti e comprende
      quindi anche ogni stanza aggiunta in futuro. Leggi la sezione Manutenzione
      del calco e compila la destinazione degli esiti nella fonte esistente.
      Il mandato della stessa routine include lavori aperti, riparazioni,
@@ -678,7 +682,7 @@ Operazione 6 - collaudo
    `censitore-processi`
    nel percorso dell'agente attivo: `.claude/skills/` per Claude Code,
    `.agents/skills/` per Codex, entrambe in modalita' both; e l'automazione
-   giornaliera `manutenzione-ecosistema` attiva, con cartella di lavoro uguale
+   giornaliera `manutenzione-ecosistema` attiva su una sola AI, con cartella di lavoro uguale
    alla cartella madre e un giro eseguito con esito letto.
    Se Claude e' attivo, verifica anche le user settings di ogni computer, trust
    del workspace e `/memory` sulla memoria canonica.

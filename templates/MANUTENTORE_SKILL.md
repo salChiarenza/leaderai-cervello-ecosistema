@@ -180,7 +180,13 @@ chiude: una sola sessione, nessun accumulo. La sua cartella di lavoro e' la
 cartella madre, con il percorso completo: senza cartella di lavoro parte dalla
 cartella predefinita del sistema e il controllo FUORI DAL CERVELLO la ferma a
 ogni giro. Se manca, l'installatore riprende
-l'installazione autorizzata sul runtime disponibile: niente seconda automazione.
+l'installazione autorizzata sul runtime disponibile: niente seconda automazione,
+nemmeno su un'altra AI. La routine gira su una sola AI, quella scritta in
+`COSA_E_ACCESO.md`: prima di crearla guarda le attivita' programmate di tutte le
+AI del computer. Se a ogni giro trovi la stessa routine su due AI, metti in pausa
+quella che non e' in tabella (non cancellarla) e scrivilo nel resoconto.
+Se in tabella la colonna «Su quale AI» dice ancora «una sola: Claude o
+ChatGPT/Codex», scrivici l'AI su cui stai girando.
 Prova un'esecuzione nativa e la ripresa di un incarico interrotto; non attestare
 autonomia continua dalla sola configurazione. Host o applicazione spenti e
 permessi mancanti restano limiti espliciti, mai aggirati.

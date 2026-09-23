@@ -2,6 +2,11 @@
 
 ## 0.7.17 - 23/09/2026
 
+- **Una routine gira su una sola AI.** Chi usa sia Claude sia ChatGPT/Codex si ritrovava
+  la stessa routine su tutte e due (visto da Sal e da Caterina Mencarini). La manutenzione
+  nasce su una sola AI, scelta dal proprietario e scritta in `COSA_E_ACCESO.md`; prima di
+  crearla si guardano le attivita' programmate di tutte le AI; se ne gira una doppia, il
+  Manutentore mette in pausa quella in piu' senza cancellarla.
 - **La ripresa guarda la casa vera.** Se lo stato l'ha scritto un pacchetto di un'altra
   versione, o la casa e' cambiata dopo (file rimessi da una copia), l'assistente
   ricontrolla i passi gia' segnati come fatti prima di ripartire. Caso vero: Giovanni

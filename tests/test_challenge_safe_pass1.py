@@ -180,3 +180,24 @@ def test_la_ripresa_guarda_la_casa_vera_non_lo_stato_vecchio():
     assert "prima di ripartire ricontrolla sulla casa vera i passi segnati come fatti" in messaggio
     assert "dopo aver ricontrollato sulla casa vera i passi gia' segnati come fatti" in guida
     assert "prima di ripartire ricontrolla sulla casa vera i passi gia' fatti" in vecchia
+
+
+def test_una_routine_gira_su_una_sola_ai():
+    # Sal, 23/09/2026: «le routine vengono installate su tutte le AI... non va bene
+    # doppia routine»: visto da lui e da Caterina Mencarini, capita a chi usa piu' AI.
+    installatore = _piatto((ROOT / "01 - Cervello - installazione e aggiornamento.md").read_text(encoding="utf-8"))
+    manutentore = _piatto((ROOT / "templates/MANUTENTORE_SKILL.md").read_text(encoding="utf-8"))
+    acceso = _piatto((ROOT / "templates/COSA_E_ACCESO.md").read_text(encoding="utf-8"))
+
+    assert "invoca la skill `manutentore-ecosistema`, su una sola ai" in installatore
+    assert "mai tutte e due" in installatore
+    assert "gli chiedi una volta su quale la vuole" in installatore
+    assert "mai due routine per lo stesso lavoro, nemmeno su due ai diverse" in installatore
+    assert "per motore o reparto" not in installatore
+
+    assert "niente seconda automazione, nemmeno su un'altra ai" in manutentore
+    assert "metti in pausa quella che non e' in tabella (non cancellarla)" in manutentore
+
+    assert "| su quale ai |" in acceso
+    assert "ogni cosa che parte da sola gira su una sola ai" in acceso
+    assert "{{routine_ai}}" not in acceso
