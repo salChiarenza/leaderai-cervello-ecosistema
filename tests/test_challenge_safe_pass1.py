@@ -89,9 +89,9 @@ def _piatto(testo: str) -> str:
 
 
 def test_la_casa_si_cerca_su_tutto_il_computer_prima_di_scrivere():
-    # P-087, 23/09/2026: Caterina Mencarini apre Claude dalla radice di iCloud;
-    # la guida diceva «monta la casa in questa cartella» e l'assistente ha
-    # montato una seconda casa accanto a quella vera.
+    # P-087, 23/09/2026: la guida diceva «monta la casa in questa cartella» e
+    # decideva guardando solo la cartella aperta: un assistente aperto da iCloud o
+    # da una cartella nuova non vedeva la casa vera (famiglia P-053).
     guida = (ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8")
     messaggio = _piatto(guida.split("```text", 1)[1].split("```", 1)[0])
 

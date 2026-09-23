@@ -7,7 +7,8 @@
   il computer, cartelle online comprese, dal contenuto e non dal nome; Cestino e
   pacchetto scaricato non contano. Una casa: la aggiorna dov'e'. Piu' case: non
   le tocca e prepara l'email «Ho due case». Nessuna: la crea nella cartella
-  utente. Caso vero: Caterina Mencarini, aggiornamento aperto da iCloud il 23/09.
+  utente. Nato dalle due voci della casa nell'app di Caterina Mencarini (23/09), poi risultate la
+  stessa cartella: il buco della guida era reale comunque (stessa famiglia di P-053).
 - **Torna il biglietto della casa.** Il blocco `LEADERAI-CASA` nelle istruzioni
   generali dell'assistente (Claude Code e Codex/ChatGPT Work) dice in ogni chat
   che la casa e' la casa di tutto il lavoro. Lo chiede la persona nel messaggio
