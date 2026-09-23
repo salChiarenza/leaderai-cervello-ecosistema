@@ -167,3 +167,16 @@ def test_la_casa_non_e_muta():
 
     vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
     assert "`agents.md` e `claude.md` della casa non si archiviano mai" in vecchia
+
+
+def test_la_ripresa_guarda_la_casa_vera_non_lo_stato_vecchio():
+    # 23/09/2026, Giovanni Leto: dopo aver rimesso AGENTS.md e CLAUDE.md dalla copia,
+    # lo stato diceva ancora di ripartire dal passo successivo: «se riparte da li'
+    # senza guardare, si ritrova nello stesso pasticcio».
+    guida = _piatto((ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8"))
+    messaggio = _piatto((ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8").split("```text", 1)[1].split("```", 1)[0])
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+
+    assert "prima di ripartire ricontrolla sulla casa vera i passi segnati come fatti" in messaggio
+    assert "dopo aver ricontrollato sulla casa vera i passi gia' segnati come fatti" in guida
+    assert "prima di ripartire ricontrolla sulla casa vera i passi gia' fatti" in vecchia

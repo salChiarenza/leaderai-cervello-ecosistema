@@ -90,7 +90,10 @@ e fai quello che dice.
 Prima di modificare qualsiasi documento crea o leggi logs/install-state.json.
 Conserva tutti i contenuti gia' compilati, crea solo i file mancanti e aggiorna
 solo i blocchi LeaderAI delimitati nel contratto. Dopo ogni file aggiorna lo
-stato, cosi' una sessione nuova puo' riprendere dal punto esatto.
+stato, cosi' una sessione nuova puo' riprendere dal punto esatto. Se lo stato
+l'ha scritto un pacchetto di un'altra versione, o la casa e' cambiata dopo
+(file rimessi a mano o da una copia), prima di ripartire ricontrolla sulla casa
+vera i passi segnati come fatti e rifai quelli che non tornano.
 
 Scrivi VERSION con il valore di PACKAGE_VERSION soltanto dopo aver verificato
 che tutti i file richiesti esistono e che i contenuti precedenti sono rimasti.
@@ -133,7 +136,9 @@ cartella Download, rispondi si': gli serve per prendere il pacchetto.
   `AGENTS.md` e guardiani senza `README.md` e senza `logs/install-state.json`):
   prima la pagina `02 - Hai la casa vecchia - come aggiornarla`, nella stessa
   cartella `1 Cervello`, poi il ramo casa esistente. Mai una seconda casa.
-- Stato `IN_PROGRESS` o `INTERRUPTED`: riparte dal primo elemento non completato.
+- Stato `IN_PROGRESS` o `INTERRUPTED`: riparte dal primo elemento non completato,
+  dopo aver ricontrollato sulla casa vera i passi gia' segnati come fatti: se la
+  casa e' cambiata da allora, rifa' quelli che non tornano.
 - File esistente senza blocco LeaderAI: non lo sostituisce.
 - Conflitto: conserva il file e lo elenca nello stato; non inventa una fusione.
 - Il nome del proprietario lo ricava da quello che il proprietario ha gia'

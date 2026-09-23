@@ -2,6 +2,10 @@
 
 ## 0.7.17 - 23/09/2026
 
+- **La ripresa guarda la casa vera.** Se lo stato l'ha scritto un pacchetto di un'altra
+  versione, o la casa e' cambiata dopo (file rimessi da una copia), l'assistente
+  ricontrolla i passi gia' segnati come fatti prima di ripartire. Caso vero: Giovanni
+  Leto, 23/09, AGENTS.md e CLAUDE.md rimessi dalla copia con lo stato fermo al passo dopo.
 - **Una casa sola, in qualunque cartella si apra l'AI (P-087).** La persona non
   sceglie piu' cartelle: prima di scrivere, l'assistente cerca la casa su tutto
   il computer, cartelle online comprese, dal contenuto e non dal nome; Cestino e

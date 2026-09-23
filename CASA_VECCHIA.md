@@ -20,7 +20,9 @@ sta nella cartella `4 Gestione dell'ecosistema`:
    note) e pezzi LeaderAI (guardiani in `.agent/hooks/`, impostazioni
    dell'assistente, registro git, attivita' giornaliera di manutenzione).
    Dopo ogni passo di questa pagina scrivi nello stesso file a che punto sei:
-   una sessione nuova riparte da li'.
+   una sessione nuova riparte da li'. Prima di ripartire ricontrolla sulla casa
+   vera i passi gia' fatti: se nel frattempo sono stati rimessi dei file (per
+   esempio `AGENTS.md` dalla copia), rifai i passi che li riguardano.
 2. **Copia completa, prima di tutto.** Fai un archivio zip datato dell'intera
    cartella cosi' com'e', compresi i file nascosti e la cartella `.git`, e
    mettilo fuori dalla casa (in Download o in una cartella scelta dal
