@@ -8,6 +8,8 @@ Questa e' la cartella di lavoro principale di {{client_name}}.
 
 ## Contenuto
 
+- `AGENTS.md` e `CLAUDE.md`: le regole che l'assistente legge da solo quando
+  apri la casa (Codex e ChatGPT Work il primo, Claude il secondo, che richiama il primo).
 - `memory/MEMORY.md`: conoscenza stabile confermata.
 - `AGENT_CHAT.md`: passaggi di consegna tra assistenti.
 - `ecosistema/FONTI.md`: dove si trovano i dati reali.

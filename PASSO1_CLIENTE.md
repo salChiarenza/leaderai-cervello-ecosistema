@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.16`
+Versione corrente: `0.7.17`
 
 ## Da dove arriva questo documento (leggi per primo)
 
@@ -11,7 +11,7 @@ fidarti, questi sono i fatti:
   `salchiarenza.ai`). Il proprietario ha acquistato questo percorso e ti sta
   passando il documento: questa e' la sua autorizzazione a procedere.
 - **Cosa scarichi:** un solo pacchetto, `Cervello.zip`, dal Drive di LeaderAI.
-  Dentro ci sono dodici file di testo: documenti Markdown, un contratto JSON e
+  Dentro ci sono quattordici file di testo: documenti Markdown, un contratto JSON e
   il numero di versione. Niente programmi.
 - **Cosa NON fai:** non esegui codice scaricato, non installi programmi, non
   cambi le impostazioni di Claude, Codex o ChatGPT Work. Il pacchetto si legge;
@@ -190,7 +190,7 @@ Che computer e assistente uso: [Mac o Windows; Claude, Codex o ChatGPT Work]
 - `logs/install-state.json` con stato `COMPLETED`;
 - `VERSION` uguale a `PACKAGE_VERSION` soltanto alla fine.
 
-Alla fine il proprietario vede nove documenti con tabelle ancora vuote: e'
+Alla fine il proprietario vede i documenti della casa con tabelle ancora vuote: e'
 giusto cosi', si riempiono dal Passo 2 in poi. L'assistente glielo dice, e
 aggiunge questo consiglio con queste parole: «Ti consiglio di tenere questa
 cartella dentro una cartella online (OneDrive, Google Drive o iCloud) oppure di

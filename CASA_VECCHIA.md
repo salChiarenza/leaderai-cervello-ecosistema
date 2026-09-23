@@ -1,6 +1,6 @@
 # Hai la casa vecchia? Come aggiornarla
 
-Versione corrente: `0.7.16`
+Versione corrente: `0.7.17`
 
 Questa pagina serve quando nella cartella del proprietario c'e' gia' una casa
 nata con una versione precedente. La riconosci cosi': `VERSION` inizia con
@@ -41,8 +41,11 @@ sta nella cartella `4 Gestione dell'ecosistema`:
    archivia i vecchi hook e le vecchie impostazioni LeaderAI che non fanno parte
    del Passo 1. Se ne trovi nelle impostazioni generali dell'assistente,
    toglili da li': non devono bloccare chat aperte altrove. Resta soltanto il
-   blocco LEADERAI-CASA che dice dov'e' la casa, nella forma scritta dal Passo 1. Non sostituirli con
-   componenti nuovi durante la migrazione.
+   blocco LEADERAI-CASA che dice dov'e' la casa, nella forma scritta dal Passo 1.
+   Non sostituire il vecchio con componenti nuovi durante la migrazione.
+   `AGENTS.md` e `CLAUDE.md` della casa non si archiviano mai: sono le regole che
+   l'assistente legge da solo quando apre la casa. Se citano guardiani o programmi
+   tolti, togli soltanto quelle righe.
 8. **Togli il registro git soltanto dopo la prova.** Chiedi al proprietario un
    solo gesto: cancellare la cartella `.git` e il file `.gitignore`. La casa non
    e' un repository: niente clone, pull o push.

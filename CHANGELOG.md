@@ -1,6 +1,6 @@
 # Changelog
 
-## Prossima versione - non ancora pubblicata (esce col manda di Sal, insieme al marchio LeaderAI)
+## 0.7.17 - 23/09/2026
 
 - **Una casa sola, in qualunque cartella si apra l'AI (P-087).** La persona non
   sceglie piu' cartelle: prima di scrivere, l'assistente cerca la casa su tutto
@@ -16,6 +16,11 @@
   documento scaricato faceva bloccare l'installazione a Claude. Non ferma le chat
   aperte altrove: le fa lavorare nella casa. Solo istruzioni, nessun gancio.
 - **La casa si sposta, non si copia**, anche quando va in una cartella online.
+- **La casa non e' piu' muta (P-083).** Il Passo 1 crea `AGENTS.md` (letto da
+  Codex e ChatGPT Work) e `CLAUDE.md` (che per Claude richiama `AGENTS.md`): chi
+  apre la casa trova subito cosa leggere. Le case nate con la 0.7 li ricevono con
+  l'aggiornamento; nella pagina delle case vecchie non si archiviano mai. Caso
+  vero: Giovanni Leto, casa aggiornata e poi muta.
 
 ## 0.7.16 - 21/09/2026
 

@@ -12,6 +12,8 @@ def test_public_pass1_has_no_persistent_agent_changes():
     assert package["external_effects"] == []
     assert {rule["destination"] for rule in package["templates"]} == {
         "README.md",
+        "AGENTS.md",
+        "CLAUDE.md",
         "memory/MEMORY.md",
         "AGENT_CHAT.md",
         "ecosistema/FONTI.md",
@@ -146,3 +148,22 @@ def test_ogni_chat_sa_dov_e_la_casa():
 
     vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
     assert "resta soltanto il blocco leaderai-casa" in vecchia
+
+
+def test_la_casa_non_e_muta():
+    # P-083, 23/09/2026: Giovanni Leto, casa aggiornata senza AGENTS.md e CLAUDE.md:
+    # una chat nuova aperta nella casa non sapeva niente. Sal: «quando installiamo
+    # l'ecosistema non venivano corretti i file di Claude, GPT o Codex».
+    contratto = json.loads((ROOT / "install_contract.json").read_text(encoding="utf-8"))
+    regole = {r["destination"]: r for r in contratto["client_package"]["templates"]}
+    for nome in ("AGENTS.md", "CLAUDE.md"):
+        assert regole[nome]["strategy"] == "create"
+        assert regole[nome]["ownership"] == "client"
+
+    agents = _piatto((ROOT / "templates/passo1/AGENTS.md").read_text(encoding="utf-8"))
+    assert "e' la casa di tutto il lavoro" in agents
+    assert "`readme.md`" in agents and "`memory/memory.md`" in agents
+    assert (ROOT / "templates/passo1/CLAUDE.md").read_text(encoding="utf-8").strip() == "@AGENTS.md"
+
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+    assert "`agents.md` e `claude.md` della casa non si archiviano mai" in vecchia

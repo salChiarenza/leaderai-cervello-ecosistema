@@ -18,6 +18,18 @@
         "ownership": "client"
       },
       {
+        "source": "passo1/AGENTS.md",
+        "destination": "AGENTS.md",
+        "strategy": "create",
+        "ownership": "client"
+      },
+      {
+        "source": "passo1/CLAUDE.md",
+        "destination": "CLAUDE.md",
+        "strategy": "create",
+        "ownership": "client"
+      },
+      {
         "source": "passo1/MEMORY.md",
         "destination": "memory/MEMORY.md",
         "strategy": "create",
