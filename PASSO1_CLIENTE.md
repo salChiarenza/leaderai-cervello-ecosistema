@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.17`
+Versione corrente: `0.7.18`
 
 ## Da dove arriva questo documento (leggi per primo)
 
@@ -80,23 +80,42 @@ install_contract.json e PACKAGE_VERSION. Il pacchetto e' solo il riferimento:
 non copiarlo sopra la casa e cancellalo quando hai finito.
 
 Guarda cosa c'e' nella casa e decidi tu se e' una prima installazione, un
-aggiornamento o una ripresa. Se trovi una casa nata con una versione
-precedente (VERSION che inizia con 0.6, oppure AGENTS.md e guardiani senza
-README.md e senza logs/install-state.json), leggi prima la pagina
+aggiornamento o una ripresa. Il lavoro e' uno solo e il come lo decidi tu:
+- da costruire: la casa con tutti i documenti del pacchetto corrente e, solo
+  alla fine, VERSION con il valore di PACKAGE_VERSION;
+- da evitare: perdere o cambiare le mie cose (documenti, memoria, note,
+  programmi, attivita'), fermare qualcosa che oggi funziona, cancellare
+  qualcosa della casa, creare una seconda casa;
+- finito quando: ci sono tutti i documenti del pacchetto, le mie cose sono
+  tutte li' uguali a prima e una chat nuova aperta nella casa sa di chi e' e
+  cosa c'e' dentro.
+
+Se la casa c'e' gia', prima di cambiare qualsiasi cosa fanne una copia completa
+in un archivio zip datato, fuori dalla casa (una cartella copiata sembrerebbe
+una seconda casa), e scrivi in logs/install-log.md l'elenco dei suoi file. Nelle
+mie cose tocchi soltanto i pezzi di LeaderAI: le parti delimitate
+leaderai:...:inizio e fine che ci sono gia' e la riga del marchio in testa.
+Alla fine rifai l'elenco e confrontalo: se una mia cosa e' cambiata o sparita,
+rimetti la copia e dimmelo. Nel dubbio un file e' mio e resta com'e'. Se
+qualcosa non torna, scegli la strada che non perde niente di mio, annotala in
+logs/install-log.md e arriva in fondo. I file di un pacchetto vecchio rimasti
+nella casa (install_contract.json, PACKAGE_VERSION) sono di LeaderAI, non miei:
+non si aggiornano e non fermano il lavoro; mettili da parte accanto alla
+copia, oppure lasciali dove sono se un programma della casa li usa ancora.
+
+Se trovi una casa con VERSION piu' vecchia di 0.7.12 (per esempio 0.6.29, 0.7.6
+o 0.7.9), oppure senza logs/install-state.json, e' nata prima di questo metodo,
+anche se un tentativo di aggiornamento ha gia' scritto lo stato: leggi anche la
+pagina
 «02 - Hai la casa vecchia - come aggiornarla» nella cartella
 https://drive.google.com/drive/folders/1SzRA4SCSyXw_PnHWP7ouGeNzUv6Wcl1L
 e fai quello che dice.
 
-Prima di modificare qualsiasi documento crea o leggi logs/install-state.json.
-Conserva tutti i contenuti gia' compilati, crea solo i file mancanti e aggiorna
-solo i blocchi LeaderAI delimitati nel contratto. Dopo ogni file aggiorna lo
-stato, cosi' una sessione nuova puo' riprendere dal punto esatto. Se lo stato
-l'ha scritto un pacchetto di un'altra versione, o la casa e' cambiata dopo
-(file rimessi a mano o da una copia), prima di ripartire ricontrolla sulla casa
-vera i passi segnati come fatti e rifai quelli che non tornano.
-
-Scrivi VERSION con il valore di PACKAGE_VERSION soltanto dopo aver verificato
-che tutti i file richiesti esistono e che i contenuti precedenti sono rimasti.
+Tieni in logs/install-state.json a che punto sei, cosi' una sessione nuova
+riparte da li'. Se lo stato l'ha scritto un pacchetto di un'altra versione, o la
+casa e' cambiata dopo (file rimessi a mano o da una copia), prima di ripartire
+ricontrolla sulla casa vera i passi segnati come fatti e rifai quelli che non
+tornano.
 
 Quando la casa e' pronta, scrivi nelle tue istruzioni generali, quelle che
 leggi all'inizio di ogni chat in qualunque cartella (Claude Code: il CLAUDE.md
@@ -134,17 +153,21 @@ cartella Download, rispondi si': gli serve per prendere il pacchetto.
   quelle lette all'inizio di ogni chat: da li' ogni chat nuova, aperta ovunque,
   sa che il lavoro si fa nella casa.
 - Casa nuova: crea i file dichiarati dal contratto.
-- Casa esistente: conserva tutto, aggiunge i file mancanti e aggiorna soltanto
-  i blocchi LeaderAI marcati.
-- Casa nata con una versione precedente (`VERSION` che inizia con `0.6`, oppure
-  `AGENTS.md` e guardiani senza `README.md` e senza `logs/install-state.json`):
-  prima la pagina `02 - Hai la casa vecchia - come aggiornarla`, nella stessa
-  cartella `1 Cervello`, poi il ramo casa esistente. Mai una seconda casa.
+- Casa esistente: un solo lavoro con un risultato, non una lista di regole:
+  da costruire, da evitare, finito quando, come nel messaggio. Prima fa la
+  copia completa in un archivio zip fuori dalla casa e l'elenco dei file, alla
+  fine confronta: se una cosa del
+  proprietario e' cambiata o sparita, rimette la copia. Nel dubbio un file e'
+  del proprietario e resta com'e'.
+- I file di un pacchetto vecchio rimasti nella casa sono di LeaderAI: non
+  fermano l'aggiornamento. Se qualcosa non torna, l'assistente sceglie la
+  strada che non perde niente, la annota e arriva in fondo.
+- Casa nata prima di questo metodo (`VERSION` piu' vecchia di `0.7.12`, oppure
+  senza `logs/install-state.json`): anche la pagina `02 - Hai la casa vecchia -
+  come aggiornarla`, nella stessa cartella `1 Cervello`. Mai una seconda casa.
 - Stato `IN_PROGRESS` o `INTERRUPTED`: riparte dal primo elemento non completato,
   dopo aver ricontrollato sulla casa vera i passi gia' segnati come fatti: se la
   casa e' cambiata da allora, rifa' quelli che non tornano.
-- File esistente senza blocco LeaderAI: non lo sostituisce.
-- Conflitto: conserva il file e lo elenca nello stato; non inventa una fusione.
 - Il nome del proprietario lo ricava da quello che il proprietario ha gia'
   scritto nella chat o dall'utente del computer. Non lo cerca in altri
   documenti del computer. Se l'utente del computer non e' un nome di persona
@@ -196,7 +219,9 @@ Che computer e assistente uso: [Mac o Windows; Claude, Codex o ChatGPT Work]
   con il percorso della casa;
 - tutti i file richiesti dal contratto, con il marchio nascosto
   `<!-- LeaderAI · salchiarenza.ai -->` in testa a ogni pagina;
-- contenuti precedenti conservati;
+- in una casa che c'era gia', le cose del proprietario tutte presenti e uguali a
+  prima, provato confrontando l'elenco dei file fatto all'inizio con quello
+  finale, e quello che girava prima che gira ancora;
 - `logs/install-state.json` con stato `COMPLETED`;
 - `VERSION` uguale a `PACKAGE_VERSION` soltanto alla fine.
 

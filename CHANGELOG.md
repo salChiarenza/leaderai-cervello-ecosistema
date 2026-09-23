@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.7.18 - 23/09/2026
+
+- **L'aggiornamento e' un lavoro con un risultato, non una lista di regole (P-067).**
+  Sal: chi riceve le istruzioni deve interpretare il lavoro; noi sappiamo cosa deve
+  costruire, cosa deve evitare e quando ha finito. Il ramo casa esistente del messaggio
+  e la pagina delle case vecchie dicono ora queste tre cose e lasciano il come
+  all'assistente. Lo stesso giorno due aggiornamenti veri erano andati storti per due
+  regole seguite alla lettera: un assistente si e' fermato a meta' su un file nostro,
+  un altro aveva archiviato troppo.
+- **La rete la tiene il confronto, non la regola.** Prima di toccare una casa
+  esistente: copia completa fuori dalla casa ed elenco dei file. Alla fine l'elenco si
+  rifa' e si confronta: se una cosa del proprietario e' cambiata o sparita, si rimette
+  la copia. Nel dubbio un file e' del proprietario e resta com'e'; se qualcosa non torna,
+  l'assistente sceglie la strada che non perde niente, la annota e arriva in fondo.
+- **I file del pacchetto vecchio non fermano piu' l'aggiornamento.** Fino al 21/09 il
+  pacchetto si estraeva dentro la casa: `install_contract.json` e `PACKAGE_VERSION`
+  vecchi restano nelle case di quei giorni. Sono di LeaderAI, non del proprietario: non
+  si aggiornano, si mettono da parte accanto alla copia se nessun programma della casa
+  li usa. Tolte le due regole che li facevano scambiare per documenti del proprietario
+  («file senza blocco: non lo sostituisce», «conflitto: non inventa una fusione»).
+- **Casa vecchia si riconosce anche senza il numero 0.6.** Una casa con `VERSION` piu'
+  vecchia di 0.7.12, oppure senza `logs/install-state.json`, e' nata prima di questo
+  metodo: anche una casa 0.6 portata a una 0.7 di quei giorni legge la pagina delle case
+  vecchie, e lo resta anche dopo un tentativo fermo che ha gia' scritto lo stato.
+- **Quello che gira non si ferma.** La pagina delle case vecchie non fa piu' fermare
+  tutte le attivita' programmate: si mette in pausa solo un pezzo LeaderAI vecchio che
+  blocca il lavoro, i programmi e le attivita' del proprietario non si toccano. La
+  tecnica LeaderAI vecchia che funziona e serve (per esempio la copia di sicurezza)
+  resta com'e' fino al Passo 4; si mette da parte, senza cancellarla, solo quella rotta
+  o che non usa nessuno. Il confronto finale controlla anche che quello che girava
+  prima giri ancora.
+
 ## 0.7.17 - 23/09/2026
 
 - **Il consiglio sulla copia arriva con le sue parole (P-089).** Nel messaggio da incollare

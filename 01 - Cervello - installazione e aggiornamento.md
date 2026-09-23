@@ -1,6 +1,6 @@
 # Cervello LeaderAI — installazione e aggiornamento
 
-Versione corrente: `0.7.17`
+Versione corrente: `0.7.18`
 
 > **Nota 0.7.1:** questo file conserva il contratto dell'installatore tecnico
 > completo usato dai collaudi interni. Non e' piu' il documento pubblicato nel

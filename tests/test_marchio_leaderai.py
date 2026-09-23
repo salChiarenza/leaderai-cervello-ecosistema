@@ -50,7 +50,16 @@ def test_la_casa_vecchia_cambia_nome_con_un_solo_gesto_dopo_la_copia():
     passo1 = pagina.index("**Applica il Passo 1 corrente.**")
     marchio = pagina.index("**Metti il marchio LeaderAI.**")
     prova = pagina.index("**Prova la base documentale.**")
-    assert copia < nome < passo1 < marchio < prova
+    # 23/09/2026, prove dal vivo: con il nome cambiato prima del Passo 1 servivano due
+    # gesti (rinomina e poi una chat nuova per la prova). Ora la chat riaperta dopo
+    # la rinomina e' la chat della prova: un gesto solo.
+    assert copia < passo1 < marchio < nome < prova
+    assert "l'unico che gli chiedi" in " ".join(pagina.split())
+    assert "la prova si fa li', senza chiedere altro al proprietario" in " ".join(pagina.split())
+    # Stessa prova dal vivo: il registro git chiesto come secondo gesto teneva
+    # l'aggiornamento aperto. Ora e' un si' finale e lo cancella l'assistente.
+    assert "il registro git si toglie alla fine, e non tiene aperto il lavoro" in " ".join(pagina.split()).casefold()
+    assert "con il suo si' li cancelli tu" in " ".join(pagina.split())
     assert "SERVE UN TUO PASSAGGIO" in pagina
     assert "scrivimi: continua" in pagina
     assert "una sessione nuova riparte da li'" in pagina
@@ -64,7 +73,7 @@ def test_la_casa_vecchia_non_tocca_nomi_dei_programmi_ne_documenti_del_proprieta
     assert "Non rinominare la cartella interna `ecosistema/`" in pagina
     assert "Non toccare i documenti del proprietario" in pagina
     assert "Le app installate a parte, come Voce, non sono vecchia tecnica della casa" in pagina
-    assert "riaccendi quello che hai messo in pausa al passo 3" in pagina
+    assert "riaccendi quello che hai messo in pausa" in pagina
 
 
 def test_le_pagine_pubbliche_non_usano_casi_veri_come_esempio():

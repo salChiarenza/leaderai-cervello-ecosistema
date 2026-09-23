@@ -203,6 +203,101 @@ def test_una_routine_gira_su_una_sola_ai():
     assert "{{routine_ai}}" not in acceso
 
 
+def _messaggio() -> str:
+    guida = (ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8")
+    return _piatto(guida.split("```text", 1)[1].split("```", 1)[0])
+
+
+def test_l_aggiornamento_e_un_lavoro_con_un_risultato():
+    # Sal, 23/09/2026: chi riceve le istruzioni deve interpretare il lavoro; «sappiamo
+    # cosa deve costruire, sappiamo cosa deve evitare, sappiamo cosa deve portare a
+    # termine». Lo stesso giorno due aggiornamenti veri erano andati storti per due
+    # regole seguite alla lettera (uno fermo a meta', uno che aveva archiviato troppo).
+    messaggio = _messaggio()
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+
+    for parte in ("da costruire:", "da evitare:", "finito quando:"):
+        assert parte in messaggio
+        assert f"**{parte}**" in vecchia
+    assert "il come lo decidi tu" in messaggio
+    assert "il come lo decidi tu" in vecchia
+    assert "nel dubbio un file e' mio e resta com'e'" in messaggio
+    assert "nel dubbio una cosa e' del proprietario e resta com'e'" in vecchia
+    assert "scegli la strada che non perde niente di mio" in messaggio
+    assert "scegli la strada che non perde niente" in vecchia
+    assert "arriva in fondo" in messaggio
+
+
+def test_prima_la_copia_alla_fine_il_confronto():
+    # La rete la tiene il confronto dei fatti, non una regola: copia completa prima,
+    # elenco dei file prima e dopo, copia rimessa se una cosa del proprietario cambia.
+    messaggio = _messaggio()
+    # Prova dal vivo del 23/09: una copia fatta come cartella sembrava una seconda casa.
+    assert "fanne una copia completa in un archivio zip datato, fuori dalla casa" in messaggio
+    assert "una cartella copiata sembrerebbe una seconda casa" in messaggio
+    assert "l'elenco dei suoi file" in messaggio
+    assert "rifai l'elenco e confrontalo" in messaggio
+    assert "rimetti la copia e dimmelo" in messaggio
+
+    pagina = (ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8")
+    copia = pagina.index("**Copia completa, prima di tutto.**")
+    prova = pagina.index("**Prova la base documentale.**")
+    confronto = pagina.index("**Confronta e, se serve, torna indietro.**")
+    tecnica = pagina.index("**Solo dopo, la tecnica vecchia.**")
+    assert copia < prova < confronto < tecnica
+    vecchia = _piatto(pagina)
+    assert "l'elenco dei file della casa con la loro impronta" in vecchia
+    assert "ripristina la copia del passo 1" in vecchia
+
+    risultato = _piatto((ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8").split("## Risultato corretto", 1)[1])
+    assert "confrontando l'elenco dei file fatto all'inizio con quello finale" in risultato
+
+
+def test_i_file_del_pacchetto_vecchio_non_fermano_l_aggiornamento():
+    # P-067, 23/09/2026: fino al 21/09 il pacchetto si estraeva dentro la casa; il
+    # contratto di allora e' rimasto in quelle case. La guida diceva «file senza blocco:
+    # non lo sostituisce; conflitto: non inventa una fusione» e l'assistente si e'
+    # fermato a meta' aggiornamento su un file nostro, chiedendo a Sal cosa fare.
+    guida = _piatto((ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8"))
+    messaggio = _messaggio()
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+
+    for regola in ("senza blocco leaderai: non lo sostituisce", "non inventa una fusione"):
+        assert regola not in guida
+        assert regola not in vecchia
+    assert (
+        "i file di un pacchetto vecchio rimasti nella casa (install_contract.json, "
+        "package_version) sono di leaderai, non miei" in messaggio
+    )
+    assert "non si aggiornano e non fermano il lavoro" in messaggio
+    assert "non fermano l'aggiornamento" in guida
+    assert "(`install_contract.json`, `package_version`) sono di leaderai" in vecchia
+
+
+def test_la_casa_vecchia_si_riconosce_anche_senza_il_numero():
+    # Una casa nata 0.6 e portata a una 0.7 di quei giorni non ha VERSION 0.6: e'
+    # vecchia lo stesso, e resta vecchia anche dopo un tentativo fermo che ha gia'
+    # scritto lo stato dell'installazione (23/09/2026, la prima casa vera).
+    messaggio = _messaggio()
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+    assert "se trovi una casa con version piu' vecchia di 0.7.12 (per esempio 0.6.29, 0.7.6 o 0.7.9), oppure senza logs/install-state.json" in messaggio
+    assert "anche se un tentativo di aggiornamento ha gia' scritto lo stato" in messaggio
+    assert "`version` e' piu' vecchia di `0.7.12`" in vecchia
+    assert "anche se un tentativo di aggiornamento ha gia' scritto lo stato" in vecchia
+
+
+def test_quello_che_gira_non_si_ferma():
+    # 23/09/2026: la pagina diceva di fermare «attivita' programmate, manutenzione e
+    # guardiani» senza dire quali: in uno studio avrebbe fermato anche il giro della posta
+    # del proprietario. La tecnica che funziona e serve resta fino al Passo 4.
+    vecchia = _piatto((ROOT / "CASA_VECCHIA.md").read_text(encoding="utf-8"))
+    assert "ferma attivita' programmate" not in vecchia
+    assert "i programmi e le attivita' del proprietario non si fermano" in vecchia
+    assert "restano come sono se funzionano e servono al proprietario" in vecchia
+    assert "quello che girava prima gira ancora" in vecchia
+    assert "metti da parte, senza cancellarli, soltanto quelli rotti o che non usa nessuno" in vecchia
+
+
 def test_il_consiglio_sulla_copia_arriva_con_le_sue_parole():
     # P-089, 23/09/2026: con il solo messaggio l'assistente consigliava un disco esterno
     # in 3 prove su 3, cioe' il posto tolto con P-063.

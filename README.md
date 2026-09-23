@@ -1,6 +1,6 @@
 <!-- vista: inizio (generata, non correggere a mano) -->
 
-# LeaderAI Cervello + Ecosistema 0.7.17
+# LeaderAI Cervello + Ecosistema 0.7.18
 
 Costruisce un ambiente AI di lavoro in cinque passi. Il Passo 1 consegna soltanto la base documentale; stanze, controlli e capacita' nascono dopo dal lavoro vero. Funziona con Claude Code e con ChatGPT Work.
 
