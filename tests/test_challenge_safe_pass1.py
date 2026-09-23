@@ -201,3 +201,12 @@ def test_una_routine_gira_su_una_sola_ai():
     assert "| su quale ai |" in acceso
     assert "ogni cosa che parte da sola gira su una sola ai" in acceso
     assert "{{routine_ai}}" not in acceso
+
+
+def test_il_consiglio_sulla_copia_arriva_con_le_sue_parole():
+    # P-089, 23/09/2026: con il solo messaggio l'assistente consigliava un disco esterno
+    # in 3 prove su 3, cioe' il posto tolto con P-063.
+    messaggio = _piatto((ROOT / "PASSO1_CLIENTE.md").read_text(encoding="utf-8").split("```text", 1)[1].split("```", 1)[0])
+    assert "dentro una cartella online (onedrive, google drive o icloud) oppure di farne una copia ogni tanto. decidi tu." in messaggio
+    assert "dammi il tuo consiglio" not in messaggio
+    assert "sposta la casa, non copiarla, e aggiorna il percorso nel blocco leaderai-casa" in messaggio

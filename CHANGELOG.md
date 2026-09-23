@@ -2,6 +2,10 @@
 
 ## 0.7.17 - 23/09/2026
 
+- **Il consiglio sulla copia arriva con le sue parole (P-089).** Nel messaggio da incollare
+  l'assistente improvvisava e proponeva un disco esterno, tolto con P-063. Ora le parole
+  esatte stanno nel messaggio, e se la persona sceglie la cartella online la casa si sposta
+  e il biglietto prende il percorso nuovo.
 - **Una routine gira su una sola AI.** Chi usa sia Claude sia ChatGPT/Codex si ritrovava
   la stessa routine su tutte e due (visto da Sal e da Caterina Mencarini). La manutenzione
   nasce su una sola AI, scelta dal proprietario e scritta in `COSA_E_ACCESO.md`; prima di

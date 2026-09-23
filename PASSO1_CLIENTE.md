@@ -113,7 +113,11 @@ scrivi nella casa.
 
 Alla fine dimmi in una frase: installato, aggiornato oppure ripreso e
 completato; versione; eventuali conflitti lasciati intatti. Poi dimmi cosa
-vedo nella cartella e dammi il tuo consiglio sulla copia di sicurezza.
+vedo nella cartella e dammi, con queste parole, il consiglio sulla copia di
+sicurezza: «Ti consiglio di tenere questa cartella dentro una cartella online
+(OneDrive, Google Drive o iCloud) oppure di farne una copia ogni tanto. Decidi
+tu.» Se scelgo la cartella online, sposta la casa, non copiarla, e aggiorna il
+percorso nel blocco LEADERAI-CASA.
 ```
 
 Se l'assistente ti chiede il permesso di usare internet o di leggere la
