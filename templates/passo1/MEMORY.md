@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Memoria
 
 Conoscenza stabile confermata di {{client_name}}.

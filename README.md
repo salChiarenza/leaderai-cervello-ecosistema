@@ -165,7 +165,7 @@ Domande 1, 2, 3 e Operazione 7.
 Uso tecnico opzionale, dopo autorizzazione esplicita:
 
 ```bash
-python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
+python3 leaderai_setup.py --target /percorso/LeaderAI-Cliente --client "Nome Cliente" --agent claude
 ```
 
 Valori per `--agent`:
@@ -347,7 +347,7 @@ Preflight strutturale opzionale e in sola lettura, quando la repo e' locale e
 l'esecuzione e' stata autorizzata:
 
 ```bash
-python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
+python3 ecosistema_inspector.py --target /percorso/LeaderAI-Cliente
 ```
 
 ## Stato
@@ -367,7 +367,7 @@ Una riga per pezzo: cosa e' e a cosa serve. Si aggiorna a ogni versione.
 ### 1. La casa del cliente al Passo 1
 
 ```
-EcosistemaAI-<Cliente>/           Passo 1 (0.7.1): solo documenti, nessuno script, nessun gancio, niente git
+LeaderAI-<Cliente>/               Passo 1 (0.7.1): solo documenti, nessuno script, nessun gancio, niente git
 ├─ README.md                     come e' fatta la casa e da dove viene (letto per primo)
 ├─ AGENTS.md                     la mappa madre: chi c'e', dove stanno le cose, come si lavora
 ├─ CLAUDE.md                     il ponte di una riga (@AGENTS.md): l'assistente legge la mappa

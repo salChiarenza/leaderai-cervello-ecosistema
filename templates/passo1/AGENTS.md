@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Casa LeaderAI di {{client_name}}
 
 Questa cartella e' la casa di tutto il lavoro di {{client_name}}: ogni lavoro si

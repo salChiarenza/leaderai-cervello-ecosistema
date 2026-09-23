@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Registro di installazione
 
 - Data: `{{date}}`

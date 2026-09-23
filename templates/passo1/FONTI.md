@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Fonti
 
 Elenco delle fonti reali usate nel lavoro di {{client_name}}.

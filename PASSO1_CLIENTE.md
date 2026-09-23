@@ -66,9 +66,9 @@ install_contract.json). Una casa sola:
 - se ne trovi piu' di una, non ne tocchi nessuna: mi dici dove sono e prepari
   per me un'email a info@salchiarenza.com, oggetto «Ho due case», senza dati
   personali;
-- se non ne trovi, la crei nella mia cartella utente con il nome EcosistemaAI-
+- se non ne trovi, la crei nella mia cartella utente con il nome LeaderAI-
   seguito dal nome della mia attivita', senza spazi (per esempio
-  EcosistemaAI-Studio-Rossi); se mi hai aperto in una cartella vuota creata
+  LeaderAI-Studio-Rossi); se mi hai aperto in una cartella vuota creata
   apposta per la casa, usi quella.
 
 Scarica Cervello.zip nella cartella Download da questo collegamento:
@@ -185,7 +185,8 @@ Che computer e assistente uso: [Mac o Windows; Claude, Codex o ChatGPT Work]
 - una sola casa su tutto il computer, senza il pacchetto dentro;
 - il blocco LEADERAI-CASA nelle istruzioni generali dell'assistente, riletto,
   con il percorso della casa;
-- tutti i file richiesti dal contratto;
+- tutti i file richiesti dal contratto, con il marchio nascosto
+  `<!-- LeaderAI · salchiarenza.ai -->` in testa a ogni pagina;
 - contenuti precedenti conservati;
 - `logs/install-state.json` con stato `COMPLETED`;
 - `VERSION` uguale a `PACKAGE_VERSION` soltanto alla fine.

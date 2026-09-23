@@ -233,7 +233,7 @@ Prima di giudicare censisce le
 cartelle candidate: la cartella viva puo' chiamarsi in qualunque modo, quindi
 si riconosce dai segnali di vita (memoria compilata, log, asset,
 commit, file di lavoro recenti, connettori provati), non dal nome. La ricerca
-non si limita a `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
+non si limita a `LeaderAI-*`, `EcosistemaAI-*` o `leaderai-cervello-ecosistema`: include
 anche nomi brandizzati o sbagliati (`LeaderAI`, `Leader AI`, `leader ai`,
 `leder ai`, `cervello`, `_leaderai`, `install`, `setup`, `repo`, `clone`) e
 classifica ogni risultato sospetto. La fonte unica del metodo e' il
@@ -306,13 +306,13 @@ python3 -m tests.gate --release --agents codex,claude
 Preflight strutturale opzionale e in sola lettura:
 
 ```bash
-python3 ecosistema_inspector.py --target /percorso/EcosistemaAI-Cliente
+python3 ecosistema_inspector.py --target /percorso/LeaderAI-Cliente
 ```
 
 Installazione manuale:
 
 ```bash
-python3 leaderai_setup.py --target /percorso/EcosistemaAI-Cliente --client "Nome Cliente" --agent claude
+python3 leaderai_setup.py --target /percorso/LeaderAI-Cliente --client "Nome Cliente" --agent claude
 ```
 
 Questo comando e' per uso tecnico verificato o per una installazione autorizzata

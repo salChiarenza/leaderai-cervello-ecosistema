@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Chat degli assistenti
 
 Passaggi di consegna recenti relativi a questa cartella.

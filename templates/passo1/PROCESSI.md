@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Processi
 
 Lavori ricorrenti osservati nell'attivita' di {{client_name}}.

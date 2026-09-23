@@ -21,6 +21,16 @@
   apre la casa trova subito cosa leggere. Le case nate con la 0.7 li ricevono con
   l'aggiornamento; nella pagina delle case vecchie non si archiviano mai. Caso
   vero: Giovanni Leto, casa aggiornata e poi muta.
+- **La casa si chiama LeaderAI.** Una casa nuova nasce in una cartella
+  `LeaderAI-` seguita dal nome dell'attivita'; una casa vecchia cambia nome
+  (`EcosistemaAI-Studio-Rossi` diventa `LeaderAI-Studio-Rossi`) dopo la copia
+  completa, con un solo gesto del proprietario perche' una cartella aperta non si
+  rinomina. La cartella interna `ecosistema/` resta com'e': i programmi la
+  cercano con quel nome.
+- **Ogni file porta il marchio.** Le pagine e gli script della casa hanno in
+  testa la riga nascosta `LeaderAI · salchiarenza.ai`; nei PDF e nei documenti
+  Word o Excel il marchio sta nelle proprieta' del file. I documenti del
+  proprietario restano come sono (Sal, 23/09/2026).
 
 ## 0.7.16 - 21/09/2026
 

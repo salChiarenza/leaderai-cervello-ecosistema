@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Strumenti e risorse
 
 Elenco degli strumenti e delle risorse effettivamente disponibili.

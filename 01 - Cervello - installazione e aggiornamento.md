@@ -256,7 +256,7 @@ Operazione 1 - autodiagnosi
 2. Cerca una cartella di lavoro gia' viva, sia su disco locale sia dentro
    OneDrive / Google Drive / iCloud Drive, anche se la sessione e' aperta
    altrove. Se ne trovi una che sembra gia' usata per il lavoro
-   (per esempio una cartella [CARTELLA DI LAVORO] o EcosistemaAI-...), proponila
+   (per esempio una cartella [CARTELLA DI LAVORO], LeaderAI-... o EcosistemaAI-...), proponila
    come possibile cartella madre. Non creare doppioni.
    Il nome non basta: la cartella viva puo' chiamarsi in qualunque modo
    (nome azienda, progetto, reparto, cartella AI, casa AI, workspace). Guardala
@@ -279,8 +279,8 @@ Operazione 1 - autodiagnosi
    cloud) e chiedimi se confermarla o spostarla.
 4. Crea la cartella madre solo dopo la mia scelta. Se non trovo nulla di gia'
    vivo, proponi un nome:
-   - Mac/Linux: ~/EcosistemaAI-[AZIENDA]
-   - Windows: %USERPROFILE%\EcosistemaAI-[AZIENDA]
+   - Mac/Linux: ~/LeaderAI-[AZIENDA]
+   - Windows: %USERPROFILE%\LeaderAI-[AZIENDA]
    nella posizione che ho scelto alla Domanda 1.
 5. La cartella madre sta FUORI dalle cartelle degli agenti e dei programmi
    (`Codex`, `Claude`, `ChatGPT`, cartelle di installazione): l'ecosistema

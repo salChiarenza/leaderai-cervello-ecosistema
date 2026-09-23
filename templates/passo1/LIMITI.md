@@ -1,3 +1,4 @@
+<!-- LeaderAI · salchiarenza.ai -->
 # Limiti
 
 Confini, cautele e decisioni che restano alla persona.

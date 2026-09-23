@@ -227,7 +227,7 @@ presupposto che l'ambiente AI sia gia' stato installato da qualche parte. Non
 creare una nuova cartella per "fare ordine": prima devi trovare quella viva.
 
 Il nome non basta. La cartella madre puo' chiamarsi in qualunque modo:
-`EcosistemaAI-*`, nome azienda, nome proprietario, progetto interno, reparto,
+`LeaderAI-*`, `EcosistemaAI-*`, nome azienda, nome proprietario, progetto interno, reparto,
 cartella AI, casa AI, workspace, Studio, Investimenti o altro. Non promuovere o
 scartare una cartella solo per il nome: riconoscila dai segnali di vita.
 
@@ -239,7 +239,7 @@ brandizzati, abbreviati o scritti male.
 - home utente e, se leggibili, altri profili utente della stessa macchina;
 - Desktop, Documenti, Downloads, OneDrive, Google Drive, iCloud Drive o cartelle
   aziendali sincronizzate;
-- nomi tipo `EcosistemaAI-*`, nome azienda/proprietario, cartella AI, casa AI,
+- nomi tipo `LeaderAI-*`, `EcosistemaAI-*`, nome azienda/proprietario, cartella AI, casa AI,
   workspace, reparto o progetto;
 - varianti e typo legati a LeaderAI: `LeaderAI`, `Leader AI`, `leaderai`,
   `leader ai`, `leder ai`, `leader-ai`, `leader_ai`;
