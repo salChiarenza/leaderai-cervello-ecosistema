@@ -1,6 +1,6 @@
 # Cervello LeaderAI - installazione e aggiornamento
 
-Versione corrente: `0.7.18`
+Versione corrente: `0.7.19`
 
 ## Da dove arriva questo documento (leggi per primo)
 
@@ -94,7 +94,7 @@ Se la casa c'e' gia', prima di cambiare qualsiasi cosa fanne una copia completa
 in un archivio zip datato, fuori dalla casa (una cartella copiata sembrerebbe
 una seconda casa), e scrivi in logs/install-log.md l'elenco dei suoi file. Nelle
 mie cose tocchi soltanto i pezzi di LeaderAI: le parti delimitate
-leaderai:...:inizio e fine che ci sono gia' e la riga del marchio in testa.
+leaderai:...:inizio e fine che ci sono gia'.
 Alla fine rifai l'elenco e confrontalo: se una mia cosa e' cambiata o sparita,
 rimetti la copia e dimmelo. Nel dubbio un file e' mio e resta com'e'. Se
 qualcosa non torna, scegli la strada che non perde niente di mio, annotala in

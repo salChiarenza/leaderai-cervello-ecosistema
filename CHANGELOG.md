@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.7.19 - 24/09/2026
+
+- **Sulla casa gia' installata si consiglia, non si impone (P-099, P-100).**
+  Caso Monica Cordaro (Santa Brigida), casa nata con la 0.6, aggiornata seguendo
+  la 0.7.18: la sua AI ha messo il marchio su 172 pagine e 44 script, rompendo le
+  sue schede Instagram (leggono le pagine dalla prima riga; le ha sistemate lei);
+  si e' fermata sulla rinomina della cartella (dieci riferimenti al vecchio
+  percorso, memoria nelle impostazioni) e sul passo che toglie git, che lei usa
+  per lavorare dal telefono. Sal, 24/09: «non gli possiamo dire togli, metti,
+  fai»; regola in `leaderai-ecosistema/AGENTS.md`, «Aggiornamenti e nomi nelle
+  case dei clienti».
+- **Il marchio va soltanto nei documenti che il pacchetto porta.** La pagina
+  delle case vecchie (passo 3) e il ramo casa esistente del Passo 1 non
+  aggiungono piu' la riga del marchio, non cambiano «Ecosistema» in «LeaderAI»
+  e non scrivono nella casa del cliente la regola «ogni file che scrivi porta
+  il marchio»: quelle pagine e quegli script restano come sono. Il marchio
+  resta un consiglio da fare al proprietario, mai un'aggiunta di default.
+- **Niente rinomina imposta (passo 4), niente registro git tolto d'ufficio
+  (passo 8).** Il nome della cartella non cambia da solo, e non e' piu' un
+  gesto che si chiede al proprietario per proseguire l'aggiornamento; se lo fa
+  di sua iniziativa, si controlla solo che i collegamenti vecchi funzionino
+  ancora. Il registro git resta se il proprietario lo usa davvero (per esempio
+  dal telefono, come Monica): si propone di toglierlo, come consiglio, soltanto
+  quando e' un residuo del vecchio metodo che nessun programma usa.
+- **Le case nuove non cambiano**, tranne una riga in piu' nella regola del
+  marchio di `templates/passo1/README.md`: un programma che legge le pagine
+  della casa salta la riga nascosta del marchio in testa, cosi' un futuro
+  P-100 non nasce nemmeno li'.
+- Prove: 626 test verdi (`python3 -m pytest tests/`) e gate deterministico
+  494/494 PASS (`python3 -m tests.gate --quick`). Collaudo dal vivo non
+  eseguito in questo giro: nessuna sessione live di Claude o Codex disponibile.
+
 ## 0.7.18 - 23/09/2026
 
 - **L'aggiornamento e' un lavoro con un risultato, non una lista di regole (P-067).**

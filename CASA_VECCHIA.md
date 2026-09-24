@@ -1,6 +1,6 @@
 # Hai la casa vecchia? Come aggiornarla
 
-Versione corrente: `0.7.18`
+Versione corrente: `0.7.19`
 
 Questa pagina serve quando nella cartella del proprietario c'e' gia' una casa
 nata prima di questo metodo. La riconosci cosi': `VERSION` e' piu' vecchia di
@@ -19,14 +19,17 @@ sta nella cartella `4 Gestione dell'ecosistema`:
 
 ## Il lavoro
 
-- **Da costruire:** la stessa casa portata al Passo 1 corrente, con il nome
-  LeaderAI, il marchio e il blocco LEADERAI-CASA nelle istruzioni generali;
-  la versione nuova si scrive soltanto alla fine.
+- **Da costruire:** la stessa casa portata al Passo 1 corrente, con i
+  documenti nuovi del pacchetto e il blocco LEADERAI-CASA nelle istruzioni
+  generali; il nome della cartella e il marchio sulle pagine che il
+  proprietario ha gia' restano come sono. La versione nuova si scrive
+  soltanto alla fine.
 - **Da evitare:** perdere o cambiare le cose del proprietario (documenti,
   memoria, fonti, processi, note, pratiche, i suoi programmi e le sue
   attivita'); fermare quello che oggi gira e gli serve, come la copia di
   sicurezza, la manutenzione o le app installate a parte; cancellare qualcosa
-  della casa; creare una seconda casa.
+  della casa; creare una seconda casa; rinominare la cartella o mettere il
+  marchio sulle pagine e sugli script che il proprietario ha gia'.
 - **Finito quando:** la copia completa e' stata fatta prima di tutto; il
   confronto finale dice che le cose del proprietario ci sono tutte, uguali a
   prima; una chat nuova nella casa risponde dai documenti; quello che girava
@@ -60,49 +63,37 @@ annotala in `logs/install-log.md` e arriva in fondo.
    un'attivita' LeaderAI vecchia ti blocca, o rischia di rimettere le cose
    com'erano, mettila in pausa e annotalo. I programmi e le attivita' del
    proprietario non si fermano.
-3. **Metti il marchio LeaderAI.** In testa a ogni pagina `.md` della casa
-   aggiungi, se manca, la riga nascosta `<!-- LeaderAI · salchiarenza.ai -->`;
-   `CLAUDE.md` resta la sola riga `@AGENTS.md`;
-   negli script della casa la riga e' `# LeaderAI · salchiarenza.ai`. Dove le
-   pagine della casa la chiamano «Ecosistema» o «EcosistemaAI», scrivi
-   «LeaderAI». Nel file di regole che l'assistente legge all'avvio (`AGENTS.md`
-   o `CLAUDE.md`) aggiungi questa regola: «Ogni file che scrivi porta il marchio
-   LeaderAI · salchiarenza.ai: nelle pagine e negli script una riga di
-   commento in testa, nei PDF e nei documenti Word o Excel nelle proprieta' del
-   file.» Non rinominare la cartella interna `ecosistema/`: i programmi la
-   cercano con quel nome. Non toccare i documenti del proprietario (Word,
-   Excel, PDF, immagini, esportazioni, programmi suoi): restano come sono.
-4. **Dai alla casa il nome LeaderAI.** Il nome della cartella comincia con
-   `LeaderAI-`: `EcosistemaAI-Studio-Rossi` diventa `LeaderAI-Studio-Rossi`;
-   una cartella senza la parola Ecosistema diventa `LeaderAI-` seguito dal suo
-   nome attuale. Prima annota in `logs/install-log.md` dove compare il vecchio
-   percorso: file della casa, istruzioni generali e impostazioni
-   dell'assistente, collegamenti sulla Scrivania, attivita' programmate,
-   programmi del proprietario. Dopo il cambio tutto quello che puntava al
-   vecchio nome deve funzionare con il nuovo. Controlla anche che le decisioni
-   importanti delle chat recenti siano scritte nei documenti della casa: le
-   chat vecchie restano legate al vecchio nome. Una cartella aperta non si puo'
-   rinominare, soprattutto su Windows: il gesto e' del proprietario, ed e'
-   l'unico che gli chiedi. Chiediglielo con queste parole, mettendo i due nomi veri:
-   «SERVE UN TUO PASSAGGIO: la copia di sicurezza e' fatta. Chiudi questa chat,
-   rinomina la cartella [vecchio nome] in [nuovo nome], riaprimi dentro la
-   cartella rinominata e scrivimi: continua l'aggiornamento.» Quando
-   riparti, sostituisci il vecchio percorso con il nuovo dove l'avevi
-   annotato, compreso il blocco LEADERAI-CASA, e controlla che la casa si
-   apra dal nuovo nome. Se il nome comincia gia' con `LeaderAI-`, non c'e'
-   niente da rinominare: chiedi al proprietario soltanto di chiudere questa
-   chat, riaprirti dentro la casa e scriverti: continua l'aggiornamento.
-5. **Prova la base documentale.** La chat riaperta al passo 4 e' una chat nuova
-   dentro la casa: la prova si fa li', senza chiedere altro al proprietario.
-   Rispondi a quattro domande: chi e' il proprietario, cosa c'e' in memoria,
-   cosa e' stato fatto oggi, come si chiama la casa. Le risposte devono venire
-   dai documenti aggiornati, e la casa si chiama LeaderAI.
+3. **Il marchio resta nei documenti nuovi.** Il marchio LeaderAI (in testa
+   alle pagine `.md` la riga nascosta `<!-- LeaderAI · salchiarenza.ai -->`,
+   negli script `# LeaderAI · salchiarenza.ai`) va soltanto nei documenti che
+   il pacchetto aggiunge al passo 2, non su quelli che il proprietario ha
+   gia'. Le pagine e gli script suoi restano come sono: niente riga aggiunta,
+   niente «Ecosistema» o «EcosistemaAI» cambiato in «LeaderAI», niente nuova
+   regola nel file che l'assistente legge all'avvio (`AGENTS.md` o
+   `CLAUDE.md`). Puoi consigliare il marchio al proprietario; lo aggiungi sulle
+   sue pagine soltanto se lo chiede lui. Non rinominare la cartella interna
+   `ecosistema/`: i programmi la cercano con quel nome. Non toccare i
+   documenti del proprietario (Word, Excel, PDF, immagini, esportazioni,
+   programmi suoi): restano come sono.
+4. **Il nome della cartella non cambia.** Anche se non comincia con
+   `LeaderAI-`, la cartella resta come si chiama: rinominarla non e' un passo
+   di questo aggiornamento e non e' un gesto che chiedi al proprietario per
+   proseguire. Se e' lui a volerla rinominare di sua iniziativa, puoi
+   consigliarlo su come farlo con sicurezza (copia prima, poi il cambio), mai
+   imporlo. Se lo fa, controlla che tutto quello che puntava al vecchio
+   percorso funzioni ancora: istruzioni generali e blocco LEADERAI-CASA,
+   collegamenti sulla Scrivania, attivita' programmate, programmi del
+   proprietario.
+5. **Prova la base documentale.** Apri una chat nuova dentro la casa, senza
+   chiedere altro al proprietario, e rispondi a tre domande: chi e' il
+   proprietario, cosa c'e' in memoria, cosa e' stato fatto oggi. Le risposte
+   devono venire dai documenti aggiornati.
 6. **Confronta e, se serve, torna indietro.** Rifai l'elenco dei file con la
    loro impronta e confrontalo con quello del passo 1. Le cose del proprietario
-   devono esserci tutte, con lo stesso contenuto: cambiano soltanto i pezzi di
-   LeaderAI (il nome della casa, la riga e la regola del marchio, le parti
-   delimitate da LeaderAI). Controlla anche che quello che girava prima giri
-   ancora. Se la prova del passo 5 o il confronto non tornano, ripristina la
+   devono esserci tutte, con lo stesso contenuto: cambiano soltanto i
+   documenti nuovi che il passo 2 ha aggiunto e le parti delimitate da
+   LeaderAI nelle istruzioni generali. Controlla anche che quello che girava
+   prima giri ancora. Se la prova del passo 5 o il confronto non tornano, ripristina la
    copia del passo 1, annota il punto che non ha funzionato e riprova senza
    eliminare nulla.
 7. **Solo dopo, la tecnica vecchia.** Guardiani, attivita' e impostazioni
@@ -120,12 +111,17 @@ annotala in `logs/install-log.md` e arriva in fondo.
    app installate a parte, come Voce, non sono vecchia tecnica della casa:
    restano come sono. Poi riaccendi quello che hai messo in pausa e controlla
    che giri.
-8. **Il registro git si toglie alla fine, e non tiene aperto il lavoro.** La
-   casa non e' un repository: niente clone, pull o push. La cartella `.git` e il
-   file `.gitignore` non servono piu' e la copia del passo 1 li conserva.
-   Scrivi la versione nuova e chiudi l'aggiornamento; poi, nel messaggio finale,
-   chiedi al proprietario il permesso di cancellarli: con il suo si' li cancelli
-   tu, senza fargli cercare cartelle nascoste.
+8. **Il registro git resta se il proprietario lo usa, e non tiene comunque
+   aperto il lavoro.** Guarda prima se lavora davvero con Git o GitHub (per
+   esempio per aprire o aggiornare la casa dal telefono): in quel caso `.git` e
+   `.gitignore` restano, non li tocchi e non proponi nemmeno di toglierli. Se
+   invece sono li' soltanto per un vecchio modo di installare e nessun
+   programma del proprietario li usa, la copia del passo 1 li conserva:
+   scrivi la versione nuova, chiudi l'aggiornamento e poi, nel messaggio
+   finale, chiedi il permesso di toglierli, come consiglio, non come passo
+   obbligato: con il suo si' li cancelli tu, senza fargli cercare cartelle
+   nascoste; con un no restano e la casa funziona lo stesso. Niente clone,
+   pull o push richiesti da questo aggiornamento.
 9. **Tieni una sola casa.** Se lavora da piu' computer, la casa vive in una
    cartella condivisa (OneDrive, Google Drive o iCloud) marcata «sempre
    disponibile offline» su ogni computer, una macchina alla volta. Per portarla

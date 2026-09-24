@@ -1,10 +1,10 @@
 <!-- vista: inizio (generata, non correggere a mano) -->
 
-# LeaderAI Cervello + Ecosistema 0.7.18
+# LeaderAI Cervello + Ecosistema 0.7.19
 
 Costruisce un ambiente AI di lavoro in cinque passi. Il Passo 1 consegna soltanto la base documentale; stanze, controlli e capacita' nascono dopo dal lavoro vero. Funziona con Claude Code e con ChatGPT Work.
 
-Dentro ci sono 3 stanze, 3 agenti, 2 skill, 13 guardiani, 4 memorie, 50 modelli, 39 prove nella sorgente completa. Alla persona arrivano in 5 passi, uno per volta; non sono tutti nel Passo 1.
+Dentro ci sono 3 stanze, 3 agenti, 2 skill, 13 guardiani, 4 memorie, 52 modelli, 40 prove nella sorgente completa. Alla persona arrivano in 5 passi, uno per volta; non sono tutti nel Passo 1.
 
 | Nella sorgente | Quanti | Quando serve |
 |---|---|---|
@@ -13,8 +13,8 @@ Dentro ci sono 3 stanze, 3 agenti, 2 skill, 13 guardiani, 4 memorie, 50 modelli,
 | Skill | 2 | capacita' opzionali successive |
 | Guardiani | 13 | controlli valutati nel Passo 4 |
 | Memorie | 4 | la conoscenza che resta (modelli vuoti da riempire) |
-| Modelli | 50 | il calco di ogni pezzo |
-| Prove | 39 | si controlla da solo |
+| Modelli | 52 | il calco di ogni pezzo |
+| Prove | 40 | si controlla da solo |
 
 ## Come si installa
 
@@ -33,15 +33,15 @@ Cervello + Ecosistema/
 |-- Agenti/                                            # 3 prodotti opzionali per i passi successivi
 |-- Skill/                                             # 2 capacita' opzionali per i passi successivi
 |-- moduli/                                            # pezzi che si montano solo quando servono
-|-- templates/                                         # 50 modelli: il calco di mappa, stanza, fonte, controlli
-|-- tests/                                             # 39 prove che il prodotto gira prima di uscire
+|-- templates/                                         # 52 modelli: il calco di mappa, stanza, fonte, controlli
+|-- tests/                                             # 40 prove che il prodotto gira prima di uscire
 |-- 01 - Cervello - installazione e aggiornamento.md   # l'unico file da cui parte il cliente
 |-- CHECKUP.md                                         # diagnosi e riparazione di una casa già viva
 |-- MANIFEST.md                                        # lo standard con cui si confronta il caso reale
 |-- install_contract.json                              # la lista che leggono installazione, Ispettore e collaudo
 ```
 
-> Blocco generato il 21/09/2026 dalle cartelle del prodotto con
+> Blocco generato il 24/09/2026 dalle cartelle del prodotto con
 > `leaderai-ecosistema/tools/mappa_sistema.py`. Si rigenera, non si corregge a mano.
 
 <!-- vista: fine -->
